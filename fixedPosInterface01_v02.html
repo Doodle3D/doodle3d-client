@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap 101 Template</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
+
+  <!-- Bootstrap -->
+  <!--<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">-->
+  <link href="css/normalize.css" rel="stylesheet" media="screen">
+  <link href="css/fixedPosInterface.css" rel="stylesheet" media="screen">
+  <link href="css/d3d_btns.css" rel="stylesheet" media="screen">
+  <style type="text/css">
+
+    .debugContainer {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: 500;
+    }
+
+    .debugBtn {
+      width: 25px;
+      height: 25px;
+      background-color: #03b;
+      float:left;
+    }
+
+    .agentInfo {
+      background: #fff;
+      border: 1px #333 solid;
+      display: none;
+      float:left;
+      opacity: .7;
+    }
+
+    .agentInfoToggle {
+      display: block;
+    }
+
+
+  </style>
+</head>
+<body>
+<div class="debugContainer">
+  <div class="debugBtn"></div>
+  <div class="agentInfo"></div>
+</div>
+<div id="landscape">
+  <div class="container">
+    <img class="bgTop" src="img/bg_top.png" />
+    <img class="bgMiddle" src="img/bg_middle.png" />
+    <img class="bgBottom" src="img/bg_bottom.png" />
+    <div class="buttons">
+      <img id="d3dlogo" src="img/logo_full.png" onclick="location.reload()">
+      <img class="btn" id="btnNew" src="img/buttons/btnNew.png">
+      <img class="btn" id="btnPrevious" src="img/buttons/btnLeft.png">
+      <img class="btn" id="btnNext" src="img/buttons/btnRight.png">
+      <img class="btn" id="btnSave" src="img/buttons/btnSave.png">
+      <img class="btn" id="btnOops" src="img/buttons/btnOops.png">
+      <img class="btn" id="btnPrint" src="img/buttons/btnPrint.png">
+      <img class="btn" id="btnStop" src="img/buttons/btnStop.png">
+    </div>
+  </div>
+  <div id="drawAreaContainer">
+    <svg id="svg">
+      <path id="path" d="M200 100 L450 100 L450 350 L200 350 L200 100" fill="none" stroke="black" stroke-width="3"/>
+    </svg>
+    <canvas id="preview" width="150" height="450"></canvas>
+    <div class="buttons cf">
+      <div id="btnsUpDown">
+        <img id="btnUp" src="img/buttons/btnUp.png">
+        <img id="btnDown" src="img/buttons/btnDown.png">
+      </div>
+      <div id="btnsTurnLeftRight">
+        <img id="btnTurnLeft" src="img/buttons/btnTurnLeft.png">
+        <img id="btnTurnRight" src="img/buttons/btnTurnRight.png">
+      </div>
+    </div>
+  </div>
+</div>
+<div id="portrait">
+  <img class="vertImage" src="img/bg_vertical.jpg"/>
+</div>
+
+<script src="js/jquery-1.8.3.min.js"></script>
+<!--<script src="js/bootstrap.min.js"></script>-->
+<script src="js/init_layout.js"></script>
+<script src="js/draw_logic.js"></script>
+<script type="text/javascript">
+</script>
+</body>
+</html>
