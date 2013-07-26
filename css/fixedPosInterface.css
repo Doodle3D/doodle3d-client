@@ -1,6 +1,6 @@
 body {
 /*   This chops off any overhanging divs */
-/*  overflow:hidden;	*/
+  overflow:hidden;
 }
 
 
@@ -43,9 +43,9 @@ body {
 	height: 140px;
 }
 
-ha {
-	background: #f5f5f5 url('../images/bg.jpg') no-repeat;
-}
+/*ha {*/
+	/*background: #f5f5f5 url('../images/bg.jpg') no-repeat;*/
+/*}*/
 
   /* Portrait */
 @media screen and (orientation:portrait) {
@@ -108,16 +108,31 @@ ha {
   border-radius: 15px;
 }
 
+#mycanvas, #preview {
+  /*border: 1px solid #08c;*/
+  float: left;
+}
+
+#mycanvas {
+  width: 500px;
+  height: 450px;
+  border: 0px solid #333;
+  border-right: 2px solid #333;
+}
+
 #preview {
+  /*border: 1px solid #f8c;*/
   position: absolute;
   right: 0px;
   top: 0px;
+  width: 150px;
+  height: 450px;
 }
 
 .vertImage {
 	margin:  0px;
 	padding: 0px;
-  border: 2px solid #f0f;
+  /*border: 2px solid #f0f;*/
   max-width: 100%;
   height: auto;
   width: auto; /* for ie9 */
@@ -144,6 +159,9 @@ ha {
 	z-index: -5;
 }
 
+/* The code below is for resizing UI elements as the viewport becomes less high (suitable for tablets & smartphones) */
+
+/*
 @media screen and (max-height: 700px) {
 	.bgMiddle {
 		display: none;
@@ -196,6 +214,8 @@ ha {
 	  height: 350px;
 	}
 }
+
+//*/
 
 
 

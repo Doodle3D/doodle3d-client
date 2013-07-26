@@ -56,6 +56,16 @@ img {
 	top: 200px;
 }
 
+#btnInfo {
+	right: 25px;
+	bottom: 20px;
+}
+
+#btnSettings {
+	right: 25px;
+	bottom: 90px;
+}
+
 
 
 /*
@@ -71,26 +81,28 @@ img {
 
 #btnsUpDown {
 	position: absolute;
-	right: 200px;	
+	right: 200px;
+  bottom: -75px;
 }
 
 #btnsTurnLeftRight {
 	position: absolute;
-	right: 20px;	
+	right: 20px;
+  bottom: -75px;
 }
 
-#btnUp {
+#btnMoveUp {
 }
 
-#btnDown {
+#btnMoveDown {
 	
 }
 
-#btnTurnLeft {
+#btnTwistLeft {
 	
 }
 
-#btnTurnRight {
+#btnTwistRight {
 	
 }
 
