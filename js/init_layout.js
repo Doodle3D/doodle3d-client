@@ -105,50 +105,48 @@ function doOnResize() {
   }
 }
 
+function initLayouting() {
+  console.log("f:initLayouting()");
 
-$("document").ready(function(){
-  console.log("ready");
-
-  initDrawing();
-
-//  imgDims[0] = parseInt($(".container").css("width").match(/[0-9]+/).join(""));
-//  imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
+  //  imgDims[0] = parseInt($(".container").css("width").match(/[0-9]+/).join(""));
+  //  imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
 
   imgDims = [1024, 768];
   /*
-  if( /Android|webOS|BlackBerry/i.test(navigator.userAgent) ) {
-    imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
-  } else if ( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
-    imgDims[1] = parseInt($(".container").css("width").match(/[0-9]+/).join(""));
-  } else {
-    imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
-  }
-  //*/
+   if( /Android|webOS|BlackBerry/i.test(navigator.userAgent) ) {
+   imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
+   } else if ( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
+   imgDims[1] = parseInt($(".container").css("width").match(/[0-9]+/).join(""));
+   } else {
+   imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
+   }
+   //*/
 
-//  $(".container").css("height", window.innerHeight);
+  //  $(".container").css("height", window.innerHeight);
 
   // Initial execution if needed
-  window.addEventListener('orientationchange', doOnOrientationChange);
-  window.addEventListener('resize', doOnResize)
+  /* 2013-07-26 not doing this resizing stuff now, it's not working well yet
+  if (!window.addEventListener) {
+    window.attachEvent('orientationchange', doOnOrientationChange);
+    window.attachEvent('resize', doOnResize)
+  } else {
+    window.addEventListener('orientationchange', doOnOrientationChange);
+    window.addEventListener('resize', doOnResize)
+  }
+  //*/
   doClientAndOrientationStuff();
-//    doOnOrientationChange();
+  //    doOnOrientationChange();
 
   // window.innerHeight
   console.log("window.innerHeight: " + window.innerHeight);
   console.log("$('#drawAreaContainer').innerHeight(): " + $("#drawAreaContainer").innerHeight());
   console.log("$('#drawAreaContainer').offset().top: " + $("#drawAreaContainer").offset().top);
 
+
+  /*  2013-07-26 not doing this resizing stuff now, it's not working well yet
   if (window.innerHeight < 768) {
     $('#drawAreaContainer').innerHeight(window.innerHeight - $("#drawAreaContainer").offset().top - 70);
   }
+  //*/
 
-  // DEBUG
-//  $(".agentInfo").css("display", "none");
-  $(".debugBtn").click(function(e) {
-    console.log("debugClick");
-    $(".agentInfo").toggleClass("agentInfoToggle");
-    e.preventDefault();
-  })
-
-})
-
+}
