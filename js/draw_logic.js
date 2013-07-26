@@ -123,6 +123,8 @@ function print(e) {
 
 	output = "\nBEGIN\n" + output + "\n\nEND\n";
 
+  console.log("output :" + output );
+
 	$.post("/doodle3d.of", { data:output }, function(data) {
 	 	btnPrint.disabled = false;
 	});
