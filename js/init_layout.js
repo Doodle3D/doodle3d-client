@@ -41,7 +41,7 @@ function doClientAndOrientationStuff() {
       }
       //*/
       var ratio =  ww / mw; //calculate ratio
-      $('#Viewport').attr('content', 'initial-scale='+ratio+',maximum-scale='+ratio+',minimum-scale='+ratio+',user-scalable=yes,width='+mw);
+      $('#Viewport').attr('content', 'initial-scale='+ratio+',maximum-scale='+ratio+',minimum-scale='+ratio+',user-scalable=no,width='+mw);
       if( ww < mw){ //smaller than minimum size
 //        $(".colmask").css("background-color", "#ff0");
         //        $('#Viewport').attr('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=yes, width=' + ww);
@@ -57,7 +57,7 @@ function doClientAndOrientationStuff() {
     } else {
       // portrait
 //      $('#Viewport').attr('content', 'initial-scale='+1+',maximum-scale='+1+',minimum-scale='+1+',user-scalable=no');
-      $('#Viewport').attr('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes');
+      $('#Viewport').attr('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no');
     }
 
   } else {
@@ -95,18 +95,58 @@ function doOnOrientationChange() {
   //    }
 }
 
+var drawAreaContainerMinHeight = 300;
+var drawAreaContainerMaxHeight = 450;
 function doOnResize() {
   //    console.log("doOnResize() >> " + new Date().getTime());
 //  $(".container").css("height", window.innerHeight);
-  doClientAndOrientationStuff()
 
+//  doClientAndOrientationStuff() // <-- is this necessary in this method?
+
+//  console.log("f:doOnResize() >> $('#canvascontainer').innerHeight: " + window.innerHeight);
   if (window.innerHeight < 768) {
-    $('#drawAreaContainer').innerHeight(window.innerHeight - $("#drawAreaContainer").offset().top - 70);
+//    $('#drawAreaContainer').innerHeight(window.innerHeight - $("#drawAreaContainer").offset().top - 70);
+    var newVal = window.innerHeight - $("#drawAreaContainer").offset().top - 100; // what's the 70 ??
+    newVal = Math.max(newVal, drawAreaContainerMinHeight);
+    newVal = Math.min(newVal, drawAreaContainerMaxHeight);
+
+    $('#drawAreaContainer').innerHeight(newVal);
+
+    // canvas drawing area
+    $canvas.css("height", newVal);
+    canvas.height = newVal;
+    canvasWidth = canvas.width;
+    canvasHeight = canvas.height;
+
+    // preview area
+    $preview.css("height", newVal);
+    preview.height = newVal;
+    layerOffsetY = preview.height - 1.75 * layerCY;
+    yStep = preview.height / 150;
+
+    redrawDoodle();
+    redrawPreview();
   }
 }
 
 function initLayouting() {
   console.log("f:initLayouting()");
+
+  // first set the css width/height and actual width/height of the drawing area
+  <!--div drawAreaContainer 650,450-->
+  <!--canvas mycanvas       500, 450-->
+  <!--canvas preview      150, 450-->
+  $("#drawAreaContainer").attr("width", parseInt($("#drawAreaContainer").css("width"), 10));
+  $("#drawAreaContainer").attr("height", parseInt($("#drawAreaContainer").css("height"), 10));
+  canvas.width = parseInt($canvas.css("width"), 10);
+  canvas.height = parseInt($canvas.css("height"), 10);
+  preview.width = parseInt($preview.css("width"), 10);
+  preview.height = parseInt($preview.css("height"), 10);
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
+//  console.log("f:initLayouting() >> canvas height: " + canvas.height);
+
+
 
   //  imgDims[0] = parseInt($(".container").css("width").match(/[0-9]+/).join(""));
   //  imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
@@ -125,7 +165,7 @@ function initLayouting() {
   //  $(".container").css("height", window.innerHeight);
 
   // Initial execution if needed
-  /* 2013-07-26 not doing this resizing stuff now, it's not working well yet
+  //* 2013-07-26 not doing this resizing stuff now, it's not working well yet
   if (!window.addEventListener) {
     window.attachEvent('orientationchange', doOnOrientationChange);
     window.attachEvent('resize', doOnResize)
@@ -135,6 +175,7 @@ function initLayouting() {
   }
   //*/
   doClientAndOrientationStuff();
+  doOnResize();
   //    doOnOrientationChange();
 
   // window.innerHeight

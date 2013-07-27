@@ -8,8 +8,21 @@
 	}
 }*/
 
+body {
+  -moz-user-select: none;                /* disable cut copy paste */
+  -webkit-user-select: none;                /* disable cut copy paste */
+}
+
 img {
 	z-index: 5;
+  /*pointer-events:none;*/
+  /*-webkit-touch-callout: none;               *//*disable callout, image save panel */
+  /*-webkit-tap-highlight-color: transparent; *//* "turn off" link highlight */
+}
+
+/*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
+.btn {
+  background-repeat: no-repeat;
 }
 
 /*
@@ -21,6 +34,9 @@ img {
 #btnNew {
 	left: 10px;
 	top: 10px;
+  width: 194px;
+  height: 170px;
+  background: url('../img/buttons/btnNew.png');
 }
 
 #btnPrevious {
@@ -42,8 +58,11 @@ img {
 
 #btnOops {
 	left: 20px;
-/*	bottom: 150px;*/
 	top: 450px;
+/*	bottom: 150px;*/
+  width: 146px;
+  height: 144px;
+  background: url('../img/buttons/btnOops.png');
 }
 
 #btnPrint {
@@ -84,26 +103,45 @@ img {
 	right: 200px;
   bottom: -75px;
 }
+#btnsUpDown > div {
+  float: left;
+  padding-right: 8px;
+  background-repeat: no-repeat;
+}
 
 #btnsTurnLeftRight {
 	position: absolute;
 	right: 20px;
   bottom: -75px;
 }
+#btnsTurnLeftRight >div {
+  float: left;
+  padding-right: 8px;
+  background-repeat: no-repeat;
+}
 
 #btnMoveUp {
+  width: 65px;
+  height: 61px;
+  background: url('../img/buttons/btnUp.png');
 }
 
 #btnMoveDown {
-	
+  width: 64px;
+  height: 63px;
+  background: url('../img/buttons/btnDown.png');
 }
 
 #btnTwistLeft {
-	
+  width: 59px;
+  height: 61px;
+  background: url('../img/buttons/btnTurnLeft.png');
 }
 
 #btnTwistRight {
-	
+  width: 64px;
+  height: 56px;
+  background: url('../img/buttons/btnTurnRight.png');
 }
 
 .btn {

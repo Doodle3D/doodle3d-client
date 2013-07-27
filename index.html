@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Bootstrap 101 Template</title>
+  <title>Doodle3D</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" href="img/icon.png"/>
   <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
 
   <!-- Bootstrap -->
@@ -61,31 +62,32 @@
     <img class="bgBottom" src="img/bg_bottom.png" />
     <div class="buttons">
       <img id="d3dlogo" src="img/logo_full.png" onclick="location.reload()">
-      <img class="btn" id="btnNew" src="img/buttons/btnNew.png">
+      <div class="btn" id="btnNew"></div>
+      <!--<img class="btn" id="btnNew" src="img/buttons/btnNew.png">-->
       <img class="btn" id="btnPrevious" src="img/buttons/btnLeft.png">
       <img class="btn" id="btnNext" src="img/buttons/btnRight.png">
       <img class="btn" id="btnSave" src="img/buttons/btnSave.png">
-      <img class="btn" id="btnOops" src="img/buttons/btnOops.png">
+      <div class="btn" id="btnOops"></div>
       <img class="btn" id="btnPrint" src="img/buttons/btnPrint.png">
       <img class="btn" id="btnStop" src="img/buttons/btnStop.png">
       <img class="btn" id="btnInfo" src="img/buttons/btnInfo.png">
       <img class="btn" id="btnSettings" src="img/buttons/btnSettings.png">
     </div>
   </div>
-  <div id="drawAreaContainer" width="650" height="450">
-    <canvas id="mycanvas" width="500" height="450"></canvas>
+  <div id="drawAreaContainer">
+    <canvas id="mycanvas"></canvas>
     <!--<svg id="svg">-->
       <!--<path id="path" d="M200 100 L450 100 L450 350 L200 350 L200 100" fill="none" stroke="black" stroke-width="3"/>-->
     <!--</svg>-->
-    <canvas id="preview" width="150" height="450"></canvas>
+    <canvas id="preview"></canvas>
     <div class="buttons cf">
       <div id="btnsUpDown">
-        <img id="btnMoveUp" src="img/buttons/btnUp.png">
-        <img id="btnMoveDown" src="img/buttons/btnDown.png">
+        <div id="btnMoveUp"></div>
+        <div id="btnMoveDown"></div>
       </div>
       <div id="btnsTurnLeftRight">
-        <img id="btnTwistLeft" src="img/buttons/btnTurnLeft.png">
-        <img id="btnTwistRight" src="img/buttons/btnTurnRight.png">
+        <div id="btnTwistLeft"></div>
+        <div id="btnTwistRight"></div>
       </div>
     </div>
   </div>
@@ -94,7 +96,7 @@
   </div>
 </div>
 <div id="portrait">
-  <img class="vertImage" src="img/bg_vertical.jpg"/>
+  <img class="vertImage" src="img/bg_vertical2.png"/>
 </div>
 
 <script src="js/libs/jquery-1.8.3.min.js"></script>
@@ -135,15 +137,14 @@
       $("#debug_textArea").css("display", "block");
     }
 
+//    $("#mycanvas").css("scale", 0.5);
+
 
     //debug
 //    generate_gcode();
 
   })
 
-  function copyToClipboard (text) {
-    window.prompt ("Copy to clipboard: Ctrl+C, Enter", text);
-  }
 </script>
 </body>
 </html>

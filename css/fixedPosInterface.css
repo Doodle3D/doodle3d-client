@@ -161,8 +161,7 @@ body {
 
 /* The code below is for resizing UI elements as the viewport becomes less high (suitable for tablets & smartphones) */
 
-/*
-@media screen and (max-height: 700px) {
+@media screen and (max-height: 675px) {
 	.bgMiddle {
 		display: none;
 	}
@@ -173,7 +172,7 @@ body {
   }
 
   #btnsUpDown, #btnsTurnLeftRight {
-  	zoom: 0.96;
+  	zoom: 0.94;
   }
 
 	#btnPrint {
@@ -182,7 +181,7 @@ body {
 	}
 
 	.btn {
-		zoom: 0.96;
+		zoom: 0.94;
 	}
 
 	#drawAreaContainer {
@@ -191,14 +190,14 @@ body {
 	}
 }
 
-@media screen and (max-height: 500px) {
+@media screen and (max-height: 560px) {
 	#d3dlogo {
 		zoom: 0.8;
 		left: 34%;
   }
 
   #btnsUpDown, #btnsTurnLeftRight {
-  	zoom: 0.9;
+  	zoom: 0.86;
   }
 
 	#btnPrint {
@@ -206,16 +205,22 @@ body {
 	}
 
 	.btn {
-		zoom: 0.9;
+		zoom: 0.86;
 	}
 
-	#drawAreaContainer {
+  #btnOops {
+    top: 350px;
+  }
+
+  #btnSave {
+    top: 200px;
+  }
+
+  #drawAreaContainer {
 	  top: 110px;
 	  height: 350px;
 	}
 }
-
-//*/
 
 
 

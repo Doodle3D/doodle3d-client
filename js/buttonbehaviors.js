@@ -78,20 +78,24 @@ function initButtonBehavior() {
 //    console.log("btnPrevious");
 //  })
 
-  btnOops.mousedown(function(e) {
-    e.preventDefault();
+  function startOops(e) {
     //      console.log("btnOops mouse down");
+    e.preventDefault();
     btnOopsInterval = setInterval( function() {
       oopsUndo();
     }, 1000/50);
-  });
-  btnOops.mouseup(function(e) {
-    e.preventDefault();
+  }
+  function stopOops(e) {
     //      console.log("btnOops mouse up");
+    e.preventDefault();
     clearInterval(btnOopsInterval);
-  });
+  }
+  btnOops.on('touchstart', function(e) { startOops(e); });
+  btnOops.on('touchend', function(e) { stopOops(e); });
+  btnOops.mousedown(function(e) { startOops(e); });
+  btnOops.mouseup(function(e) { stopOops(e); });
 
-  btnMoveUp.mousedown(function(e) {
+  function startMoveUp(e) {
     e.preventDefault();
     //      console.log("btnMoveUp mouse down");
     previewUp();
@@ -99,14 +103,18 @@ function initButtonBehavior() {
     btnMoveUpInterval = setInterval( function() {
       previewUp();
     }, 1000/30);
-  });
-  btnMoveUp.mouseup(function(e) {
+  }
+  function stopMoveUp(e) {
     e.preventDefault();
-          console.log("btnMoveUp mouse up");
+    console.log("btnMoveUp mouse up");
     clearInterval(btnMoveUpInterval);
-  });
+  }
+  btnMoveUp.mousedown(function(e) { startMoveUp(e) });
+  btnMoveUp.mouseup(function(e) { stopMoveUp(e) });
+  btnMoveUp.on('touchstart', function(e) { startMoveUp(e) });
+  btnMoveUp.on('touchend', function(e) { stopMoveUp(e) });
 
-  btnMoveDown.mousedown(function(e) {
+  function startMoveDown(e) {
     e.preventDefault();
     //      console.log("btnMoveDown mouse down");
     previewDown();
@@ -114,14 +122,18 @@ function initButtonBehavior() {
     btnMoveDownInterval = setInterval( function() {
       previewDown();
     }, 1000/30);
-  });
-  btnMoveDown.mouseup(function(e) {
+  }
+  function stopMoveDown(e) {
     e.preventDefault();
-          console.log("btnMoveDown mouse up");
+    console.log("btnMoveDown mouse up");
     clearInterval(btnMoveDownInterval);
-  });
+  }
+  btnMoveDown.mousedown(function(e) { startMoveDown(e) });
+  btnMoveDown.mouseup(function(e) { stopMoveDown(e) });
+  btnMoveDown.on('touchstart', function(e) { startMoveDown(e) });
+  btnMoveDown.on('touchend', function(e) { stopMoveDown(e) });
 
-  btnTwistLeft.mousedown(function(e) {
+  function startTwistLeft(e) {
     e.preventDefault();
     //      console.log("btnTwistLeft mouse down");
     previewTwistLeft();
@@ -129,14 +141,18 @@ function initButtonBehavior() {
     btnTwistLeftInterval = setInterval( function() {
       previewTwistLeft();
     }, 1000/30);
-  });
-  btnTwistLeft.mouseup(function(e) {
+  }
+  function stopTwistLeft(e) {
     e.preventDefault();
     //      console.log("btnTwistLeft mouse up");
     clearInterval(btnTwistLeftInterval);
-  });
+  }
+  btnTwistLeft.mousedown(function(e) { startTwistLeft(e) });
+  btnTwistLeft.mouseup(function(e) { stopTwistLeft(e) });
+  btnTwistLeft.on('touchstart', function(e) { startTwistLeft(e) });
+  btnTwistLeft.on('touchend', function(e) { stopTwistLeft(e) });
 
-  btnTwistRight.mousedown(function(e) {
+  function startTwistRight(e) {
     e.preventDefault();
     //      console.log("btnTwistRight mouse down");
     previewTwistRight();
@@ -144,12 +160,16 @@ function initButtonBehavior() {
     btnTwistRightInterval = setInterval( function() {
       previewTwistRight();
     }, 1000/30);
-  });
-  btnTwistRight.mouseup(function(e) {
+  }
+  function stopTwistRight(e) {
     e.preventDefault();
     //      console.log("btnTwistRight mouse up");
     clearInterval(btnTwistRightInterval);
-  });
+  }
+  btnTwistRight.mousedown(function(e) { startTwistRight(e) });
+  btnTwistRight.mouseup(function(e) { stopTwistRight(e) });
+  btnTwistRight.on('touchstart', function(e) { startTwistRight(e) });
+  btnTwistRight.on('touchend', function(e) { stopTwistRight(e) });
 
   btnSettings.mouseup(function(e) {
     e.preventDefault();
@@ -232,19 +252,8 @@ function clearPreview() {
 function oopsUndo() {
   //    console.log("f:oopsUndo()");
   _points.pop();
+  redrawDoodle();
   redrawPreview();
-  clearMainView();
-  prevX = 0;
-  prevY = 0;
-  for (var i = 0; i < _points.length; i++) {
-    //      console.log("     drawing points " + _points[i]);
-    if (_points[i][2] == true) {
-      draw(_points[i][0], _points[i][1], 0.5);
-    } else {
-      draw(_points[i][0], _points[i][1]);
-    }
-  }
-
 }
 function previewUp() {
   //    console.log("f:previewUp()");

@@ -11,6 +11,7 @@ var svgPathParamsRegExp = /([LM])(\d*) (\d*)/;
 
 var dragging = false;
 
+var $canvas = $("#mycanvas");
 var canvas = $("#mycanvas")[0];
 var ctx = canvas.getContext('2d');
 
@@ -143,6 +144,24 @@ function clearDoodle() {
 
   clearMainView();
   clearPreview();
+}
+
+function redrawDoodle() {
+  console.log("f:redrawDoodle()");
+
+  clearMainView();
+
+  prevX = 0;
+  prevY = 0;
+
+  for (var i = 0; i < _points.length; i++) {
+    //      console.log("     drawing points " + _points[i]);
+    if (_points[i][2] == true) {
+      draw(_points[i][0], _points[i][1], 0.5);
+    } else {
+      draw(_points[i][0], _points[i][1]);
+    }
+  }
 }
 
  function adjustBounds(x, y) {

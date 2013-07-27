@@ -1,6 +1,11 @@
 //*
+var $preview;
 var preview;
 var previewCtx;
+
+$preview = $("#preview");
+preview = document.getElementById('preview');
+previewCtx = preview.getContext('2d');
 
 var svgPathRegExp = /[LM]\d* \d*/ig;
 var svgPathParamsRegExp = /([LM])(\d*) (\d*)/;
@@ -11,8 +16,10 @@ var redrawInterval = 1000 / 20; // ms
 function initPreviewRendering() {
   console.log("f:initPreviewRendering()");
 
-  preview = document.getElementById('preview');
-  previewCtx = preview.getContext('2d');
+  layerCX			= (canvasWidth / 2) * globalScale;  // defined in canvasDrawing_v01.js
+  layerCY			= (canvasHeight / 2) * globalScale; // defined in canvasDrawing_v01.js
+  layerOffsetY = preview.height - 1.75 * layerCY;
+  yStep 			= preview.height / 150;
 
   redrawPreview();
 }
@@ -26,12 +33,12 @@ var viewerScale = 0.65;  // additional scale to fit into preview nicely (otherwi
 var strokeWidth = 2; //4; 
 //var rStep 			= Math.PI/40; //Math.PI/40; //
 var rStep 			= Math.PI/45; // Math.PI/180; //Math.PI/40; //
-var yStep 			= 3; //6;
+var yStep 			= preview.height / 150; // 3; //6;
 //var svgWidth 		= 500; // 650 //parseInt($(svg).css("width"));
 //var svgHeight 	= 450; //450; //parseInt($(svg).css("height"));
 var layerCX			= (canvasWidth / 2) * globalScale;  // defined in canvasDrawing_v01.js
 var layerCY			= (canvasHeight / 2) * globalScale; // defined in canvasDrawing_v01.js
-var layerOffsetY= 330;
+var layerOffsetY= preview.height - 1.75 * layerCY; // 330; // previewHeight - 120
 var prevX 			= 0;
 var prevY 			= 0;
 var highlight		= true; //highlight bottom, middle and top layers
