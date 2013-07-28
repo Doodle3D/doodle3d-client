@@ -1,0 +1,60 @@
+form {
+  margin: 10px;
+}
+input {
+  margin: 1px;
+}
+
+body,th,td {
+  font-family: Arial;
+  font-size: 13px;
+}
+#advancedSettings {
+  width: 96.3%;
+  height: 300px;
+  padding: 10px;
+}
+fieldset {
+  width: 600px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  /*padding-left: 20px;*/
+}
+fieldset legend {
+  margin-left: 10px;
+}
+label {
+  min-width: 150px;
+  display: inline-block;
+}
+textarea {
+  border-radius: 10px;
+}
+input[type="text"] {
+  border: 1px solid black;
+  margin-right: 5px;
+}
+input[type="text"].small {
+  width: 50px;
+}
+input[type="text"].large {
+  width: 250px;
+}
+legend {
+  font-weight: bold;
+  font-family: Arial;
+}
+select {
+  margin-left: -4px;
+}
+textarea.gcode {
+  width: 270px;
+  height: 150px;
+  margin-right: 20px;
+}
+
+.retractionSettings {
+  display: none;
+  margin-top: 5px;
+}

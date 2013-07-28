@@ -1,0 +1,73 @@
+#contentOverlay {
+  background-color: rgba(255, 255, 255, 0.65);
+  top: 0px;
+  left: 0px;
+  width: 1024px;
+  height: 100%;
+  z-index: 10;
+  position: absolute;
+  display:table;
+}
+.contentOverlayHidden {
+  display:none;
+}
+#settingsContainer {
+  display: table-cell;
+  /*text-align: center;*/
+  vertical-align: middle;
+}
+#settings {
+  position: relative;
+  background-color: #fff;
+  border: 2px solid #222;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  z-index: 15;
+  margin: 0 auto;
+  padding: 25px;
+  width: 850px;
+  height: 450px;
+  /*overflow: scroll;*/
+  /*overflow-y: hidden;*/
+  -moz-box-shadow:    0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+  box-shadow:         0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+  overflow: hidden;
+}
+
+
+#settings header {
+  height: 44px;
+}
+
+div.content {
+  margin: 15px 0px;
+  height: 388px;
+  display: table;
+}
+
+div.content > div {
+  height: 100%;
+}
+
+div.content > div.settings {
+  border: 1px solid #333;
+  width: 725px;
+  overflow: scroll;
+  max-height: 368px;
+  overflow-x: hidden;
+  padding: 10px 10px 10px 10px;
+}
+div.content > div.buttons {
+  display: table-cell;
+  vertical-align: bottom;
+  width: 125px;
+}
+
+div.content .btnOK {
+  width: 85px;
+  height: 86px;
+  background: url('../img/buttons/btnOk_settings.png') no-repeat;
+  margin: 10px auto;
+}
