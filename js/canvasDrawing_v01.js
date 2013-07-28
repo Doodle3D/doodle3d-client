@@ -210,7 +210,7 @@ function adjustPreviewTransformation() {
 
   var sclX, sclY, finalScl;
   if (_points.length < 2) {
-    console.log(_points);
+//    console.log(_points);
     sclX = 1.0;
     sclY = 1.0;
     finalScl = Math.min(sclX, sclY);
@@ -233,7 +233,11 @@ function adjustPreviewTransformation() {
  *
  * * * * * * * * * */
 function onCanvasMouseDown(e) {
-  //    console.log("onmousedown");
+//  console.log("onmousedown");
+//  console.log("onmousedown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
+//  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
+//  console.log("onmousedown >> e: " + e);
+//  console.log(e);
   dragging = true;
 
   prevCountingTime = new Date().getTime();
@@ -243,10 +247,21 @@ function onCanvasMouseDown(e) {
 //  adjustBounds(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
 //  adjustPreviewTransformation();
 //  draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 0.5);
-  _points.push([e.offsetX,e.offsetY, true]);
-  adjustBounds(e.offsetX,e.offsetY);
+
+  var x, y;
+  if (e.offsetX != undefined) {
+    x = e.offsetX;
+    y = e.offsetY;
+  } else {
+    x = e.layerX;
+    y = e.layerY;
+  }
+//  console.log("     x: " + x + ", y: " + y);
+
+  _points.push([x, y, true]);
+  adjustBounds(x, y);
   adjustPreviewTransformation();
-  draw(e.offsetX,e.offsetY, 0.5);
+  draw(x, y, 0.5);
 }
 
 function onCanvasMouseMove(e) {
@@ -258,10 +273,19 @@ function onCanvasMouseMove(e) {
 //  adjustPreviewTransformation();
 //  draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
 
-  _points.push([e.offsetX,e.offsetY, false]);
-  adjustBounds(e.offsetX,e.offsetY);
+  var x, y;
+  if (e.offsetX != undefined) {
+    x = e.offsetX;
+    y = e.offsetY;
+  } else {
+    x = e.layerX;
+    y = e.layerY;
+  }
+
+  _points.push([x, y, false]);
+  adjustBounds(x, y);
   adjustPreviewTransformation();
-  draw(e.offsetX,e.offsetY);
+  draw(x, y);
 
   // update counter -> this was for getting a handle on how often the Canvas fires a move-event
   /*

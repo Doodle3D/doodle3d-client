@@ -36,7 +36,7 @@ img {
 	top: 10px;
   width: 194px;
   height: 170px;
-  background: url('../img/buttons/btnNew.png');
+  background: url('../img/buttons/btnNew.png') no-repeat;
 }
 
 #btnPrevious {
@@ -62,7 +62,7 @@ img {
 /*	bottom: 150px;*/
   width: 146px;
   height: 144px;
-  background: url('../img/buttons/btnOops.png');
+  background: url('../img/buttons/btnOops.png') no-repeat;
 }
 
 #btnPrint {
@@ -77,12 +77,12 @@ img {
 
 #btnInfo {
 	right: 25px;
-	bottom: 20px;
+  bottom: 90px;
 }
 
 #btnSettings {
 	right: 25px;
-	bottom: 90px;
+  bottom: 20px;
 }
 
 

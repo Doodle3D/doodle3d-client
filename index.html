@@ -14,6 +14,7 @@
   <link href="css/normalize.css" rel="stylesheet" media="screen">
   <link href="css/fixedPosInterface.css" rel="stylesheet" media="screen">
   <link href="css/d3d_btns.css" rel="stylesheet" media="screen">
+  <link href="css/settingsPopup.css" rel="stylesheet" media="screen">
   <style type="text/css">
 
     .debugContainer {
@@ -94,6 +95,22 @@
   <div id="debug_textArea" style="position:absolute; bottom: -600px; width: 800px; height: 600px;">
     <textarea rows="5" cols="115" id="textdump"></textarea>
   </div>
+  <div id="contentOverlay">
+    <div id="settingsContainer">
+      <div id="settings">
+        <header>
+          <img src="img/settings_lable.png" alt="settings"/>
+        </header>
+        <div class="content">
+          <div class="settings">henk</div>
+          <div class="buttons">
+            <div class="btnOK"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 <div id="portrait">
   <img class="vertImage" src="img/bg_vertical2.png"/>
@@ -117,7 +134,7 @@
   $("#btnNext").css("opacity", "0.3");
   $("#btnSave").css("opacity", "0.3");
   $("#btnInfo").css("opacity", "0.3");
-  $("#btnSettings").css("opacity", "0.3");
+//  $("#btnSettings").css("opacity", "0.3");
 
 //  var debug = true;
 
@@ -130,6 +147,13 @@
     initPreviewRendering();
 
     initButtonBehavior();
+
+    initSettingsPopup();
+
+    $("#settings .settings").load("settings.html", function() {
+      console.log("finished loading settings.html, now loading settings...");
+      loadSettings();
+    });
 
     if(debug) {
       console.log("debug mode");

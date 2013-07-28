@@ -171,10 +171,22 @@ function initButtonBehavior() {
   btnTwistRight.on('touchstart', function(e) { startTwistRight(e) });
   btnTwistRight.on('touchend', function(e) { stopTwistRight(e) });
 
-  btnSettings.mouseup(function(e) {
+  function openSettings() {
+    console.log("f:openSettings()");
+    $("#contentOverlay").fadeIn(1000, function() {
+      loadSettings();
+    });
+
+  }
+  btnSettings.click(function(e) {
     e.preventDefault();
-    console.log("btnSettings mouse up");
+    console.log("btnSettings clicked");
+    showSettings();
   });
+//  btnSettings.on('touchend', function(e) {
+//    e.preventDefault();
+//    console.log("btnSettings touchend");
+//  });
 
   btnInfo.mouseup(function(e) {
     e.preventDefault();
@@ -209,8 +221,6 @@ function print(e) {
      //  generate_gcode();
      var gencode = generate_gcode();
     startPrint();
-
-
 
 //     console.log("");
 //     console.log("");

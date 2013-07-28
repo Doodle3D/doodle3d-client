@@ -101,7 +101,7 @@ function doOnResize() {
   //    console.log("doOnResize() >> " + new Date().getTime());
 //  $(".container").css("height", window.innerHeight);
 
-//  doClientAndOrientationStuff() // <-- is this necessary in this method?
+  doClientAndOrientationStuff() // <-- is this necessary in this method?
 
 //  console.log("f:doOnResize() >> $('#canvascontainer').innerHeight: " + window.innerHeight);
   if (window.innerHeight < 768) {
@@ -177,6 +177,7 @@ function initLayouting() {
   doClientAndOrientationStuff();
   doOnResize();
   //    doOnOrientationChange();
+
 
   // window.innerHeight
   console.log("window.innerHeight: " + window.innerHeight);

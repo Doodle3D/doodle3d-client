@@ -8,30 +8,30 @@ body {
 	display: table;
 }
 
-.big {
-	background: #a6e19c;
-	border: 1px solid #222;
-	height: 64px;
-	width: 64px;
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	border-radius: 32px;
-	-moz-border-radius: 32px;
-	-webkit-border-radius: 32px;
-}
-.small {
-	background: #a3d5f7;
-	border: 1px solid #222;
-	height: 40px;
-	width: 40px;
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	border-radius: 20px;
-	-moz-border-radius: 20px;
-	-webkit-border-radius: 20px;
-}
+/*.big {*/
+	/*background: #a6e19c;*/
+	/*border: 1px solid #222;*/
+	/*height: 64px;*/
+	/*width: 64px;*/
+	/*display: table-cell;*/
+	/*vertical-align: middle;*/
+	/*text-align: center;*/
+	/*border-radius: 32px;*/
+	/*-moz-border-radius: 32px;*/
+	/*-webkit-border-radius: 32px;*/
+/*}*/
+/*.small {*/
+	/*background: #a3d5f7;*/
+	/*border: 1px solid #222;*/
+	/*height: 40px;*/
+	/*width: 40px;*/
+	/*display: table-cell;*/
+	/*vertical-align: middle;*/
+	/*text-align: center;*/
+	/*border-radius: 20px;*/
+	/*-moz-border-radius: 20px;*/
+	/*-webkit-border-radius: 20px;*/
+/*}*/
 
 #logo {
 	position: absolute;
@@ -173,15 +173,29 @@ body {
 
   #btnsUpDown, #btnsTurnLeftRight {
   	zoom: 0.94;
+    -moz-transform: translate(0px,-5px) scale(.94);
   }
+
+	#btnNew {
+    zoom: 0.94;
+    -moz-transform: translate(-5px,-5px) scale(.94);
+    /*-moz-transform: translate(-3px,-3px);*/
+	}
+	#btnOops {
+    zoom: 0.94;
+    -moz-transform: translate(-5px,-10px) scale(0.94);
+	}
 
 	#btnPrint {
 		right: 10px;
 		top:  10px;
+    -moz-transform: translate(5px,-5px);
 	}
+
 
 	.btn {
 		zoom: 0.94;
+    -moz-transform: scale(.94);
 	}
 
 	#drawAreaContainer {
@@ -193,27 +207,43 @@ body {
 @media screen and (max-height: 560px) {
 	#d3dlogo {
 		zoom: 0.8;
-		left: 34%;
+    -moz-transform: translate(-20px,-15px) scale(.8);
+    /*-moz-transform: ;*/
+    left: 34%;
   }
 
   #btnsUpDown, #btnsTurnLeftRight {
   	zoom: 0.86;
+    -moz-transform: translate(0px,-7px) scale(0.86);
   }
 
 	#btnPrint {
 		right: 6px;
+    -moz-transform: translate(10px,-10px);
+	}
+
+	#btnNew {
+    zoom: 0.86;
+    -moz-transform: translate(-10px,-10px) scale(.86);
 	}
 
 	.btn {
 		zoom: 0.86;
+    -moz-transform: scale(.86);
 	}
 
   #btnOops {
     top: 350px;
+    zoom: 0.86;
+    -moz-transform: translate(-10px,-25px) scale(.86);
+  }
+  #btnSave {
+    -moz-transform: translate(-5px,-13px);
   }
 
-  #btnSave {
-    top: 200px;
+  #btnPrevious, #btnNext {
+    /*top: 200px;*/
+    -moz-transform: translate(-5px,-10px);
   }
 
   #drawAreaContainer {

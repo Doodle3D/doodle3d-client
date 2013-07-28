@@ -13,14 +13,17 @@ function startPrint() {
 //  sendLength = 2000; // 2000 regels
 //  sendGCodeSlice(sendIndex, sendLength);
 
-  $.post(kastjeURL + "test/" + "write/", { data: "test"}, function(data) {
-    console.log("returned data: " + JSON.stringify(data));
-    data = JSON.parse(data);
-    console.log("    data.msg: " + data.msg);
-    console.log("    data.status: " + data.status);
-//    console.log("    status: " + data["status"]);
-//    btnPrint.disabled = false;
-  });
+  // 2013-07-28 tot hier en niet verder... de GCODE kan al wel worden gegenereerd, maar we sturen het nu niet naar het kastje.
+  /*
+   $.post(kastjeURL + "test/" + "write/", { data: "test"}, function(data) {
+   console.log("returned data: " + JSON.stringify(data));
+   data = JSON.parse(data);
+   console.log("    data.msg: " + data.msg);
+   console.log("    data.status: " + data.status);
+   //    console.log("    status: " + data["status"]);
+   //    btnPrint.disabled = false;
+   });
+   //*/
 
   //http://192.168.10.1/cgi-bin/d3dapi/write
 }
