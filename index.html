@@ -140,6 +140,8 @@
 
   $(function() {
     console.log("ready");
+    var wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
+    console.log("wifibox URL: " + wifiboxURL);
 
     initLayouting();
 
@@ -148,7 +150,7 @@
 
     initButtonBehavior();
 
-    initSettingsPopup();
+    initSettingsPopup(wifiboxURL);
 
     $("#settings .settings").load("settings.html", function() {
       console.log("finished loading settings.html, now loading settings...");

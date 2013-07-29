@@ -1,4 +1,4 @@
-var wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
+var wifiboxURL;//"http://192.168.5.1/cgi-bin/d3dapi";
 
 var settings = {
   layerHeight: 0.2,
@@ -25,8 +25,9 @@ settingsForm.submit(function(e) {
   return false;
 })
 
-function initSettingsPopup() {
+function initSettingsPopup(apiURL) {
   console.log("f:initSettingsPopup()");
+  wifiboxURL = apiURL;
 
   $("#contentOverlay").hide();
 

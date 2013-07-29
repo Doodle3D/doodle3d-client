@@ -1,10 +1,6 @@
 var sendIndex;
 var sendLength;
 
-//var kastjeURL = "http://192.168.10.1/cgi-bin/d3dapi/";
-var kastjeURL = "http://192.168.5.1/cgi-bin/d3dapi/";
-
-
 var data = "";
 function startPrint(gcode) {
 	console.log("f:startPrint()");
