@@ -5,32 +5,20 @@ var sendLength;
 var kastjeURL = "http://192.168.5.1/cgi-bin/d3dapi/";
 
 
-var mydata = "";
-function startPrint() {
-  console.log("f:startPrint()");
+var data = "";
+function startPrint(gcode) {
+	console.log("f:startPrint()");
+	console.log("total # of lines: " + gcode.length);
+	data = gcode;
 
-//  sendIndex = 0;
-//  sendLength = 2000; // 2000 regels
-//  sendGCodeSlice(sendIndex, sendLength);
-
-  // 2013-07-28 tot hier en niet verder... de GCODE kan al wel worden gegenereerd, maar we sturen het nu niet naar het kastje.
-  /*
-   $.post(kastjeURL + "test/" + "write/", { data: "test"}, function(data) {
-   console.log("returned data: " + JSON.stringify(data));
-   data = JSON.parse(data);
-   console.log("    data.msg: " + data.msg);
-   console.log("    data.status: " + data.status);
-   //    console.log("    status: " + data["status"]);
-   //    btnPrint.disabled = false;
-   });
-   //*/
-
-  //http://192.168.10.1/cgi-bin/d3dapi/write
+	sendIndex = 0;
+	sendLength = 2000; // 2000 regels
+	sendGCodeSlice(sendIndex, sendLength);
 }
 
 
 function sendGCodeSlice(startIndex, sendAmt) {
-  console.log("f:senGCodeSlice >> startIndex:" + startIndex + ", sendAmt:" + sendAmt);
+  console.log("f:sendGCodeSlice >> startIndex:" + startIndex + ", sendAmt:" + sendAmt);
 
   if (typeof startIndex == "number" && typeof sendAmt == "number") {
     var lastOne = false;
@@ -42,10 +30,16 @@ function sendGCodeSlice(startIndex, sendAmt) {
     var _tmp = data.slice(startIndex, startIndex+sendAmt);
     //      console.log("f:senGCodeSlice >> _tmp.length:" + _tmp.length);
 
-    $.post("/doodle3d.of", { data:output }, function(data) {
-      btnPrint.disabled = false;
-    });
-    sendBoy( { data: _tmp, lastOne: lastOne} , function(e) {
+//    $.post("/doodle3d.of", { data:data }, function(data) {
+//      btnPrint.disabled = false;
+//    });
+    
+    var firstOne = false;
+    if (startIndex == 0) { firstOne = true; }
+    
+    var postData = { id: 0, gcode: _tmp.join("\n"), first: firstOne, last: lastOne};
+    
+    $.post( wifiboxURL + "/printer/print", postData , function(e) {
       console.log("sendBoy callback: " + e);
       //        console.log(e);
       //        console.log("e.success: " + e.success);
@@ -63,7 +57,7 @@ function sendGCodeSlice(startIndex, sendAmt) {
 }
 
 function sendBoy(sendObj, callback) {
-  console.log("f:sendBoy() (dummy kastje) >> data length: " + sendObj.data.length + ", lastOne: " + sendObj.lastOne);
+  console.log("f:sendBoy() (dummy kastje) >> data length: " + sendObj.data.length + ", lastOne: " + sendObj.last);
   console.log("");
   if (callback != undefined) callback({success:true});
 }

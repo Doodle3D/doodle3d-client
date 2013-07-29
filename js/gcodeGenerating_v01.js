@@ -155,7 +155,7 @@ function generate_gcode(callback) {
   // Return the gcode array, joined to one string with '\n' (line break) as the join parameter
   // This should result in a nice long string with line breaks
   if (callback == undefined) {
-    return gcode.join("\n");
+	  return gcode;
   } else {
     // post
   }

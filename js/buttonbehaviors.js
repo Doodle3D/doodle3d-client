@@ -213,36 +213,34 @@ function nextDoodle(e) {
 }
 
 function print(e) {
-  console.log("f:print()");
+	console.log("f:print()");
 
-  $("#textdump").text("");
-  if (_points.length > 2) {
-    //*
-     //  generate_gcode();
-     var gencode = generate_gcode();
-    startPrint();
+	$("#textdump").text("");
+	if (_points.length > 2) {
+		var gencode = generate_gcode();
+		startPrint(gencode);
 
-//     console.log("");
-//     console.log("");
-//     console.log("-------------------------------------------------");
-//     console.log("generated gcode:");
-//     console.log(gencode);
-//     console.log("-------------------------------------------------");
-//     console.log("");
-//     console.log("");
-//     console.log("");
+//		console.log("");
+//		console.log("");
+//		console.log("-------------------------------------------------");
+//		console.log("generated gcode:");
+//		console.log(gencode);
+//		console.log("-------------------------------------------------");
+//		console.log("");
+//		console.log("");
+//		console.log("");
 
-     $("#textdump").text(gencode);
-     //  copyToClipboard(gencode);
-     //*/
-  } else {
-    console.log("f:print >> not enough points!");
-  }
+		$("#textdump").text(gencode.join("\n"));
+		//  copyToClipboard(gencode);
+		//*/
+	} else {
+		console.log("f:print >> not enough points!");
+	}
 
 
-//  $.post("/doodle3d.of", { data:output }, function(data) {
-//    btnPrint.disabled = false;
-//  });
+//	$.post("/doodle3d.of", { data:output }, function(data) {
+//	btnPrint.disabled = false;
+//	});
 }
 
 
