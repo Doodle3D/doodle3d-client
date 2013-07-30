@@ -41,7 +41,7 @@ function generate_gcode(callback) {
   var extruder = 0.0;
   var prev = new Point(); prev.set(0, 0);
 
-  // vervanger voor ofxGetCenterofMass
+  // replacement (and improvement) for ofxGetCenterofMass
   var centerOfDoodle = {
     x: doodleBounds[0] + (doodleBounds[2]- doodleBounds[0])/2,
     y: doodleBounds[1] + (doodleBounds[3] - doodleBounds[1])/2
@@ -77,13 +77,14 @@ function generate_gcode(callback) {
     if (layer == 0) {
       gcode.push("M107"); //fan off
       if (firstLayerSlow) gcode.push("M220 S40"); //slow speed
-    } else if (layer == 2) { ////////LET OP
+    } else if (layer == 2) { ////////LET OP, pas bij layer 2 weer op normale snelheid ipv layer 1
       gcode.push("M106");      //fan on
       gcode.push("M220 S100"); //normal speed
     }
 
     var curLayerCommand = 0;
     var totalLayerCommands = p.length;
+    var layerProgress = 0;
 
     var paths = [];
     var pathCounter = -1;
@@ -101,10 +102,10 @@ function generate_gcode(callback) {
 //    console.log("f:generategcode() >> paths.length: " + paths.length);
 
     // loop over the subpaths (the separately drawn lines)
-    for (var j = 0; j < paths.length; j++) {
+    for (var j = 0; j < paths.length; j++) { // TODO paths > subpaths
       // this line is probably for drawing efficiency, alternating going from 0->end and end->0 (i.e. to and fro)
 //      vector<ofSubPath::Command> &commands = subpaths[even ? j : subpaths.size()-1-j].getCommands();
-      var commands = paths[j];
+      var commands = paths[j]; //commands zijn alle points uit subpath j // TODO commands > subpathPoints
 
       // loop over the coordinates of the subpath
       for (var i = 0; i < commands.length; i++) {
@@ -113,17 +114,17 @@ function generate_gcode(callback) {
         // this line is probably for drawing efficiency, alternating going from 0->end and end->0 (i.e. to and fro)
 //        ofPoint to = commands[(even || isLoop || loopAlways) ? i : last-i].to;
         var to = new Point(); to.set(commands[i][0], commands[i][1]);
-        var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
-        var z = (sublayer + 1) * layerHeight + zOffset;
+        var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? layerProgress : 0);
+        var z = (sublayer + 1) * layerHeight + zOffset; // you always start printing at z=0.2 (layerheight)
 
         var isTraveling = !isLoop && i==0;
         var doRetract = prev.distance(to) > retractionminDistance;
 
         if (enableTraveling && isTraveling) {
 //          console.log("enableTraveling && isTraveling >> doRetract: " + doRetract + ", retractionspeed: " + retractionspeed);
-          if (doRetract) gcode.push("G1 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3));
+          if (doRetract) gcode.push("G1 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
           gcode.push("G1 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + (z + (doRetract ? hop : 0)).toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
-          if (doRetract) gcode.push("G1 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3));
+          if (doRetract) gcode.push("G1 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal 
         } else {
 //          console.log("       else");
           extruder += prev.distance(to) * wallThickness * layerHeight / filamentThickness;
@@ -131,6 +132,7 @@ function generate_gcode(callback) {
         }
 
         curLayerCommand++;
+        layerProgress = curLayerCommand/totalLayerCommands;
         prev = to;
 
       }
