@@ -6,6 +6,10 @@ function startPrint(gcode) {
 	console.log("f:startPrint()");
 	console.log("total # of lines: " + gcode.length);
 	data = gcode;
+	
+	for (i = 0; i < data.length; i++) {
+		data[i] += " (" + i + ")";
+	}
 
 	sendIndex = 0;
 	sendLength = 2000; // 2000 regels

@@ -2,7 +2,6 @@ var gcodeStart = [];
 gcodeStart.push("G21 (mm)");
 gcodeStart.push("G91 (relative)");
 gcodeStart.push("G28 X0 Y0 Z0 (physical home)");
-gcodeStart.push("M104 S230 (temperature)");
 gcodeStart.push("G1 E10 F250 (flow)");
 gcodeStart.push("G92 X-100 Y-100 Z0 E10");
 gcodeStart.push("G1 Z3 F5000 (prevent diagonal line)");
@@ -36,8 +35,13 @@ function generate_gcode(callback) {
 
   // add gcode begin commands
   gcode = gcode.concat(gcodeStart);
+ 
+  console.log("printer temperature: ",settings["printer.temperature"]);
+  
+  gcode.push("M104 S" + settings["printer.temperature"] + " (temperature)");
+  gcode.push("M109 S" + settings["printer.temperature"] + " (wait for heating)");
 
-  var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
+  var layers = maxObjectHeight / settings["printer.layerHeight"]; //maxObjectHeight instead of objectHeight
   var extruder = 0.0;
   var prev = new Point(); prev.set(0, 0);
 
@@ -99,7 +103,7 @@ function generate_gcode(callback) {
       }
     }
 //    console.log("f:generategcode() >> paths.length: " + paths.length);
-
+    
     // loop over the subpaths (the separately drawn lines)
     for (var j = 0; j < paths.length; j++) {
       // this line is probably for drawing efficiency, alternating going from 0->end and end->0 (i.e. to and fro)
@@ -114,11 +118,11 @@ function generate_gcode(callback) {
 //        ofPoint to = commands[(even || isLoop || loopAlways) ? i : last-i].to;
         var to = new Point(); to.set(commands[i][0], commands[i][1]);
         var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
-        var z = (sublayer + 1) * layerHeight + zOffset;
+        var z = (sublayer + 1) * settings["printer.layerHeight"] + zOffset;
 
         var isTraveling = !isLoop && i==0;
         var doRetract = prev.distance(to) > retractionminDistance;
-
+        
         if (enableTraveling && isTraveling) {
 //          console.log("enableTraveling && isTraveling >> doRetract: " + doRetract + ", retractionspeed: " + retractionspeed);
           if (doRetract) gcode.push("G1 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3));
@@ -126,7 +130,7 @@ function generate_gcode(callback) {
           if (doRetract) gcode.push("G1 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3));
         } else {
 //          console.log("       else");
-          extruder += prev.distance(to) * wallThickness * layerHeight / filamentThickness;
+          extruder += prev.distance(to) * settings["printer.wallThickness"] * settings["printer.layerHeight"] / filamentThickness;
           gcode.push("G1 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (speed * 60).toFixed(3) + " E" + extruder.toFixed(3));
         }
 

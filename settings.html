@@ -47,23 +47,24 @@
       <button>Check connection...</button>
     </fieldset>
 
-    <fieldset>
+    <fieldset id="printersettings">
       <legend>Print settings</legend>
-      <label for="layerHeight">Layer height:</label><input type="text" class="small" name="layerHeight" id="layerHeight" value="0.12">mm<br>
-      <label for="wallThickness">Wall thickness:</label><input type="text" class="small" name="wallThickness" id="wallThickness" value="0.6">mm<br>
-      <label for="filamentThickness">Filament thickness:</label><input type="text" class="small" name="filamentThickness" id="filamentThickness" value="2.89">mm<br>
+      <label for="layerHeight">Layer height:</label><input type="text" class="small" name="printer.layerHeight">mm<br>
+      <label for="wallThickness">Wall thickness:</label><input type="text" class="small" name="printer.wallThickness">mm<br>
+      <label for="filamentThickness">Filament thickness:</label><input type="text" class="small" name="printer.filamentThickness">mm<br>
+      <label for="temperature">Temperature:</label><input type="text" class="small" name="printer.temperature">degrees C<br>
       <br>
-      <label for="speed">Speed:</label><input type="text" name="speed" id="speed" class="small" value="50">mm/s<br>
-      <label for="travelSpeed">Travel speed:</label><input type="text" name="travelSpeed" id="travelSpeed" class="small" value="200">mm/s<br>
+      <label for="speed">Speed:</label><input type="text" name="printer.speed" class="small">mm/s<br>
+      <label for="travelSpeed">Travel speed:</label><input type="text" name="printer.travelSpeed" class="small">mm/s<br>
       <br>
-      <label for="autoWarmUp">Auto warm-up:</label><input type="checkbox" name="autoWarmUp" id="autoWarmUp" value="autoWarmUp" checked><br>
-      <label for="firstLayerSlow">First layer slow:</label><input type="checkbox" name="firstLayerSlow" id="firstLayerSlow" value="firstLayerSlow" checked><br>
-      <label for="useSubLayers">Use sub-layers:</label><input type="checkbox" name="useSubLayers" id="useSubLayers" value="firstLayerSlow" checked><br>
-      <label for="useRetraction">Use retraction:</label><input type="checkbox" name="useRetraction" id="useRetraction" value="useRetraction" checked><br>
+      <label for="autoWarmUp">Auto warm-up:</label><input type="checkbox" name="printer.autoWarmUp" value="autoWarmUp"><br>
+      <label for="firstLayerSlow">First layer slow:</label><input type="checkbox" name="printer.firstLayerSlow" value="firstLayerSlow"><br>
+      <label for="useSubLayers">Use sub-layers:</label><input type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
+      <label for="useRetraction">Use retraction:</label><input type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
       <br>
-      <label for="retractionAmount">Retraction amount:</label><input type="text" class="small" name="retractionAmount" id="retractionAmount" value="2">mm<br>
-      <label for="retractionMinDistance">Retraction min distance:</label><input type="text" class="small" name="retractionMinDistance" id="retractionMinDistance" value="1">mm<br>
-      <label for="retractionSpeed">Retraction speed:</label><input type="text" class="small" name="retractionSpeed" id="retractionSpeed" value="250">mm/s<br>
+      <label for="retractionAmount">Retraction amount:</label><input type="text" class="small" name="printer.retraction.amount">mm<br>
+      <label for="retractionMinDistance">Retraction min distance:</label><input type="text" class="small" name="printer.retraction.minDistance">mm<br>
+      <label for="retractionSpeed">Retraction speed:</label><input type="text" class="small" name="printer.retraction.speed">mm/s<br>
     </fieldset>
 
     <fieldset>
@@ -243,5 +244,6 @@ printer.temperature: 230
 X  printer.travelSpeed: 200
 X  printer.useSubLayers: true
 X  printer.wallThickness: 0.5
+X  printer.temperature: 230
 
 -->
