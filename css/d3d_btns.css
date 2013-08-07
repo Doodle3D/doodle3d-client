@@ -149,7 +149,14 @@ img {
 	-webkit-user-select: none;
 	cursor: hand;
 }
-
+#displayTemp {
+	position: absolute;
+	right: 55px;
+	top: 334px;
+	font-weight: bold;
+	background: white;
+	display:none;
+}
 
 
 

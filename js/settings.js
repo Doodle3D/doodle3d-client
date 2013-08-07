@@ -185,5 +185,5 @@ var windowbounds = [0, 0, 800, 500];
 var windowcenter = true;
 var windowfullscreen = false;
 var autoWarmUpCommand = "M104 S230";
-var checkTemperatureInterval = 3;
+//var checkTemperatureInterval = 3;
 var autoWarmUpDelay = 3;

@@ -121,6 +121,8 @@ function generate_gcode(callback) {
         var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
         var z = (sublayer + 1) * settings["printer.layerHeight"] + zOffset;
 
+				// TODO if (z > layerheight*2) do M106 (enable fan)
+
         var isTraveling = !isLoop && i==0;
         var doRetract = prev.distance(to) > retractionminDistance;
 

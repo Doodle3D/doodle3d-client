@@ -13,6 +13,8 @@ var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
 var btnDebug; // debug
 
+var displayTempEnabled = false;
+
 function initButtonBehavior() {
   console.log("f:initButtonBehavior >> btnNew = " + btnNew);
 
@@ -25,6 +27,8 @@ function initButtonBehavior() {
   btnInfo = $("#btnInfo");
   btnSettings = $("#btnSettings");
 //  btnPrint= $("#btnPrint");
+  btnStop = $("#btnStop");
+  displayTemp = $("#displayTemp");
 
 //  btnPrevious = $("#btnPrevious");
 //  btnNext = $("#btnNext");
@@ -202,6 +206,10 @@ function initButtonBehavior() {
     $(".agentInfo").toggleClass("agentInfoToggle");
     e.preventDefault();
   })
+  
+  btnStop.click(function(e) {
+    printer.stop()
+  });
 }
 
 
@@ -290,4 +298,20 @@ function previewTwistRight() {
   rStep += twistIncrement;
   //        }
   redrawPreview();
+}
+
+
+
+function updatePrinterInfo() {
+	if(!displayTempEnabled && printer.alive) {
+		displayTemp.show();
+		displayTempEnabled = true;
+	} else if(displayTempEnabled && !printer.alive) {
+		displayTemp.hide();
+		displayTempEnabled = false;
+	}
+	
+	if(displayTempEnabled) {
+		displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
+	}
 }
