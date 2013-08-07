@@ -5,7 +5,7 @@ $("#btnSave").css("opacity", "0.3");
 $("#btnInfo").css("opacity", "0.3");
 //$("#btnSettings").css("opacity", "0.3");
 
-//  var debug = true;
+  var debug = true;
 
 var printer =  new Printer(); 
 var updateTemperatureInterval; 

@@ -26,7 +26,9 @@
     }
 
     #debug_textArea {
-      display:none;
+      position:absolute; 
+      bottom: 0; 
+      width: 800px; 
     }
 
     .debugBtn {
@@ -93,22 +95,19 @@
       </div>
     </div>
   </div>
-  <div id="debug_textArea" style="position:absolute; bottom: -600px; width: 800px; height: 600px;">
+  <div id="debug_textArea">
     <textarea rows="5" cols="115" id="textdump"></textarea>
   </div>
   <div id="contentOverlay">
-    <div id="settingsContainer">
-      <div id="settings">
-        <header>
-          <img src="img/settings_lable.png" alt="settings"/>
-        </header>
-        <div class="content">
-          <div class="settings">henk</div>
-          <div class="buttons">
-            <div class="btnOK"></div>
-          </div>
+    <div id="settings">
+      <header>
+        <img src="img/settings_lable.png" alt="settings"/>
+      </header>
+      <div class="content">
+        <div class="settings">henk</div>
+        <div class="buttons">
+          <div class="btnOK"></div>
         </div>
-
       </div>
     </div>
   </div>

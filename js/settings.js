@@ -2,27 +2,27 @@ var wifiboxURL;//"http://192.168.5.1/cgi-bin/d3dapi";
 
 //these settings are defined in the firmware (conf_defaults.lua) and will be initialized in loadSettings()
 var settings = {
-//  "network.ap.ssid": "d3d-ap-%%MAC_ADDR_TAIL%%",
-//  "network.ap.address": "192.168.10.1",
-//  "network.ap.netmask": "255.255.255.0",
-//  "printer.temperature": 215,
-//  "printer.objectHeight": '???',
-//  "printer.layerHeight": 0.2,
-//  "printer.wallThickness": 0.6,
-//  "printer.speed": 50,
-//  "printer.travelSpeed": 200,
-//  "printer.filamentThickness": 2.89,
-//  "printer.useSubLayers": true,
-//  "printer.firstLayerSlow": true,
-//  "printer.autoWarmUp": true,
-//  "printer.simplify.iterations": 10,
-//  "printer.simplify.minNumPoints": 15,
-//  "printer.simplify.minDistance": 3,
-//  "printer.retraction.enabled": true,
-//  "printer.retraction.speed": 250,
-//  "printer.retraction.minDistance": 1,
-//  "printer.retraction.amount": 2,
-//  "printer.autoWarmUpCommand": "M104 S230 (hardcoded temperature)" 
+"network.ap.ssid": "d3d-ap-%%MAC_ADDR_TAIL%%",
+"network.ap.address": "192.168.10.1",
+"network.ap.netmask": "255.255.255.0",
+"printer.temperature": 215,
+"printer.objectHeight": '???',
+"printer.layerHeight": 0.2,
+"printer.wallThickness": 0.6,
+"printer.speed": 50,
+"printer.travelSpeed": 200,
+"printer.filamentThickness": 2.89,
+"printer.useSubLayers": true,
+"printer.firstLayerSlow": true,
+"printer.autoWarmUp": true,
+"printer.simplify.iterations": 10,
+"printer.simplify.minNumPoints": 15,
+"printer.simplify.minDistance": 3,
+"printer.retraction.enabled": true,
+"printer.retraction.speed": 250,
+"printer.retraction.minDistance": 1,
+"printer.retraction.amount": 2,
+"printer.autoWarmUpCommand": "M104 S230 (hardcoded temperature)" 
 }
 
 var settingsForm = $("#settingsForm");
