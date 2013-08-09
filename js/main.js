@@ -2,11 +2,6 @@ var debug = false;
 
 var printer =  new Printer(); 
 
-var $canvas;
-var canvas;
-var $preview;
-var preview;
-
 $(function() {
   console.log("ready");
   //var wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
