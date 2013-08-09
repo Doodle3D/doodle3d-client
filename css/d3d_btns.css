@@ -158,5 +158,11 @@ img {
 	display:none;
 }
 
+.disabled { 
+	opacity: 0.3;
+	cursor: default;
+}
 
-
+#btnStop.disabled {
+	display: none;
+}

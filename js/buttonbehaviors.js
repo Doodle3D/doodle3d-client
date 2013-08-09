@@ -7,13 +7,19 @@ var twistIncrement = Math.PI/1800;
 
 var btnOopsInterval;
 
-//var btnNew, btnPrevious, btnNext;
+var btnNew, btnPrevious, btnNext;
 var btnOops, btnStop, btnClear;
 var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
 var btnDebug; // debug
 
 var displayTempEnabled = false;
+
+var IDLE_STATE = "idle";
+var PRINTING_STATE = "printing";
+
+var state = IDLE_STATE;
+var prevState = state;
 
 function initButtonBehavior() {
   console.log("f:initButtonBehavior >> btnNew = " + btnNew);
@@ -26,7 +32,8 @@ function initButtonBehavior() {
   btnTwistRight = $("#btnTwistRight");
   btnInfo = $("#btnInfo");
   btnSettings = $("#btnSettings");
-//  btnPrint= $("#btnPrint");
+  btnNew = $("#btnNew");
+  btnPrint= $("#btnPrint");
   btnStop = $("#btnStop");
   displayTemp = $("#displayTemp");
 
@@ -36,7 +43,7 @@ function initButtonBehavior() {
   //debug
   btnDebug = $(".debugBtn");
 
-  if (!btnNew.addEventListener) {
+  /*if (!btnNew.addEventListener) {
     btnNew.attachEvent('onmousedown',clearDoodle);
     btnNew.attachEvent('ontouchstart',clearDoodle);
     btnPrint.attachEvent('onmousedown',print);
@@ -56,7 +63,16 @@ function initButtonBehavior() {
 //    btnPrevious.addEventListener('touchstart',prevDoodle,false);
 //    btnNext.addEventListener('mousedown',nextDoodle,false);
 //    btnNext.addEventListener('touchstart',nextDoodle,false);
-  }
+  }*/
+
+	btnNew.bind('touchstart mousedown',clearDoodle);
+	btnPrint.bind('touchstart mousedown',print);
+
+	// not using these at the moment
+	$("#btnPrevious").css("opacity", "0.3");
+	$("#btnNext").css("opacity", "0.3");
+	$("#btnSave").css("opacity", "0.3");
+	$("#btnInfo").css("opacity", "0.3");
 
   btnClear.click(function(e) {
     e.preventDefault();
@@ -175,16 +191,15 @@ function initButtonBehavior() {
   btnTwistRight.on('touchstart', function(e) { startTwistRight(e) });
   btnTwistRight.on('touchend', function(e) { stopTwistRight(e) });
 
-  function openSettings() {
+  /*function openSettings() {
     console.log("f:openSettings()");
     $("#contentOverlay").fadeIn(1000, function() {
       loadSettings();
     });
-
-  }
-  btnSettings.click(function(e) {
-    e.preventDefault();
-    console.log("btnSettings clicked");
+  }*/
+  btnSettings.bind('touchstart mousedown',function () {
+    //e.preventDefault();
+    //console.log("btnSettings clicked");
     showSettings();
   });
 //  btnSettings.on('touchend', function(e) {
@@ -197,8 +212,6 @@ function initButtonBehavior() {
     console.log("btnInfo mouse up");
   });
 
-
-
   // DEBUG
   //  $(".agentInfo").css("display", "none");
   btnDebug.click(function(e) {
@@ -206,10 +219,11 @@ function initButtonBehavior() {
     $(".agentInfo").toggleClass("agentInfoToggle");
     e.preventDefault();
   })
-  
-  btnStop.click(function(e) {
-    printer.stop()
-  });
+
+  btnStop.bind('touchstart mousedown',stopPrint);
+}
+function stopPrint() {
+	printer.stop();
 }
 
 
@@ -225,6 +239,8 @@ function print(e) {
 
 	$("#textdump").text("");
 	if (_points.length > 2) {
+
+		setState(PRINTING_STATE);
 		var gencode = generate_gcode();
 		startPrint(gencode);
 
@@ -302,7 +318,7 @@ function previewTwistRight() {
 
 
 
-function updatePrinterInfo() {
+function update() {
 	if(!displayTempEnabled && printer.alive) {
 		displayTemp.show();
 		displayTempEnabled = true;
@@ -314,4 +330,34 @@ function updatePrinterInfo() {
 	if(displayTempEnabled) {
 		displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
 	}
+
+	var btnPrint= $("#btnPrint");	
+	
+	setState(printer.printing? PRINTING_STATE : IDLE_STATE);
+}
+
+
+function setState(newState) {
+	if(newState == state) return;
+	
+	switch(newState) {
+		case IDLE_STATE: 
+
+			btnPrint.removeClass("disabled"); // enable print button
+			btnStop.addClass("disabled"); // disable stop button
+			btnPrint.bind('touchstart mousedown',print);
+
+			break;
+		case PRINTING_STATE: 
+			
+			btnPrint.addClass("disabled"); // disable print button
+			btnStop.removeClass("disabled"); // enable stop button
+			btnPrint.unbind('touchstart mousedown');
+		
+			break;
+	}
+	
+	prevState = state;
+	state = newState;
+	
 }

@@ -15,43 +15,8 @@
   <link href="css/fixedPosInterface.css" rel="stylesheet" media="screen">
   <link href="css/d3d_btns.css" rel="stylesheet" media="screen">
   <link href="css/settingsPopup.css" rel="stylesheet" media="screen">
-  <style type="text/css">
-
-    .debugContainer {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      z-index: 500;
-      display: none;
-    }
-
-    #debug_textArea {
-      position:absolute; 
-      bottom: 0; 
-      width: 800px; 
-    }
-
-    .debugBtn {
-      width: 25px;
-      height: 25px;
-      background-color: #03b;
-      float:left;
-    }
-
-    .agentInfo {
-      background: #fff;
-      border: 1px #333 solid;
-      display: none;
-      float:left;
-      opacity: .7;
-    }
-
-    .agentInfoToggle {
-      display: block;
-    }
-
-
-  </style>
+  <link href="css/debug.css" rel="stylesheet" media="screen">
+  
 </head>
 <body>
 <div class="debugContainer">
@@ -72,7 +37,7 @@
       <img class="btn" id="btnSave" src="img/buttons/btnSave.png">
       <div class="btn" id="btnOops"></div>
       <img class="btn" id="btnPrint" src="img/buttons/btnPrint.png">
-      <img class="btn" id="btnStop" src="img/buttons/btnStop.png">
+      <img class="btn disabled" id="btnStop" src="img/buttons/btnStop.png">
       <img class="btn" id="btnInfo" src="img/buttons/btnInfo.png">
       <img class="btn" id="btnSettings" src="img/buttons/btnSettings.png">
     </div>
@@ -129,5 +94,6 @@
 <script src="js/Printer.js"></script>
 <!--<script src="js/draw_logic.js"></script>-->
 <script src="js/main.js"></script>
+
 </body>
 </html>

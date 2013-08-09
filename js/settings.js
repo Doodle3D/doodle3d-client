@@ -22,7 +22,7 @@ var settings = {
 "printer.retraction.speed": 250,
 "printer.retraction.minDistance": 1,
 "printer.retraction.amount": 2,
-"printer.autoWarmUpCommand": "M104 S230 (hardcoded temperature)" 
+"printer.autoWarmUpCommand": "M104 S220 (hardcoded temperature)" 
 }
 
 var settingsForm = $("#settingsForm");

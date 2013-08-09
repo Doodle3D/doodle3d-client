@@ -1,0 +1,33 @@
+.debugContainer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 500;
+  display: none;
+}
+
+#debug_textArea {
+  position:absolute; 
+  bottom: 0; 
+  width: 800px; 
+  display: none;
+}
+
+.debugBtn {
+  width: 25px;
+  height: 25px;
+  background-color: #03b;
+  float:left;
+}
+
+.agentInfo {
+  background: #fff;
+  border: 1px #333 solid;
+  display: none;
+  float:left;
+  opacity: .7;
+}
+
+.agentInfoToggle {
+  display: block;
+}

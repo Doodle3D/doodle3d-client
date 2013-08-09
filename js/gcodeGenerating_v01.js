@@ -6,8 +6,7 @@ gcodeStart.push("G1 E10 F250 (flow)");
 gcodeStart.push("G92 X-100 Y-100 Z0 E10");
 gcodeStart.push("G1 Z3 F5000 (prevent diagonal line)");
 gcodeStart.push("G90 (absolute)");
-gcodeStart.push("M106 (fan on)");
-
+//gcodeStart.push("M106 (fan on)");
 var gcodeEnd= [];
 gcodeEnd.push("G1 X-100 Y-100 F15000 (fast homing)");
 gcodeEnd.push("M107");
@@ -80,7 +79,7 @@ function generate_gcode(callback) {
 
     if (layer == 0) {
       gcode.push("M107"); //fan off
-      if (firstLayerSlow) gcode.push("M220 S40"); //slow speed
+      if (firstLayerSlow) gcode.push("M220 S20"); //slow speed
     } else if (layer == 2) { ////////LET OP, pas bij layer 2 weer op normale snelheid ipv layer 1
       gcode.push("M106");      //fan on
       gcode.push("M220 S100"); //normal speed
@@ -120,8 +119,6 @@ function generate_gcode(callback) {
         var to = new Point(); to.set(commands[i][0], commands[i][1]);
         var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
         var z = (sublayer + 1) * settings["printer.layerHeight"] + zOffset;
-
-				// TODO if (z > layerheight*2) do M106 (enable fan)
 
         var isTraveling = !isLoop && i==0;
         var doRetract = prev.distance(to) > retractionminDistance;

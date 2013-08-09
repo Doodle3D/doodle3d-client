@@ -1,21 +1,18 @@
-// not using these at the moment
-$("#btnPrevious").css("opacity", "0.3");
-$("#btnNext").css("opacity", "0.3");
-$("#btnSave").css("opacity", "0.3");
-$("#btnInfo").css("opacity", "0.3");
-//$("#btnSettings").css("opacity", "0.3");
-
-  var debug = true;
+var debug = false;
 
 var printer =  new Printer(); 
-var updateTemperatureInterval; 
+
+var $canvas;
+var canvas;
+var $preview;
+var preview;
 
 $(function() {
   console.log("ready");
   //var wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
   var wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
   console.log("wifibox URL: " + wifiboxURL);
-  
+
   initLayouting();
 
   initDoodleDrawing();
@@ -39,13 +36,6 @@ $(function() {
 	printer.init();
 	printer.preheat();
 	
-	$(document).on(Printer.UPDATE,updatePrinterInfo);
-//    $("#mycanvas").css("scale", 0.5);
-
-
-	
-
-  //debug
-//    generate_gcode();
+	$(document).on(Printer.UPDATE,update);
 
 })
