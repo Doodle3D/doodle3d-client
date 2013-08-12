@@ -40,7 +40,7 @@ function Printer() {
 		  dataType: 'json',
 		  timeout: this.timeoutTime,
 		  success: function(data){
-		  	console.log("Printer:preheat response: " + data);
+		  	console.log("Printer:preheat response: ",data);
 			},
 			error: function(jqXHR, status, errorThrown){   //the status returned will be "timeout" 
 	 			//console.log("Printer:temperature error. Status: ",status,' errorThrown: ',errorThrown);

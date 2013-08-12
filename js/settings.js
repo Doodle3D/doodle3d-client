@@ -5,13 +5,13 @@ var settings = {
 "network.ap.ssid": "d3d-ap-%%MAC_ADDR_TAIL%%",
 "network.ap.address": "192.168.10.1",
 "network.ap.netmask": "255.255.255.0",
-"printer.temperature": 215,
+"printer.temperature": 220,
 "printer.objectHeight": '???',
 "printer.layerHeight": 0.2,
-"printer.wallThickness": 0.6,
+"printer.wallThickness": 0.7,
 "printer.speed": 50,
 "printer.travelSpeed": 200,
-"printer.filamentThickness": 2.89,
+"printer.filamentThickness": 2.85,
 "printer.useSubLayers": true,
 "printer.firstLayerSlow": true,
 "printer.autoWarmUp": true,
@@ -82,14 +82,14 @@ function loadSettings() {
     $("#ssid").attr('value', settings["network.ap.ssid"]);
 
     //update html with loaded printer settings
+  
 	$("#printersettings input").each( function(index,element) {
 		var element = $(element);
-		//console.log("printer setting input",index,element,element.attr('name'));
+		//console.log("printer setting input: ",index,element.attr("type"),element.attr('name')); //,element);
 		if(element.attr("type") == "text") {
 			element.val(settings[element.attr('name')]);
 		} else if(element.attr("type") == "checkbox") {
-			//console.log("settings setting: ",settings[element.attr('name')],typeof settings[element.attr('name')]);
-			element.attr('checked', settings[element.attr('name')]);
+			element.prop('checked', settings[element.attr('name')]);
 		}
 			
 		//console.log("  val: ",$(element).val(),element);
@@ -111,7 +111,7 @@ function saveSettings(callback) {
 	if(element.attr("type") == "text") {
 		settings[element.attr('name')] = element.val();
 	} else if(element.attr("type") == "checkbox") {
-		settings[element.attr('name')] = element.attr('checked')
+		settings[element.attr('name')] = element.prop('checked')
 	}
   });
   
@@ -143,12 +143,12 @@ function saveSettings(callback) {
 //TODO: find all references to these variables, replace them and finally remove these.
 var objectHeight = 20;
 var layerHeight = .2;
-var wallThickness = .5;
+//var wallThickness = .5;
 var hop = 0;
-var speed = 70;
-var travelSpeed = 200;
+//var speed = 70;
+//var travelSpeed = 200;
 var enableTraveling = true;
-var filamentThickness = 2.89;
+//var filamentThickness = 2.89;
 var minScale = .3;
 var maxScale = 1;
 var shape = "%";

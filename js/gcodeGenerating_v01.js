@@ -1,16 +1,28 @@
 var gcodeStart = [];
-gcodeStart.push("G21 (mm)");
-gcodeStart.push("G91 (relative)");
-gcodeStart.push("G28 X0 Y0 Z0 (physical home)");
-gcodeStart.push("G1 E10 F250 (flow)");
-gcodeStart.push("G92 X-100 Y-100 Z0 E10");
-gcodeStart.push("G1 Z3 F5000 (prevent diagonal line)");
-gcodeStart.push("G90 (absolute)");
-//gcodeStart.push("M106 (fan on)");
+gcodeStart.push(";Generated with Doodle3D");
+gcodeStart.push("G21"); 						// metric values
+gcodeStart.push("G91"); 						// relative positioning
+gcodeStart.push("M107"); 						// start with the fan off
+gcodeStart.push("G28 X0 Y0"); 			// move X/Y to min endstops
+gcodeStart.push("G28 Z0"); 					// move Z to min endstops
+gcodeStart.push("G1 Z15 F9000"); 		// move the platform down 15mm
+gcodeStart.push("G92 E0"); 					// zero the extruded length
+gcodeStart.push("G1 F200 E10");			// extrude 10mm of feed stock
+gcodeStart.push("G92 E0");					// zero the extruded length again
+gcodeStart.push("G92 X-100 Y-100 E0"); // zero the extruded length again and make center the start position
+gcodeStart.push("G1 F9000");				
+gcodeStart.push("G90"); 						// absolute positioning
+gcodeStart.push("M117 Printing Doodle...  ");	// display message (20 characters to clear whole screen)
+
 var gcodeEnd= [];
-gcodeEnd.push("G1 X-100 Y-100 F15000 (fast homing)");
-gcodeEnd.push("M107");
-gcodeEnd.push("M84 (disable axes)");
+gcodeEnd.push("M107"); 							// fan off
+gcodeEnd.push("G91"); 							// relative positioning
+gcodeEnd.push("G1 E-1 F300"); 			// retract the filament a bit before lifting the nozzle, to release some of the pressure
+gcodeEnd.push("G1 Z+0.5 E-5 X-20 Y-20 F9000"); // move Z up a bit and retract filament even more
+gcodeEnd.push("G28 X0 Y0"); 				// move X/Y to min endstops, so the head is out of the way
+gcodeEnd.push("M84"); 							// disable axes / steppers
+gcodeEnd.push("G90"); 							// absolute positioning
+gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)
 
 var gcode = [];
 function generate_gcode(callback) {
@@ -31,16 +43,24 @@ function generate_gcode(callback) {
 //  console.log("paths.toString(): " + paths.toString());
 //  return;
 
+	console.log("settings: ",settings);
+	var speed 						= settings["printer.speed"]
+	var normalSpeed 			= speed;
+  var bottomSpeed 			= speed*0.5;
+	var travelSpeed 			= settings["printer.travelSpeed"]
+	var filamentThickness = settings["printer.filamentThickness"];
+	var wallThickness 		= settings["printer.wallThickness"];
+	var layerHeight 			= settings["printer.layerHeight"];
+	var temperature 			= settings["printer.temperature"];
 
+  console.log("printer temperature: ",temperature);
+	gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
   // add gcode begin commands
   gcode = gcode.concat(gcodeStart);
+	
+  //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
 
-  console.log("printer temperature: ",settings["printer.temperature"]);
-  
-  gcode.push("M104 S" + settings["printer.temperature"] + " (temperature)");
-  gcode.push("M109 S" + settings["printer.temperature"] + " (wait for heating)");
-
-  var layers = maxObjectHeight / settings["printer.layerHeight"]; //maxObjectHeight instead of objectHeight
+  var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
   var extruder = 0.0;
   var prev = new Point(); prev.set(0, 0);
 
@@ -51,8 +71,13 @@ function generate_gcode(callback) {
 //    x: doodleBounds[0],
 //    y: doodleBounds[1]
   }
-
+  
+  
+	
   console.log("f:generategcode() >> layers: " + layers);
+  
+  
+  
   for (var layer = 0; layer < layers; layer++) {
 
     var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
@@ -78,11 +103,17 @@ function generate_gcode(callback) {
     pointsRotate(p, rStep * progress * 139);
 
     if (layer == 0) {
-      gcode.push("M107"); //fan off
-      if (firstLayerSlow) gcode.push("M220 S20"); //slow speed
+      //gcode.push("M107"); //fan off
+      if (firstLayerSlow) {
+	      //gcode.push("M220 S20"); //slow speed
+	      speed = bottomSpeed;
+			  console.log("> speed: ",speed);
+      }
     } else if (layer == 2) { ////////LET OP, pas bij layer 2 weer op normale snelheid ipv layer 1
       gcode.push("M106");      //fan on
-      gcode.push("M220 S100"); //normal speed
+      //gcode.push("M220 S100"); //normal speed
+      speed = normalSpeed;
+  	  console.log("> speed: ",speed);
     }
 
     var curLayerCommand = 0;
@@ -103,7 +134,7 @@ function generate_gcode(callback) {
       }
     }
 //    console.log("f:generategcode() >> paths.length: " + paths.length);
-
+		
     // loop over the subpaths (the separately drawn lines)
     for (var j = 0; j < paths.length; j++) { // TODO paths > subpaths
       // this line is probably for drawing efficiency, alternating going from 0->end and end->0 (i.e. to and fro)
@@ -118,19 +149,19 @@ function generate_gcode(callback) {
 //        ofPoint to = commands[(even || isLoop || loopAlways) ? i : last-i].to;
         var to = new Point(); to.set(commands[i][0], commands[i][1]);
         var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
-        var z = (sublayer + 1) * settings["printer.layerHeight"] + zOffset;
+        var z = (sublayer + 1) * layerHeight + zOffset;
 
         var isTraveling = !isLoop && i==0;
         var doRetract = prev.distance(to) > retractionminDistance;
 
         if (enableTraveling && isTraveling) {
 //          console.log("enableTraveling && isTraveling >> doRetract: " + doRetract + ", retractionspeed: " + retractionspeed);
-          if (doRetract) gcode.push("G1 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
-          gcode.push("G1 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + (z + (doRetract ? hop : 0)).toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
-          if (doRetract) gcode.push("G1 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal 
+          if (doRetract) gcode.push("G0 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
+          gcode.push("G0 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + (z + (doRetract ? hop : 0)).toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
+          if (doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal 
         } else {
 //          console.log("       else");
-          extruder += prev.distance(to) * settings["printer.wallThickness"] * settings["printer.layerHeight"] / filamentThickness;
+          extruder += prev.distance(to) * wallThickness * layerHeight / filamentThickness;
           gcode.push("G1 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (speed * 60).toFixed(3) + " E" + extruder.toFixed(3));
         }
 
