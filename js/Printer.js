@@ -32,13 +32,26 @@ function Printer() {
 	this.preheat = function() {
     console.log("Printer:preheat");
 		var postData = { id: 0 };
-    $.post( this.wifiboxURL + "/printer/heatup", postData , function(e) {
-      console.log("Printer:preheat response: " + e);
-      
-      if (e.success = true) {
-        console.log("  success");
-      }
-    });
+    var self = this;
+    $.ajax({
+		  url: this.wifiboxURL + "/printer/heatup",
+		  type: "POST",
+		  data: postData,
+		  dataType: 'json',
+		  timeout: this.timeoutTime,
+		  success: function(data){
+		  	console.log("Printer:preheat response: " + data);
+			},
+			error: function(jqXHR, status, errorThrown){   //the status returned will be "timeout" 
+	 			//console.log("Printer:temperature error. Status: ",status,' errorThrown: ',errorThrown);
+	 			switch(status) {
+	 				case 'timeout':
+		 				console.log("retrieving printer/heatup timeout");
+		 				self.preheat(); 
+	 					break;
+	 			} 			
+			}
+		});
 	}
 	
 	this.stop = function() {
@@ -83,6 +96,7 @@ function Printer() {
 	 			//console.log("Printer:temperature error. Status: ",status,' errorThrown: ',errorThrown);
 	 			switch(status) {
 	 				case 'timeout':
+		 				console.log("retrieving printer/temperature timeout");
 		 				self.checkTemperature(); 
 	 					break;
 	 			} 			
@@ -119,6 +133,7 @@ function Printer() {
 	 			switch(status) {
 	 				case 'timeout':
 		 				self.checkProgress(); 
+		 				console.log("retrieving printer/progress timeout");
 	 					break;
 	 			} 			
 			}
