@@ -107,13 +107,13 @@ function generate_gcode(callback) {
       if (firstLayerSlow) {
 	      //gcode.push("M220 S20"); //slow speed
 	      speed = bottomSpeed;
-			  console.log("> speed: ",speed);
+			  //console.log("> speed: ",speed);
       }
     } else if (layer == 2) { ////////LET OP, pas bij layer 2 weer op normale snelheid ipv layer 1
       gcode.push("M106");      //fan on
       //gcode.push("M220 S100"); //normal speed
       speed = normalSpeed;
-  	  console.log("> speed: ",speed);
+  	  //console.log("> speed: ",speed);
     }
 
     var curLayerCommand = 0;

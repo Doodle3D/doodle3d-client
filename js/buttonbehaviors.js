@@ -241,8 +241,9 @@ function print(e) {
 	if (_points.length > 2) {
 
 		setState(PRINTING_STATE);
-		var gencode = generate_gcode();
-		startPrint(gencode);
+		var gcode = generate_gcode();
+		//startPrint(gencode);
+		printer.print(gcode);
 
 //		console.log("");
 //		console.log("");
@@ -254,7 +255,7 @@ function print(e) {
 //		console.log("");
 //		console.log("");
 
-		$("#textdump").text(gencode.join("\n"));
+		$("#textdump").text(gcode.join("\n"));
 		//  copyToClipboard(gencode);
 		//*/
 	} else {
