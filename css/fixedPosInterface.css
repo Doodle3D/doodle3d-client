@@ -108,6 +108,11 @@ body {
   border-radius: 15px;
 }
 
+#preview_tmp {
+  /*border: 1px solid #8fc;*/
+  display: none;
+}
+
 #mycanvas, #preview {
   /*border: 1px solid #08c;*/
   float: left;
