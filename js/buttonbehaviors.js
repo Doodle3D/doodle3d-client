@@ -118,16 +118,17 @@ function initButtonBehavior() {
   function startMoveUp(e) {
     e.preventDefault();
     //      console.log("btnMoveUp mouse down");
-    previewUp();
+    previewUp(true);
     clearInterval(btnMoveUpInterval);
     btnMoveUpInterval = setInterval( function() {
-      previewUp();
+      previewUp(true);
     }, 1000/30);
   }
   function stopMoveUp(e) {
     e.preventDefault();
     console.log("btnMoveUp mouse up");
     clearInterval(btnMoveUpInterval);
+    previewUp();
   }
   btnMoveUp.mousedown(function(e) { startMoveUp(e) });
   btnMoveUp.mouseup(function(e) { stopMoveUp(e) });
@@ -137,16 +138,17 @@ function initButtonBehavior() {
   function startMoveDown(e) {
     e.preventDefault();
     //      console.log("btnMoveDown mouse down");
-    previewDown();
+    previewDown(true);
     clearInterval(btnMoveDownInterval);
     btnMoveDownInterval = setInterval( function() {
-      previewDown();
+      previewDown(true);
     }, 1000/30);
   }
   function stopMoveDown(e) {
     e.preventDefault();
     console.log("btnMoveDown mouse up");
     clearInterval(btnMoveDownInterval);
+    previewDown();
   }
   btnMoveDown.mousedown(function(e) { startMoveDown(e) });
   btnMoveDown.mouseup(function(e) { stopMoveDown(e) });
@@ -156,16 +158,17 @@ function initButtonBehavior() {
   function startTwistLeft(e) {
     e.preventDefault();
     //      console.log("btnTwistLeft mouse down");
-    previewTwistLeft();
+    previewTwistLeft(true);
     clearInterval(btnTwistLeftInterval);
     btnTwistLeftInterval = setInterval( function() {
-      previewTwistLeft();
+      previewTwistLeft(true);
     }, 1000/30);
   }
   function stopTwistLeft(e) {
     e.preventDefault();
     //      console.log("btnTwistLeft mouse up");
     clearInterval(btnTwistLeftInterval);
+    previewTwistLeft();
   }
   btnTwistLeft.mousedown(function(e) { startTwistLeft(e) });
   btnTwistLeft.mouseup(function(e) { stopTwistLeft(e) });
@@ -175,16 +178,17 @@ function initButtonBehavior() {
   function startTwistRight(e) {
     e.preventDefault();
     //      console.log("btnTwistRight mouse down");
-    previewTwistRight();
+    previewTwistRight(true);
     clearInterval(btnTwistRightInterval);
     btnTwistRightInterval = setInterval( function() {
-      previewTwistRight();
+      previewTwistRight(true);
     }, 1000/30);
   }
   function stopTwistRight(e) {
     e.preventDefault();
     //      console.log("btnTwistRight mouse up");
     clearInterval(btnTwistRightInterval);
+    previewTwistLeft();
   }
   btnTwistRight.mousedown(function(e) { startTwistRight(e) });
   btnTwistRight.mouseup(function(e) { stopTwistRight(e) });
@@ -223,11 +227,13 @@ function initButtonBehavior() {
   btnStop.bind('touchstart mousedown',stopPrint);
 }
 function stopPrint() {
-	printer.stop();
+  console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
+  if (sendPrintCommands) printer.stop();
 }
 
 
 function prevDoodle(e) {
+  console.log("f:prevDoodle()");
   console.log("f:prevDoodle()");
 }
 function nextDoodle(e) {
@@ -235,37 +241,42 @@ function nextDoodle(e) {
 }
 
 function print(e) {
-	console.log("f:print()");
+	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
 
-	$("#textdump").text("");
-	if (_points.length > 2) {
+  if (sendPrintCommands) {
+    $("#textdump").text("");
+    if (_points.length > 2) {
 
-		setState(PRINTING_STATE);
-		var gcode = generate_gcode();
-		//startPrint(gencode);
-		printer.print(gcode);
+      setState(PRINTING_STATE);
+      var gcode = generate_gcode();
+      //startPrint(gencode);
+      printer.print(gcode);
 
-//		console.log("");
-//		console.log("");
-//		console.log("-------------------------------------------------");
-//		console.log("generated gcode:");
-//		console.log(gencode);
-//		console.log("-------------------------------------------------");
-//		console.log("");
-//		console.log("");
-//		console.log("");
+      //		console.log("");
+      //		console.log("");
+      //		console.log("-------------------------------------------------");
+      //		console.log("generated gcode:");
+      //		console.log(gencode);
+      //		console.log("-------------------------------------------------");
+      //		console.log("");
+      //		console.log("");
+      //		console.log("");
 
-		$("#textdump").text(gcode.join("\n"));
-		//  copyToClipboard(gencode);
-		//*/
-	} else {
-		console.log("f:print >> not enough points!");
-	}
+      if (debugMode) $("#textdump").text(gcode.join("\n"));
+
+      //  copyToClipboard(gencode);
+      //*/
+    } else {
+      console.log("f:print >> not enough points!");
+    }
 
 
-//	$.post("/doodle3d.of", { data:output }, function(data) {
-//	btnPrint.disabled = false;
-//	});
+    //	$.post("/doodle3d.of", { data:output }, function(data) {
+    //	btnPrint.disabled = false;
+    //	});
+  } else {
+    console.log("sendPrintCommands is false: not sending print command to 3dprinter");
+  }
 }
 
 
@@ -288,33 +299,34 @@ function oopsUndo() {
   redrawDoodle();
   redrawPreview();
 }
-function previewUp() {
+function previewUp(redrawLess) {
   //    console.log("f:previewUp()");
   if (numLayers < 100) {
     numLayers++;
   }
-  redrawPreview();
+  redrawPreview(redrawLess);
 }
-function previewDown() {
+function previewDown(redrawLess) {
   //    console.log("f:previewDown()");
   if (numLayers > 2) {
     numLayers--;
   }
-  redrawPreview();
+  redrawPreview(redrawLess);
 }
-function previewTwistLeft() {
+function previewTwistLeft(redrawLess) {
+  if (redrawLess == undefined) redrawLess = false;
   //    console.log("f:previewTwistLeft()");
   //        if (rStep < Math.PI) {
   rStep -= twistIncrement;
   //        }
-  redrawPreview();
+  redrawPreview(redrawLess);
 }
-function previewTwistRight() {
+function previewTwistRight(redrawLess) {
   //    console.log("f:previewTwistRight()");
   //        if (rStep < Math.PI) {
   rStep += twistIncrement;
   //        }
-  redrawPreview();
+  redrawPreview(redrawLess);
 }
 
 

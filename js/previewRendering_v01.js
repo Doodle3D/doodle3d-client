@@ -11,7 +11,7 @@ var svgPathRegExp = /[LM]\d* \d*/ig;
 var svgPathParamsRegExp = /([LM])(\d*) (\d*)/;
 
 var prevRedrawTime = new Date().getTime();
-var redrawInterval = 1000 / 20; // ms
+var redrawInterval = 1000 / 30; // ms
 
 function initPreviewRendering() {
   console.log("f:initPreviewRendering()");
@@ -44,7 +44,9 @@ var prevY 			= 0;
 var highlight		= true; //highlight bottom, middle and top layers
 
 var linesRaw = "";
-function redrawPreview() {
+var debug_redrawSimplification = 6;
+function redrawPreview(redrawLess) {
+  if (redrawLess == undefined) redrawLess = false;
   //*/
   //TODO
   /*
@@ -52,6 +54,26 @@ function redrawPreview() {
     Is het een idee om op het einde van een touchevent wel de image versie te renderen maar tijdens het tekenen
     niet?
   */
+
+  if (!redrawLess) {
+    //debug_redrawSimplification = Math.round(_points.length / 65);
+    //*
+    if (_points.length < 100) {
+      debug_redrawSimplification = 6;
+    } else if (_points.length < 250) {
+      debug_redrawSimplification = 7;
+    } else if (_points.length < 400) {
+      debug_redrawSimplification = 8;
+    } else if (_points.length < 550) {
+      debug_redrawSimplification = 9;
+    } else if (_points.length < 700) {
+      debug_redrawSimplification = 10;
+    } else {
+      debug_redrawSimplification = 11;
+    }
+    //*/
+//    console.log("debug_redrawSimplification: " + debug_redrawSimplification);
+  }
 
   if (_points.length < 2) return;
 
@@ -65,10 +87,17 @@ function redrawPreview() {
 
   for(var i = 0; i < numLayers; i++) {
 
-    if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1){
+
+    if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) {
       previewCtx.globalAlpha = 1;
     } else {
       previewCtx.globalAlpha = globalAlpha;
+    }
+
+    if (redrawLess && i%debug_redrawSimplification != 0 && !(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) ) {
+      y -= yStep;
+      r += rStep;
+      continue;
     }
 
     previewCtx.save();
@@ -89,6 +118,9 @@ function redrawPreview() {
     previewCtx.moveTo(adjustedDoodlePoint.x, adjustedDoodlePoint.y);
     for(var j = 1; j < _points.length; j++) {
       adjustedDoodlePoint = centeredAndScaledDoodlePoint(_points[j])
+//      if (redrawLess && Math.floor(j/debug_redrawSimplification)%2 == 0 ) continue;
+//      if (redrawLess && Math.floor(j/debug_redrawSimplification)%2 == 0 ) continue;
+      if (redrawLess && j%debug_redrawSimplification != 0 ) continue;
       previewCtx.lineTo(adjustedDoodlePoint.x, adjustedDoodlePoint.y);
     }
     previewCtx.stroke();
@@ -113,49 +145,65 @@ function centeredAndScaledDoodlePoint(p) {
   return obj;
 }
 
-/*
-function updatePreview(x, y, move) {
-  x *= globalScale;
-  y *= globalScale;
+//*
+var updatePrevX = -1;
+var updatePrevY = -1;
+function updatePreview(_x, _y, redrawLess) {
+  if (redrawLess == undefined) redrawLess = false;
+  redrawLess = false;
 
-  if(!move) {
-    var tY = 0;
-    var r = 0;
-
-    if(!highlight) {
-      previewCtx.globalAlpha = globalAlpha;
-      previewCtx.beginPath();
-    }
-    for(var i=0;i<numLayers;i++) {
-
-      if(highlight && (i == 0 || i == numLayers/2 || i == numLayers-1)){
-        previewCtx.stroke();
-        previewCtx.globalAlpha = 1;
-        previewCtx.beginPath();
-      }
-
-      previewCtx.save();
-      previewCtx.translate(layerCX,layerOffsetY+layerCY+tY);
-      previewCtx.scale(1, scaleY)
-      previewCtx.rotate(r);
-      previewCtx.translate(-layerCX,-layerCY);
-
-      previewCtx.moveTo(prevX,prevY);
-      previewCtx.lineTo(x,y);
-
-      tY -= yStep;
-      r += rStep;
-      previewCtx.restore();
-
-      if(highlight && (i == 0 || i == numLayers/2 || i == numLayers-1)){
-        previewCtx.stroke();
-        previewCtx.globalAlpha = globalAlpha;
-        previewCtx.beginPath();
-      }
-    }
+  if (_points.length < 2) return;
+  if (updatePrevX == -1 || updatePrevY == -1) {
+    updatePrevX = _x;
+    updatePrevY = _y;
+    return;
   }
-  previewCtx.stroke();
-  prevX = x;
-  prevY = y;
+
+//  if (_points.length < 16 && Math.sqrt(Math.pow((updatePrevX - _x), 2) + Math.pow((updatePrevY - _y), 2)) < 8) return;
+
+  var y = 0;
+  var r = 0;
+
+  previewCtx.lineWidth = strokeWidth;
+  previewCtx.strokeStyle = '#f00'; //"rgba(255,255,0,0)";
+
+  for(var i = 0; i < numLayers; i++) {
+
+
+    if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) {
+      previewCtx.globalAlpha = 1;
+    } else {
+      previewCtx.globalAlpha = globalAlpha;
+    }
+
+    if (redrawLess && i%debug_redrawSimplification != 0 && !(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) ) {
+      y -= yStep;
+      r += rStep;
+      continue;
+    }
+
+    previewCtx.save();
+
+    previewCtx.translate(layerCX, layerOffsetY + layerCY + y);
+    previewCtx.scale(viewerScale, scaleY * viewerScale);
+    previewCtx.rotate(r);
+    previewCtx.translate((-doodleTransform[0]) * (globalScale * doodleTransform[2]), (-doodleTransform[1]) * (globalScale * doodleTransform[3]));
+
+
+    previewCtx.beginPath();
+    var prevPoint = centeredAndScaledDoodlePoint([updatePrevX, updatePrevY]);
+    previewCtx.moveTo(prevPoint.x, prevPoint.y);
+    var adjustedDoodlePoint = centeredAndScaledDoodlePoint([_x, _y]);
+    previewCtx.lineTo(adjustedDoodlePoint.x, adjustedDoodlePoint.y);
+    previewCtx.stroke();
+
+    y -= yStep;
+    r += rStep;
+    previewCtx.restore();
+  }
+  previewCtx.globalAlpha = globalAlpha;
+  updatePrevX = _x;
+  updatePrevY = _y;
+
 }
 //*/
