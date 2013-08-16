@@ -24,6 +24,8 @@ function Printer() {
 
 	this.maxGCodeSize = 10;						// max size of gcode in MB's (estimation)
 	
+	this.sendStopGCodeDelay = 1000;
+	
 	// Events
 	Printer.UPDATE = "update";
 	
@@ -133,6 +135,7 @@ function Printer() {
 	this.stop = function() {
     console.log("Printer:stop");
 		var postData = { id: 0 }; 
+		var self = this;
     $.ajax({
 		  url: this.wifiboxURL + "/printer/stop",
 		  type: "POST",
@@ -141,6 +144,8 @@ function Printer() {
 		  timeout: this.timeoutTime,
 		  success: function(data){
 			  console.log("Printer:stop response: ", data);
+			  
+			  setTimeout(function() { console.log("send: ",gcodeEnd); self.print(gcodeEnd) },self.sendStopGCodeDelay);
 		  }
 		}).fail(function() { 
 			console.log("Printer:stop: failed");
