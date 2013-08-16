@@ -36,15 +36,17 @@ function initSettingsPopup(apiURL) {
   console.log("f:initSettingsPopup()");
   wifiboxURL = apiURL;
 
-  loadSettings();
-  
+  if (communicateWithWifibox) loadSettings();
+
   $("#contentOverlay").hide();
 
   $("div.content .btnOK").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
+
     // TODO something like a callback or feedback that saving went well / or failed
-    saveSettings();
+
+    if (communicateWithWifibox) saveSettings();
 
     $("#contentOverlay").fadeOut(375, function() {
       document.body.addEventListener('touchmove',prevent,false);
@@ -56,9 +58,10 @@ function initSettingsPopup(apiURL) {
 
 function showSettings() {
   console.log("f:showSettings()");
+  if (!communicateWithWifibox) console.log("     communicateWithWifibox is false: settings aren't being loaded from wifibox...")
   $("#contentOverlay").fadeIn(375, function() {
     console.log("#contentOverlay faded in...");
-    loadSettings();
+    if (communicateWithWifibox) loadSettings();
     document.body.removeEventListener('touchmove',prevent,false);
   });
 }
@@ -99,7 +102,7 @@ function loadSettings() {
 }
 
 function saveSettings(callback) {
-//  console.log("settings form submitted");
+  console.log("settings form submitted");
 //  console.log("   printer.layerHeight:" + $("#formpje input[name='printer.layerHeight']").attr('value'));
 //  console.log("   first layer slow (checkbox):" + $('#firstLayerSlow').prop('checked'));
 //  console.log("   use sublayers (checkbox):" + $('#useSubLayers').prop('checked'));
@@ -154,7 +157,7 @@ var maxScale = 1;
 var shape = "%";
 var twists = 0;
 var useSubLayers = true;
-var debug = false;
+//var debug = false; // debug moved to main.js
 var loglevel = 2;
 var zOffset = 0;
 var serverport = 8888;

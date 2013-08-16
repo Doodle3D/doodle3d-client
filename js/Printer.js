@@ -154,64 +154,71 @@ function Printer() {
 		//console.log("Printer:checkTemperature");
     var getData = { id: 0 };
     var self = this;
-		$.ajax({
-		  url: this.wifiboxURL + "/printer/temperature",
-		  data: getData,
-		  dataType: 'json',
-		  timeout: this.timeoutTime,
-		  success: function(data){
-		  	//console.log("Printer:temperature response: ",data);
-		  	if(data.status == "success") {
-	      	//console.log("temp: ",response.data.hotend+"/"+response.data.hotend_target+" ("+response.data.last_mod+")");
-	      	self.temperature = data.data.hotend;
-	      	if(data.data.hotend_target != undefined) {
-	      		self.targetTemperature = data.data.hotend_target;
-	      	}
-	      	self.alive = (data.data.last_mod < self.maxTempLastMod);
-        } else {
-        	self.alive = false;
+    if (communicateWithWifibox) {
+      $.ajax({
+        url: this.wifiboxURL + "/printer/temperature",
+        data: getData,
+        dataType: 'json',
+        timeout: this.timeoutTime,
+        success: function(data){
+          //console.log("Printer:temperature response: ",data);
+          if(data.status == "success") {
+            //console.log("temp: ",response.data.hotend+"/"+response.data.hotend_target+" ("+response.data.last_mod+")");
+            self.temperature = data.data.hotend;
+            if(data.data.hotend_target != undefined) {
+              self.targetTemperature = data.data.hotend_target;
+            }
+            self.alive = (data.data.last_mod < self.maxTempLastMod);
+          } else {
+            self.alive = false;
+          }
+          //console.log("  this.alive: ",self.alive);
+          $(document).trigger(Printer.UPDATE);
+
+          self.checkTemperatureDelay = setTimeout(function() { self.checkTemperature() }, self.checkTemperatureInterval);
         }
-        //console.log("  this.alive: ",self.alive);
-        $(document).trigger(Printer.UPDATE);
-		  	
-				self.checkTemperatureDelay = setTimeout(function() { self.checkTemperature() },self.checkTemperatureInterval);
-			}
-		}).fail(function() { 
-			console.log("Printer:checkTemperature: failed");
-			clearTimeout(self.retryCheckTemperatureDelay);
-			self.retryCheckTemperatureDelay = setTimeout(function() { self.checkTemperature() },self.retryDelay); // retry after delay
-		});
+      }).fail(function() {
+          console.log("Printer:checkTemperature: failed");
+          clearTimeout(self.retryCheckTemperatureDelay);
+          self.retryCheckTemperatureDelay = setTimeout(function() { self.checkTemperature() },self.retryDelay); // retry after delay
+        });
+    } else {
+      console.log ("Printer >> f:checkTemperature() >> communicateWithWifibox is false, so not executing this function");
+    }
 	}
 	this.checkProgress = function() {
 		//console.log("Printer:checkProgress");
     var getData = { id: 0 };
 		var self = this;
-    $.ajax({
-		  url: this.wifiboxURL + "/printer/progress",
-		  data: getData,
-		  dataType: 'json',
-		  timeout: this.timeoutTime,
-		  success: function(data){
-		  	if(data.status == "success") {
-	      
-	      	self.printing = data.data.printing;
-	      	self.currentLine = data.data.current_line;
-	      	self.num_lines = data.data.num_lines;
-	      	
-	      	if(self.printing) {
-	      		console.log("progress: ",data.data.current_line+"/"+data.data.num_lines+" ("+data.data.last_mod+")");
-	      	}
-        } 
-        //console.log("  this.alive: ",self.alive);
-        $(document).trigger(Printer.UPDATE);
-		  	
-				self.checkProgressDelay = setTimeout(function() { self.checkProgress() },self.checkProgressInterval);
-			}
-		}).fail(function() { 
-			console.log("Printer:checkProgress: failed");
-			clearTimeout(self.retryCheckProgressDelay);
-			self.retryCheckProgressDelay = setTimeout(function() { self.checkProgress() },self.retryDelay); // retry after delay
-		});
+    if (communicateWithWifibox) {
+      $.ajax({
+        url: this.wifiboxURL + "/printer/progress",
+        data: getData,
+        dataType: 'json',
+        timeout: this.timeoutTime,
+        success: function(data){
+          if(data.status == "success") {
 
+            self.printing = data.data.printing;
+            self.currentLine = data.data.current_line;
+            self.num_lines = data.data.num_lines;
+
+            if(self.printing) {
+              console.log("progress: ",data.data.current_line+"/"+data.data.num_lines+" ("+data.data.last_mod+")");
+            }
+          }
+          //console.log("  this.alive: ",self.alive);
+          $(document).trigger(Printer.UPDATE);
+
+          self.checkProgressDelay = setTimeout(function() { self.checkProgress() },self.checkProgressInterval);
+        }
+      }).fail(function() {
+          console.log("Printer:checkProgress: failed");
+          clearTimeout(self.retryCheckProgressDelay);
+          self.retryCheckProgressDelay = setTimeout(function() { self.checkProgress() },self.retryDelay); // retry after delay
+        });
+    } else {
+      console.log ("Printer >> f:checkProgress() >> communicateWithWifibox is false, so not executing this function");
+    }
 	}
 }
