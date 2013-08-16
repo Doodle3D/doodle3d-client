@@ -26,6 +26,9 @@ function doClientAndOrientationStuff() {
       var ww = 0; //get proper width
       if (window.screen.availWidth) {
         ww = window.screen.availWidth;
+        if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
+          ww = window.innerWidth;
+        }
       } else if($(window).width()) {
         ww = $(window).width();
       } else {
