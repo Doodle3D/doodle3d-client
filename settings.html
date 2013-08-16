@@ -49,24 +49,24 @@
 
     <fieldset id="printersettings">
       <legend>Print settings</legend>
-      <label for="layerHeight">Layer height:</label><input type="text" class="small" name="printer.layerHeight">mm<br>
-      <label for="wallThickness">Wall thickness:</label><input type="text" class="small" name="printer.wallThickness">mm<br>
-      <label for="filamentThickness">Filament thickness:</label><input type="text" class="small" name="printer.filamentThickness">mm<br>
-      <label for="temperature">Temperature:</label><input type="text" class="small" name="printer.temperature">degrees C<br>
+      <label for="layerHeight">Layer height:</label><input id="layerHeight" type="text" class="small" name="printer.layerHeight">mm<br>
+      <label for="wallThickness">Wall thickness:</label><input id="wallThickness" type="text" class="small" name="printer.wallThickness">mm<br>
+      <label for="filamentThickness">Filament thickness:</label><input id="filamentThickness" type="text" class="small" name="printer.filamentThickness">mm<br>
+      <label for="temperature">Temperature:</label><input id="temperature" type="text" class="small" name="printer.temperature">degrees C<br>
       <br>
-      <label for="speed">Speed:</label><input type="text" name="printer.speed" class="small">mm/s<br>
-      <label for="travelSpeed">Travel speed:</label><input type="text" name="printer.travelSpeed" class="small">mm/s<br>
+      <label for="speed">Speed:</label><input id="speed" type="text" name="printer.speed" class="small">mm/s<br>
+      <label for="travelSpeed">Travel speed:</label><input id="travelSpeed" type="text" name="printer.travelSpeed" class="small">mm/s<br>
       <br>
-      <label for="autoWarmUp">Auto warm-up:</label><input type="checkbox" name="printer.autoWarmUp" value="autoWarmUp"><br>
-      <label for="firstLayerSlow">First layer slow:</label><input type="checkbox" name="printer.firstLayerSlow" value="firstLayerSlow"><br>
-      <label for="useSubLayers">Use sub-layers:</label><input type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
-      <label for="useRetraction">Use retraction:</label><input type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
+      <label for="autoWarmUp">Auto warm-up:</label><input id="autoWarmUp" type="checkbox" name="printer.autoWarmUp" value="autoWarmUp"><br>
+      <label for="firstLayerSlow">First layer slow:</label><input id="firstLayerSlow" type="checkbox" name="printer.firstLayerSlow" value="firstLayerSlow"><br>
+      <label for="useSubLayers">Use sub-layers:</label><input id="useSubLayers" type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
+      <label for="useRetraction">Use retraction:</label><input id="useRetraction" type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
       <br>
-      <label for="retractionAmount">Retraction amount:</label><input type="text" class="small" name="printer.retraction.amount">mm<br>
-      <label for="retractionMinDistance">Retraction min distance:</label><input type="text" class="small" name="printer.retraction.minDistance">mm<br>
-      <label for="retractionSpeed">Retraction speed:</label><input type="text" class="small" name="printer.retraction.speed">mm/s<br>
+      <label for="retractionAmount">Retraction amount:</label><input id="retractionAmount" type="text" class="small" name="printer.retraction.amount">mm<br>
+      <label for="retractionMinDistance">Retraction min distance:</label><input id="retractionMinDistance" type="text" class="small" name="printer.retraction.minDistance">mm<br>
+      <label for="retractionSpeed">Retraction speed:</label><input id="retractionSpeed" type="text" class="small" name="printer.retraction.speed">mm/s<br>
       <br>
-      <label for="autoWarmUpCommand">Auto Warm up command:</label><input type="text" name="printer.autoWarmUpCommand"><br>
+      <label for="autoWarmUpCommand">Auto Warm up command:</label><input id="autoWarmUpCommand" type="text" name="printer.autoWarmUpCommand"><br>
     </fieldset>
 
     <fieldset>
@@ -215,7 +215,7 @@ targetTemperature=230
 //      e.preventDefault();
 //      console.log("load");
 //    });
-    loadSettings();
+//    if (communicateWithWifibox) loadSettings();
   })
 
 </script>
