@@ -211,6 +211,8 @@ function Printer() {
             if(self.printing) {
               console.log("progress: ",data.data.current_line+"/"+data.data.num_lines+" ("+data.data.last_mod+")");
             }
+          } else {
+          	self.printing = false;
           }
           //console.log("  this.alive: ",self.alive);
           $(document).trigger(Printer.UPDATE);
