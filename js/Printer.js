@@ -1,6 +1,7 @@
 function Printer() {
 	this.temperature = 0;
 	this.targetTemperature = 0;
+	this.printing;
 	
 	this.wifiboxURL; 
 	
@@ -45,24 +46,28 @@ function Printer() {
     console.log("Printer:preheat");
 		var postData = { id: 0 };
     var self = this;
-    $.ajax({
-		  url: this.wifiboxURL + "/printer/heatup",
-		  type: "POST",
-		  data: postData,
-		  dataType: 'json',
-		  timeout: this.timeoutTime,
-		  success: function(data){
-		  	console.log("Printer:preheat response: ",data);
-		  	if(data.status == "error") {
-		  		clearTimeout(self.retryPreheatDelay);
-					self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
-		  	}
-			}
-		}).fail(function() { 
-			console.log("Printer:preheat: failed");
-			clearTimeout(self.retryPreheatDelay);
-			self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
-		});
+    if (communicateWithWifibox) {
+	    $.ajax({
+			  url: this.wifiboxURL + "/printer/heatup",
+			  type: "POST",
+			  data: postData,
+			  dataType: 'json',
+			  timeout: this.timeoutTime,
+			  success: function(data){
+			  	console.log("Printer:preheat response: ",data);
+			  	if(data.status == "error") {
+			  		clearTimeout(self.retryPreheatDelay);
+						self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
+			  	}
+				}
+			}).fail(function() { 
+				console.log("Printer:preheat: failed");
+				clearTimeout(self.retryPreheatDelay);
+				self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
+			});
+		} else {
+      console.log ("Printer >> f:preheat() >> communicateWithWifibox is false, so not executing this function");
+    }
 	}
 	
 	this.print = function(gcode) {
@@ -106,29 +111,33 @@ function Printer() {
     
     var postData = { id: 0, gcode: gcodePart.join("\n"), first: firstOne, last: lastOne};
     var self = this;
-    $.ajax({
-		  url: this.wifiboxURL + "/printer/print",
-		  type: "POST",
-		  data: postData,
-		  dataType: 'json',
-		  timeout: this.timeoutTime,
-		  success: function(data){
-		  	console.log("Printer:sendPrintPart response: ",data);
-		  	
-		  	if(data.status == "success") {
-			  	if (lastOne) {
-	          console.log("Printer:sendPrintPart:gcode sending completed");
-	          this.gcode = [];
-	        } else {
-	          self.sendPrintPart(sendIndex + sendLength, sendLength);
-	        }
-	      }
-			}
-		}).fail(function() { 
-			console.log("Printer:sendPrintPart: failed");
-			clearTimeout(self.retrySendPrintPartDelay);
-			self.retrySendPrintPartDelay = setTimeout(function() { self.sendPrintPart(sendIndex, sendLength) },self.retryDelay); // retry after delay
-		});
+    if (communicateWithWifibox) {
+	    $.ajax({
+			  url: this.wifiboxURL + "/printer/print",
+			  type: "POST",
+			  data: postData,
+			  dataType: 'json',
+			  timeout: this.timeoutTime,
+			  success: function(data){
+			  	console.log("Printer:sendPrintPart response: ",data);
+			  	
+			  	if(data.status == "success") {
+				  	if (lastOne) {
+		          console.log("Printer:sendPrintPart:gcode sending completed");
+		          this.gcode = [];
+		        } else {
+		          self.sendPrintPart(sendIndex + sendLength, sendLength);
+		        }
+		      }
+				}
+			}).fail(function() { 
+				console.log("Printer:sendPrintPart: failed");
+				clearTimeout(self.retrySendPrintPartDelay);
+				self.retrySendPrintPartDelay = setTimeout(function() { self.sendPrintPart(sendIndex, sendLength) },self.retryDelay); // retry after delay
+			});
+		} else {
+      console.log ("Printer >> f:sendPrintPart() >> communicateWithWifibox is false, so not executing this function");
+    }
 	}
 	
 	
@@ -136,23 +145,26 @@ function Printer() {
     console.log("Printer:stop");
 		var postData = { id: 0 }; 
 		var self = this;
-    $.ajax({
-		  url: this.wifiboxURL + "/printer/stop",
-		  type: "POST",
-		  data: postData,
-		  dataType: 'json',
-		  timeout: this.timeoutTime,
-		  success: function(data){
-			  console.log("Printer:stop response: ", data);
-			  
-			  setTimeout(function() { console.log("send: ",gcodeEnd); self.print(gcodeEnd) },self.sendStopGCodeDelay);
-		  }
-		}).fail(function() { 
-			console.log("Printer:stop: failed");
-			clearTimeout(self.retryStopDelay);
-			self.retryStopDelay = setTimeout(function() { self.stop() },self.retryDelay); // retry after delay
-		});
-
+		if (communicateWithWifibox) {
+	    $.ajax({
+			  url: this.wifiboxURL + "/printer/stop",
+			  type: "POST",
+			  data: postData,
+			  dataType: 'json',
+			  timeout: this.timeoutTime,
+			  success: function(data){
+				  console.log("Printer:stop response: ", data);
+				  
+				  setTimeout(function() { console.log("send: ",gcodeEnd); self.print(gcodeEnd) },self.sendStopGCodeDelay);
+			  }
+			}).fail(function() { 
+				console.log("Printer:stop: failed");
+				clearTimeout(self.retryStopDelay);
+				self.retryStopDelay = setTimeout(function() { self.stop() },self.retryDelay); // retry after delay
+			});
+		} else {
+      console.log ("Printer >> f:communicateWithWifibox() >> communicateWithWifibox is false, so not executing this function");
+    }
 	}
 	
 	this.checkTemperature = function() {

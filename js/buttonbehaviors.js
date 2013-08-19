@@ -229,6 +229,7 @@ function initButtonBehavior() {
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
   if (sendPrintCommands) printer.stop();
+  setState(IDLE_STATE);
 }
 
 

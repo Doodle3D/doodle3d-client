@@ -13,10 +13,14 @@ $(function() {
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
 
-  if (communicateWithWifibox) {
-    wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
-  } else {
-    wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
+
+	if (wifiboxIsRemote) {
+		wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
+	} else {
+		wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
+	}
+	
+  if (!communicateWithWifibox) {
     sendPrintCommands = false; // 'communicateWithWifibox = false' implies this
   }
   console.log("debugMode: " + debugMode);
