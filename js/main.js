@@ -1,7 +1,7 @@
 var debugMode = false;              // debug mode
 var sendPrintCommands = true;       // if Doodle3d should send print commands to the 3d printer
 var communicateWithWifibox = true;  // if Doodle3d should try interfacing with the wifibox (in case one is not connected)
-var wifiboxIsRemote = true;         // if Doodle3d should try interfacing with the wifibox (in case one is not connected)
+var wifiboxIsRemote = false;        // when you want to run the client on a computer and have it remotely connect to the wifibox
 
 var printer =  new Printer(); 
 
