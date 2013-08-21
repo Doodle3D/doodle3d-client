@@ -305,14 +305,16 @@ function previewUp(redrawLess) {
   if (numLayers < 100) {
     numLayers++;
   }
-  redrawPreview(redrawLess);
+//  redrawPreview(redrawLess);
+  redrawRenderedPreview();
 }
 function previewDown(redrawLess) {
   //    console.log("f:previewDown()");
   if (numLayers > 2) {
     numLayers--;
   }
-  redrawPreview(redrawLess);
+//  redrawPreview(redrawLess);
+  redrawRenderedPreview();
 }
 function previewTwistLeft(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
@@ -320,14 +322,16 @@ function previewTwistLeft(redrawLess) {
   //        if (rStep < Math.PI) {
   rStep -= twistIncrement;
   //        }
-  redrawPreview(redrawLess);
+  //  redrawPreview(redrawLess);
+  redrawRenderedPreview();
 }
 function previewTwistRight(redrawLess) {
   //    console.log("f:previewTwistRight()");
   //        if (rStep < Math.PI) {
   rStep += twistIncrement;
   //        }
-  redrawPreview(redrawLess);
+  //  redrawPreview(redrawLess);
+  redrawRenderedPreview();
 }
 
 

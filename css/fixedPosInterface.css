@@ -109,7 +109,11 @@ body {
 }
 
 #preview_tmp {
-  /*border: 1px solid #8fc;*/
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 500;
+  border: 1px solid #f80;
   display: none;
 }
 

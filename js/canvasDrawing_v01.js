@@ -328,6 +328,7 @@ function onCanvasMouseMove(e) {
     if (_points.length < 50) {
       redrawPreview();
     } else {
+//      redrawPreview();
       updatePreview(x, y, true);
     }
     prevRedrawTime = new Date().getTime();
@@ -349,7 +350,8 @@ function onCanvasMouseUp(e) {
 //  $("#textdump").append("doodlebounds:" + doodleBounds + "\n");
 //  $("#textdump").append("doodletransform:" + doodleTransform + "\n");
 
-  redrawPreview();
+//  redrawPreview();
+  renderToImageDataPreview();
 }
 
 function onCanvasTouchDown(e) {
@@ -425,7 +427,8 @@ function onCanvasTouchEnd(e) {
 
   console.log("_points.length :" + _points.length);
 
-  redrawPreview();
+  //  redrawPreview();
+  renderToImageDataPreview();
 }
 
 function prevent(e) {

@@ -34,6 +34,7 @@ $(function() {
   initDoodleDrawing();
   initPreviewRendering();
 
+
   initButtonBehavior();
 
   initSettingsPopup(wifiboxURL);
@@ -51,6 +52,7 @@ $(function() {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
+    $("#preview_tmp").css("display", "block");
   }
 
 	printer.init();
