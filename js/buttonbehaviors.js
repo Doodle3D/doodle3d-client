@@ -306,7 +306,7 @@ function previewUp(redrawLess) {
     numLayers++;
   }
 //  redrawPreview(redrawLess);
-  redrawRenderedPreview();
+  redrawRenderedPreview(redrawLess);
 }
 function previewDown(redrawLess) {
   //    console.log("f:previewDown()");
@@ -314,7 +314,7 @@ function previewDown(redrawLess) {
     numLayers--;
   }
 //  redrawPreview(redrawLess);
-  redrawRenderedPreview();
+  redrawRenderedPreview(redrawLess);
 }
 function previewTwistLeft(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
@@ -323,7 +323,7 @@ function previewTwistLeft(redrawLess) {
   rStep -= twistIncrement;
   //        }
   //  redrawPreview(redrawLess);
-  redrawRenderedPreview();
+  redrawRenderedPreview(redrawLess);
 }
 function previewTwistRight(redrawLess) {
   //    console.log("f:previewTwistRight()");
@@ -331,7 +331,7 @@ function previewTwistRight(redrawLess) {
   rStep += twistIncrement;
   //        }
   //  redrawPreview(redrawLess);
-  redrawRenderedPreview();
+  redrawRenderedPreview(redrawLess);
 }
 
 

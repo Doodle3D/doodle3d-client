@@ -203,7 +203,8 @@ function renderToImageDataPreview() {
 
 // called by the move up/down or twist left/right buttons
 // it is assumed that the preview has been rendered to an Image object, which will be used to draw the preview with (much better performance)
-function redrawRenderedPreview() {
+function redrawRenderedPreview(redrawLess) {
+  if (redrawLess == undefined) redrawLess = false;
   console.log("f:redrawRenderedPreview()");
 
   previewCtx.clearRect(0, 0, preview.width, preview.height);
@@ -221,6 +222,11 @@ function redrawRenderedPreview() {
       previewCtx.globalAlpha = globalAlpha;
     }
 
+    if (redrawLess && i%2 != 0 && !(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) ) {
+      y -= yStep;
+      r += rStep;
+      continue;
+    }
     previewCtx.save();
 
     previewCtx.translate(layerCX,layerOffsetY+layerCY+y);

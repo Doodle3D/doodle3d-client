@@ -325,15 +325,26 @@ function onCanvasMouseMove(e) {
 
   if (new Date().getTime() - prevRedrawTime > redrawInterval) {
     // redrawing the whole preview the first X points ensures that the doodleBounds is set well
+    prevRedrawTime = new Date().getTime();
     if (_points.length < 50) {
       redrawPreview();
     } else {
-//      redrawPreview();
       updatePreview(x, y, true);
+      /*
+       if (_points.length - prevUpdateFullPreview > prevUpdateFullPreviewInterval) {
+       console.log("f:onTouchMove >> passed prevUpdateFullPreviewInterval, updating full preview");
+       redrawPreview();
+       prevUpdateFullPreview = _points.length;
+       } else {
+       updatePreview(x, y, true);
+       }
+       //*/
+//      redrawPreview();
     }
-    prevRedrawTime = new Date().getTime();
   }
 }
+prevUpdateFullPreview = 0; // 0 is not a timeframe but refers to the _points array
+prevUpdateFullPreviewInterval = 25; // refers to number of points, not a timeframe
 
 function onCanvasMouseUp(e) {
   //    console.log("onmouseup");
@@ -414,13 +425,22 @@ function onCanvasTouchMove(e) {
       redrawPreview();
     } else {
       updatePreview(x, y, true);
+      /*
+      if (_points.length - prevUpdateFullPreview > prevUpdateFullPreviewInterval) {
+        console.log("f:onTouchMove >> passed prevUpdateFullPreviewInterval, updating full preview");
+        redrawPreview();
+        prevUpdateFullPreview = _points.length;
+      } else {
+        updatePreview(x, y, true);
+      }
+      //*/
     }
     prevRedrawTime = new Date().getTime();
   }
 }
 
 function onCanvasTouchEnd(e) {
-  //    console.log("ontouchend");
+  console.log("f:onCanvasTouchEnd()");
   console.log("doodleBounds: " + doodleBounds);
   console.log("doodleTransform: " + doodleTransform);
   //    ctx.stroke();
