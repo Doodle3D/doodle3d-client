@@ -204,7 +204,7 @@ function initButtonBehavior() {
   btnSettings.bind('touchstart mousedown',function () {
     //e.preventDefault();
     //console.log("btnSettings clicked");
-    showSettings();
+    settingsWindow.showSettings();
   });
 //  btnSettings.on('touchend', function(e) {
 //    e.preventDefault();

@@ -38,8 +38,10 @@ function Printer() {
 		//this.wifiboxURL = "proxy5.php";
     console.log("  wifiboxURL: ",this.wifiboxURL);
     
-    this.checkTemperature();
-    this.checkProgress();
+    if(autoUpdate) {
+	    this.checkTemperature();
+	    this.checkProgress();
+    }
  	}
 	
 	this.preheat = function() {

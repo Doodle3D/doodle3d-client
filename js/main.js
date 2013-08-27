@@ -2,9 +2,10 @@ var debugMode = false;              // debug mode
 var sendPrintCommands = true;       // if Doodle3d should send print commands to the 3d printer
 var communicateWithWifibox = true;  // if Doodle3d should try interfacing with the wifibox (in case one is not connected)
 var wifiboxIsRemote = false;        // when you want to run the client on a computer and have it remotely connect to the wifibox
+var autoUpdate = true; 							// auto retrieve updates about temperature and progress from printer
 
 var printer =  new Printer(); 
-
+var settingsWindow = new SettingsWindow();
 $(function() {
   console.log("ready");
 
@@ -12,7 +13,7 @@ $(function() {
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
-
+  if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
 
 	if (wifiboxIsRemote) {
 		wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
@@ -30,34 +31,27 @@ $(function() {
   console.log("wifibox URL: " + wifiboxURL);
 
   initLayouting();
-
   initDoodleDrawing();
   initPreviewRendering();
-
-
   initButtonBehavior();
 
-  initSettingsPopup(wifiboxURL);
-
-  $("#settings .settings").load("settings.html", function() {
-    if (communicateWithWifibox) {
-      console.log("finished loading settings.html, now loading settings...");
-      loadSettings();
-    } else {
-      console.log("finished loading settings.html >> communicateWithWifibox is false: not loading settings");
-    }
-  });
-
-  if(debugMode) {
+	printer.init();
+	$(document).on(Printer.UPDATE,update);
+	
+	settingsWindow.init(wifiboxURL);
+	$(document).on(SettingsWindow.SETTINGS_LOADED,settingsLoaded);
+	
+	if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
     $("#preview_tmp").css("display", "block");
   }
-
-	printer.init();
-	if (communicateWithWifibox) printer.preheat();
-	
-	$(document).on(Printer.UPDATE,update);
-
 })
+function settingsLoaded() {
+	console.log("settingsLoaded");
+	console.log("autoWarmUp: ",settings["printer.autoWarmUp"]);
+	if(settings["printer.autoWarmUp"]) {
+		printer.preheat();
+	}
+}

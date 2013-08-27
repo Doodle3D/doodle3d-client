@@ -9,15 +9,6 @@
   <link href="css/settings.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<!--<div>-->
-  <!--<button id="loadBtn">load</button> - load data-->
-<!--</div>-->
-<!--<div>-->
-  <!--<form action="http://192.168.5.1/cgi-bin/d3dapi/config" method="POST" id="formpje">-->
-    <!--printer.layerHeight: <input type="text" name="printer.layerHeight" value="0.1"><br>-->
-    <!--<input type="submit" value="Submit">-->
-  <!--</form>-->
-<!--</div>-->
 <div>
   <h3 style="font-weight:bold">
     Not all fields are saveable at the moment
@@ -171,54 +162,6 @@ targetTemperature=230
     <!--<input type="submit" value="Save settings">-->
   </form>
 </div>
-<!--<script src="js/jquery-1.8.3.min.js"></script>-->
-<!--<script src="js/bootstrap.min.js"></script>-->
-<script src="js/settings.js"></script>
-<script type="text/javascript">
-
-
-//  var btnLoad = $("#loadBtn");
-
-//  var myForm = $("#formpje");
-//  myForm.submit(function(e) {
-//    e.preventDefault();
-//    console.log("form submitted");
-//    console.log("   printer.layerHeight:" + $("#formpje input[name='printer.layerHeight']").attr('value'));
-//    $.post(
-//        wifiboxURL + "/config",
-//        {
-//          "printer.layerHeight": $("#formpje input[name='printer.layerHeight']").attr('value')
-//        },
-//        function(data) {
-//          console.log(JSON.stringify(data));
-//        });
-//    return false;
-//  })
-
-
-
-  var sendIndex;
-  var sendLength;
-  $(function() {
-    console.log("ready");
-
-//    if ($("#useRetraction").prop('checked') == true) $(".retractionSettings").show(500);
-//    $("#useRetraction").click(function(e) {
-//      if ($(this).prop('checked')) {
-//        $(".retractionSettings").show(350);
-//      } else {
-//        $(".retractionSettings").hide(350);
-//      }
-//    });
-
-//    btnLoad.click(function(e) {
-//      e.preventDefault();
-//      console.log("load");
-//    });
-//    if (communicateWithWifibox) loadSettings();
-  })
-
-</script>
 </body>
 </html>
 
