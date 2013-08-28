@@ -57,6 +57,7 @@ function SettingsWindow() {
 	  self.saveSettings();
 	  self.hideSettings();
 	}
+	
 	this.showSettings = function() {
 	  console.log("f:showSettings()");
 	  
@@ -71,6 +72,7 @@ function SettingsWindow() {
       document.body.addEventListener('touchmove',prevent,false);
     });
 	}
+	
 	this.loadSettings = function() {
 		if (!communicateWithWifibox) {
 			console.log("     communicateWithWifibox is false: settings aren't being loaded from wifibox...")
@@ -96,6 +98,7 @@ function SettingsWindow() {
 			self.retryLoadSettingsDelay = setTimeout(function() { self.loadSettings() },self.retryDelay); // retry after delay
 		});
 	}
+	
 	this.saveSettings = function(callback) {
 	  console.log("Settings:saveSettings");
 	  
@@ -103,12 +106,13 @@ function SettingsWindow() {
 	  $("#printersettings input").each( function(index,element) {
 			var element = $(element);
 			//populate settings are with values from html
-			if(element.attr("type") == "text") {
+			if(element.attr("type") == "text" || element.attr("type") == "number") {
 				settings[element.attr('name')] = element.val();
 			} else if(element.attr("type") == "checkbox") {
 				settings[element.attr('name')] = element.prop('checked')
 			}
 	  });
+	  this.readForm();
 	  
 	  if (communicateWithWifibox) {
 		  $.ajax({
@@ -142,22 +146,58 @@ function SettingsWindow() {
 			});
 	  }
 	}
+	
 	this.fillForm = function() {
-		//update html with loaded wifi settings
-    $("#ipaddress").attr('value', settings["network.ap.address"]);
-    $("#netmask").attr('value', settings["network.ap.netmask"]);
-    $("#ssid").attr('value', settings["network.ap.ssid"]);
-
-    //update html with loaded printer settings
-	  $("#printersettings input").each( function(index,element) {
+		console.log("SettingsWindow:fillForm");
+		//fill form with loaded settings
+		var selects = this.form.find("select");
+		selects.each( function(index,element) {
+			var element = $(element);
+			element.val(settings[element.attr('name')]);
+		});
+		
+		var inputs = this.form.find("input");
+		inputs.each( function(index,element) {
 			var element = $(element);
 			//console.log("printer setting input: ",index,element.attr("type"),element.attr('name')); //,element);
-			if(element.attr("type") == "text") {
-				element.val(settings[element.attr('name')]);
-			} else if(element.attr("type") == "checkbox") {
-				element.prop('checked', settings[element.attr('name')]);
+			switch(element.attr("type")) {
+				case "text": 
+				case "number":  
+					element.val(settings[element.attr('name')]);
+					break;
+				case "checkbox":
+					element.prop('checked', settings[element.attr('name')]);
+					break;
 			}
 		});
+		
+		// TODO: textarea's
+		var textareas = this.form.find("textarea");
+		console.log(textareas);
+		textareas.each( function(index,element) {
+			var element = $(element);
+			
+			console.log("printer setting textarea: ",index,element.attr('name')); //,element);
+			var value = settings[element.attr('name')];
+			element.val(value);
+			console.log("  value: ",value);
+		});
+	}
+	
+	this.readForm = function() {
+		console.log("SettingsWindow:readForm");
+		// read settings from form
+		
+		// TODO: textarea's
+		var textareas = this.form.find("textarea");
+		console.log(textareas);
+		textareas.each( function(index,element) {
+			var element = $(element);
+			console.log("printer textarea: ",index,element.attr('name')); //,element);
+			console.log("  val: ",element.val());
+			settings[element.attr('name')] = element.val();
+		});
+		console.log(settings);
 	}
 }
 

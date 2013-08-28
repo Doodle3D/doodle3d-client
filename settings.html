@@ -10,156 +10,106 @@
 </head>
 <body>
 <div>
-  <h3 style="font-weight:bold">
-    Not all fields are saveable at the moment
-  </h3>
-
   <form id="settingsForm">
     <fieldset>
       <legend>3D printer</legend>
-      <label for="deviceType">Type:</label>
-      <select id="deviceType">
-        <option value="ultimaker">Ultimaker</option>
-        <option value="ultimaker">Makerbot CupCake</option>
-        <option value="reprap">Prusa Mendel</option>
+      <label for="printerType">Type:</label>
+      <select id="printerType" name="printer.type">
+        <option value="rigidbot">Rigidbot</option>
+	      <option value="ultimaker">Ultimaker</option>
+	      <option value="makerbot_replicator2">MakerBot Replicator2</option>
+        <option value="makerbot_thingomatic">MakerBot Thing-o-matic</option>
+        <option value="printrbot">Printrbot</option>
+        <option value="bukobot">Bukobot</option>
+        <option value="cartesio">Cartesio</option>
+        <option value="cyrus">Cyrus</option>
+        <option value="delta_rostockmax">Delta RostockMax</option>
+        <option value="deltamaker">Deltamaker</option>
+        <option value="eventorbot">EventorBot</option>
+        <option value="felix">Felix</option>
+        <option value="gigabot">Gigabot</option>
+        <option value="kossel">Kossel</option>
+        <option value="leapfrog_creatr">LeapFrog Creatr</option>
+        <option value="lulzbot_aO_101">LulzBot AO-101</option>
+        <option value="makergear_m2">MakerGear M2</option>
+        <option value="makergear_prusa">MakerGear Prusa</option>
+        <option value="makibox">Makibox</option>
+        <option value="orca_0_3">Orca 0.3</option>
+        <option value="ord_bot_hadron">ORD Bot Hadron</option>
+        <option value="printxel_3d">Printxel 3D</option>
+        <option value="prusa_i3">Prusa I3</option>
+        <option value="prusa_iteration_2">Prusa Iteration 2</option>
+        <option value="rapman">RapMan</option>
+        <option value="reprappro_huxley">RepRapPro Huxley</option>
+        <option value="reprappro_mendel">RepRapPro Mendel</option>
+        <option value="robo_3d_printer">RoBo 3D Printer</option>
+        <option value="shapercube">ShaperCube</option>
+        <option value="tantillus">Tantillus</option>
+        <option value="vision_3d_printer">Vision 3D Printer</option>
       </select>
       <br>
-      <label for="deviceSpeed">Speed:</label>
-      <select id="deviceSpeed">
+      <label for="printerBaudrate">Baud rate:</label>
+      <select id="printerBaudrate" name="printer.baudrate">
         <option value="115200">115200 bps</option>
         <option value="2500000">2500000 bps</option>
       </select>
-      <br>
-      <label for="devicePort">Port:</label>
-      <select id="devicePort">
-        <option value="/dev/tty.usbmodem411">/dev/tty.usbmodem411</option>
-        <option value="/dev/tty.usbmodem602">/dev/tty.usbmodem621</option>
-      </select>
-      <button>Check connection...</button>
     </fieldset>
-
-    <fieldset id="printersettings">
+		
+		<fieldset id="printersettings">
       <legend>Print settings</legend>
-      <label for="layerHeight">Layer height:</label><input id="layerHeight" type="text" class="small" name="printer.layerHeight">mm<br>
-      <label for="wallThickness">Wall thickness:</label><input id="wallThickness" type="text" class="small" name="printer.wallThickness">mm<br>
-      <label for="filamentThickness">Filament thickness:</label><input id="filamentThickness" type="text" class="small" name="printer.filamentThickness">mm<br>
-      <label for="temperature">Temperature:</label><input id="temperature" type="text" class="small" name="printer.temperature">degrees C<br>
+      <label for="layerHeight">Layer height:</label><input id="layerHeight" type="number" step="0.01" class="small" name="printer.layerHeight">mm<br>
+      <label for="wallThickness">Wall thickness:</label><input id="wallThickness" type="number" step="0.1" class="small" name="printer.wallThickness">mm<br>
+      <label for="filamentThickness">Filament thickness:</label><input id="filamentThickness" step="0.01" type="number" class="small" name="printer.filamentThickness">mm<br>
+      <label for="temperature">Temperature:</label><input id="temperature" type="number" class="small" name="printer.temperature">degrees C<br>
       <br>
-      <label for="speed">Speed:</label><input id="speed" type="text" name="printer.speed" class="small">mm/s<br>
-      <label for="travelSpeed">Travel speed:</label><input id="travelSpeed" type="text" name="printer.travelSpeed" class="small">mm/s<br>
+      <label for="speed">Speed:</label><input id="speed" type="number" name="printer.speed" class="small">mm/s<br>
+      <label for="travelSpeed">Travel speed:</label><input id="travelSpeed" type="number" name="printer.travelSpeed" class="small">mm/s<br>
       <br>
-      <label for="autoWarmUp">Auto warm-up:</label><input id="autoWarmUp" type="checkbox" name="printer.autoWarmUp" value="autoWarmUp"><br>
       <label for="firstLayerSlow">First layer slow:</label><input id="firstLayerSlow" type="checkbox" name="printer.firstLayerSlow" value="firstLayerSlow"><br>
-      <label for="useSubLayers">Use sub-layers:</label><input id="useSubLayers" type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
-      <label for="useRetraction">Use retraction:</label><input id="useRetraction" type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
+      <label for="useSubLayers">Use sub-layers*:</label><input id="useSubLayers" type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
+      <small>* Continuously move platform while printing instead of once per layer</small>
       <br>
-      <label for="retractionAmount">Retraction amount:</label><input id="retractionAmount" type="text" class="small" name="printer.retraction.amount">mm<br>
-      <label for="retractionMinDistance">Retraction min distance:</label><input id="retractionMinDistance" type="text" class="small" name="printer.retraction.minDistance">mm<br>
-      <label for="retractionSpeed">Retraction speed:</label><input id="retractionSpeed" type="text" class="small" name="printer.retraction.speed">mm/s<br>
+			<label for="useRetraction">Use retraction:</label><input id="useRetraction" type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
+      <label for="retractionAmount">Retraction amount:</label><input id="retractionAmount" type="number" class="small" name="printer.retraction.amount">mm<br>
+      <label for="retractionMinDistance">Retraction min distance:</label><input id="retractionMinDistance" type="number" class="small" name="printer.retraction.minDistance">mm<br>
+      <label for="retractionSpeed">Retraction speed:</label><input id="retractionSpeed" type="number" class="small" name="printer.retraction.speed">mm/s<br>
       <br>
+			<label for="autoWarmUp">Auto warm-up:</label><input id="autoWarmUp" type="checkbox" name="printer.autoWarmUp" value="autoWarmUp"><br>
       <label for="autoWarmUpCommand">Auto Warm up command:</label><input id="autoWarmUpCommand" type="text" name="printer.autoWarmUpCommand"><br>
     </fieldset>
 
+		<fieldset id="doodlesettings">
+			<legend>Doodle3D settings</legend>
+			<label for="objectHeight">Max object height:</label><input id="objectHeight" type="number" class="small" name="doodle3d.objectHeight">mm<br>
+			<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
+		</fieldset>
+
     <fieldset>
       <legend>Access point settings</legend>
-      <label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="ipaddress" id="ipaddress" value="0.3"><br>
-      <label for="netmask">Wi-Fi box netmask:</label><input type="text" name="netmask" id="netmask" value="0.8"><br>
-      <label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="ssid" id="ssid" value="d3d-ap-%%MAC_ADDR_TAIL%%"> <br>
-      <br>
-      * The macro <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.<br>
+      <label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="network.ap.address" id="ipaddress"><br>
+      <label for="netmask">Wi-Fi box netmask:</label><input type="text" name="network.ap.netmask" id="netmask"><br>
+      <label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="network.ap.ssid" id="ssid"> <br>
+      <small>* The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
     </fieldset>
 
-    <!--<fieldset>-->
-      <!--<legend>Doodle3D shape settings</legend>-->
-
-      <!--<label for="minScale">Minimum scale:</label><input type="text" class="small" name="minScale" id="minScale" value="0.3"><br>-->
-      <!--<label for="maxScale">Maximum scale:</label><input type="text" class="small" name="maxScale" id="maxScale" value="0.8"><br>-->
-      <!--<label for="twists">Twists:</label><input type="text" class="small" name="twists" id="twists" value="1.5"><br>-->
-
-      <!--<label for="shape">Vertical shape:</label>-->
-      <!--<select id="shape">-->
-        <!--<option value="/">/</option>-->
-        <!--<option value="|">|</option>-->
-        <!--<option value="/">\</option>-->
-        <!--<option value="#">#</option>-->
-        <!--<option value="$">$</option>-->
-        <!--<option value="%">%</option>-->
-        <!--<option value="^">^</option>-->
-        <!--<option value="*">*</option>-->
-      <!--</select>-->
-
-      <!--<br>-->
-      <!--<label for="simplifyShape">Simplify shape:</label>-->
-      <!--<select id="simplifyShape">-->
-        <!--<option value="strong">strong</option>-->
-        <!--<option value="normal" selected>normal</option>-->
-        <!--<option value="less">less</option>-->
-        <!--<option value="none">no</option>-->
-    <!--</fieldset>-->
-
-    <!--<fieldset>-->
-      <!--<legend>Webserver</legend>-->
-      <!--<label for="serverPort">Port:</label><input type="text" class="small" name="serverPort" id="serverPort" value="8888"><br>-->
-      <!--<label for="serverIP">IP-address:</label><input readonly type="text" name="serverPort" id="serverIP" value="192.168.2.1"><br>-->
-    <!--</fieldset>-->
-
-    <!--<fieldset>-->
-      <!--<legend>Application settings</legend>-->
-      <!--<label for="fullscreen">Start fullscreen:</label><input type="checkbox" name="fullscreen" id="fullscreen" value="fullscreen" checked><br>-->
-      <!--<label for="centerWindow">Center window:</label><input type="checkbox" name="centerWindow" id="centerWindow" value="centerWindow" checked><br>-->
-      <!--<label for="windowWidth">Window width:</label><input type="text" class="small" name="layerHeight" id="windowWidth" value="1120">px<br>-->
-      <!--<label for="windowHeight">Window height:</label><input type="text" class="small" name="layerHeight" id="windowHeight" value="700">px<br>-->
-    <!--</fieldset>-->
-
     <fieldset>
-      <legend>GCODE settings</legend><br>
-
+      <legend>GCODE settings</legend>
       <table>
         <tr>
           <td>
             <label for="startgcode">Start:</label><br>
-            <textarea id="startgcode" class="gcode">
-G21 (mm)
-G91 (relative)
-G28 X0 Y0 Z0 (physical home)
-M104 S230 (temperature)
-G1 E10 F250 (flow)
-G92 X-100 Y-100 Z0 E10
-G1 Z3 F5000 (prevent diagonal line)
-G90 (absolute)
-M106 (fan on)
+            <textarea id="startgcode" class="gcode" name="printer.startgcode">
             </textarea>
 
           </td>
           <td>
             <label for="endgcode">End:</label><br>
-            <textarea id="endgcode" class="gcode">
-G1 X-100 Y-100 F15000 (fast homing)
-M107
-M84 (disable axes)
+            <textarea id="endgcode" class="gcode" name="printer.endgcode">
             </textarea>
           </td>
         </tr>
       </table>
-      <br>
     </fieldset>
-
-    <fieldset>
-      <legend>Advanced settings</legend>
-      <textarea id="advancedSettings">
-zOffset=0
-loadOffset=0,0
-showWarmUp=true
-loopAlways=false
-maxObjectHeight=200
-maxScaleDifference=.1
-quitOnEscape=true
-screenToMillimeterScale=.3
-targetTemperature=230
-      </textarea>
-    </fieldset>
-    <!--<br>-->
-    <!--<input type="submit" value="Save settings">-->
   </form>
 </div>
 </body>

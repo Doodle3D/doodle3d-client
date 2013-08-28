@@ -47,7 +47,11 @@ div.content > div {
 }
 
 div.content > div.settings {
-  border: 1px solid #333;
+  border: 1px solid rgb(187, 187, 187);
+  -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
   width: 660px;
   overflow: scroll;
   max-height: 368px;

@@ -301,7 +301,7 @@ function onCanvasMouseMove(e) {
 
   if (prevPoint.x != -1 || prevPoint.y != -1) {
     var dist = Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2));
-    if (dist > 5) {
+    if (dist > 5) { // replace by setting: doodle3d.simplify.minDistance
       _points.push([x, y, false]);
       adjustBounds(x, y)
       adjustPreviewTransformation();
