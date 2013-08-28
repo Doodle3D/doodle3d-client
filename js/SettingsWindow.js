@@ -102,16 +102,6 @@ function SettingsWindow() {
 	this.saveSettings = function(callback) {
 	  console.log("Settings:saveSettings");
 	  
-	  //var printerSettings = {};
-	  $("#printersettings input").each( function(index,element) {
-			var element = $(element);
-			//populate settings are with values from html
-			if(element.attr("type") == "text" || element.attr("type") == "number") {
-				settings[element.attr('name')] = element.val();
-			} else if(element.attr("type") == "checkbox") {
-				settings[element.attr('name')] = element.prop('checked')
-			}
-	  });
 	  this.readForm();
 	  
 	  if (communicateWithWifibox) {
@@ -171,7 +161,6 @@ function SettingsWindow() {
 			}
 		});
 		
-		// TODO: textarea's
 		var textareas = this.form.find("textarea");
 		console.log(textareas);
 		textareas.each( function(index,element) {
@@ -184,17 +173,31 @@ function SettingsWindow() {
 		});
 	}
 	
-	this.readForm = function() {
+	this.readForm = function() {	
 		console.log("SettingsWindow:readForm");
-		// read settings from form
+		var selects = this.form.find("select");
+		selects.each( function(index,element) {
+			var element = $(element);
+			settings[element.attr('name')] = element.val();
+		});
 		
-		// TODO: textarea's
+		var inputs = this.form.find("input");
+		inputs.each( function(index,element) {
+			var element = $(element);
+			switch(element.attr("type")) {
+				case "text": 
+				case "number":  
+					settings[element.attr('name')] = element.val();
+					break;
+				case "checkbox":
+					settings[element.attr('name')] = element.prop('checked')
+					break;
+			}
+		});
+	
 		var textareas = this.form.find("textarea");
-		console.log(textareas);
 		textareas.each( function(index,element) {
 			var element = $(element);
-			console.log("printer textarea: ",index,element.attr('name')); //,element);
-			console.log("  val: ",element.val());
 			settings[element.attr('name')] = element.val();
 		});
 		console.log(settings);
