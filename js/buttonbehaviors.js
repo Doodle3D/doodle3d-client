@@ -43,28 +43,6 @@ function initButtonBehavior() {
   //debug
   btnDebug = $(".debugBtn");
 
-  /*if (!btnNew.addEventListener) {
-    btnNew.attachEvent('onmousedown',clearDoodle);
-    btnNew.attachEvent('ontouchstart',clearDoodle);
-    btnPrint.attachEvent('onmousedown',print);
-    btnPrint.attachEvent('ontouchstart',print);
-
-//    btnPrevious.attachEvent('onmousedown',prevDoodle);
-//    btnPrevious.attachEvent('ontouchstart',prevDoodle);
-//    btnNext.attachEvent('onmousedown',nextDoodle);
-//    btnNext.attachEvent('ontouchstart',nextDoodle);
-  } else {
-    btnNew.addEventListener('mousedown',clearDoodle,false);
-    btnNew.addEventListener('touchstart',clearDoodle,false);
-    btnPrint.addEventListener('mousedown',print,false);
-    btnPrint.addEventListener('touchstart',print,false);
-
-//    btnPrevious.addEventListener('mousedown',prevDoodle,false);
-//    btnPrevious.addEventListener('touchstart',prevDoodle,false);
-//    btnNext.addEventListener('mousedown',nextDoodle,false);
-//    btnNext.addEventListener('touchstart',nextDoodle,false);
-  }*/
-
 	btnNew.bind('touchstart mousedown',clearDoodle);
 	btnPrint.bind('touchstart mousedown',print);
 
@@ -80,23 +58,6 @@ function initButtonBehavior() {
 
     clearDoodle();
   });
-
-//  btnPrevious.mouseup(function(e) {
-//    e.preventDefault();
-//    console.log("btnPrevious");
-//  })
-//  btnPrevious.bind("touchend", function(e) {
-//    e.preventDefault();
-//    console.log("btnPrevious");
-//  })
-//  btnNext.mouseup(function(e) {
-//    e.preventDefault();
-//    console.log("btnNext");
-//  })
-//  btnNext.bind("touchend", function(e) {
-//    e.preventDefault();
-//    console.log("btnPrevious");
-//  })
 
   function startOops(e) {
     //      console.log("btnOops mouse down");
@@ -188,7 +149,7 @@ function initButtonBehavior() {
     e.preventDefault();
     //      console.log("btnTwistRight mouse up");
     clearInterval(btnTwistRightInterval);
-    previewTwistLeft();
+    previewTwistRight();
   }
   btnTwistRight.mousedown(function(e) { startTwistRight(e) });
   btnTwistRight.mouseup(function(e) { stopTwistRight(e) });
