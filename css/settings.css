@@ -1,72 +1,79 @@
 form {
   margin: 10px;
 }
-input {
+form input {
   margin: 1px;
 }
 
 body,th,td {
-  font-family: Arial;
+  font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif;
   font-size: 13px;
 }
-#advancedSettings {
-  width: 96.3%;
-  height: 300px;
-  padding: 10px;
-}
-fieldset {
+form fieldset {
   width: 600px;
   border: 1px solid rgb(187, 187, 187);
   -webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
   margin-bottom: 20px;
-  /*padding-left: 20px;*/
+  padding: 8px 0 8px 8px;
 }
-fieldset legend {
+form fieldset fieldset{
+	width: 580px;
+	margin: 15px 0 5px 0;
+	clear: left;
+	float: left;
+}
+form fieldset legend {
   margin-left: 10px;
+  font-weight: bold;
 }
-label {
+form label {
   min-width: 150px;
-  display: inline-block;
+  display: block;
+  float: left;
+  margin: 1px 0 0 0;
+	clear: left;
 }
-textarea {
-  border: 1px solid rgb(144, 192, 255);
-  -webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+form div {
+	float: left;
 }
-input[type="text"], input[type="number"] {
+form input[type="text"], form input[type="number"], form input[type="password"] {
   border: 1px solid rgb(144, 192, 255);
   margin-right: 5px;
   -webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
-input[type="text"].small, input[type="number"].small {
+form input[type="text"].small, form input[type="number"].small, form input[type="password"].small {
   width: 50px;
 }
-input[type="text"].large,input[type="number"].large {
+form input[type="text"].large, form input[type="number"].large, form input[type="password"].large {
   width: 250px;
 }
-legend {
-  font-weight: bold;
-  font-family: Arial;
+form input[type="radio"] {
+  margin: 4px 4px 0 0;
 }
-select {
-  margin-left: -4px;
+form textarea {
+  border: 1px solid rgb(144, 192, 255);
+  -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
-textarea.gcode {
+form textarea.gcode {
   width: 270px;
   height: 150px;
   margin-right: 20px;
 }
-
-.retractionSettings {
-  display: none;
-  margin-top: 5px;
-}
 form small {
 	margin: 3px 0 0 0;
 	display: block;
+	clear: left;
+}
+form .button {
+	display: inline-block;
+}
+
+form #passwordLabel, form #password {
+	display: none;
 }

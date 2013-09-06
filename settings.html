@@ -54,7 +54,7 @@
         <option value="2500000">2500000 bps</option>
       </select>
     </fieldset>
-		
+
 		<fieldset id="printersettings">
       <legend>Print settings</legend>
       <label for="layerHeight">Layer height:</label><input id="layerHeight" type="number" step="0.01" class="small" name="printer.layerHeight">mm<br>
@@ -84,13 +84,37 @@
 			<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
 		</fieldset>
 
-    <fieldset>
-      <legend>Access point settings</legend>
-      <label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="network.ap.address" id="ipaddress"><br>
-      <label for="netmask">Wi-Fi box netmask:</label><input type="text" name="network.ap.netmask" id="netmask"><br>
-      <label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="network.ap.ssid" id="ssid"> <br>
-      <small>* The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
-    </fieldset>
+		<fieldset>
+      <legend>Network settings</legend>
+      <label>Connection type:</label>
+      <div>
+      	<label for="ap"><input type="radio" name="connectiontype" value="ap" id="ap">Access point mode</label>
+				<label for="client"><input type="radio" name="connectiontype" value="client" id="client">Client mode</label>
+			</div>
+
+	    <fieldset id="apSettings">
+	      <legend>Access point settings</legend>
+	      <label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="network.ap.address" id="ipaddress"><br>
+	      <label for="netmask">Wi-Fi box netmask:</label><input type="text" name="network.ap.netmask" id="netmask"><br>
+	      <label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="network.ap.ssid" id="ssid"> <br>
+	      <small>* The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
+	      <input type="button" name="create" value="Create" class="button" id="createAP"/>
+          <span id="apModeState"></span>
+	    </fieldset>
+
+	    <fieldset id="clientSettings">
+	      <legend>Client mode settings</legend>
+	      <label for="network">Network:</label>
+	      <select id="network" name="network.client.network">
+	        <option value="rigidbot">Fablab Amersfoort</option>
+		      <option value="ultimaker">Globe4D</option>
+	      </select>
+	      <input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br>
+	      <label for="password" id="passwordLabel">Password:</label><input type="password" name="network.client.password" id="password"><br>
+	      <input type="button" name="connect" value="Connect" class="button" id="connectToNetwork"/>
+          <span id="clientModeState"></span>
+	    </fieldset>
+		</fieldset>
 
     <fieldset>
       <legend>GCODE settings</legend>
