@@ -1,3 +1,28 @@
+var $printProgressContainer = $("#printProgressContainer");
+var $progressbar = $("#progressbar");
+var $progressAmount = $(".progressAmount");
+function setPrintprogress(val) {
+  if (isNaN(val)) return;
+//  console.log("f:setPrintprogress() >> val " + val);
+  $progressbar.css("width", val*100 + "%");
+  $progressAmount.text(Math.floor(val*100) + "%");
+}
+
+var thermoVal = 0;
+var thermocounter = 0;
+var $displayThermometer = $("#thermometerContainer");
+var $thermometer = $("#thermometer");
+//var thermoInterval;
+function updateThermometer(curr, targ) {
+  console.log("f:updateThermometer() >> curr temp " + curr + ", targ temp " + targ);
+  if (isNaN(curr) || isNaN(targ)) return;
+
+  $thermometer.css("height", (curr/targ)*100 + "%");
+  //    $thermometer.css("background-position", -val*100 + "%");
+  $(".thermoAmount").text(curr+"/"+targ);
+}
+
+
 function Printer() {
 	this.temperature = 0;
 	this.targetTemperature = 0;
