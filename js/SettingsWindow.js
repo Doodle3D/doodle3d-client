@@ -4,12 +4,15 @@ var settings = {
 "network.ap.address": "192.168.10.1",
 "network.ap.netmask": "255.255.255.0",
 "printer.temperature": 220,
-"printer.objectHeight": '???',
+"printer.objectHeight": 20,
+"printer.maxObjectHeight": 150,
 "printer.layerHeight": 0.2,
 "printer.wallThickness": 0.7,
+"printer.screenToMillimeterScale": 0.3,
 "printer.speed": 50,
 "printer.travelSpeed": 200,
 "printer.filamentThickness": 2.85,
+"printer.enableTraveling": true,
 "printer.useSubLayers": true,
 "printer.firstLayerSlow": true,
 "printer.autoWarmUp": true,
@@ -17,11 +20,12 @@ var settings = {
 "printer.simplify.minNumPoints": 15,
 "printer.simplify.minDistance": 3,
 "printer.retraction.enabled": true,
-"printer.retraction.speed": 250,
+"printer.retraction.speed": 50,
 "printer.retraction.minDistance": 1,
-"printer.retraction.amount": 2,
+"printer.retraction.amount": 5,
 "printer.autoWarmUpCommand": "M104 S220 (hardcoded temperature)"
 }
+
 
 function SettingsWindow() {
 	this.wifiboxURL;
@@ -130,7 +134,7 @@ function SettingsWindow() {
 		  timeout: this.timeoutTime,
 		  success: function(data){
 		  	console.log("Settings:loadSettings response: ",data);
-		  	settings = data.data;
+        settings = data.data;
 		  	console.log("  settings: ",settings);
 		  	self.fillForm();
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
@@ -497,7 +501,7 @@ function SettingsWindow() {
 var objectHeight = 20;
 var layerHeight = .2;
 //var wallThickness = .5;
-var hop = 0;
+//var hop = 0;
 //var speed = 70;
 //var travelSpeed = 200;
 var enableTraveling = true;
@@ -506,10 +510,10 @@ var minScale = .3;
 var maxScale = 1;
 var shape = "%";
 var twists = 0;
-var useSubLayers = true;
+//var useSubLayers = true;
 //var debug = false; // debug moved to main.js
 var loglevel = 2;
-var zOffset = 0;
+//var zOffset = 0;
 var serverport = 8888;
 var autoLoadImage = "hand.txt";
 var loadOffset = [0, 0]; // x en y ?
@@ -518,18 +522,18 @@ var loopAlways = false;
 var firstLayerSlow = true;
 var useSubpathColors = false;
 var autoWarmUp = true;
-var maxObjectHeight = 150;
+//var maxObjectHeight = 150;
 var maxScaleDifference = .1;
 var frameRate = 60;
 var quitOnEscape = true;
 var screenToMillimeterScale = .3; // 0.3
-var targetTemperature = 230;
-var simplifyiterations = 10;
-var simplifyminNumPoints = 15;
-var simplifyminDistance = 3;
-var retractionspeed = 50;
-var retractionminDistance = 5;
-var retractionamount = 3;
+//var targetTemperature = 220;
+//var simplifyiterations = 10;
+//var simplifyminNumPoints = 15;
+//var simplifyminDistance = 3;
+//var retractionspeed = 50;
+//var retractionminDistance = 5;
+//var retractionamount = 3;
 var sideis3D = true;
 var sidevisible = true;
 var sidebounds = [900, 210, 131, 390];

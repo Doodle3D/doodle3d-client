@@ -12,6 +12,7 @@ var btnOops, btnStop, btnClear;
 var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
 var btnDebug; // debug
+var displayTemp, displayProgress;
 
 var displayTempEnabled = false;
 
@@ -36,6 +37,7 @@ function initButtonBehavior() {
   btnPrint= $("#btnPrint");
   btnStop = $("#btnStop");
   displayTemp = $("#displayTemp");
+  displayProgress = $("#printProgressContainer");
 
 //  btnPrevious = $("#btnPrevious");
 //  btnNext = $("#btnNext");
@@ -205,40 +207,43 @@ function nextDoodle(e) {
 function print(e) {
 	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
 
-  if (sendPrintCommands) {
-    $("#textdump").text("");
-    if (_points.length > 2) {
+  $("#textdump").text("");
+  if (_points.length > 2) {
 
-      setState(PRINTING_STATE);
-      var gcode = generate_gcode();
-      //startPrint(gencode);
+    setState(PRINTING_STATE);
+    var gcode = generate_gcode();
+    //startPrint(gencode);
+
+    if (sendPrintCommands) {
       printer.print(gcode);
-
-      //		console.log("");
-      //		console.log("");
-      //		console.log("-------------------------------------------------");
-      //		console.log("generated gcode:");
-      //		console.log(gencode);
-      //		console.log("-------------------------------------------------");
-      //		console.log("");
-      //		console.log("");
-      //		console.log("");
-
-      if (debugMode) $("#textdump").text(gcode.join("\n"));
-
-      //  copyToClipboard(gencode);
-      //*/
     } else {
-      console.log("f:print >> not enough points!");
+      console.log("sendPrintCommands is false: not sending print command to 3dprinter");
+    }
+    //		console.log("");
+    //		console.log("");
+    //		console.log("-------------------------------------------------");
+    //		console.log("generated gcode:");
+    //		console.log(gencode);
+    //		console.log("-------------------------------------------------");
+    //		console.log("");
+    //		console.log("");
+    //		console.log("");
+
+    if (debugMode) {
+      console.log("f:print() >> debugMode is true, dumping gcode to textarea #textdump");
+      $("#textdump").text(gcode.join("\n"));
     }
 
-
-    //	$.post("/doodle3d.of", { data:output }, function(data) {
-    //	btnPrint.disabled = false;
-    //	});
+    //  copyToClipboard(gencode);
+    //*/
   } else {
-    console.log("sendPrintCommands is false: not sending print command to 3dprinter");
+    console.log("f:print >> not enough points!");
   }
+
+
+  //	$.post("/doodle3d.of", { data:output }, function(data) {
+  //	btnPrint.disabled = false;
+  //	});
 }
 
 
@@ -263,7 +268,7 @@ function oopsUndo() {
 }
 function previewUp(redrawLess) {
   //    console.log("f:previewUp()");
-  if (numLayers < 100) {
+  if (numLayers < maxNumLayers) {
     numLayers++;
   }
 //  redrawPreview(redrawLess);
@@ -271,7 +276,7 @@ function previewUp(redrawLess) {
 }
 function previewDown(redrawLess) {
   //    console.log("f:previewDown()");
-  if (numLayers > 2) {
+  if (numLayers > minNumLayers) {
     numLayers--;
   }
 //  redrawPreview(redrawLess);
@@ -300,17 +305,22 @@ function previewTwistRight(redrawLess) {
 function update() {
 	if(!displayTempEnabled && printer.alive) {
 		displayTemp.show();
+    $displayThermometer.show();
 		displayTempEnabled = true;
 	} else if(displayTempEnabled && !printer.alive) {
 		displayTemp.hide();
+    $displayThermometer.hide();
 		displayTempEnabled = false;
 	}
 	
 	if(displayTempEnabled) {
 		displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
+    updateThermometer(printer.temperature, printer.targetTemperature);
 	}
 
-	var btnPrint= $("#btnPrint");	
+  setPrintprogress(printer.currentLine/printer.num_lines);
+
+	var btnPrint= $("#btnPrint");
 	
 	setState(printer.printing? PRINTING_STATE : IDLE_STATE);
 }
@@ -325,6 +335,7 @@ function setState(newState) {
 			btnPrint.removeClass("disabled"); // enable print button
 			btnStop.addClass("disabled"); // disable stop button
 			btnPrint.bind('touchstart mousedown',print);
+      displayProgress.hide();
 
 			break;
 		case PRINTING_STATE: 
@@ -332,7 +343,8 @@ function setState(newState) {
 			btnPrint.addClass("disabled"); // disable print button
 			btnStop.removeClass("disabled"); // enable stop button
 			btnPrint.unbind('touchstart mousedown');
-		
+      displayProgress.show();
+
 			break;
 	}
 	
