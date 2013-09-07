@@ -51,7 +51,7 @@ function SettingsWindow() {
   // because the webserver needs time to switch
   // this time is multiplied 3 times after access point creation
   this.retrieveNetworkStatusDelay;   // setTimout delay
-  this.retrieveNetworkStatusDelayTime = 3000;
+  this.retrieveNetworkStatusDelayTime = 4000;
 
 	// Events
 	SettingsWindow.SETTINGS_LOADED = "settingsLoaded";
@@ -320,10 +320,13 @@ function SettingsWindow() {
 			  dataType: 'json',
 			  timeout: self.timeoutTime,
 			  success: function(response){
-			  	console.log("Settings:updateNetworkStatus response: ",response);
-			  	if(response.status == "error") {
-			  		clearTimeout(self.retryRetrieveNetworkStatusDelay);
-						self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retryDelay); // retry after delay
+			  	console.log("Settings:retrieveNetworkStatus response: ",response);
+			  	if(response.status == "error" || response.data.ssid == "") {
+			  		//clearTimeout(self.retryRetrieveNetworkStatusDelay);
+						//self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retryDelay); // retry after delay
+
+            self.setClientModeState(SettingsWindow.NOT_CONNECTED);
+
 			  	} else {
             var data = response.data;
             switch(data.mode) {
@@ -363,7 +366,7 @@ function SettingsWindow() {
 			  	}
 				}
 			}).fail(function() {
-				console.log("Settings:updateNetworkStatus: failed");
+				console.log("Settings:retrieveNetworkStatus: failed");
 				clearTimeout(self.retryRetrieveNetworkStatusDelay);
 				self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retryDelay); // retry after delay
 			});
@@ -419,7 +422,8 @@ function SettingsWindow() {
 		if(self.selectedNetwork == undefined) return;
 		postData = {
 			ssid:self.selectedNetwork,
-			phrase:self.form.find("#password").val()
+			phrase:self.form.find("#password").val(),
+      recreate:true
 		}
 		console.log("  postData: ",postData);
 		if (communicateWithWifibox) {
