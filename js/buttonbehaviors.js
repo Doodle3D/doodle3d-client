@@ -263,7 +263,8 @@ function print(e) {
       //		console.log("");
       //		console.log("");
 
-      if (debugMode) $("#textdump").text(gcode.join("\n"));
+      //if (debugMode) 
+      $("#textdump").text(gcode.join("\n"));
 
       //  copyToClipboard(gencode);
       //*/
