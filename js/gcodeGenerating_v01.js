@@ -24,11 +24,71 @@ gcodeEnd.push("M84"); 							// disable axes / steppers
 gcodeEnd.push("G90"); 							// absolute positioning
 gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)
 
+
 var gcode = [];
 function generate_gcode(callback) {
   console.log("f:generategcode()");
 
+  var startGcode = [];
+  var endGcode = [];
+
+  // get gcode start statements
+  if ($("#startgcode").val().trim().length != 0) {
+    console.log("   found contents for start-gcode in settings.html")
+    startGcode = $("#startgcode").val().trim().split("\n");
+  } else {
+    console.log("   no start-gcode in settings.html, using defaults")
+    startGcode.concat(gcodeStart);
+  }
+
+  // get gcode end statements
+  if ($("#endgcode").val().trim().length != 0) {
+    console.log("   found contents for end-gcode in settings.html")
+    endGcode = $("#endgcode").val().trim().split("\n");
+  } else {
+    console.log("   no end-gcode in settings.html, using defaults")
+    endGcode.concat(gcodeEnd);
+  }
+
   gcode = [];
+
+  console.log("settings: ",settings);
+  var speed 						      = settings["printer.speed"]
+  var normalSpeed 			      = speed;
+  var bottomSpeed 			      = speed*0.5;
+  var travelSpeed 			      = settings["printer.travelSpeed"]
+  var filamentThickness       = settings["printer.filamentThickness"];
+  var wallThickness 		      = settings["printer.wallThickness"];
+  var screenToMillimeterScale = isNaN(settings["printer.screenToMillimeterScale"]) ? 0.3 : settings["printer.screenToMillimeterScale"]; // TODO add this item to the settings on 'kastje'
+  var layerHeight 			      = settings["printer.layerHeight"];
+  var objectHeight		        = settings["printer.objectHeight"];
+  var maxObjectHeight		      = isNaN(settings["printer.maxObjectHeight"]) ? 150 : settings["printer.maxObjectHeight"]; // TODO add this item to the settings on 'kastje'
+  var temperature 			      = settings["printer.temperature"];
+  var useSubLayers 			      = settings["printer.useSubLayers"];
+  var enableTraveling 	      = isNaN(settings["printer.enableTraveling"]) ? true : settings["printer.enableTraveling"]; // TODO add this item to the settings on 'kastje'
+  var retractionspeed 	      = settings["printer.retraction.speed"];
+  var retractionminDistance   = settings["printer.retraction.minDistance"];
+  var retractionamount 	      = settings["printer.retraction.amount"];
+
+  /*
+  console.log("f:generate_gcode >> EFFE CHECKEN:");
+  console.log("   speed: " + speed);
+  console.log("   travelSpeed: " + travelSpeed);
+  console.log("   filamentThickness: " + filamentThickness);
+  console.log("   wallThickness: " + wallThickness);
+  console.log("   screenToMillimeterScale: " + screenToMillimeterScale);
+  console.log("   layerHeight: " + layerHeight);
+  console.log("   objectHeight: " + objectHeight);
+  console.log("   maxObjectHeight: " + maxObjectHeight);
+  console.log("   temperature: " + temperature);
+  console.log("   maxObjectHeight: " + maxObjectHeight);
+  console.log("   useSubLayers: " + useSubLayers);
+  console.log("   enableTraveling: " + enableTraveling);
+  console.log("   retractionspeed: " + retractionspeed);
+  console.log("   retractionminDistance: " + retractionminDistance);
+  console.log("   retractionamount: " + retractionamount);
+  console.log("");
+  //*/
 
   objectHeight = Math.ceil(numLayers / 5); // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
   objectHeight = numLayers; // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
@@ -43,20 +103,10 @@ function generate_gcode(callback) {
 //  console.log("paths.toString(): " + paths.toString());
 //  return;
 
-	console.log("settings: ",settings);
-	var speed 						= settings["printer.speed"]
-	var normalSpeed 			= speed;
-  var bottomSpeed 			= speed*0.5;
-	var travelSpeed 			= settings["printer.travelSpeed"]
-	var filamentThickness = settings["printer.filamentThickness"];
-	var wallThickness 		= settings["printer.wallThickness"];
-	var layerHeight 			= settings["printer.layerHeight"];
-	var temperature 			= settings["printer.temperature"];
-
   console.log("printer temperature: ",temperature);
 	gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
   // add gcode begin commands
-  gcode = gcode.concat(gcodeStart);
+  gcode = gcode.concat(startGcode);
 	
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
 
@@ -71,13 +121,10 @@ function generate_gcode(callback) {
 //    x: doodleBounds[0],
 //    y: doodleBounds[1]
   }
-  
-  
-	
+
   console.log("f:generategcode() >> layers: " + layers);
-  
-  
-  
+  if (layers == Infinity) return;
+
   for (var layer = 0; layer < layers; layer++) {
 
     var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
@@ -149,7 +196,7 @@ function generate_gcode(callback) {
 //        ofPoint to = commands[(even || isLoop || loopAlways) ? i : last-i].to;
         var to = new Point(); to.set(commands[i][0], commands[i][1]);
         var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
-        var z = (sublayer + 1) * layerHeight + zOffset;
+        var z = (sublayer + 1) * layerHeight; // 2013-09-06 removed zOffset (seemed to be useless)
 
         var isTraveling = !isLoop && i==0;
         var doRetract = prev.distance(to) > retractionminDistance;
@@ -157,7 +204,7 @@ function generate_gcode(callback) {
         if (enableTraveling && isTraveling) {
 //          console.log("enableTraveling && isTraveling >> doRetract: " + doRetract + ", retractionspeed: " + retractionspeed);
           if (doRetract) gcode.push("G0 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
-          gcode.push("G0 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + (z + (doRetract ? hop : 0)).toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
+          gcode.push("G0 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
           if (doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal 
         } else {
 //          console.log("       else");
@@ -174,7 +221,7 @@ function generate_gcode(callback) {
     }
 
     if ((layer/layers) > (objectHeight/maxObjectHeight)) {
-      console.log("f:generategcode() >> (layer/layers) > (objectHeight/maxObjectHeight) is true -> breaking");
+      console.log("f:generategcode() >> (layer/layers) > (objectHeight/maxObjectHeight) is true -> breaking at layer " + (layer + 1));
       break;
     }
 
@@ -182,7 +229,7 @@ function generate_gcode(callback) {
   }
 
   // add gcode end commands
-  gcode = gcode.concat(gcodeEnd);
+  gcode = gcode.concat(endGcode);
 
   // debug
 //  var _gc = gc.join("\n");

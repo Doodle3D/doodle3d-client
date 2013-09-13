@@ -40,12 +40,36 @@ $(function() {
 	
 	settingsWindow.init(wifiboxURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED,settingsLoaded);
-	
+
 	if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
     $("#preview_tmp").css("display", "block");
+
+    /* TEMP CODE!! -> artificially populates the startgcode and endgcode textareas in the settings window */
+    // todo remove this temporary code...
+    /*
+    setTimeout(function() {
+      $("#startgcode").text("");
+      $("#startgcode").append("G21 (mm) \n");
+      $("#startgcode").append("G91 (relative) \n");
+      $("#startgcode").append("G28 X0 Y0 Z0 (physical home) \n");
+      $("#startgcode").append("M104 S230 (temperature) \n");
+      $("#startgcode").append("G1 E10 F250 (flow) \n");
+      $("#startgcode").append("G92 X-100 Y-100 Z0 E10 \n");
+      $("#startgcode").append("G1 Z3 F5000 (prevent diagonal line) \n");
+      $("#startgcode").append("G90 (absolute) \n");
+      $("#startgcode").append("M106 (fan on)");
+      console.log("$('#startgcode'): " + $("#startgcode").val());
+
+      $("#endgcode").text("");
+      $("#endgcode").append("G1 X-100 Y-100 F15000 (fast homing) \n");
+      $("#endgcode").append("M107 \n");
+      $("#endgcode").append("M84 (disable axes) \n");
+      console.log("$('#endgcode'): " + $("#endgcode").val());
+    }, 1000);
+    //*/
   }
 })
 function settingsLoaded() {

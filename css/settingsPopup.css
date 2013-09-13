@@ -58,7 +58,7 @@ div.content > div.settings {
   overflow-x: hidden;
   padding: 10px 10px 10px 10px;
 }
-div.content > div.buttons {
+div.content > div.manipulationBtns {
   display: table-cell;
   vertical-align: bottom;
   width: 125px;

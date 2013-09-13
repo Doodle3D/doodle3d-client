@@ -23,6 +23,7 @@ img {
 /*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
 .btn {
   background-repeat: no-repeat;
+  cursor: pointer
 }
 
 /*
@@ -94,8 +95,12 @@ img {
 */
 
 
-#drawAreaContainer > .buttons {
+#drawAreaContainer > .manipulationBtns {
 	margin: 5px;
+}
+
+.manipulationBtn {
+  cursor: pointer;
 }
 
 #btnsUpDown {
