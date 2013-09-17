@@ -11,6 +11,11 @@ previewCtx = preview.getContext('2d');
 var preview_tmp;
 var previewCtx_tmp;
 
+var previewDefaults = {
+  rotation: Math.PI/90,
+  numLayers: 10
+}
+
 var svgPathRegExp = /[LM]\d* \d*/ig;
 var svgPathParamsRegExp = /([LM])(\d*) (\d*)/;
 
@@ -37,7 +42,10 @@ function initPreviewRendering() {
   redrawPreview();
 }
 
-var numLayers 	= 10;     // current number of preview layers
+// TODO (perhaps) : make the twist limit dynamic, depending on what's printable (w.r.t. overlapping)
+var previewRotationLimit = Math.PI / 20; // rough estimate
+
+var numLayers 	= previewDefaults.numLayers;     // current number of preview layers
 var maxNumLayers= 100;    // maximum number of preview layers
 var minNumLayers= 2;      // minimum number of preview layers
 var globalScale = 0.3;		// global scale of preview (width preview / width canvas)
@@ -46,7 +54,7 @@ var scaleY 			= 0.4; 		// additional vertical scale per path for 3d effect
 var viewerScale = 0.65;   // additional scale to fit into preview nicely (otherwise is fills out totally)
 var strokeWidth = 2;      //4;
 //var rStep 			= Math.PI/40; //Math.PI/40; //
-var rStep 			= Math.PI/90; // Math.PI/180; //Math.PI/40; //
+var rStep 			= previewDefaults.rotation; // Math.PI/180; //Math.PI/40; //
 var yStep;// 			= preview.height / 150; // 3; //6;
 //var svgWidth 		= 500; // 650 //parseInt($(svg).css("width"));
 //var svgHeight 	= 450; //450; //parseInt($(svg).css("height"));
