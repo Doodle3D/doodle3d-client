@@ -219,20 +219,11 @@ function print(e) {
     } else {
       console.log("sendPrintCommands is false: not sending print command to 3dprinter");
     }
-    //		console.log("");
-    //		console.log("");
-    //		console.log("-------------------------------------------------");
-    //		console.log("generated gcode:");
-    //		console.log(gencode);
-    //		console.log("-------------------------------------------------");
-    //		console.log("");
-    //		console.log("");
-    //		console.log("");
 
-    if (debugMode) {
-      console.log("f:print() >> debugMode is true, dumping gcode to textarea #textdump");
+    //if (debugMode) {
+      //console.log("f:print() >> debugMode is true, dumping gcode to textarea #textdump");
       $("#textdump").text(gcode.join("\n"));
-    }
+    //}
 
     //  copyToClipboard(gencode);
     //*/
