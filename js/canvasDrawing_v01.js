@@ -146,7 +146,7 @@ function clearDoodle() {
   doodleTransform = [0, 0, 1.0, 1.0]; // [ x, y, scaleX, scaleY ]
 
   clearMainView();
-  clearPreview();
+  resetPreview();
 }
 
 function redrawDoodle() {
