@@ -4,7 +4,6 @@ var settings = {
 "network.ap.address": "192.168.10.1",
 "network.ap.netmask": "255.255.255.0",
 "printer.temperature": 220,
-"printer.objectHeight": 20,
 "printer.maxObjectHeight": 150,
 "printer.layerHeight": 0.2,
 "printer.wallThickness": 0.7,

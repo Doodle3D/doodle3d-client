@@ -11,7 +11,7 @@
 <body>
 <div>
   <form id="settingsForm">
-    <fieldset>
+    <!--<fieldset>
       <legend>3D printer</legend>
       <label for="printerType">Type:</label>
       <select id="printerType" name="printer.type">
@@ -53,7 +53,7 @@
         <option value="115200">115200 bps</option>
         <option value="2500000">2500000 bps</option>
       </select>
-    </fieldset>
+    </fieldset>-->
 
 		<fieldset id="printersettings">
       <legend>Print settings</legend>
@@ -64,7 +64,7 @@
       <br>
       <label for="speed">Speed:</label><input id="speed" type="number" name="printer.speed" class="small">mm/s<br>
       <label for="travelSpeed">Travel speed:</label><input id="travelSpeed" type="number" name="printer.travelSpeed" class="small">mm/s<br>
-      <br>
+      <label for="enableTraveling">Enable traveling:</label><input id="enableTraveling" type="checkbox" name="printer.enableTraveling" value="enableTraveling"><br>
       <label for="firstLayerSlow">First layer slow:</label><input id="firstLayerSlow" type="checkbox" name="printer.firstLayerSlow" value="firstLayerSlow"><br>
       <label for="useSubLayers">Use sub-layers*:</label><input id="useSubLayers" type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
       <small>* Continuously move platform while printing instead of once per layer</small>
@@ -80,8 +80,9 @@
 
 		<fieldset id="doodlesettings">
 			<legend>Doodle3D settings</legend>
-			<label for="objectHeight">Max object height:</label><input id="objectHeight" type="number" class="small" name="doodle3d.objectHeight">mm<br>
 			<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
+			<label for="maxObjectHeight">Max object height:</label><input id="maxObjectHeight" type="number" class="small" name="printer.maxObjectHeight">mm<br>
+			<label for="screenToMillimeterScale">Pixels to mm scale:</label><input id="screenToMillimeterScale" type="number" step="0.1" class="small" name="printer.screenToMillimeterScale">px<br>
 		</fieldset>
 
 		<fieldset>
@@ -138,31 +139,3 @@
 </div>
 </body>
 </html>
-
-<!--
-
-implemented:
-
-X  network.ap.address: "192.168.10.1"
-X  network.ap.netmask: "255.255.255.0"
-X  network.ap.ssid: "d3d-ap-%%MAC_ADDR_TAIL%%"
-X  printer.autoWarmUp: true
-printer.autoWarmUpCommand: "M104 S230"
-X printer.filamentThickness: 2.89
-X  printer.firstLayerSlow: true
-X  printer.layerHeight: 0.3
-printer.objectHeight: 20
-X  printer.retraction.amount: 3
-X  printer.retraction.minDistance: 5
-X  printer.retraction.speed: 50
-printer.simplify.iterations: 10
-printer.simplify.minDistance: 3
-printer.simplify.minNumPoints: 15
-X  printer.speed: 70
-printer.temperature: 230
-X  printer.travelSpeed: 200
-X  printer.useSubLayers: true
-X  printer.wallThickness: 0.5
-X  printer.temperature: 230
-
--->

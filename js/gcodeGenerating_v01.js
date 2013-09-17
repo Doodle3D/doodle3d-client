@@ -59,13 +59,13 @@ function generate_gcode(callback) {
   var travelSpeed 			      = settings["printer.travelSpeed"]
   var filamentThickness       = settings["printer.filamentThickness"];
   var wallThickness 		      = settings["printer.wallThickness"];
-  var screenToMillimeterScale = isNaN(settings["printer.screenToMillimeterScale"]) ? 0.3 : settings["printer.screenToMillimeterScale"]; // TODO add this item to the settings on 'kastje'
+  var screenToMillimeterScale = settings["printer.screenToMillimeterScale"];
   var layerHeight 			      = settings["printer.layerHeight"];
-  var objectHeight		        = settings["printer.objectHeight"];
-  var maxObjectHeight		      = isNaN(settings["printer.maxObjectHeight"]) ? 150 : settings["printer.maxObjectHeight"]; // TODO add this item to the settings on 'kastje'
+  var maxObjectHeight		      = settings["printer.maxObjectHeight"];
   var temperature 			      = settings["printer.temperature"];
   var useSubLayers 			      = settings["printer.useSubLayers"];
-  var enableTraveling 	      = isNaN(settings["printer.enableTraveling"]) ? true : settings["printer.enableTraveling"]; // TODO add this item to the settings on 'kastje'
+  var enableTraveling 	      = settings["printer.enableTraveling"];
+  var retractionEnabled 	    = settings["printer.retraction.enabled"];
   var retractionspeed 	      = settings["printer.retraction.speed"];
   var retractionminDistance   = settings["printer.retraction.minDistance"];
   var retractionamount 	      = settings["printer.retraction.amount"];
@@ -199,7 +199,7 @@ function generate_gcode(callback) {
         var z = (sublayer + 1) * layerHeight; // 2013-09-06 removed zOffset (seemed to be useless)
 
         var isTraveling = !isLoop && i==0;
-        var doRetract = prev.distance(to) > retractionminDistance;
+        var doRetract = retractionEnabled && prev.distance(to) > retractionminDistance;
 
         if (enableTraveling && isTraveling) {
 //          console.log("enableTraveling && isTraveling >> doRetract: " + doRetract + ", retractionspeed: " + retractionspeed);
