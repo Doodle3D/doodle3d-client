@@ -4,8 +4,10 @@ var communicateWithWifibox = true;  // if Doodle3d should try interfacing with t
 var wifiboxIsRemote = false;        // when you want to run the client on a computer and have it remotely connect to the wifibox
 var autoUpdate = true; 							// auto retrieve updates about temperature and progress from printer
 
-var printer =  new Printer(); 
+var printer =  new Printer();
+var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
+
 $(function() {
   console.log("ready");
 
@@ -35,7 +37,9 @@ $(function() {
   initPreviewRendering();
   initButtonBehavior();
 
-	printer.init();
+	thermometer.init($("#thermometerCanvas"));
+
+  printer.init();
 	$(document).on(Printer.UPDATE,update);
 	
 	settingsWindow.init(wifiboxURL);

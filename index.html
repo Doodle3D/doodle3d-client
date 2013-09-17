@@ -10,8 +10,6 @@
   <link rel="icon" type="image/ico" href="favicon.ico"/>
   <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
 
-  <!-- Bootstrap -->
-  <!--<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">-->
   <link href="css/normalize.css" rel="stylesheet" media="screen">
   <link href="css/fixedPosInterface.css" rel="stylesheet" media="screen">
   <link href="css/d3d_btns.css" rel="stylesheet" media="screen">
@@ -30,9 +28,8 @@
     <img class="bgMiddle" src="img/bg_middle.png" />
     <img class="bgBottom" src="img/bg_bottom.png" />
     <div class="buttons">
-      <img id="d3dlogo" src="img/logo_full.png" onclick="location.reload()">
+      <div id="d3dlogo" onclick="location.reload()"></div>
       <div class="btn" id="btnNew"></div>
-      <!--<img class="btn" id="btnNew" src="img/buttons/btnNew.png">-->
       <img class="btn" id="btnPrevious" src="img/buttons/btnLeft.png">
       <img class="btn" id="btnNext" src="img/buttons/btnRight.png">
       <img class="btn" id="btnSave" src="img/buttons/btnSave.png">
@@ -42,7 +39,17 @@
       <img class="btn" id="btnInfo" src="img/buttons/btnInfo.png">
       <img class="btn" id="btnSettings" src="img/buttons/btnSettings.png">
     </div>
-    <div id="displayTemp"></div>
+    <!-- not now
+    <div id="printProgressContainer">
+      <label for="progressbarContainer">Progress:</label><span class="progressAmount">0%</span>
+      <div id="progressbarContainer">
+        <div id="progressbar"></div>
+      </div>
+    </div>
+    -->
+    <div id="thermometerContainer">
+      <canvas id="thermometerCanvas" width="100" height="125"></canvas>
+    </div>
   </div>
   <div id="drawAreaContainer">
     <canvas id="mycanvas"></canvas>
@@ -83,7 +90,6 @@
   <img class="vertImage" src="img/bg_vertical2.png"/>
 </div>
 <script src="js/libs/jquery-1.8.3.min.js"></script>
-<!--<script src="js/libs/bootstrap.min.js"></script>-->
 <script src="js/SettingsWindow.js"></script>
 <script src="js/d3dServerInterfacing.js"></script>
 <script src="js/buttonbehaviors.js"></script>
@@ -92,7 +98,7 @@
 <script src="js/gcodeGenerating_v01.js"></script>
 <script src="js/init_layout.js"></script>
 <script src="js/Printer.js"></script>
-<!--<script src="js/draw_logic.js"></script>-->
+<script src="js/Thermometer.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/main.js"></script>
 

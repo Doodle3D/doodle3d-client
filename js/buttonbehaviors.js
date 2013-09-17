@@ -253,11 +253,17 @@ function clearMainView() {
   ctx.clearRect(0,0,canvas.width, canvas.height);
   ctx.restore();
 }
-function clearPreview() {
-  //    console.log("f:clearPreview()");
+function resetPreview() {
+  //    console.log("f:resetPreview()");
+
+  // clear preview canvas
   previewCtx.save();
   previewCtx.clearRect(0,0,canvas.width, canvas.height);
   previewCtx.restore();
+
+  // reset height and rotation to default values
+  numLayers 	= previewDefaults.numLayers;     // current number of preview layers
+  rStep 			= previewDefaults.rotation; // Math.PI/180; //Math.PI/40; //
 }
 
 function oopsUndo() {
@@ -285,17 +291,13 @@ function previewDown(redrawLess) {
 function previewTwistLeft(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
   //    console.log("f:previewTwistLeft()");
-  //        if (rStep < Math.PI) {
-  rStep -= twistIncrement;
-  //        }
+  if (rStep > -previewRotationLimit) rStep -= twistIncrement;
   //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
 }
 function previewTwistRight(redrawLess) {
   //    console.log("f:previewTwistRight()");
-  //        if (rStep < Math.PI) {
-  rStep += twistIncrement;
-  //        }
+  if (rStep < previewRotationLimit) rStep += twistIncrement;
   //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
 }
@@ -315,7 +317,7 @@ function update() {
 	
 	if(displayTempEnabled) {
 		displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
-    updateThermometer(printer.temperature, printer.targetTemperature);
+    thermometer.update(printer.temperature, printer.targetTemperature);
 	}
 
   setPrintprogress(printer.currentLine/printer.num_lines);

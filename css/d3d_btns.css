@@ -152,7 +152,7 @@ img {
 .btn {
 	position: absolute;
 	-webkit-user-select: none;
-	cursor: hand;
+	cursor: pointer;
 }
 #displayTemp {
 	position: absolute;
@@ -163,7 +163,7 @@ img {
 	display:none;
 }
 
-.disabled { 
+.disabled {
 	opacity: 0.3;
 	cursor: default;
 }
