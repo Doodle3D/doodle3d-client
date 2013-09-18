@@ -8,6 +8,8 @@ var printer =  new Printer();
 var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
 
+var firstTimesettingsLoaded = true; 
+
 $(function() {
   console.log("ready");
 
@@ -80,6 +82,9 @@ function settingsLoaded() {
 	console.log("settingsLoaded");
 	console.log("autoWarmUp: ",settings["printer.autoWarmUp"]);
 	if(settings["printer.autoWarmUp"]) {
-		printer.preheat();
+		if(firstTimesettingsLoaded) {
+			printer.preheat();
+			firstTimesettingsLoaded = false;
+		}
 	}
 }
