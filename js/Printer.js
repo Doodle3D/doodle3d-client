@@ -19,9 +19,9 @@ function Printer() {
 	
 	this.maxTempLastMod = 5; // max time (seconds) since the last temp info modification before the printer connection is considered lost
 		
-	this.checkTemperatureInterval = 3000;
+	this.checkTemperatureInterval = 6000;
 	this.checkTemperatureDelay;
-	this.checkProgressInterval = 3000;
+	this.checkProgressInterval = 6000;
 	this.checkProgressDelay;
 	this.timeoutTime = 3000;
 	
@@ -109,6 +109,8 @@ function Printer() {
     this.targetTemperature = settings["printer.temperature"]; // slight hack
     
 		this.sendPrintPart(this.sendIndex, this.sendLength);
+		
+		this.restartIntervals(); // slight hack
 	}
 	this.byteSize = function(s){
 		return~-encodeURI(s).split(/%..|./).length;
@@ -157,7 +159,6 @@ function Printer() {
     }
 	}
 	
-	
 	this.stop = function() {
     console.log("Printer:stop");
 		var postData = { id: 0 }; 
@@ -182,6 +183,8 @@ function Printer() {
 		} else {
       console.log ("Printer >> f:communicateWithWifibox() >> communicateWithWifibox is false, so not executing this function");
     }
+		
+		this.restartIntervals(); // slight hack
 	}
 	
 	this.checkTemperature = function() {
@@ -200,7 +203,10 @@ function Printer() {
             //console.log("temp: ",response.data.hotend+"/"+response.data.hotend_target+" ("+response.data.last_mod+")");
             self.temperature = data.data.hotend;
             if(data.data.hotend_target != undefined) {
+            	if(self.@@@@)
               self.targetTemperature = data.data.hotend_target;
+              
+              self.targetTemperature = settings["printer.temperature"]; // hack
             }
             self.alive = (data.data.last_mod < self.maxTempLastMod);
           } else {
@@ -256,5 +262,14 @@ function Printer() {
     } else {
       console.log ("Printer >> f:checkProgress() >> communicateWithWifibox is false, so not executing this function");
     }
+	}
+
+	this.restartIntervals = function() {
+		var self = this;
+		clearTimeout(self.checkProgressDelay);
+		self.checkProgressDelay = setTimeout(function() { self.checkProgress() },self.checkProgressInterval);
+		
+		clearTimeout(self.checkTemperatureDelay);
+		self.checkTemperatureDelay = setTimeout(function() { self.checkTemperature() }, self.checkTemperatureInterval);
 	}
 }
