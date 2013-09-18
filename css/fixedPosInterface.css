@@ -245,7 +245,7 @@ body {
 
 
 /* The code below is for resizing UI elements as the viewport becomes less high (suitable for tablets & smartphones) */
-
+/*
 @media screen and (max-height: 675px) {
 	.bgMiddle {
 		display: none;
@@ -266,7 +266,6 @@ body {
 	#btnNew {
     zoom: 0.94;
     -moz-transform: translate(-5px,-5px) scale(.94);
-    /*-moz-transform: translate(-3px,-3px);*/
 	}
 	#btnOops {
     zoom: 0.94;
@@ -297,10 +296,6 @@ body {
     height: 57px;
     background-image: url('../img/logo_smaller_wide.png');
     margin-top:  14px;
-		/*zoom: 0.8;*/
-    /*-moz-transform: translate(-20px,-15px) scale(.8);*/
-    /*-moz-transform: ;*/
-    /*left: 34%;*/
   }
 
   #btnsUpDown, #btnsTurnLeftRight {
@@ -333,7 +328,6 @@ body {
   }
 
   #btnPrevious, #btnNext {
-    /*top: 200px;*/
     -moz-transform: translate(-5px,-10px);
   }
 
@@ -342,6 +336,7 @@ body {
 	  height: 350px;
 	}
 }
+//*/
 
 
 
