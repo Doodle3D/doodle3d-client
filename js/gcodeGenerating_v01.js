@@ -155,7 +155,7 @@ function generate_gcode(callback) {
 
     // sort-of in de buurt van (360/2.5)
     // // -> aight.. er zijn 750 lines vs 1000 in de d3d app. 135 = .75 * 180... dit kan je nog rechttrekken als je NET wat slimmer nadenkt :)
-    // update: NEE, het is niet .75 * 180 want 135 was niet de beste value. //TODO dus.
+    // update: NEE, het is niet .75 * 180 want 135 was niet de beste value.
     //pointsRotate(p, rStep * progress * 139);
     pointsRotate(p, rStepGCode * layer);
 
