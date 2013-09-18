@@ -3,51 +3,21 @@ body {
   overflow:hidden;
 }
 
-
 .button {
 	display: table;
 }
 
-/*.big {*/
-	/*background: #a6e19c;*/
-	/*border: 1px solid #222;*/
-	/*height: 64px;*/
-	/*width: 64px;*/
-	/*display: table-cell;*/
-	/*vertical-align: middle;*/
-	/*text-align: center;*/
-	/*border-radius: 32px;*/
-	/*-moz-border-radius: 32px;*/
-	/*-webkit-border-radius: 32px;*/
-/*}*/
-/*.small {*/
-	/*background: #a3d5f7;*/
-	/*border: 1px solid #222;*/
-	/*height: 40px;*/
-	/*width: 40px;*/
-	/*display: table-cell;*/
-	/*vertical-align: middle;*/
-	/*text-align: center;*/
-	/*border-radius: 20px;*/
-	/*-moz-border-radius: 20px;*/
-	/*-webkit-border-radius: 20px;*/
+/*#landscape {*/
+  /*position:relative;*/
+  /*width: 1024px;*/
+  /*max-height: 768px;*/
+  /*background-color: #808;*/
+  /*border: 10px solid #ff0;*/
+  /*margin: 0px auto;*/
 /*}*/
 
-#logo {
-	position: absolute;
-	/*left: 50%;*/
-	/*margin-left: -220px;*/
-	top: 20px;
-	left: 315px;
-	width: 400px;
-	height: 140px;
-}
 
-/*ha {*/
-	/*background: #f5f5f5 url('../images/bg.jpg') no-repeat;*/
-/*}*/
-
-  /* Portrait */
+/* Portrait */
 @media screen and (orientation:portrait) {
   body {
 /*    background-color: #08F;*/
@@ -74,16 +44,25 @@ body {
   }
 }
 
-.container {
+.uiButtonsContainer {
   position: fixed;
   top: 0px;
   left: 0px;
-  border: 2px solid #333;
   width: 1024px;
-	min-height: 500px;
-	max-height: 768px;
-	height: 100%;
-/*  height: 768px;*/
+  min-height: 500px;
+  max-height: 768px;
+  height: 100%;
+  /*  height: 768px;*/
+}
+.uiButtonsContainer:before {
+  content:' ';
+  display:block;
+  position:absolute;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  border: 2px solid #333;
 }
 
 #d3dlogo {
@@ -93,10 +72,6 @@ body {
   width: 399px;
   height: 139px;
   background-image: url('../img/logo_full.png');
-  cursor: pointer;
-}
-
-#svg {
   cursor: pointer;
 }
 
