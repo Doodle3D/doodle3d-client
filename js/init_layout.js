@@ -115,18 +115,21 @@ function doOnResize() {
 
   // code from new layouting approach... //TODO give this a more logical spot
   $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height"))/2);
-  doodleCanvas.width = doodleCanvas.clientWidth;
-  doodleCanvas.height = doodleCanvas.clientHeight;
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
   //  $("#drawAreaContainer").attr("width", parseInt($("#drawAreaContainer").css("width"), 10));
   //  $("#drawAreaContainer").attr("height", parseInt($("#drawAreaContainer").css("height"), 10));
   //  canvas.width = parseInt($canvas.css("width"), 10);
   //  canvas.height = parseInt($canvas.css("height"), 10);
-  preview.width = parseInt($preview.css("width"), 10);
-  preview.height = parseInt($preview.css("height"), 10);
+//  preview.width = parseInt($preview.css("width"), 10);
+//  preview.height = parseInt($preview.css("height"), 10);
   canvasWidth = canvas.width;
   canvasHeight = canvas.height;
 
-  //return;
+  redrawDoodle();
+  redrawPreview();
+
+  return;
 
 //  doClientAndOrientationStuff() // <-- is this necessary in this method?
 
@@ -164,16 +167,25 @@ function initLayouting() {
   <!--canvas mycanvas       500, 450-->
   <!--canvas preview      150, 450-->
 
-  // code from new layouting approach... //TODO give this a more logical spot
+  $drawAreaContainer = $("#drawAreaContainer");
+//  $doodleCanvas = $("#mycanvas");
+//  doodleCanvas = $("#mycanvas")[0];
+//  doodleCanvasContext = doodleCanvas.getContext('2d');
+
+  $drawAreaContainer.css("margin", 0);
+  $drawAreaContainer.css("marginLeft", -parseInt($drawAreaContainer.css("width"))/2);
   $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height"))/2);
-  doodleCanvas.width = doodleCanvas.clientWidth;
-  doodleCanvas.height = doodleCanvas.clientHeight;
+
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  // code from new layouting approach... //TODO give this a more logical spot
 //  $("#drawAreaContainer").attr("width", parseInt($("#drawAreaContainer").css("width"), 10));
 //  $("#drawAreaContainer").attr("height", parseInt($("#drawAreaContainer").css("height"), 10));
 //  canvas.width = parseInt($canvas.css("width"), 10);
 //  canvas.height = parseInt($canvas.css("height"), 10);
-  preview.width = parseInt($preview.css("width"), 10);
-  preview.height = parseInt($preview.css("height"), 10);
+//  preview.width = parseInt($preview.css("width"), 10);
+//  preview.height = parseInt($preview.css("height"), 10);
   canvasWidth = canvas.width;
   canvasHeight = canvas.height;
 
@@ -184,7 +196,8 @@ function initLayouting() {
   //  imgDims[0] = parseInt($(".container").css("width").match(/[0-9]+/).join(""));
   //  imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));
 
-  imgDims = [1024, 768];
+//  imgDims = [1024, 768];
+
   /*
    if( /Android|webOS|BlackBerry/i.test(navigator.userAgent) ) {
    imgDims[1] = parseInt($(".container").css("height").match(/[0-9]+/).join(""));

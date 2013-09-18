@@ -43,12 +43,13 @@ body {
   left: 0;
   right: 0;
   width: 100%;
-  max-width: 1024px;
   height: 100%;
+  max-width: 1024px;
+  max-height: 768px;
   margin: 0px auto;
 }
 /* http://stackoverflow.com/questions/8129524/simulate-inner-border-in-css */
-#landscape:after {
+#landscape:before {
   content:' ';
   display:block;
   position:absolute;
@@ -93,13 +94,73 @@ body {
   left: 50%;
   /*margin: -225px 0 0 -325px;*/
   background-color: #fff;
-  width: 75%;
+  width: 65%;
   min-width: 150px;
   max-width: 650px;
-  height: 70%;
+  height: 60%;
   min-height: 150px;
+  max-height: 450px;
   border: 4px solid #000;
   border-radius: 15px;
+}
+
+#canvasContainers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  /*height: 100%;*/
+  background-color: #0e0;
+}
+
+#mycanvas, #preview {
+  /*border: 1px solid #08c;*/
+  /*float:left;*/
+}
+
+#mycanvasContainer {
+  display: table-cell;
+  float:left;
+}
+
+#previewContainer {
+  display: table-cell;
+}
+
+#mycanvas {
+  /*width: 500px;*/
+  /*height: 450px;*/
+  /*border: 0px solid #333;*/
+  border-right: 2px solid #333;
+  /*background-color: #f0f;*/
+
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  /*right: 0;*/
+  /*width: 80%;*/
+  /*float:left;*/
+  /*width: 100%;*/
+  /*height: 100%;*/
+  background: #808;
+}
+
+#preview {
+  /*border: 1px solid #f8c;*/
+  /*position: absolute;*/
+  /*right: 0px;*/
+  /*top: 0px;*/
+
+  float:right;
+  width: 150px;
+  height: 100%;
+  background: #f44;
+
+  /*width: 150px;*/
+  /*height: 450px;*/
 }
 
 #preview_tmp {
@@ -109,41 +170,6 @@ body {
   z-index: 500;
   border: 1px solid #f80;
   display: none;
-}
-
-#mycanvas, #preview {
-  /*border: 1px solid #08c;*/
-  float: left;
-}
-
-#mycanvas {
-  /*width: 500px;*/
-  /*height: 450px;*/
-  /*border: 0px solid #333;*/
-  /*border-right: 2px solid #333;*/
-  /*background-color: #f0f;*/
-
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 80%;
-  height: 100%;
-  background: #808;
-}
-
-#preview {
-  /*border: 1px solid #f8c;*/
-  position: absolute;
-  right: 0px;
-  top: 0px;
-
-  /*width: 150px;*/
-  /*height: 450px;*/
-
-  width: 20%;
-  height: 100%;
 }
 
 
@@ -245,7 +271,6 @@ body {
 
 
 /* The code below is for resizing UI elements as the viewport becomes less high (suitable for tablets & smartphones) */
-/*
 @media screen and (max-height: 675px) {
 	.bgMiddle {
 		display: none;
@@ -284,10 +309,10 @@ body {
     -moz-transform: scale(.94);
 	}
 
-	#drawAreaContainer {
-	  top: 128px;
-	  height: 350px;
-	}
+	/*#drawAreaContainer {*/
+	  /*top: 128px;*/
+	  /*height: 350px;*/
+	/*}*/
 }
 
 @media screen and (max-height: 560px) {
@@ -331,12 +356,11 @@ body {
     -moz-transform: translate(-5px,-10px);
   }
 
-  #drawAreaContainer {
-	  top: 110px;
-	  height: 350px;
-	}
+  /*#drawAreaContainer {*/
+	  /*top: 110px;*/
+	  /*height: 350px;*/
+	/*}*/
 }
-//*/
 
 
 

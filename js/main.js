@@ -14,18 +14,7 @@ $(function() {
   console.log("ready");
 
 
-  //TODO give more logical place in code
-  $drawAreaContainer = $("#drawAreaContainer");
-  $doodleCanvas = $("#mycanvas");
-  doodleCanvas = $("#mycanvas")[0];
-  doodleCanvasContext = doodleCanvas.getContext('2d');
-
-  $drawAreaContainer.css("margin", 0);
-  $drawAreaContainer.css("marginLeft", -parseInt($drawAreaContainer.css("width"))/2);
-  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height"))/2);
-
-  doodleCanvas.width = doodleCanvas.clientWidth;
-  doodleCanvas.height = doodleCanvas.clientWidth;
+  //TODO give this a more logical place in code
 
 
 
