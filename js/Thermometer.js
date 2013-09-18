@@ -1,4 +1,4 @@
-  var $displayThermometer = $("#thermometerContainer");
+var $displayThermometer = $("#thermometerContainer");
 
 function Thermometer() {
   this.currentTemperature = 0; // default val
