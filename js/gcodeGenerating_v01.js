@@ -32,6 +32,11 @@ function generate_gcode(callback) {
   var startGcode = [];
   var endGcode = [];
 
+  // TODO 2013-09-18 evaluate if this should stay here
+  // this was added when Rick mailed us wrt the Ultimaker delivery of Doodle3D
+  var gCodeOffsetX = 110; // mm
+  var gCodeOffsetY = 110; // mm
+
   // get gcode start statements
   if ($("#startgcode").val().trim().length != 0) {
     console.log("   found contents for start-gcode in settings.html")
@@ -205,6 +210,12 @@ function generate_gcode(callback) {
         // this line is probably for drawing efficiency, alternating going from 0->end and end->0 (i.e. to and fro)
 //        ofPoint to = commands[(even || isLoop || loopAlways) ? i : last-i].to;
         var to = new Point(); to.set(commands[i][0], commands[i][1]);
+
+        // TODO 2013-09-18 evaluate if this should stay..
+        // this was added when Rick mailed us wrt the Ultimaker delivery of Doodle3D
+        to.x += gCodeOffsetX;
+        to.y += gCodeOffsetY;
+
         var sublayer = (layer == 0) ? 0.0 : layer + (useSubLayers ? (curLayerCommand/totalLayerCommands) : 0);
         var z = (sublayer + 1) * layerHeight; // 2013-09-06 removed zOffset (seemed to be useless)
 
@@ -250,6 +261,12 @@ function generate_gcode(callback) {
   } else {
     // post
   }
+}
+
+function scaleFunction(percent) {
+  var r;
+
+  return r;
 }
 
 pointsTranslate = function(p, x, y) {
