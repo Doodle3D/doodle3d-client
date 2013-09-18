@@ -311,7 +311,7 @@ function update() {
     thermometer.update(printer.temperature, printer.targetTemperature);
 	}
 
-  setPrintprogress(printer.currentLine/printer.num_lines);
+  //setPrintprogress(printer.currentLine/printer.num_lines);
 
 	var btnPrint= $("#btnPrint");
 	
