@@ -43,7 +43,7 @@ function initPreviewRendering() {
 }
 
 // TODO (perhaps) : make the twist limit dynamic, depending on what's printable (w.r.t. overlapping)
-var previewRotationLimit = Math.PI / 20; // rough estimate
+var previewRotationLimit = Math.PI / 30; // rough estimate
 
 var numLayers 	= previewDefaults.numLayers;     // current number of preview layers
 var maxNumLayers= 100;    // maximum number of preview layers
