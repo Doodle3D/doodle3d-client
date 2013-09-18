@@ -17,7 +17,7 @@ function Printer() {
 	
 	this.wifiboxURL; 
 	
-	this.maxTempLastMod = 5; // max time (seconds) since the last temp info modification before the printer connection is considered lost
+	this.maxTempLastMod = 7; // max time (seconds) since the last temp info modification before the printer connection is considered lost
 		
 	this.checkTemperatureInterval = 6000;
 	this.checkTemperatureDelay;
