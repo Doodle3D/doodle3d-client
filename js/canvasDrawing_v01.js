@@ -147,6 +147,7 @@ function clearDoodle() {
 
   clearMainView();
   resetPreview();
+  resetVerticalShapes();
 }
 
 function redrawDoodle() {

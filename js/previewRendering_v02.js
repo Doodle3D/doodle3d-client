@@ -103,6 +103,7 @@ function redrawPreview(redrawLess) {
 
   for(var i = 0; i < numLayers; i++) {
 
+    var verticalScaleFactor = scaleFunction(i / maxNumLayers);
 
     if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) {
       previewCtx.globalAlpha = 1;
@@ -120,7 +121,7 @@ function redrawPreview(redrawLess) {
 
     previewCtx.translate(layerCX, layerOffsetY + layerCY + y);
 //    previewCtx.setTransform(1, 0, 0, scaleY, layerCX, layerOffsetY+layerCY+y);
-    previewCtx.scale(viewerScale, scaleY * viewerScale);
+    previewCtx.scale(viewerScale * verticalScaleFactor, scaleY * viewerScale * verticalScaleFactor);
     previewCtx.rotate(r);
     previewCtx.translate((-doodleTransform[0]) * (globalScale * doodleTransform[2]), (-doodleTransform[1]) * (globalScale * doodleTransform[3]));
 
@@ -185,6 +186,8 @@ function renderToImageDataPreview() {
 
     for(var i=0;i<numLayers;i++) {
 
+      var verticalScaleFactor = scaleFunction(i / maxNumLayers);
+
       if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1){
         previewCtx.globalAlpha = 1;
       } else {
@@ -194,7 +197,8 @@ function renderToImageDataPreview() {
       previewCtx.save();
 
       previewCtx.translate(layerCX,layerOffsetY+layerCY+y);
-      previewCtx.scale(1, scaleY)
+//      previewCtx.scale(1, scaleY)
+      previewCtx.scale(verticalScaleFactor, scaleY * verticalScaleFactor)
       previewCtx.rotate(r);
       previewCtx.translate(-layerCX,-layerCY);
 
@@ -225,6 +229,8 @@ function redrawRenderedPreview(redrawLess) {
 
   for(var i = 0; i < numLayers; i++) {
 
+    var verticalScaleFactor = scaleFunction(i / maxNumLayers);
+
     if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1){
       previewCtx.globalAlpha = 1;
     } else {
@@ -239,7 +245,8 @@ function redrawRenderedPreview(redrawLess) {
     previewCtx.save();
 
     previewCtx.translate(layerCX,layerOffsetY+layerCY+y);
-    previewCtx.scale(1, scaleY)
+//    previewCtx.scale(1, scaleY)
+    previewCtx.scale(verticalScaleFactor, scaleY * verticalScaleFactor);
     previewCtx.rotate(r);
     previewCtx.translate(-layerCX,-layerCY);
 
@@ -287,7 +294,6 @@ function updatePreview(_x, _y, redrawLess) {
   previewCtx.strokeStyle = '#f00'; //"rgba(255,255,0,0)";
 
   for(var i = 0; i < numLayers; i++) {
-
 
     if(i == 0 || i == Math.floor(numLayers/2) || i == numLayers-1) {
       previewCtx.globalAlpha = 1;

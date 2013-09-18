@@ -9,7 +9,7 @@ gcodeStart.push("G1 Z15 F9000"); 		// move the platform down 15mm
 gcodeStart.push("G92 E0"); 					// zero the extruded length
 gcodeStart.push("G1 F200 E10");			// extrude 10mm of feed stock
 gcodeStart.push("G92 E0");					// zero the extruded length again
-gcodeStart.push("G92 X-100 Y-100 E0"); // zero the extruded length again and make center the start position
+//gcodeStart.push("G92 X-100 Y-100 E0"); // zero the extruded length again and make center the start position
 gcodeStart.push("G1 F9000");				
 gcodeStart.push("G90"); 						// absolute positioning
 gcodeStart.push("M117 Printing Doodle...  ");	// display message (20 characters to clear whole screen)
@@ -43,8 +43,14 @@ function generate_gcode(callback) {
     startGcode = $("#startgcode").val().trim().split("\n");
   } else {
     console.log("   no start-gcode in settings.html, using defaults")
-    startGcode.concat(gcodeStart);
+    startGcode = startGcode.concat(gcodeStart);
   }
+
+  console.log("f:generate_gcode() >> startGcode:");
+  console.log(startGcode);
+  console.log("");
+  console.log("f:generate_gcode() >> endGcode:");
+  console.log(endGcode);
 
   // get gcode end statements
   if ($("#endgcode").val().trim().length != 0) {
@@ -52,7 +58,7 @@ function generate_gcode(callback) {
     endGcode = $("#endgcode").val().trim().split("\n");
   } else {
     console.log("   no end-gcode in settings.html, using defaults")
-    endGcode.concat(gcodeEnd);
+    endGcode = endGcode.concat(gcodeEnd);
   }
 
   gcode = [];
@@ -148,7 +154,8 @@ function generate_gcode(callback) {
     var progress = layer / layers;
 
     // float layerScale = scaleFunction(float(layer)/layers); // scaleFactor van de layer -> lookup naar vfunc[] voor die scaleVals
-    var layerScale = 1.0;
+//    var layerScale = 1.0;
+    var layerScale = scaleFunction(progress);
 
     // if begin point this row and end point last row are close enough, isLoop is true
     var isLoop = lineLength(points[0][0], points[0][1], points[points.length-1][0], points[points.length-1][1]) < 3;
@@ -264,8 +271,24 @@ function generate_gcode(callback) {
 }
 
 function scaleFunction(percent) {
-  var r;
+  var r = 1.0;
 
+  switch (VERTICALSHAPE) {
+    case verticalShapes.NONE:
+      r = 1.0;
+      break;
+    case verticalShapes.DIVERGING:
+      r = .5 + (percent * .5);
+      break;
+    case verticalShapes.CONVERGING:
+      r = 1.0 - (percent * .8);
+      break;
+    case verticalShapes.SINUS:
+      r = (Math.cos(percent * Math.PI * 4) * .25) + .75;
+      break;
+  }
+
+//  return 1.0 - (percent *.8);
   return r;
 }
 

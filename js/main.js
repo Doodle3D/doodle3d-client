@@ -8,7 +8,8 @@ var printer =  new Printer();
 var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
 
-var firstTimesettingsLoaded = true; 
+var firstTimesettingsLoaded = true;
+
 
 $(function() {
   console.log("ready");
@@ -38,6 +39,7 @@ $(function() {
   initDoodleDrawing();
   initPreviewRendering();
   initButtonBehavior();
+  initVerticalShapes();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
 
@@ -47,7 +49,7 @@ $(function() {
 	settingsWindow.init(wifiboxURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED,settingsLoaded);
 
-	if(debugMode) {
+  if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
