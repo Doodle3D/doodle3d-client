@@ -211,8 +211,8 @@ body {
 /* THERMOMETER */
 #thermometerContainer {
   position: absolute;
-  right: 30px;
-  top: 410px;
+  right: 25px;
+  top: 370px;
 }
 #thermometerCanvas {
   /*background: #59b2b8;*/
