@@ -147,7 +147,9 @@ function generate_gcode(callback) {
     // sort-of in de buurt van (360/2.5)
     // // -> aight.. er zijn 750 lines vs 1000 in de d3d app. 135 = .75 * 180... dit kan je nog rechttrekken als je NET wat slimmer nadenkt :)
     // update: NEE, het is niet .75 * 180 want 135 was niet de beste value. //TODO dus.
-    pointsRotate(p, rStep * progress * 139);
+    var radToDeg = 180/Math.PI;
+    pointsRotate(p, (rStep * radToDeg) * -progress);
+//    pointsRotate(p, rStep * -progress * 139);
 
     if (layer == 0) {
       //gcode.push("M107"); //fan off
