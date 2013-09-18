@@ -91,7 +91,7 @@ function generate_gcode(callback) {
   //*/
 
   objectHeight = Math.ceil(numLayers / 5); // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
-  objectHeight = numLayers; // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
+  objectHeight = (numLayers / maxNumLayers) * maxObjectHeight; // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
 
   // todo hier een array van PATHS maken wat de losse paths zijn
 
@@ -147,7 +147,9 @@ function generate_gcode(callback) {
     // sort-of in de buurt van (360/2.5)
     // // -> aight.. er zijn 750 lines vs 1000 in de d3d app. 135 = .75 * 180... dit kan je nog rechttrekken als je NET wat slimmer nadenkt :)
     // update: NEE, het is niet .75 * 180 want 135 was niet de beste value. //TODO dus.
-    pointsRotate(p, rStep * progress * 139);
+    var radToDeg = 180/Math.PI;
+    //pointsRotate(p, (rStep * radToDeg) * progress);
+    pointsRotate(p, (rStep * 139) * progress);
 
     if (layer == 0) {
       //gcode.push("M107"); //fan off

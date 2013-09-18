@@ -41,6 +41,7 @@ var lineweight = 2;
 function initDoodleDrawing() {
   console.log("f:initDoodleDrawing()");
 
+  //TODO make these jquery eventhandlers (works for all)
   if (!canvas.addEventListener) {
     canvas.attachEvent('onmousedown',onCanvasMouseDown);
     canvas.attachEvent('onmousemove',onCanvasMouseMove);
@@ -254,11 +255,11 @@ function adjustPreviewTransformation() {
  *
  * * * * * * * * * */
 function onCanvasMouseDown(e) {
-//  console.log("onmousedown");
-//  console.log("onmousedown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
-//  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
-//  console.log("onmousedown >> e: " + e);
-//  console.log(e);
+  //  console.log("onmousedown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
+  //  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
+  //  console.log("onmousedown >> e: " + e);
+  //  console.log(e);
+  console.log("f:onCanvasMouseDown()");
   dragging = true;
 
   prevCountingTime = new Date().getTime();
@@ -287,6 +288,7 @@ function onCanvasMouseDown(e) {
 
 var prevPoint = {x:-1, y:-1};
 function onCanvasMouseMove(e) {
+  console.log("f:onCanvasMouseMove()");
   if (!dragging) return;
   //    console.log("onmousemove");
 
@@ -347,6 +349,7 @@ prevUpdateFullPreview = 0; // 0 is not a timeframe but refers to the _points arr
 prevUpdateFullPreviewInterval = 25; // refers to number of points, not a timeframe
 
 function onCanvasMouseUp(e) {
+  console.log("f:onCanvasMouseUp()");
   //    console.log("onmouseup");
   dragging = false;
   console.log("doodleBounds: " + doodleBounds);

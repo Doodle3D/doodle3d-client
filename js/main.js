@@ -8,8 +8,27 @@ var printer =  new Printer();
 var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
 
+var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previewContainer;
+
 $(function() {
   console.log("ready");
+
+
+  //TODO give more logical place in code
+  $drawAreaContainer = $("#drawAreaContainer");
+  $doodleCanvas = $("#mycanvas");
+  doodleCanvas = $("#mycanvas")[0];
+  doodleCanvasContext = doodleCanvas.getContext('2d');
+
+  $drawAreaContainer.css("margin", 0);
+  $drawAreaContainer.css("marginLeft", -parseInt($drawAreaContainer.css("width"))/2);
+  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height"))/2);
+
+  doodleCanvas.width = doodleCanvas.clientWidth;
+  doodleCanvas.height = doodleCanvas.clientWidth;
+
+
+
 
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");

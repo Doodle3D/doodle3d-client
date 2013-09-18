@@ -1,3 +1,5 @@
+  var $displayThermometer = $("#thermometerContainer");
+
 function Thermometer() {
   this.currentTemperature = 0; // default val
   this.targetTemperature = 180; // default val

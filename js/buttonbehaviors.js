@@ -297,7 +297,7 @@ function previewTwistRight(redrawLess) {
 
 function update() {
 	if(!displayTempEnabled && printer.alive) {
-		displayTemp.show();
+		//displayTemp.show();
     $displayThermometer.show();
 		displayTempEnabled = true;
 	} else if(displayTempEnabled && !printer.alive) {
@@ -307,7 +307,7 @@ function update() {
 	}
 	
 	if(displayTempEnabled) {
-		displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
+		//displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
     thermometer.update(printer.temperature, printer.targetTemperature);
 	}
 

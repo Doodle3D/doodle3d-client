@@ -1,7 +1,7 @@
 var imgDims = [320, 320]; // width and height of image
 
 function doClientAndOrientationStuff() {
-  console.log("doClientAndOrientationStuff");
+  console.log("f:doClientAndOrientationStuff()");
 
   $(".agentInfo").text("");
 
@@ -19,13 +19,18 @@ function doClientAndOrientationStuff() {
   //*/
 
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+    console.log("PHONE OR TABLET! --> window.orientation = " + window.orientation);
     if (window.orientation == -90 || window.orientation == 90) {
+      console.log("   landscape");
       // landscape
 
       //      var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
       var ww = 0; //get proper width
-      if (window.screen.availWidth) {
-        ww = window.screen.availWidth;
+      if (window.innerWidth) {
+        ww = window.innerWidth;
+        //        if (window.screen.availWidth) {
+//        ww = window.screen.availWidth;
+
 //        if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
 //          ww = window.innerWidth;
 //        }
@@ -54,10 +59,13 @@ function doClientAndOrientationStuff() {
         //        $('#Viewport').attr('content', 'initial-scale=1.0, maximum-scale=2, minimum-scale=1.0, user-scalable=yes, width=' + ww);
       }
 
+      console.log("   ww: " + ww + ", mw: " + mw + ", ratio: " + ratio);
+
       $(".agentInfo").append("ww: " + ww + ", mw: " + mw + "<br/>");
       $(".agentInfo").append("ratio: " + ratio + "<br/>");
       $(".agentInfo").append("<br/>");
     } else {
+      console.log("     portrait");
       // portrait
 //      $('#Viewport').attr('content', 'initial-scale='+1+',maximum-scale='+1+',minimum-scale='+1+',user-scalable=no');
       $('#Viewport').attr('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no');
@@ -68,6 +76,7 @@ function doClientAndOrientationStuff() {
     $(".colmask").css("background-color", "#f80");
 
   }
+
 
   $(".agentInfo").append("$(window).width(): " + $(window).width() + "<br/>");
   $(".agentInfo").append("window.screen.width: " + window.screen.width+ "<br/>");
@@ -104,7 +113,22 @@ function doOnResize() {
   //    console.log("doOnResize() >> " + new Date().getTime());
 //  $(".container").css("height", window.innerHeight);
 
-  doClientAndOrientationStuff() // <-- is this necessary in this method?
+  // code from new layouting approach... //TODO give this a more logical spot
+  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height"))/2);
+  doodleCanvas.width = doodleCanvas.clientWidth;
+  doodleCanvas.height = doodleCanvas.clientHeight;
+  //  $("#drawAreaContainer").attr("width", parseInt($("#drawAreaContainer").css("width"), 10));
+  //  $("#drawAreaContainer").attr("height", parseInt($("#drawAreaContainer").css("height"), 10));
+  //  canvas.width = parseInt($canvas.css("width"), 10);
+  //  canvas.height = parseInt($canvas.css("height"), 10);
+  preview.width = parseInt($preview.css("width"), 10);
+  preview.height = parseInt($preview.css("height"), 10);
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
+
+  //return;
+
+//  doClientAndOrientationStuff() // <-- is this necessary in this method?
 
 //  console.log("f:doOnResize() >> $('#canvascontainer').innerHeight: " + window.innerHeight);
   if (window.innerHeight < 768) {
@@ -139,14 +163,20 @@ function initLayouting() {
   <!--div drawAreaContainer 650,450-->
   <!--canvas mycanvas       500, 450-->
   <!--canvas preview      150, 450-->
-  $("#drawAreaContainer").attr("width", parseInt($("#drawAreaContainer").css("width"), 10));
-  $("#drawAreaContainer").attr("height", parseInt($("#drawAreaContainer").css("height"), 10));
-  canvas.width = parseInt($canvas.css("width"), 10);
-  canvas.height = parseInt($canvas.css("height"), 10);
+
+  // code from new layouting approach... //TODO give this a more logical spot
+  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height"))/2);
+  doodleCanvas.width = doodleCanvas.clientWidth;
+  doodleCanvas.height = doodleCanvas.clientHeight;
+//  $("#drawAreaContainer").attr("width", parseInt($("#drawAreaContainer").css("width"), 10));
+//  $("#drawAreaContainer").attr("height", parseInt($("#drawAreaContainer").css("height"), 10));
+//  canvas.width = parseInt($canvas.css("width"), 10);
+//  canvas.height = parseInt($canvas.css("height"), 10);
   preview.width = parseInt($preview.css("width"), 10);
   preview.height = parseInt($preview.css("height"), 10);
   canvasWidth = canvas.width;
   canvasHeight = canvas.height;
+
 //  console.log("f:initLayouting() >> canvas height: " + canvas.height);
 
 
@@ -167,23 +197,9 @@ function initLayouting() {
 
   //  $(".container").css("height", window.innerHeight);
 
-  // Initial execution if needed
-  //* 2013-07-26 not doing this resizing stuff now, it's not working well yet
-  if (!window.addEventListener) {
-    window.attachEvent('orientationchange', doOnOrientationChange);
-    window.attachEvent('resize', doOnResize)
-  } else {
-    window.addEventListener('orientationchange', doOnOrientationChange);
-    window.addEventListener('resize', doOnResize)
-  }
-  //*/
-  doClientAndOrientationStuff();
-  doOnResize();
-  //    doOnOrientationChange();
-
-
   // window.innerHeight
   console.log("window.innerHeight: " + window.innerHeight);
+  console.log("window.innerWidth: " + window.innerWidth);
   console.log("$('#drawAreaContainer').innerHeight(): " + $("#drawAreaContainer").innerHeight());
   console.log("$('#drawAreaContainer').offset().top: " + $("#drawAreaContainer").offset().top);
 
@@ -194,4 +210,25 @@ function initLayouting() {
   }
   //*/
 
+  // timeout because it SEEMS to be beneficial for initting the layout
+  // 2013-09-18 seems beneficial since when?
+  setTimeout(_startOrientationAndChangeEventListening, 1000);
+}
+
+function _startOrientationAndChangeEventListening() {
+  // Initial execution if needed
+
+  $(window).on('resize', doOnResize);
+
+//  if (!window.addEventListener) {
+//    window.attachEvent('orientationchange', doOnOrientationChange, false);
+//    window.attachEvent('resize', doOnResize, false);
+//  } else {
+//    window.addEventListener('orientationchange', doOnOrientationChange, false);
+//    window.addEventListener('resize', doOnResize, false);
+//  }
+
+  // is it necessary to call these? Aren't they called by the above eventhandlers?
+//  doClientAndOrientationStuff();
+  doOnResize();
 }
