@@ -24,8 +24,10 @@ function Thermometer() {
     [244, 50, 50]   // 'ready / hot'
   ];
 
-  this.init = function(targCanvas) {
+  this.init = function(targCanvas, targCanvasContainer) {
     console.log("Thermometer.init()");
+
+    $displayThermometer = targCanvasContainer;
 
     this.$canvas = targCanvas;
     this.canvas = this.$canvas[0];

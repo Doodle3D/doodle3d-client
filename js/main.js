@@ -45,7 +45,7 @@ $(function() {
   initPreviewRendering();
   initButtonBehavior();
 
-	thermometer.init($("#thermometerCanvas"));
+	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
 
   printer.init();
 	$(document).on(Printer.UPDATE,update);
