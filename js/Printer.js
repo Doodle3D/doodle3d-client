@@ -203,10 +203,11 @@ function Printer() {
             //console.log("temp: ",response.data.hotend+"/"+response.data.hotend_target+" ("+response.data.last_mod+")");
             self.temperature = data.data.hotend;
             if(data.data.hotend_target != undefined) {
-            	if(self.@@@@)
-              self.targetTemperature = data.data.hotend_target;
-              
-              self.targetTemperature = settings["printer.temperature"]; // hack
+            	if(state == PRINTING_STATE) { // HACK
+            		self.targetTemperature = settings["printer.temperature"];
+            	} else {
+            		self.targetTemperature = data.data.hotend_target;
+            	}
             }
             self.alive = (data.data.last_mod < self.maxTempLastMod);
           } else {
