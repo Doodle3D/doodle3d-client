@@ -106,6 +106,8 @@ function Printer() {
     	return;
     }
     
+    this.targetTemperature = settings["printer.temperature"]; // slight hack
+    
 		this.sendPrintPart(this.sendIndex, this.sendLength);
 	}
 	this.byteSize = function(s){
@@ -139,6 +141,7 @@ function Printer() {
 				  	if (lastOne) {
 		          console.log("Printer:sendPrintPart:gcode sending completed");
 		          this.gcode = [];
+		          self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		          self.sendPrintPart(sendIndex + sendLength, sendLength);
 		        }
