@@ -41,6 +41,7 @@ var lineweight = 2;
 function initDoodleDrawing() {
   console.log("f:initDoodleDrawing()");
 
+  //*
   //TODO make these jquery eventhandlers (works for all)
   if (!canvas.addEventListener) {
     canvas.attachEvent('onmousedown',onCanvasMouseDown);
@@ -57,14 +58,19 @@ function initDoodleDrawing() {
     canvas.addEventListener('touchstart',onCanvasTouchDown,false);
     canvas.addEventListener('touchmove',onCanvasTouchMove,false);
     canvas.addEventListener('touchend',onCanvasTouchEnd,false);
-    document.body.addEventListener('touchmove',prevent,false);
   }
+  //*/
 
   drawCanvas = $("#drawAreaContainer");
+//  drawCanvas = $("#mycanvasContainer"); // $("#drawAreaContainer")
 
   console.log("drawCanvasTopLeftCoords: " + drawCanvasTopLeftCoords);
-  drawCanvasTopLeftCoords[0] = drawCanvas.css("left").match(/[0-9]/g).join("");
-  drawCanvasTopLeftCoords[1] = drawCanvas.css("top").match(/[0-9]/g).join("");
+//  drawCanvasTopLeftCoords[0] = drawCanvas.css("left").match(/[0-9]/g).join("");
+//  drawCanvasTopLeftCoords[1] = drawCanvas.css("top").match(/[0-9]/g).join("");
+  drawCanvasTopLeftCoords[0] = drawCanvas.offset().left;
+  drawCanvasTopLeftCoords[1] = drawCanvas.offset().top;
+//  drawCanvasTopLeftCoords[0] = drawCanvas[0].offsetParent.offsetLeft;
+//  drawCanvasTopLeftCoords[1] = drawCanvas[0].offsetParent.offsetTop;
 
   console.log("f:initDoodleDrawing() >> canvasWidth: " + canvasWidth);
   console.log("f:initDoodleDrawing() >> canvasHeight: " + canvasHeight);
@@ -145,6 +151,8 @@ function clearDoodle() {
 
   doodleBounds = [-1, -1, -1, -1]; // left, top, right, bottom
   doodleTransform = [0, 0, 1.0, 1.0]; // [ x, y, scaleX, scaleY ]
+
+  dragging = false;
 
   clearMainView();
   resetPreview();
@@ -259,7 +267,7 @@ function onCanvasMouseDown(e) {
   //  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
   //  console.log("onmousedown >> e: " + e);
   //  console.log(e);
-  console.log("f:onCanvasMouseDown()");
+//  console.log("f:onCanvasMouseDown()");
   dragging = true;
 
   prevCountingTime = new Date().getTime();
@@ -288,7 +296,7 @@ function onCanvasMouseDown(e) {
 
 var prevPoint = {x:-1, y:-1};
 function onCanvasMouseMove(e) {
-  console.log("f:onCanvasMouseMove()");
+//  console.log("f:onCanvasMouseMove()");
   if (!dragging) return;
   //    console.log("onmousemove");
 
@@ -349,7 +357,7 @@ prevUpdateFullPreview = 0; // 0 is not a timeframe but refers to the _points arr
 prevUpdateFullPreviewInterval = 25; // refers to number of points, not a timeframe
 
 function onCanvasMouseUp(e) {
-  console.log("f:onCanvasMouseUp()");
+//  console.log("f:onCanvasMouseUp()");
   //    console.log("onmouseup");
   dragging = false;
   console.log("doodleBounds: " + doodleBounds);
@@ -370,10 +378,13 @@ function onCanvasMouseUp(e) {
 
 function onCanvasTouchDown(e) {
   e.preventDefault();
+  console.log("f:onCanvasTouchDown >> e: " , e);
 //  var x = e.touches[0].pageX - e.touches[0].target.offsetLeft;
 //  var y = e.touches[0].pageY - e.touches[0].target.offsetTop;
-  var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
-  var y = e.touches[0].pageY - drawCanvasTopLeftCoords[1];
+//  var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
+//  var y = e.touches[0].pageY - drawCanvasTopLeftCoords[1];
+  var x = e.touches[0].layerX;
+  var y = e.touches[0].layerY;
 
   _points.push([x, y, true]);
   adjustBounds(x, y);
@@ -387,10 +398,13 @@ function onCanvasTouchDown(e) {
 
 function onCanvasTouchMove(e) {
   e.preventDefault();
+  console.log("f:onCanvasTouchMove >> e: " , e);
 //  var x = e.touches[0].pageX - e.touches[0].target.offsetLeft;
 //  var y = e.touches[0].pageY - e.touches[0].target.offsetTop;
     var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
     var y = e.touches[0].pageY - drawCanvasTopLeftCoords[1];
+//  var x = e.touches[0].layerX;
+//  var y = e.touches[0].layerY;
 
   if (prevPoint.x != -1 || prevPoint.y != -1) {
     var dist = Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2));

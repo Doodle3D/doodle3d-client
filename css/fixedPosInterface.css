@@ -60,7 +60,7 @@ body {
   border: 2px solid #333;
 }
 
-.container {
+.uiButtonsContainer {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -68,31 +68,12 @@ body {
   right: 0;
   width: 100%;
   height: 100%;
-  /*margin: 0px auto;*/
-
-  /*position: fixed;*/
-  /*top: 0px;*/
-  /*left: 0px;*/
-  /*width: 1024px;*/
-	/*min-height: 500px;*/
-	/*max-height: 768px;*/
-	/*height: 100%;*/
-/*  height: 768px;*/
 }
 
 #drawAreaContainer {
-  /*position: absolute;*/
-  /*top: 193px;*/
-  /*left: 193px;*/
-  /*width: 650px;*/
-  /*height: 450px;*/
-  /*background-color: #fff;*/
-  /*border: 4px solid #000;*/
-  /*border-radius: 15px;*/
   position: absolute;
   top: 50%;
   left: 50%;
-  /*margin: -225px 0 0 -325px;*/
   background-color: #fff;
   width: 65%;
   min-width: 150px;
@@ -100,8 +81,8 @@ body {
   height: 60%;
   min-height: 150px;
   max-height: 450px;
-  /*border: 4px solid #000;*/
-  /*border-radius: 15px;*/
+  border: 4px solid #000;
+  border-radius: 15px;
 }
 
 #canvasContainers {
@@ -115,63 +96,36 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  /*border: 4px solid #000;*/
-  /*border-radius: 15px;*/
 }
 
 #mycanvasContainer {
   display:table-cell;
   width: auto;
   height: 100%;
-  /*border: 4px solid #000;*/
 }
-#previewContainer {
-  display:table-cell;
-  width: 150px;
-  height: 100%;
-  /*border: 4px solid #000;*/
-  /*border-radius: 15px;*/
-}
-
-/*#canvasContainers {*/
-  /*position: absolute;*/
-  /*top: 0;*/
-  /*left: 0;*/
-  /*right: 0;*/
-  /*bottom: 0;*/
-  /*width: 100%;*/
-  /*background-color: #0e0;*/
-/*}*/
-
 #mycanvas {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
   /*float: left;*/
-  border-width: 0px;
-  background-color: #f0f;
   border-right: 2px solid #333;
-  /*border-radius: 15px;*/
-  /*border-radius: 15px;*/
-  border-radius-topleft: 15px;
-  /*border-radius-topright: 15px;*/
-  -moz-border-radius-topleft: 15px;
-  /*-moz-border-radius-topright: 15px;*/
-  -webkit-border-radius-topleft: 15px;
-  /*-webkit-border-radius-topright: 15px;*/
 }
 
+#previewContainer {
+  display:table-cell;
+  width: 150px;
+  height: 100%;
+}
 #preview {
   width: 150px;
   height: 100%;
   float: right;
   margin: 0;
   padding: 0;
-  border-width: 0px;
-  background-color: #0ff;
 }
 
+/* DEBUG THING */
 #preview_tmp {
   position: absolute;
   top: 0px;
