@@ -49,10 +49,6 @@ $(function() {
 	settingsWindow.init(wifiboxURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED,settingsLoaded);
 	
-	if(window.toolbar.visible == false) {
-		$("#contentOverlay").css("display","block");
-		$("#portalpopup").css("display","block");
-	}
   if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
@@ -83,6 +79,7 @@ $(function() {
     }, 1000);
     //*/
   }
+  
 })
 function settingsLoaded() {
 	console.log("settingsLoaded");
