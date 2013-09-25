@@ -109,7 +109,7 @@ function SettingsWindow() {
 	  console.log("f:showSettings()");
 
 	  this.loadSettings(); // reload settings
-
+		this.window.css("display","block");
 	  $("#contentOverlay").fadeIn(375, function() {
 	    document.body.removeEventListener('touchmove',prevent,false);
 	  });
@@ -117,6 +117,7 @@ function SettingsWindow() {
 	this.hideSettings = function() {
 		$("#contentOverlay").fadeOut(375, function() {
       document.body.addEventListener('touchmove',prevent,false);
+      self.window.css("display","none");
     });
 	}
 

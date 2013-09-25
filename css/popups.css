@@ -8,7 +8,8 @@
   height: 100%;
   display:none;
 }
-#settings {
+
+.popup {
 	background-color: #fff;
 	z-index: 15;
   
@@ -29,24 +30,24 @@
   border-radius: 15px;
   -moz-border-radius: 15px;
   -webkit-border-radius: 15px;
-  overflow: hidden;
+  overflow: hidden; 
+  display:none;
 }
+
+
 #settings header {
 	margin: 25px 25px 0 25px;
   height: 44px;
 }
-
-div.content {
+#settings div.content {
   margin: 15px 25px 25px 25px;
   height: 388px;
   display: table;
 }
-
-div.content > div {
+#settings div.content > div {
   height: 100%;
 }
-
-div.content > div.settings {
+#settings div.content > div.settings {
   border: 1px solid rgb(187, 187, 187);
   -webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -58,17 +59,26 @@ div.content > div.settings {
   overflow-x: hidden;
   padding: 10px 10px 10px 10px;
 }
-div.content > div.manipulationBtns {
+#settings div.content > div.manipulationBtns {
   display: table-cell;
   vertical-align: bottom;
   width: 125px;
   
 }
-
-div.content .btnOK {
+#settings div.content .btnOK {
   width: 85px;
   height: 86px;
   background: url('../img/buttons/btnOk_settings.png') no-repeat;
   margin: 0 0 0 10px;
   cursor: pointer;
+}
+
+
+#portalpopup {
+	width: 400px;
+	height: 200px;
+	margin: -100px 0 0 -200px;
+}
+#portalpopup p{
+	margin: 1em;
 }
