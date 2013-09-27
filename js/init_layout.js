@@ -4,13 +4,18 @@ function doOnResize() {
   //    console.log("doOnResize() >> " + new Date().getTime());
 //  $(".container").css("height", window.innerHeight);
 
-  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height")) * 0.45);
+  $drawAreaContainer.css("marginLeft", -$drawAreaContainer.width()/2);
+  $drawAreaContainer.css("marginTop", -$drawAreaContainer.height() *.45);
+//  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height")) * 0.45);
 
   canvas.width = $drawAreaContainer.width() - 150; // canvas.clientWidth;
   canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
 
   preview.width = 150;
   preview.height = $drawAreaContainer.height();
+  calcPreviewCanvasProperties();
+//  layerOffsetY = preview.height - 1.75 * layerCY;
+//  yStep = preview.height / 150;
 //  preview.width = parseInt($preview.css("width"), 10);
 //  preview.height = parseInt($preview.css("height"), 10);
 
@@ -21,6 +26,9 @@ function doOnResize() {
   drawCanvasTopLeftCoords[1] = drawCanvas.offset().top;
 //  drawCanvasTopLeftCoords[0] = drawCanvas[0].offsetParent.offsetLeft;
 //  drawCanvasTopLeftCoords[1] = drawCanvas[0].offsetParent.offsetTop;
+
+//  preview.height = $("#previewContainer").height();
+//  console.log("f:doOnResize() >> preview.height: " + preview.height);
 
   redrawDoodle();
   redrawPreview();
@@ -69,8 +77,8 @@ function initLayouting() {
 
   $drawAreaContainer = $("#drawAreaContainer");
   $drawAreaContainer.css("margin", 0);
-  $drawAreaContainer.css("marginLeft", -parseInt($drawAreaContainer.css("width"))/2);
-  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height")) * 0.45);
+  $drawAreaContainer.css("marginLeft", -$drawAreaContainer.width()/2);
+  $drawAreaContainer.css("marginTop", -$drawAreaContainer.height() *.45);
 
   canvas.width = $drawAreaContainer.width() - 150; // canvas.clientWidth;
   canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
@@ -80,6 +88,8 @@ function initLayouting() {
 
   canvasWidth = canvas.width;
   canvasHeight = canvas.height;
+
+  $drawAreaContainer.show();
 
   // window.innerHeight
   console.log("window.innerHeight: " + window.innerHeight);

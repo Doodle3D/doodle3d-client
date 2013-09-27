@@ -34,12 +34,19 @@ function initPreviewRendering() {
 
   previewCtx_tmp = preview_tmp.getContext('2d');
 
+  calcPreviewCanvasProperties();
+  redrawPreview();
+}
+
+function calcPreviewCanvasProperties() {
+  console.log("f:calcPreviewCanvasProperties()");
+
   layerCX			= (canvasWidth / 2) * globalScale;  // defined in canvasDrawing_v01.js
   layerCY			= (canvasHeight / 2) * globalScale; // defined in canvasDrawing_v01.js
   layerOffsetY = preview.height - 1.75 * layerCY;
-  yStep 			= preview.height / 150;
+  yStep 			= (preview.height * (2 * previewVerticalPadding)) / maxNumLayers;
 
-  redrawPreview();
+//  previewVerticalPadding
 }
 
 // TODO (perhaps) : make the twist limit dynamic, depending on what's printable (w.r.t. overlapping)
@@ -52,6 +59,7 @@ var globalScale = 0.3;		// global scale of preview (width preview / width canvas
 var globalAlpha = 0.20;   // global alpha of preview
 var scaleY 			= 0.4; 		// additional vertical scale per path for 3d effect
 var viewerScale = 0.65;   // additional scale to fit into preview nicely (otherwise is fills out totally)
+var previewVerticalPadding = .15; // %
 var strokeWidth = 2;      //4;
 //var rStep 			= Math.PI/40; //Math.PI/40; //
 var rStep 			= previewDefaults.rotation; // Math.PI/180; //Math.PI/40; //
