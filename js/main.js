@@ -25,7 +25,7 @@ $(function() {
 	} else {
 		wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
 	}
-	
+
   if (!communicateWithWifibox) {
     sendPrintCommands = false; // 'communicateWithWifibox = false' implies this
   }
@@ -45,10 +45,10 @@ $(function() {
 
   printer.init();
 	$(document).on(Printer.UPDATE,update);
-	
+
 	settingsWindow.init(wifiboxURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED,settingsLoaded);
-	
+
   if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
@@ -79,12 +79,12 @@ $(function() {
     }, 1000);
     //*/
   }
-  
+
 })
 function settingsLoaded() {
 	console.log("settingsLoaded");
-	console.log("autoWarmUp: ",settings["printer.autoWarmUp"]);
-	if(settings["printer.autoWarmUp"]) {
+	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);
+	if(settings["printer.heatup.enabled"]) {
 		if(firstTimesettingsLoaded) {
 			printer.preheat();
 			firstTimesettingsLoaded = false;
