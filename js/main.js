@@ -19,11 +19,11 @@ $(function() {
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
-
+  
 	if (wifiboxIsRemote) {
-		wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
+		wifiboxURL = "http://192.168.5.1/d3dapi";
 	} else {
-		wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
+		wifiboxURL = "http://" + window.location.host + "/d3dapi";
 	}
 
   if (!communicateWithWifibox) {
