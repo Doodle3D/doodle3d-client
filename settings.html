@@ -105,15 +105,18 @@
 
 	    <fieldset id="clientSettings">
 	      <legend>Client mode settings</legend>
+	      
 	      <label for="network">Network:</label>
 	      <select id="network" name="network.client.network">
-	        <option value="rigidbot">Fablab Amersfoort</option>
-		      <option value="ultimaker">Globe4D</option>
 	      </select>
 	      <input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br>
 	      <label for="password" id="passwordLabel">Password:</label><input type="password" name="network.client.password" id="password"><br>
 	      <input type="button" name="connect" value="Connect" class="button" id="connectToNetwork"/>
-          <span id="clientModeState"></span>
+        <span id="clientModeState"></span><br/>
+        <br/>
+        <label for="wifiboxid">Wi-Fi box id*:</label><input type="text" name="network.cl.wifiboxid" id="wifiboxid"><br>
+        <small>* Is used on <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>. <br/>
+        The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
 	    </fieldset>
 		</fieldset>
 
