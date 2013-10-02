@@ -42,6 +42,7 @@ function SettingsWindow() {
 	this.networks;
 	this.currentNetwork;               // the ssid of the network the box is on
   this.selectedNetwork;              // the ssid of the selected network in the client mode settings
+  this.currentLocalIP;               
   this.clientModeState = SettingsWindow.NOT_CONNECTED;
   this.currentAP;
   this.apModeState = SettingsWindow.NO_AP;
@@ -335,11 +336,12 @@ function SettingsWindow() {
                 networkSelector.val(data.ssid);
                 self.showClientSettings();
                 self.form.find("#client").prop('checked',true);
-
+								
+                self.currentLocalIP = data.localip;
                 self.currentNetwork = data.ssid;
                 self.selectNetwork(data.ssid);
                 self.setClientModeState(SettingsWindow.CONNECTED);
-
+								
                 self.setAPModeState(SettingsWindow.NO_AP);
                 break;
               case "ap":
@@ -407,7 +409,8 @@ function SettingsWindow() {
         break;
       case SettingsWindow.CONNECTED:
         btnConnect.removeAttr("disabled");
-        field.html("Connected to: "+this.currentNetwork);
+        var a = "<a href='http://"+this.currentLocalIP+"' target='_black'>"+this.currentLocalIP+"</a>";
+        field.html("Connected to: "+this.currentNetwork+". Local ip: "+a);
         break;
       case SettingsWindow.CONNECTING:
         btnConnect.attr("disabled", true);
