@@ -1,0 +1,54 @@
+//  CENTER PANEL
+.centerpanel {
+  position: absolute;
+  left: 50%;
+  margin-left: -33%;
+  width: 66%;
+  height: 100%;
+  z-index: 5;
+}
+
+
+// top panel
+@import "base_centerpanel_logo.less";
+
+// draw area stuff (plus up/down/left/right buttons)
+@import "base_centerpanel_drawarea.less";
+
+
+/*
+	HEIGHT-related RESPONSIVE STUFF
+*/
+@media screen and (max-height: 700px) {
+  .logopanel {
+    height: 22%;
+  }
+  .doodlecontainer {
+    height: 68%;
+  }
+  .d3dlogo {
+    top: 25%;
+    max-width: 399px;
+    height: 74px;
+    background-image: url('../img/logo/logo_small.png');
+  }
+}
+@media screen and (max-height: 655px) {
+  .bgMiddle { opacity: 0; }
+}
+
+@media screen and (max-height: 525px) {
+  .d3dlogo {
+    max-width: 399px;
+    top: 20%;
+    height: 57px;
+    background-image: url('../img/logo/logo_smaller_wide.png');
+  }
+}
+@media screen and (max-height: 375px) {
+  .d3dlogo {
+    max-width: 399px;
+    height: 40px;
+    background-image: url('../img/logo/logo_smallest_wide.png');
+  }
+}

@@ -1,0 +1,79 @@
+//  DRAW AREA
+.drawareacontainer {
+  position: relative;
+  width: 100%;
+  height: 65%;
+  background-color: #fff;
+  border: 4px solid #000;
+  border-radius: 15px;
+  box-sizing: border-box;
+  z-index: 15px;
+}
+/* DEBUG THING */
+#preview_tmp {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 500;
+  border: 1px solid #f80;
+  display: none;
+}
+.bottompanel {
+	position: relative;
+	bottom:  0px;
+	width: 100%;
+	height: 10%;
+}
+
+/* DOODLE UP/DOWN/LEFT/RIGHT buttons */
+.manipulationBtns {
+	margin: 2px 5px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	max-width: 340px;
+	max-height: 70px;
+	width: 45%;
+}
+
+.manipulationBtn {
+	width: 45%;
+	height: auto;
+    cursor: pointer;
+}
+
+#btnsUpDown {
+	float: left;
+	width: 45%;
+}
+#btnsUpDown > div {
+  float: left;
+  padding-right: 8px;
+  background-repeat: no-repeat;
+}
+
+#btnsTurnLeftRight {
+	float: right;
+	width: 45%;
+}
+#btnsTurnLeftRight >div {
+  float: left;
+  padding-right: 8px;
+  background-repeat: no-repeat;
+}
+
+#btnMoveUp {
+  max-width: 65px;
+}
+
+#btnMoveDown {
+  max-width: 64px;
+}
+
+#btnTwistLeft {
+  max-width: 59px;
+}
+
+#btnTwistRight {
+  max-width: 64px;
+}
