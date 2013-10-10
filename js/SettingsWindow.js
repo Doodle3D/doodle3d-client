@@ -32,6 +32,8 @@ function SettingsWindow() {
 	this.form;
 	this.timeoutTime = 3000;
 	this.retryDelay = 2000; 					// retry setTimout delay
+	this.retryRetrieveNetworkStatusDelayTime = 1000;// retry setTimout delay
+	
 	this.retryLoadSettingsDelay; 			// retry setTimout instance
 	this.retrySaveSettingsDelay; 			// retry setTimout instance
 	this.retryRetrieveNetworkStatusDelay;// retry setTimout instance
@@ -42,30 +44,38 @@ function SettingsWindow() {
 	this.networks;
 	this.currentNetwork;               // the ssid of the network the box is on
   this.selectedNetwork;              // the ssid of the selected network in the client mode settings
-  this.currentLocalIP;               
+  this.currentLocalIP = "";               
   this.clientModeState = SettingsWindow.NOT_CONNECTED;
   this.currentAP;
   this.apModeState = SettingsWindow.NO_AP;
 
   // after switching wifi network or creating a access point we delay the status retrieval
   // because the webserver needs time to switch
-  // this time is multiplied 3 times after access point creation
   this.retrieveNetworkStatusDelay;   // setTimout delay
-  this.retrieveNetworkStatusDelayTime = 4000;
+  this.retrieveNetworkStatusDelayTime = 1000;
 
 	// Events
-	SettingsWindow.SETTINGS_LOADED = "settingsLoaded";
+	SettingsWindow.SETTINGS_LOADED 		= "settingsLoaded";
 
   // network client mode states
-  SettingsWindow.NOT_CONNECTED   = "not connected";   // also used as first item in networks list
-  SettingsWindow.CONNECTED       = "connected";
-  SettingsWindow.CONNECTING      = "connecting";
-
+  SettingsWindow.NOT_CONNECTED   		= "not connected";   // also used as first item in networks list
+  SettingsWindow.CONNECTED       		= "connected";
+  SettingsWindow.CONNECTING      		= "connecting";
+  SettingsWindow.CONNECTING_FAILED	= "connecting failed"
+  
   // network access point mode states
-  SettingsWindow.NO_AP           = "no ap";
-  SettingsWindow.AP              = "ap";
-  SettingsWindow.CREATING_AP     = "creating ap";
+  SettingsWindow.NO_AP           		= "no ap";
+  SettingsWindow.AP              		= "ap";
+  SettingsWindow.CREATING_AP     		= "creating ap";
 
+  
+  SettingsWindow.API_CONNECTING_FAILED  = -1
+  SettingsWindow.API_NOT_CONNECTED 			= 0
+  SettingsWindow.API_CONNECTING 				= 1
+  SettingsWindow.API_CONNECTED 					= 2
+  SettingsWindow.API_CREATING 					= 3 
+  SettingsWindow.API_CREATED 						= 4 
+  
 	var self = this;
 
 	this.init = function(wifiboxURL) {
@@ -80,8 +90,7 @@ function SettingsWindow() {
 			self.form.submit(function (e) { self.submitwindow(e) });
 
       self.loadSettings();
-
-
+      
       var btnAP 						= self.form.find("label[for='ap']");
 		  var btnClient 				= self.form.find("label[for='client']");
 		  var btnRefresh 				= self.form.find("#refreshNetworks");
@@ -104,6 +113,8 @@ function SettingsWindow() {
 	  e.stopPropagation();
 	  self.saveSettings();
 	  self.hideSettings();
+	  
+	  clearTimeout(self.retryRetrieveNetworkStatusDelay);
 	}
 
 	this.showSettings = function() {
@@ -147,7 +158,7 @@ function SettingsWindow() {
 		});
 
     this.refreshNetworks();
-    this.retrieveNetworkStatus();
+    this.retrieveNetworkStatus(false);
 	}
 
 	this.saveSettings = function(callback) {
@@ -261,11 +272,8 @@ function SettingsWindow() {
 		self.clientFieldSet.show();
 		self.apFieldSet.hide();
 	}
-	this.connectToNetwork = function() {
-		console.log("Settings:connectToNetwork");
-	}
 	this.refreshNetworks = function() {
-    console.log("Settings:refreshnetworks");
+    console.log("Settings:refreshNetworks");
 
 		if (communicateWithWifibox) {
 		  $.ajax({
@@ -299,21 +307,17 @@ function SettingsWindow() {
             if(foundCurrentNetwork) {
               networkSelector.val(self.currentNetwork);
               self.selectNetwork(self.currentNetwork);
-            } else {
-              self.retrieveNetworkStatus();
             }
 			  	}
 				}
 			}).fail(function() {
-				console.log("Settings:saveSettings: failed");
-				//clearTimeout(self.retrySaveSettingsDelay);
-				//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
+		  	
 			});
 	  }
 	}
 
-  this.retrieveNetworkStatus = function() {
-    console.log("Settings:retrieveNetworkStatus");
+  this.retrieveNetworkStatus = function(connecting) {
+    //console.log("Settings:retrieveNetworkStatus");
     if (communicateWithWifibox) {
 		  $.ajax({
 			  url: self.wifiboxURL + "/network/status",
@@ -322,55 +326,107 @@ function SettingsWindow() {
 			  timeout: self.timeoutTime,
 			  success: function(response){
 			  	console.log("Settings:retrieveNetworkStatus response: ",response);
-			  	if(response.status == "error" || response.data.ssid == "") {
-			  		//clearTimeout(self.retryRetrieveNetworkStatusDelay);
-						//self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retryDelay); // retry after delay
-
-            self.setClientModeState(SettingsWindow.NOT_CONNECTED);
-
+			  	if(response.status == "error") {
+			  		
 			  	} else {
             var data = response.data;
-            switch(data.mode) {
-              case "sta":
-                var networkSelector = self.form.find("#network");
-                networkSelector.val(data.ssid);
-                self.showClientSettings();
-                self.form.find("#client").prop('checked',true);
+            
+            if(typeof data.status === 'string') {
+            	data.status = parseInt(data.status);
+            }
+            //console.log("  data.status: ",data.status,data.statusMessage);
+            
+            // Determine which network settings to show
+            switch(data.status) {
+              case SettingsWindow.API_NOT_CONNECTED:
+              	//console.log("  not connected & not a access point");
+          			self.apFieldSet.show();
+          			self.clientFieldSet.show();
+              	break;
+							case SettingsWindow.API_CONNECTING_FAILED:
+							case SettingsWindow.API_CONNECTING:
+							case SettingsWindow.API_CONNECTED:
+								//console.log("  client mode");
+								self.form.find("#client").prop('checked',true);
 								
-                self.currentLocalIP = data.localip;
-                self.currentNetwork = data.ssid;
-                self.selectNetwork(data.ssid);
-                self.setClientModeState(SettingsWindow.CONNECTED);
+								self.apFieldSet.hide();
+							  self.clientFieldSet.show();
+							  
+								if(data.status == SettingsWindow.API_CONNECTED) {
+									var networkSelector = self.form.find("#network");
+									networkSelector.val(data.ssid);
+																	
+									self.currentNetwork = data.ssid;
+									self.currentLocalIP = data.localip;
+									self.selectNetwork(data.ssid);
+								} else {
+									self.currentLocalIP = ""
+								}
+							  
+								break;
+							case SettingsWindow.API_CREATING:
+							case SettingsWindow.API_CREATED:
+								//console.log("  access point mode");
+								self.form.find("#ap").prop('checked',true);
 								
-                self.setAPModeState(SettingsWindow.NO_AP);
-                break;
-              case "ap":
-                //self.form.find("#ssid").val(data.ssid);
-                self.showAPSettings();
-                self.form.find("#ap").prop('checked',true);
-                self.currentAP = data.ssid;
-                self.setAPModeState(SettingsWindow.AP);
-
-                self.currentNetwork = undefined;
-                self.selectNetwork(SettingsWindow.NOT_CONNECTED);
-                self.setClientModeState(SettingsWindow.NOT_CONNECTED);
-                break;
-              default:
-                self.showAPSettings();
-                self.form.find("#ap").prop('checked',true);
-                self.setAPModeState(SettingsWindow.NO_AP);
-
-                self.currentNetwork = undefined;
-                self.selectNetwork(SettingsWindow.NOT_CONNECTED);
-                self.setClientModeState(SettingsWindow.NOT_CONNECTED);
-                break;
+								self.apFieldSet.show();
+								self.clientFieldSet.hide();
+								
+								self.currentNetwork = undefined;
+								self.selectNetwork(SettingsWindow.NOT_CONNECTED);
+								var networkSelector = self.form.find("#network");
+								networkSelector.val(SettingsWindow.NOT_CONNECTED);
+								
+								if(data.ssid) { 
+										self.currentAP = data.ssid;
+								}
+								break;
+						}
+            
+            // update status message
+            switch(data.status) {
+            	case SettingsWindow.API_CONNECTING_FAILED:
+            		self.setClientModeState(SettingsWindow.CONNECTING_FAILED,data.statusMessage); 
+            		self.setAPModeState(SettingsWindow.NO_AP,"");
+								break;
+            	case SettingsWindow.API_NOT_CONNECTED:	
+            		self.setClientModeState(SettingsWindow.NOT_CONNECTED,"");	
+            	  self.setAPModeState(SettingsWindow.NO_AP,"");
+								break;
+            	case SettingsWindow.API_CONNECTING:
+            		self.setClientModeState(SettingsWindow.CONNECTING,"");
+            	  self.setAPModeState(SettingsWindow.NO_AP,"");
+            		break;
+            	case SettingsWindow.API_CONNECTED:
+            		self.setClientModeState(SettingsWindow.CONNECTED,"");
+            	 	self.setAPModeState(SettingsWindow.NO_AP,"");
+								break;
+            	case SettingsWindow.API_CREATING:
+            		self.setClientModeState(SettingsWindow.NOT_CONNECTED,"");  
+            		self.setAPModeState(SettingsWindow.CREATING_AP,"");
+            		break;
+            	case SettingsWindow.API_CREATED:
+            		self.setClientModeState(SettingsWindow.NOT_CONNECTED,"");	
+            		self.setAPModeState(SettingsWindow.AP,"");
+								break;
+            }
+            
+            // Keep checking for updates?
+            if(connecting) {
+							switch(data.status) {
+								case SettingsWindow.API_CONNECTING:
+								case SettingsWindow.API_CREATING:
+									clearTimeout(self.retryRetrieveNetworkStatusDelay);
+									self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus(connecting) },self.retryRetrieveNetworkStatusDelayTime); // retry after delay
+									break;
+							}
             }
 			  	}
 				}
 			}).fail(function() {
 				console.log("Settings:retrieveNetworkStatus: failed");
 				clearTimeout(self.retryRetrieveNetworkStatusDelay);
-				self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retryDelay); // retry after delay
+				self.retryRetrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus(connecting) },self.retryDelay); // retry after delay
 			});
     }
   }
@@ -384,22 +440,27 @@ function SettingsWindow() {
 		console.log("select network: ",ssid);
 		this.selectedNetwork = ssid;
     if(this.networks == undefined || ssid == SettingsWindow.NOT_CONNECTED) {
-      this.form.find("#passwordLabel").hide();
-      this.form.find("#password").hide();
+    	this.hideWiFiPassword();
     } else {
       var network = this.networks[ssid];
       if(network.encryption == "none") {
-        this.form.find("#passwordLabel").hide();
-        this.form.find("#password").hide();
+      	this.hideWiFiPassword();
       } else {
-        this.form.find("#passwordLabel").show();
-        this.form.find("#password").show();
+      	this.showWiFiPassword();
       }
       this.form.find("#password").val("");
     }
 	}
-
-  this.setClientModeState = function(state) {
+	this.showWiFiPassword = function() {
+	  this.form.find("#passwordLabel").show();
+		this.form.find("#password").show();
+	}
+	this.hideWiFiPassword = function() {
+		this.form.find("#passwordLabel").hide();
+		this.form.find("#password").hide();
+	}
+	
+  this.setClientModeState = function(state,msg) {
     var field = this.form.find("#clientModeState");
 	  var btnConnect 				= self.form.find("#connectToNetwork");
     switch(state) {
@@ -409,16 +470,44 @@ function SettingsWindow() {
         break;
       case SettingsWindow.CONNECTED:
         btnConnect.removeAttr("disabled");
-        var a = "<a href='http://"+this.currentLocalIP+"' target='_black'>"+this.currentLocalIP+"</a>";
-        field.html("Connected to: "+this.currentNetwork+". Local ip: "+a);
+      
+      	var fieldText = "Connected to: "+this.currentNetwork+".";
+      	if(this.currentLocalIP != undefined && this.currentLocalIP != "") {
+      		var a = "<a href='http://"+this.currentLocalIP+"' target='_black'>"+this.currentLocalIP+"</a>";
+      		fieldText += " Local ip: "+a;
+      	}
+        field.html(fieldText);
         break;
       case SettingsWindow.CONNECTING:
         btnConnect.attr("disabled", true);
         field.html("Connecting...");
         break;
+      case SettingsWindow.CONNECTING_FAILED:
+      	btnConnect.removeAttr("disabled");
+      	field.html(msg); 
+      	break;
     }
     this.clientModeState = state;
   }
+  this.setAPModeState = function(state,msg) {
+		var field = this.form.find("#apModeState");
+		var btnCreate = this.form.find("#createAP");
+		switch(state) {
+			case SettingsWindow.NO_AP:
+				btnCreate.removeAttr("disabled");
+				field.html("Not currently a access point");
+				break;
+			case SettingsWindow.AP:
+				btnCreate.removeAttr("disabled");
+				field.html("Is access point: "+this.currentAP);
+				break;
+			case SettingsWindow.CREATING_AP:
+				btnCreate.attr("disabled", true);
+				field.html("Creating access point...");
+				break;
+		}
+		this.apModeState = state;
+	}
 
 	this.connectToNetwork = function() {
 		console.log("connectToNetwork");
@@ -438,19 +527,19 @@ function SettingsWindow() {
 			  timeout: self.timeoutTime,
 			  success: function(response){
 			  	console.log("Settings:connectToNetwork response: ",response);
-
 				}
 			}).fail(function() {
-				console.log("Settings:connectToNetwork: timeout (normal behaivior)");
+				console.log("Settings:connectToNetwork: timeout (normal behavior)");
 				//clearTimeout(self.retrySaveSettingsDelay);
 				//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
 			});
 	  }
-    self.setClientModeState(SettingsWindow.CONNECTING);
-
-    // we delay the status retrieval because the webserver needs time to switch
-    clearTimeout(self.retrieveNetworkStatusDelay);
-		self.retrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retrieveNetworkStatusDelayTime); // retry after delay
+    self.setClientModeState(SettingsWindow.CONNECTING,"");
+    
+    // after switching wifi network or creating a access point we delay the status retrieval
+    // because the webserver needs time to switch
+		clearTimeout(self.retrieveNetworkStatusDelay);
+		self.retrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus(true) },self.retrieveNetworkStatusDelayTime);
 	}
 
   this.createAP = function() {
@@ -465,36 +554,17 @@ function SettingsWindow() {
 
 				}
 			}).fail(function() {
-				console.log("Settings:createAP: timeout (normal behaivior)");
+				console.log("Settings:createAP: timeout (normal behavior)");
 				//clearTimeout(self.retrySaveSettingsDelay);
 				//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
 			});
 	  }
-    self.setAPModeState(SettingsWindow.CREATING_AP);
+    self.setAPModeState(SettingsWindow.CREATING_AP,"");
 
-    // we delay the status retrieval because the webserver needs time to switch
+    // after switching wifi network or creating a access point we delay the status retrieval
+    // because the webserver needs time to switch
     clearTimeout(self.retrieveNetworkStatusDelay);
-		self.retrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus() },self.retrieveNetworkStatusDelayTime*3); // retry after delay
-  }
-
-  this.setAPModeState = function(state) {
-    var field = this.form.find("#apModeState");
-    var btnCreate = this.form.find("#createAP");
-    switch(state) {
-      case SettingsWindow.NO_AP:
-        btnCreate.removeAttr("disabled");
-        field.html("Not currently a access point");
-        break;
-      case SettingsWindow.AP:
-        btnCreate.removeAttr("disabled");
-        field.html("Is access point: "+this.currentAP);
-        break;
-      case SettingsWindow.CREATING_AP:
-        btnCreate.attr("disabled", true);
-        field.html("Creating access point...");
-        break;
-    }
-    this.apModeState = state;
+ 		self.retrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus(true) },self.retrieveNetworkStatusDelayTime);
   }
 }
 

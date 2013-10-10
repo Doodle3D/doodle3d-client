@@ -21,7 +21,7 @@ $(function() {
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
   
 	if (wifiboxIsRemote) {
-		wifiboxURL = "http://192.168.5.1/d3dapi";
+		wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
 	} else {
 		wifiboxURL = "http://" + window.location.host + "/d3dapi";
 	}
