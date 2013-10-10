@@ -1,243 +1,3 @@
-/*! normalize.css v1.0.2 | MIT License | git.io/normalize */article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-nav,
-section,
-summary {
-  display: block;
-}
-audio,
-canvas,
-video {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-}
-audio:not([controls]) {
-  display: none;
-  height: 0;
-}
-[hidden] {
-  display: none;
-}
-html {
-  font-size: 100%;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-}
-html,
-button,
-input,
-select,
-textarea {
-  font-family: sans-serif;
-}
-body {
-  margin: 0;
-}
-a:focus {
-  outline: thin dotted;
-}
-a:active,
-a:hover {
-  outline: 0;
-}
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
-h2 {
-  font-size: 1.5em;
-  margin: 0.83em 0;
-}
-h3 {
-  font-size: 1.17em;
-  margin: 1em 0;
-}
-h4 {
-  font-size: 1em;
-  margin: 1.33em 0;
-}
-h5 {
-  font-size: .83em;
-  margin: 1.67em 0;
-}
-h6 {
-  font-size: .67em;
-  margin: 2.33em 0;
-}
-abbr[title] {
-  border-bottom: 1px dotted;
-}
-b,
-strong {
-  font-weight: 700;
-}
-blockquote {
-  margin: 1em 40px;
-}
-dfn {
-  font-style: italic;
-}
-mark {
-  background: #ff0;
-  color: #000000;
-}
-p,
-pre {
-  margin: 1em 0;
-}
-code,
-kbd,
-pre,
-samp {
-  font-family: monospace,serif;
-  _font-family: 'courier new', monospace;
-  font-size: 1em;
-}
-pre {
-  white-space: pre;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-q {
-  quotes: none;
-}
-q:before,
-q:after {
-  content: '';
-  content: none;
-}
-small {
-  font-size: 80%;
-}
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-sup {
-  top: -0.5em;
-}
-sub {
-  bottom: -0.25em;
-}
-dl,
-menu,
-ol,
-ul {
-  margin: 1em 0;
-}
-dd {
-  margin: 0 0 0 40px;
-}
-menu,
-ol,
-ul {
-  padding: 0 0 0 40px;
-}
-nav ul,
-nav ol {
-  list-style: none;
-  list-style-image: none;
-}
-img {
-  border: 0;
-  -ms-interpolation-mode: bicubic;
-}
-svg:not(:root) {
-  overflow: hidden;
-}
-figure {
-  margin: 0;
-}
-form {
-  margin: 0;
-}
-fieldset {
-  border: 1px solid silver;
-  margin: 0 2px;
-  padding: 0.35em 0.625em 0.75em;
-}
-legend {
-  border: 0;
-  padding: 0;
-  white-space: normal;
-  *margin-left: -7px;
-}
-button,
-input,
-select,
-textarea {
-  font-size: 100%;
-  margin: 0;
-  vertical-align: baseline;
-  *vertical-align: middle;
-}
-button,
-input {
-  line-height: normal;
-}
-button,
-html input[type=button],
-input[type=reset],
-input[type=submit] {
-  -webkit-appearance: button;
-  cursor: pointer;
-  *overflow: visible;
-}
-button[disabled],
-input[disabled] {
-  cursor: default;
-}
-input[type=checkbox],
-input[type=radio] {
-  box-sizing: border-box;
-  padding: 0;
-  *height: 13px;
-  *width: 13px;
-}
-input[type=search] {
-  -webkit-appearance: textfield;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-input[type=search]::-webkit-search-cancel-button,
-input[type=search]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-textarea {
-  overflow: auto;
-  vertical-align: top;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-.cf {
-  *zoom: 1;
-}
-.cf:before,
-.cf:after {
-  content: " ";
-  display: table;
-}
-.cf:after {
-  clear: both;
-}
 /*
 
   GLOBAL CONTAINER
@@ -245,6 +5,33 @@ table {
 */
 body {
   background-color: #fcfcfc;
+  -moz-user-select: none;
+  /* disable cut copy paste */
+
+  -webkit-user-select: none;
+  /* disable cut copy paste */
+
+  overflow: hidden;
+  /*   This chops off any overhanging divs */
+
+}
+img {
+  z-index: 5;
+  /*pointer-events:none;*/
+
+  /*-webkit-touch-callout: none;               */
+  /*disable callout, image save panel */
+
+  /*-webkit-tap-highlight-color: transparent; */
+  /* "turn off" link highlight */
+
+}
+/*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
+.btn {
+  background-repeat: no-repeat;
+  /*	-webkit-user-select: none;*/
+
+  cursor: pointer;
 }
 #landscape {
   position: absolute;
@@ -328,7 +115,45 @@ body {
   border: 4px solid #000;
   border-radius: 15px;
   box-sizing: border-box;
-  z-index: 15px;
+  z-index: 15;
+}
+#canvasContainers {
+  display: table;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+#mycanvasContainer {
+  display: table-cell;
+  width: auto;
+  height: 100%;
+}
+#mycanvas {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /*float: left;*/
+
+  border-right: 2px solid #333;
+}
+#previewContainer {
+  display: table-cell;
+  width: 150px;
+  height: 100%;
+}
+#preview {
+  width: 150px;
+  height: 100%;
+  float: right;
+  margin: 0;
+  padding: 0;
 }
 /* DEBUG THING */
 #preview_tmp {
@@ -345,7 +170,9 @@ body {
   width: 100%;
   height: 10%;
 }
-/* DOODLE UP/DOWN/LEFT/RIGHT buttons */
+/*
+  DOODLE UP/DOWN/LEFT/RIGHT buttons
+*/
 .manipulationBtns {
   margin: 2px 5px;
   position: absolute;
@@ -523,10 +350,68 @@ body {
 }
 /*
 
+  PRINT PROGRESS DISPLAY
+
+*/
+#printProgressContainer {
+  position: absolute;
+  right: 30px;
+  top: 370px;
+  width: 110px;
+  margin: 5px 0px;
+  font-weight: bold;
+  display: none;
+}
+#progressbarContainer {
+  margin: 3px 0px;
+  width: inherit;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  -o-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+.progressAmount {
+  margin: 0px 5px;
+}
+#progressbar {
+  position: relative;
+  /*margin-bottom: -20px;*/
+
+  width: 0%;
+  height: 100%;
+  background-color: #4c4;
+  border: 0px solid #f0f;
+  border-radius: 3px;
+  -o-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+/*
+
+  THERMOMETER
+
+*/
+#thermometerContainer {
+  position: absolute;
+  right: 25px;
+  top: 370px;
+}
+#thermometerCanvas {
+  /*background: #59b2b8;*/
+
+  /*zoom: 2;*/
+
+}
+/*
+
   REST
 
 */
 /* CLEARFIX */
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
 .clearfix:before,
 .clearfix:after {
   content: " ";
@@ -545,25 +430,83 @@ body {
 }
 /*
 
-  REST
+  SETTINGS POPUP
 
 */
-/* CLEARFIX */
-.clearfix:before,
-.clearfix:after {
-  content: " ";
-  /* 1 */
-
+#contentOverlay {
+  background-color: rgba(255, 255, 255, 0.65);
+  z-index: 20;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+#contentOverlay #settings {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  max-width: 835px;
+  max-height: 540px;
+  width: 80%;
+  height: 75%;
+  margin: 7% 8%;
+  box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+  border: 2px solid #222;
+  border-radius: 15px;
+  overflow: hidden;
   display: table;
-  /* 2 */
-
+  padding: 2%;
 }
-.clearfix:after {
-  clear: both;
+#contentOverlay #settings .settingsLabelContainer {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1%;
 }
-/* For IE 6/7 only*/
-.clearfix {
-  *zoom: 1;
+#contentOverlay #settings .settingsLabelImg {
+  width: 45%;
+  max-width: 373px;
+  height: auto;
+}
+#contentOverlay #settings > .content {
+  margin: 3% 12%;
+  margin-top: 12%;
+  max-height: 388px;
+  display: table-row;
+  width: 100%;
+}
+#contentOverlay #settings > .content > .settings {
+  border: 1px solid #bbbbbb;
+  border-radius: 5px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+#contentOverlay #settings > .content > .btnContainer {
+  width: 15%;
+  position: relative;
+  display: table-cell;
+}
+#contentOverlay #settings > .content > .btnContainer > .btnOK {
+  position: absolute;
+  bottom: 3%;
+  right: 3%;
+  max-width: 85px;
+  min-width: 42px;
+  width: 91%;
+  height: auto;
+  margin: 0 2% 2% 0;
+  cursor: pointer;
+  float: right;
+}
+#contentOverlay #settings > .content > div {
+  height: 100%;
 }
 @media only screen and (max-width: 480px), only screen and (max-width: 720px) and (min-device-pixel-ratio: 1.5), only screen and (max-width: 720px) and (-webkit-min-device-pixel-ratio: 1.5) {
   /*
@@ -600,7 +543,7 @@ body {
     width: 100px;
     background-color: #fff;
     z-index: 50;
-    transition: left 0.15s ease-out;
+    transition: left 0.3s ease-out;
   }
   .hideleft {
     left: -101px;
@@ -627,7 +570,7 @@ body {
     width: 100px;
     background-color: #fff;
     z-index: 50;
-    transition: right 0.15s ease-out;
+    transition: right 0.3s ease-out;
   }
   .hideright {
     right: -101px;
@@ -661,6 +604,7 @@ body {
     border: 1px solid #808;
     background: url('../img/arrows.png') no-repeat;
     background-color: #eee;
+    cursor: pointer;
   }
   .sidebutton:active {
     background-color: #aaa;
@@ -673,6 +617,9 @@ body {
     left: -27px;
     background-position: -25px 0px;
   }
+  .sidebuttonin:active {
+    background-color: #888;
+  }
   .leftpanel .sidebuttonin {
     background-color: #ccc;
     background-position: -25px 0px;
@@ -681,29 +628,25 @@ body {
     background-color: #ccc;
     background-position: 0px 0px;
   }
-  .sidebuttonin:active {
-    background-color: #888;
+  /*
+  
+    SETTINGS POPUP - MOBILE
+  
+  */
+  #contentOverlay {
+    z-index: 200;
+  }
+  #contentOverlay #settings {
+    width: 87%;
+    height: 82%;
+    margin: 6% 4%;
+  }
+  #contentOverlay #settings > .right {
+    width: 14%;
   }
 }
 @media only screen and (min-width: 1000px) and (max-device-pixel-ratio: 1.5), only screen and (min-width: 1000px) and (-webkit-max-device-pixel-ratio: 1.5) {
-  /*
-  .leftpanel {
-  	background-color: #8F8;
-  }
-  .rightpanel {
-  	background-color: #4Fc;
-  }
-  */
-  /*
-  .leftpanel {
-  	background-color: #0FF;
-  	width: 200px;
-  }
   
-  .rightpanel {
-  	width: 200px;
-  }
-  */
 }
 @media only screen and (orientation: portrait) {
   #landscape {
@@ -711,5 +654,16 @@ body {
   }
   #portrait {
     display: block;
+  }
+  .vertImage {
+    margin: 0px;
+    padding: 0px;
+    /*border: 2px solid #f0f;*/
+  
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    /* for ie9 */
+  
   }
 }

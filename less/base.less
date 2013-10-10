@@ -5,6 +5,21 @@
 */
 body {
   background-color: #fcfcfc;
+  -moz-user-select: none;                /* disable cut copy paste */
+  -webkit-user-select: none;                /* disable cut copy paste */
+  overflow:hidden; /*   This chops off any overhanging divs */
+}
+img {
+  z-index: 5;
+  /*pointer-events:none;*/
+  /*-webkit-touch-callout: none;               *//*disable callout, image save panel */
+  /*-webkit-tap-highlight-color: transparent; *//* "turn off" link highlight */
+}
+/*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
+.btn {
+  background-repeat: no-repeat;
+/*	-webkit-user-select: none;*/
+  cursor: pointer
 }
 #landscape {
   position:absolute;
@@ -83,6 +98,7 @@ body {
 
 */
 /* CLEARFIX */
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
 .clearfix:before,
 .clearfix:after {
   content: " "; /* 1 */
@@ -96,5 +112,4 @@ body {
 .clearfix {
   *zoom: 1;
 }
-
 

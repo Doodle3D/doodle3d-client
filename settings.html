@@ -9,7 +9,7 @@
   <link href="css/settings.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<div>
+<div class="settingsContainer">
   <form id="settingsForm">
     <!--<fieldset>
       <legend>3D printer</legend>
@@ -119,6 +119,18 @@
 
     <fieldset>
       <legend>GCODE settings</legend>
+      <div class="startgcode_left">
+        <label for="startgcode">Start:</label><br/>
+        <textarea id="startgcode" class="gcode" name="printer.startgcode">
+        </textarea>
+
+      </div>
+      <div>
+        <label for="endgcode">End:</label><br/>
+        <textarea id="endgcode" class="gcode" name="printer.endgcode">
+        </textarea>
+      </div>
+      <!-- 2013-10-09 replaced by DIV solution (but keeping here in comments temporarily as lookup...)
       <table>
         <tr>
           <td>
@@ -134,8 +146,9 @@
           </td>
         </tr>
       </table>
+      -->
     </fieldset>
-  </form>
+  </form><br/>
 </div>
 </body>
 </html>

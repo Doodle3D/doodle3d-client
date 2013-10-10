@@ -42,26 +42,58 @@
 }
 
 
+/*
 
+  PRINT PROGRESS DISPLAY
+
+*/
+#printProgressContainer {
+  position: absolute;
+  right: 30px;
+  top: 370px;
+  width: 110px;
+  margin: 5px 0px;
+  font-weight: bold;
+  display:none;
+}
+#progressbarContainer {
+  margin: 3px 0px;
+  width: inherit;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  -o-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+.progressAmount {
+  margin: 0px 5px;
+}
+#progressbar {
+  position: relative;
+/*margin-bottom: -20px;*/
+  width: 0%;
+  height: 100%;
+  background-color: #4c4;
+  border: 0px solid #f0f;
+  border-radius: 3px;
+  -o-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
 
 /*
 
-  REST
+  THERMOMETER
 
 */
-/* CLEARFIX */
-.clearfix:before,
-.clearfix:after {
-  content: " "; /* 1 */
-  display: table; /* 2 */
+#thermometerContainer {
+  position: absolute;
+  right: 25px;
+  top: 370px;
 }
-.clearfix:after {
-  clear: both;
+#thermometerCanvas {
+/*background: #59b2b8;*/
+/*zoom: 2;*/
 }
-
-/* For IE 6/7 only*/
-.clearfix {
-  *zoom: 1;
-}
-
-

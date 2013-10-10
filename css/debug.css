@@ -1,15 +1,17 @@
 .debugContainer {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   z-index: 500;
+  background-color: #f0f;
   display: none;
 }
 
 #debug_textArea {
   position:absolute; 
   bottom: 0; 
-  width: 800px; 
+  /*width: 800px; */
+  z-index: 500;
   display: none;
 }
 

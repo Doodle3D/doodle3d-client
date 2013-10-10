@@ -31,17 +31,12 @@
   width: 100px;
   background-color: #fff;
   z-index: 50;
-  -webkit-transition: left .15s ease-out;
-  -moz-transition: left .15s ease-out;
-  -o-transition: left .15s ease-out;
-  transition: left .15s ease-out;
+  transition: left .3s ease-out;
 }
 .hideleft {
   left: -101px;
 }
 .shadowright {
-	-moz-box-shadow: 2px 0 4px rgba(42, 42, 41, 0.6);
-	-webkit-box-shadow: 2px 0 4px rgba(42, 42, 41, 0.6);
 	box-shadow: 2px 0 4px rgba(42, 42, 41, 0.6);
 }
 .btnNew {
@@ -64,17 +59,12 @@
   width: 100px;
   background-color: #fff;
   z-index: 50;
-  -webkit-transition: right .15s ease-out;
-  -moz-transition: right .15s ease-out;
-  -o-transition: right .15s ease-out;
-  transition: right .15s ease-out;
+  transition: right .3s ease-out;
 }
 .hideright {
   right: -101px;
 }
 .shadowleft {
-	-moz-box-shadow: -2px 0 4px rgba(42, 42, 41, 0.6);
-	-webkit-box-shadow: -2px 0 4px rgba(42, 42, 41, 0.6);
 	box-shadow: -2px 0 4px rgba(42, 42, 41, 0.6);
 }
 .btnPrint {
@@ -102,29 +92,36 @@
   border: 1px solid #808;
   background: url('../img/arrows.png') no-repeat;
   background-color: #eee;
-}
-.sidebutton:active {
-  background-color: #aaa;
+  cursor: pointer;
+
+  &:active {
+    background-color: #aaa;
+  }
+
+  .leftpanel & {
+    right: -27px;
+    background-position: 0px 0px;
+  }
+
+  .rightpanel & {
+    left: -27px;
+    background-position: -25px 0px;
+  }
 }
 
-.leftpanel .sidebutton {
-  right: -27px;
-  background-position: 0px 0px;
-}
-.rightpanel .sidebutton {
-  left: -27px;
-  background-position: -25px 0px;
-}
+.sidebuttonin {
 
+  &:active {
+    background-color: #888;
+  }
 
-.leftpanel .sidebuttonin {
-  background-color: #ccc;
-  background-position: -25px 0px;
-}
-.rightpanel .sidebuttonin {
-  background-color: #ccc;
-  background-position: -0px 0px;
-}
-.sidebuttonin:active {
-  background-color: #888;
+  .leftpanel & {
+    background-color: #ccc;
+    background-position: -25px 0px;
+  }
+
+  .rightpanel & {
+    background-color: #ccc;
+    background-position: -0px 0px;
+  }
 }
