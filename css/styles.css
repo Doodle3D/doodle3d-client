@@ -411,13 +411,20 @@ top: 0px;
 	height: auto;
 	float: right;
 }
-
+.btnPrint.disabled {
+	opacity: 0.3;
+	
+}
 .btnStop {
 	margin: 5% 10% 1% 5%;
 	float: right;
 	width: 90%;
 	max-width: 98px;
 	height: auto;
+	display: block;
+}
+.btnStop.disabled {
+	display: none;
 }
 
 .btnsSettingsInfo {
