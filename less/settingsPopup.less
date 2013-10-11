@@ -23,7 +23,7 @@
     right: 0;
     bottom: 0;
     z-index: 15;
-    max-width: 835px;
+    max-width: 775px;
     max-height: 540px;
     width: 80%;
     height: 75%;
@@ -31,54 +31,55 @@
     box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
     border: 2px solid #222;
     border-radius: 15px;
-    overflow: hidden;
-    display: table;
     padding: 2%;
 
-    .settingsLabelContainer {
-      width: 100%;
-      height: auto;
-      margin-bottom: 1%;
-    }
-    .settingsLabelImg {
-      width: 45%;
-      max-width: 373px;
-      height: auto;
-    }
+    .toppanel {
+      height: 10%;
 
-    > .content {
-//      margin: 3% 12%;
-//      margin-top: 12%;
-//      max-height: 388px;
-      display: table-row;
-      width: 100%;
+      .settingsLabelContainer {
+        width: 100%;
+        height: auto;
+        margin-bottom: 1%;
 
-      > .settings {
+        .settingsLabelImg {
+          width: 45%;
+          max-width: 373px;
+          height: auto;
+        }
+      }
+    }
+    .bottompanel {
+      width: 100%;
+      height: 90%;
+
+      > .settingsContainer {
+        float:left;
+        width: 83%;
+        height: 98%;
+        margin: .5%;
+        overflow-y: scroll;
+        overflow-x: hidden;
         border: 1px solid rgb(187, 187, 187);
         border-radius: 5px;
-        overflow: scroll;
-        overflow-x: hidden;
       }
       > .btnContainer {
         width: 15%;
+        height: 100%;
+        float:right;
         position:relative;
-        display: table-cell;
+        right: 0;
 
         > .btnOK {
           position: absolute;
           bottom: 3%;
-          right: 3%;
+          right: 7%;
           max-width: 85px;
           min-width: 42px;
-          width: 91%;
+          width: 88%;
           height: auto;
           margin: 0 2% 2% 0;
           cursor: pointer;
-          float: right;
         }
-      }
-      > div {
-        height: 100%;
       }
     }
   }

@@ -83,7 +83,7 @@ function SettingsWindow() {
 
 		this.window = $("#settings");
 		this.window.find(".btnOK").click(this.submitwindow);
-	  this.window.find(".settings").load("settings.html", function() {
+	  this.window.find(".settingsContainer").load("settings.html", function() {
       console.log("Settings:finished loading settings.html, now loading settings...");
 
       self.form = self.window.find("form");

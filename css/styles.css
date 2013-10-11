@@ -422,20 +422,13 @@ top: 0px;
 	height: auto;
 	float: right;
 }
-.btnPrint.disabled {
-	opacity: 0.3;
-	
-}
+
 .btnStop {
 	margin: 5% 10% 1% 5%;
 	float: right;
 	width: 90%;
 	max-width: 98px;
 	height: auto;
-	display: block;
-}
-.btnStop.disabled {
-	display: none;
 }
 
 .btnsSettingsInfo {
@@ -563,7 +556,7 @@ SETTINGS POPUP
 	right: 0;
 	bottom: 0;
 	z-index: 15;
-	max-width: 835px;
+	max-width: 775px;
 	max-height: 540px;
 	width: 80%;
 	height: 75%;
@@ -573,58 +566,60 @@ SETTINGS POPUP
 	box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
 	border: 2px solid #222;
 	border-radius: 15px;
-	overflow: hidden;
-	display: table;
 	padding: 2%;
 }
 
-#contentOverlay #settings .settingsLabelContainer {
+#contentOverlay #settings .toppanel {
+	height: 10%;
+}
+
+#contentOverlay #settings .toppanel .settingsLabelContainer {
 	width: 100%;
 	height: auto;
 	margin-bottom: 1%;
 }
 
-#contentOverlay #settings .settingsLabelImg {
+#contentOverlay #settings .toppanel .settingsLabelContainer .settingsLabelImg {
 	width: 45%;
 	max-width: 373px;
 	height: auto;
 }
 
-#contentOverlay #settings > .content {
-	display: table-row;
+#contentOverlay #settings .bottompanel {
 	width: 100%;
+	height: 90%;
 }
 
-#contentOverlay #settings > .content > .settings {
+#contentOverlay #settings .bottompanel > .settingsContainer {
+	float: left;
+	width: 83%;
+	height: 98%;
+	margin: .5%;
+
+	-ms-overflow-y: scroll;
+	overflow-y: scroll;
 	border: 1px solid #bbbbbb;
 	border-radius: 5px;
-	overflow: scroll;
-
-	-ms-overflow-x: hidden;
-	overflow-x: hidden;
 }
 
-#contentOverlay #settings > .content > .btnContainer {
+#contentOverlay #settings .bottompanel > .btnContainer {
 	width: 15%;
+	height: 100%;
+	float: right;
 	position: relative;
-	display: table-cell;
+	right: 0;
 }
 
-#contentOverlay #settings > .content > .btnContainer > .btnOK {
+#contentOverlay #settings .bottompanel > .btnContainer > .btnOK {
 	position: absolute;
 	bottom: 3%;
-	right: 3%;
+	right: 7%;
 	max-width: 85px;
 	min-width: 42px;
-	width: 91%;
+	width: 88%;
 	height: auto;
 	margin: 0 2% 2% 0;
 	cursor: pointer;
-	float: right;
-}
-
-#contentOverlay #settings > .content > div {
-	height: 100%;
 }
 
 @media only screen and (max-width: 480px),only screen and (max-width: 720px) and (min-device-pixel-ratio: 1.5),only screen and (max-width: 720px) and (-webkit-min-device-pixel-ratio: 1.5) {
