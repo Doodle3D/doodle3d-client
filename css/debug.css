@@ -31,3 +31,13 @@
 .agentInfoToggle {
   display: block;
 }
+
+#debug_display { 
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	background-color: #fff;
+	opacity: .7;
+	color: #000;
+}

@@ -12,15 +12,10 @@ var btnOops, btnStop, btnClear;
 var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
 var btnDebug; // debug
-var displayTemp, displayProgress;
+var displayProgress;
 
-var displayTempEnabled = false;
-
-var IDLE_STATE = "idle";
-var PRINTING_STATE = "printing";
-
-var state = IDLE_STATE;
-var prevState = state;
+var state;
+var prevState;
 
 function initButtonBehavior() {
   console.log("f:initButtonBehavior >> btnNew = " + btnNew);
@@ -36,7 +31,6 @@ function initButtonBehavior() {
   btnNew = $("#btnNew");
   btnPrint= $("#btnPrint");
   btnStop = $("#btnStop");
-  displayTemp = $("#displayTemp");
   displayProgress = $("#printProgressContainer");
 
 //  btnPrevious = $("#btnPrevious");
@@ -192,7 +186,7 @@ function initButtonBehavior() {
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
   if (sendPrintCommands) printer.stop();
-  setState(IDLE_STATE);
+  setState(Printer.STOPPING_STATE);
 }
 
 
@@ -210,7 +204,7 @@ function print(e) {
   $("#textdump").text("");
   if (_points.length > 2) {
 
-    setState(PRINTING_STATE);
+    setState(Printer.BUFFERING_STATE);
     var gcode = generate_gcode();
     //startPrint(gencode);
 
@@ -296,52 +290,61 @@ function previewTwistRight(redrawLess) {
 
 
 function update() {
-	if(!displayTempEnabled && printer.alive) {
-		displayTemp.show();
-    $displayThermometer.show();
-		displayTempEnabled = true;
-	} else if(displayTempEnabled && !printer.alive) {
-		displayTemp.hide();
-    $displayThermometer.hide();
-		displayTempEnabled = false;
-	}
+	setState(printer.state);
 	
-	if(displayTempEnabled) {
-		displayTemp.text(printer.temperature+"/"+printer.targetTemperature);
-    thermometer.update(printer.temperature, printer.targetTemperature);
-	}
-
-  //setPrintprogress(printer.currentLine/printer.num_lines);
-
-	var btnPrint= $("#btnPrint");
-	
-	setState(printer.printing? PRINTING_STATE : IDLE_STATE);
+	thermometer.update(printer.temperature, printer.targetTemperature);
+	//TODO: update progress
 }
 
-
-function setState(newState) {
+function setState(newState) { //TODO add hasControl 
 	if(newState == state) return;
 	
+	console.log("setState: ",state," > ",newState);
+	setDebugText("State: "+newState);
+	
+	// print button
 	switch(newState) {
-		case IDLE_STATE: 
-
+		case Printer.IDLE_STATE:
 			btnPrint.removeClass("disabled"); // enable print button
-			btnStop.addClass("disabled"); // disable stop button
 			btnPrint.bind('touchstart mousedown',print);
-      displayProgress.hide();
-
 			break;
-		case PRINTING_STATE: 
-			
+		default:
 			btnPrint.addClass("disabled"); // disable print button
-			btnStop.removeClass("disabled"); // enable stop button
 			btnPrint.unbind('touchstart mousedown');
-      displayProgress.show();
-
+			break;
+	}
+	
+	// stop button
+	switch(newState) {
+		case Printer.PRINTING_STATE:
+		case Printer.BUFFERING_STATE:
+			btnStop.removeClass("disabled");
+			break;
+		default:
+			btnStop.addClass("disabled");
+			break;
+	}
+	
+	// thermometer
+	switch(newState) {
+		case Printer.UNKNOWN_STATE:
+		case Printer.DISCONNECTED_STATE:
+			thermometer.hide();
+			break;
+		default:
+			thermometer.show();
+			break;
+	}
+	// progress indicator
+	switch(newState) {
+		case Printer.PRINTING_STATE: 
+			displayProgress.show(); // TODO: Show progress
+			break;
+		default:
+			displayProgress.hide(); // TODO: hide progress
 			break;
 	}
 	
 	prevState = state;
 	state = newState;
-	
 }

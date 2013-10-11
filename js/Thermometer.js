@@ -1,5 +1,3 @@
-var $displayThermometer;
-
 function Thermometer() {
   this.currentTemperature = 0; // default val
   this.targetTemperature = 180; // default val
@@ -13,9 +11,12 @@ function Thermometer() {
   this.$canvas;
   this.canvas;
   this.context;
-
+  this.$container;
+  
   this.isInitted = false;
-
+  
+  this.enabled = true;
+  
   this.thermoColors = [
     [50, 200, 244], // 'cold'
     [244, 190, 10], // 'warming up'
@@ -25,7 +26,7 @@ function Thermometer() {
   this.init = function(targCanvas, targCanvasContainer) {
     console.log("Thermometer.init()");
 
-    $displayThermometer = targCanvasContainer;
+    this.$container = targCanvasContainer;
 
     this.$canvas = targCanvas;
     this.canvas = this.$canvas[0];
@@ -45,6 +46,7 @@ function Thermometer() {
     //      console.log("Thermometer.update(" + curr + "," + targ + ")");
 
     if (this.isInitted) {
+    	if(!this.enabled) return;
       if (curr == undefined) curr = 0;
       if (targ== undefined) targ = 180; // prevent divide by zero
 
@@ -85,7 +87,7 @@ function Thermometer() {
       // rect will be clipped by the thermometer outlines
       this.context.beginPath();
       this.context.rect(20, h - paddingUnder - p, 60, p + paddingUnder);
-      console.log("   currColor: " + currColor);
+      //console.log("   currColor: " + currColor);
       //todo Math.floor??
       this.context.fillStyle = "rgb(" + currColor[0] + "," + currColor[1] + "," + currColor[2] + ")";
       this.context.fill();
@@ -115,5 +117,13 @@ function Thermometer() {
     } else {
       console.log("Thermometer.setTemperature() -> thermometer not initialized!");
     }
+  }
+  this.show = function() {
+  	this.$container.show();
+  	this.enabled = true;
+  }
+  this.hide = function() {
+  	this.$container.hide();
+  	this.enabled = false;
   }
 }

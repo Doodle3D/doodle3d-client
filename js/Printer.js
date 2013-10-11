@@ -11,36 +11,44 @@ function setPrintprogress(val) {
 //*/
 
 function Printer() {
-	this.temperature = 0;
-	this.targetTemperature = 0;
-	this.printing;
+	
+	Printer.UNKNOWN_STATE 			= "unknown";
+	Printer.DISCONNECTED_STATE 	= "disconnected";
+	Printer.IDLE_STATE 					= "idle"; 					// printer found, but idle
+	Printer.BUFFERING_STATE 		= "buffering";			// printer is buffering (recieving) data, but not yet printing
+	Printer.PRINTING_STATE 			= "printing";
+	Printer.STOPPING_STATE 			= "stopping";				// when you stop (abort) a print it prints the endcode
+
+	this.temperature 				= 0;
+	this.targetTemperature 	= 0;
+	this.currentLine 				= 0;
+	this.totalLines					= 0;
+	this.bufferedLines			= 0;
+	this.state							= Printer.UNKNOWN_STATE;
+	this.hasControl					= true;	// whether this client has control access 
 	
 	this.wifiboxURL; 
 	
-	this.maxTempLastMod = 7; // max time (seconds) since the last temp info modification before the printer connection is considered lost
-		
-	this.checkTemperatureInterval = 6000;
-	this.checkTemperatureDelay;
-	this.checkProgressInterval = 6000;
-	this.checkProgressDelay;
-	this.timeoutTime = 3000;
+	this.checkStatusInterval 				= 3000;
+	this.checkStatusDelay;
+	this.timeoutTime 								= 3000;
+	this.sendPrintPartTimeoutTime 	= 5000;
 	
 	this.gcode; 											// gcode to be printed
-	this.sendLength = 6000; 					// max amount of gcode lines per post (limited because WiFi box can't handle to much)
+	this.sendLength = 1500; 					// max amount of gcode lines per post (limited because WiFi box can't handle to much)
 
 	this.retryDelay = 2000; 					// retry setTimout delay
 	this.retrySendPrintPartDelay; 		// retry setTimout instance
-	this.retryCheckTemperatureDelay; 	// retry setTimout instance
-	this.retryCheckProgressDelay; 		// retry setTimout instance
+	this.retryCheckStatusDelay; 			// retry setTimout instance
 	this.retryStopDelay;							// retry setTimout instance
 	this.retryPreheatDelay;						// retry setTimout instance
-
-	this.maxGCodeSize = 10;						// max size of gcode in MB's (estimation)
 	
-	this.sendStopGCodeDelay = 1000;
+	this.maxGCodeSize = 10;						// max size of gcode in MB's (estimation)
 	
 	// Events
 	Printer.UPDATE = "update";
+	
+	var self = this;
 	
 	this.init = function() {
     console.log("Printer:init");
@@ -51,20 +59,17 @@ function Printer() {
     console.log("  wifiboxURL: ",this.wifiboxURL);
     
     if(autoUpdate) {
-	    this.checkTemperature();
-	    this.checkProgress();
+	    this.checkStatus();
     }
  	}
 	
 	this.preheat = function() {
     console.log("Printer:preheat");
-		var postData = { id: 0 };
     var self = this;
     if (communicateWithWifibox) {
 	    $.ajax({
 			  url: this.wifiboxURL + "/printer/heatup",
 			  type: "POST",
-			  data: postData,
 			  dataType: 'json',
 			  timeout: this.timeoutTime,
 			  success: function(data){
@@ -109,8 +114,6 @@ function Printer() {
     this.targetTemperature = settings["printer.temperature"]; // slight hack
     
 		this.sendPrintPart(this.sendIndex, this.sendLength);
-		
-		this.restartIntervals(); // slight hack
 	}
 	this.byteSize = function(s){
 		return~-encodeURI(s).split(/%..|./).length;
@@ -127,7 +130,7 @@ function Printer() {
     }
     var gcodePart = this.gcode.slice(sendIndex, sendIndex+sendLength);
     
-    var postData = { id: 0, gcode: gcodePart.join("\n"), first: firstOne, last: lastOne};
+    var postData = { gcode: gcodePart.join("\n"), first: firstOne, last: lastOne};
     var self = this;
     if (communicateWithWifibox) {
 	    $.ajax({
@@ -135,7 +138,7 @@ function Printer() {
 			  type: "POST",
 			  data: postData,
 			  dataType: 'json',
-			  timeout: this.timeoutTime,
+			  timeout: this.sendPrintPartTimeoutTime,
 			  success: function(data){
 			  	console.log("Printer:sendPrintPart response: ",data);
 			  	
@@ -161,13 +164,11 @@ function Printer() {
 	
 	this.stop = function() {
     console.log("Printer:stop");
-		var postData = { id: 0 }; 
 		var self = this;
 		if (communicateWithWifibox) {
 	    $.ajax({
 			  url: this.wifiboxURL + "/printer/stop",
 			  type: "POST",
-			  data: postData,
 			  dataType: 'json',
 			  timeout: this.timeoutTime,
 			  success: function(data){
@@ -183,94 +184,60 @@ function Printer() {
 		} else {
       console.log ("Printer >> f:communicateWithWifibox() >> communicateWithWifibox is false, so not executing this function");
     }
-		
-		this.restartIntervals(); // slight hack
 	}
 	
-	this.checkTemperature = function() {
-		//console.log("Printer:checkTemperature");
-    var getData = { id: 0 };
+	this.checkStatus = function() {
+		//console.log("Printer:checkStatus");
     var self = this;
     if (communicateWithWifibox) {
       $.ajax({
-        url: this.wifiboxURL + "/printer/temperature",
-        data: getData,
+        url: this.wifiboxURL + "/info/status",
         dataType: 'json',
         timeout: this.timeoutTime,
-        success: function(data){
-          //console.log("Printer:temperature response: ",data);
-          if(data.status == "success") {
-            //console.log("temp: ",response.data.hotend+"/"+response.data.hotend_target+" ("+response.data.last_mod+")");
-            self.temperature = data.data.hotend;
-            if(data.data.hotend_target != undefined) {
-            	if(state == PRINTING_STATE) { // HACK
-            		self.targetTemperature = settings["printer.temperature"];
-            	} else {
-            		self.targetTemperature = data.data.hotend_target;
-            	}
-            }
-            self.alive = (data.data.last_mod < self.maxTempLastMod);
-          } else {
-            self.alive = false;
-          }
-          //console.log("  this.alive: ",self.alive);
-          $(document).trigger(Printer.UPDATE);
-
-          self.checkTemperatureDelay = setTimeout(function() { self.checkTemperature() }, self.checkTemperatureInterval);
+        success: function(response){
+          console.log("Printer:status: ",response.data.state," response: ",response);
+          
+          self.handleStatusUpdate(response);
+          
+          clearTimeout(self.checkStatusDelay);
+          clearTimeout(self.retryCheckStatusDelay);
+          self.checkStatusDelay = setTimeout(function() { self.checkStatus() }, self.checkStatusInterval);
         }
       }).fail(function() {
-          console.log("Printer:checkTemperature: failed");
-          clearTimeout(self.retryCheckTemperatureDelay);
-          self.retryCheckTemperatureDelay = setTimeout(function() { self.checkTemperature() },self.retryDelay); // retry after delay
+          console.log("Printer:checkStatus: failed");
+          self.state = Printer.UNKNOWN_STATE;
+          clearTimeout(self.checkStatusDelay);
+          clearTimeout(self.retryCheckStatusDelay);
+          self.retryCheckStatusDelay = setTimeout(function() { self.checkStatus() },self.retryDelay); // retry after delay
         });
     } else {
-      console.log ("Printer >> f:checkTemperature() >> communicateWithWifibox is false, so not executing this function");
+      console.log ("Printer >> f:checkStatus() >> communicateWithWifibox is false, so not executing this function");
     }
 	}
-	this.checkProgress = function() {
-		//console.log("Printer:checkProgress");
-    var getData = { id: 0 };
-		var self = this;
-    if (communicateWithWifibox) {
-      $.ajax({
-        url: this.wifiboxURL + "/printer/progress",
-        data: getData,
-        dataType: 'json',
-        timeout: this.timeoutTime,
-        success: function(data){
-          if(data.status == "success") {
+	this.handleStatusUpdate = function(response) {
+		var data = response.data;
+		if(response.status != "success") {
+			self.state = Printer.UNKNOWN_STATE;
+		} else {
+			// state
+			self.state 								= data.state;
+			
+			// temperature
+			self.temperature 					= data.hotend;
+			self.targetTemperature 		= data.hotend_target;
+			
+			// progress
+			self.currentLine 					= data.current_line;
+			self.totalLines 					= data.total_lines;
+			self.bufferedLines				= data.buffered_lines
 
-            self.printing = data.data.printing;
-            self.currentLine = data.data.current_line;
-            self.num_lines = data.data.num_lines;
-
-            if(self.printing) {
-              console.log("progress: ",data.data.current_line+"/"+data.data.num_lines+" ("+data.data.last_mod+")");
-            }
-          } else {
-          	self.printing = false;
-          }
-          //console.log("  this.alive: ",self.alive);
-          $(document).trigger(Printer.UPDATE);
-
-          self.checkProgressDelay = setTimeout(function() { self.checkProgress() },self.checkProgressInterval);
-        }
-      }).fail(function() {
-          console.log("Printer:checkProgress: failed");
-          clearTimeout(self.retryCheckProgressDelay);
-          self.retryCheckProgressDelay = setTimeout(function() { self.checkProgress() },self.retryDelay); // retry after delay
-        });
-    } else {
-      console.log ("Printer >> f:checkProgress() >> communicateWithWifibox is false, so not executing this function");
-    }
-	}
-
-	this.restartIntervals = function() {
-		var self = this;
-		clearTimeout(self.checkProgressDelay);
-		self.checkProgressDelay = setTimeout(function() { self.checkProgress() },self.checkProgressInterval);
-		
-		clearTimeout(self.checkTemperatureDelay);
-		self.checkTemperatureDelay = setTimeout(function() { self.checkTemperature() }, self.checkTemperatureInterval);
+			// access
+			self.hasControl						= data.has_control;
+			
+			if(self.state == Printer.PRINTING_STATE || self.state == Printer.STOPPING_STATE) {
+				console.log("progress: ",self.currentLine+"/"+self.totalLines+" ("+self.bufferedLines+") ("+self.state+")");
+			}
+		}
+		$(document).trigger(Printer.UPDATE);
 	}
 }

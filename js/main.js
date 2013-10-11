@@ -8,7 +8,7 @@ var printer =  new Printer();
 var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
 
-var firstTimesettingsLoaded = true;
+var firstTimeSettingsLoaded = true;
 
 
 $(function() {
@@ -54,7 +54,9 @@ $(function() {
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
     $("#preview_tmp").css("display", "block");
-
+    
+    $("#debug_display").css("display", "block");
+    
     /* TEMP CODE!! -> artificially populates the startgcode and endgcode textareas in the settings window */
     // todo remove this temporary code...
     /*
@@ -85,9 +87,13 @@ function settingsLoaded() {
 	console.log("settingsLoaded");
 	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);
 	if(settings["printer.heatup.enabled"]) {
-		if(firstTimesettingsLoaded) {
+		if(firstTimeSettingsLoaded) {
 			printer.preheat();
-			firstTimesettingsLoaded = false;
+			firstTimeSettingsLoaded = false;
 		}
 	}
+}
+
+function setDebugText(text) {
+	$("#debug_display").text(text);
 }
