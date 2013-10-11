@@ -62,6 +62,7 @@ function initDoodleDrawing() {
     canvas.addEventListener('touchstart',onCanvasTouchDown,false);
     canvas.addEventListener('touchmove',onCanvasTouchMove,false);
     canvas.addEventListener('touchend',onCanvasTouchEnd,false);
+    document.body.addEventListener('touchmove',prevent,false);
   }
   //*/
 
@@ -183,7 +184,7 @@ function redrawDoodle() {
 
  function adjustBounds(x, y) {
   var newPointsOutsideOfCurrentBounds = false;
-  //    console.log("f:adjustBounds("+x+","+y+")");
+      console.log("f:adjustBounds("+x+","+y+")");
 
   if (doodleBounds[0] == -1) {
     // if doodleBounds[0] is -1 then it isn't initted yet, so x and y are both the min and max vals
@@ -386,10 +387,12 @@ function onCanvasTouchDown(e) {
   console.log("f:onCanvasTouchDown >> e: " , e);
 //  var x = e.touches[0].pageX - e.touches[0].target.offsetLeft;
 //  var y = e.touches[0].pageY - e.touches[0].target.offsetTop;
-//  var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
-//  var y = e.touches[0].pageY - drawCanvasTopLeftCoords[1];
-  var x = e.touches[0].layerX;
-  var y = e.touches[0].layerY;
+  var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
+  var y = e.touches[0].pageY - drawCanvasTopLeftCoords[1];
+//  var x = e.touches[0].pageX;
+//  var y = e.touches[0].pageY;
+//  var x = e.touches[0].layerX;
+//  var y = e.touches[0].layerY;
 
   _points.push([x, y, true]);
   adjustBounds(x, y);
@@ -403,13 +406,16 @@ function onCanvasTouchDown(e) {
 
 function onCanvasTouchMove(e) {
   e.preventDefault();
-  console.log("f:onCanvasTouchMove >> e: " , e);
 //  var x = e.touches[0].pageX - e.touches[0].target.offsetLeft;
 //  var y = e.touches[0].pageY - e.touches[0].target.offsetTop;
     var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
     var y = e.touches[0].pageY - drawCanvasTopLeftCoords[1];
+//    var x = e.touches[0].layerX;
+//    var y = e.touches[0].layerY;
 //  var x = e.touches[0].layerX;
 //  var y = e.touches[0].layerY;
+
+  console.log("f:onCanvasTouchMove >> x,y = "+x+","+y+" , e: " , e);
 
   if (prevPoint.x != -1 || prevPoint.y != -1) {
     var dist = Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2));

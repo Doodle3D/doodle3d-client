@@ -121,15 +121,15 @@ function SettingsWindow() {
 	  console.log("f:showSettings()");
 
 	  this.loadSettings(); // reload settings
-		this.window.css("display","table");
+//		this.window.css("display","table");
 	  $("#contentOverlay").fadeIn(375, function() {
-	    document.body.removeEventListener('touchmove',prevent,false);
+//	    document.body.removeEventListener('touchmove',prevent,false);
 	  });
 	}
 	this.hideSettings = function() {
 		$("#contentOverlay").fadeOut(375, function() {
-      document.body.addEventListener('touchmove',prevent,false);
-      self.window.css("display","none");
+//      document.body.addEventListener('touchmove',prevent,false);
+//      self.window.css("display","none");
     });
 	}
 
