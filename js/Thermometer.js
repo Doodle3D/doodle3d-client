@@ -5,7 +5,7 @@ var $displayThermometer = $("#thermometerContainer");
 //TODO 2013-09-18 allow displaying temperatures HIGHER than the targTemp (it's now being capped at targTemp).
 function Thermometer() {
   this.currentTemperature = 0; // default val
-  this.targetTemperature = 180; // default val
+  this.targetTemperature = 0; // default val
 
   this.thermoOverlayImg = new Image();
   this.thermoOverlayImgSrc = "img/thermometer_fg_overlay.png"; // ../img/thermometer_fg_overlay.png
