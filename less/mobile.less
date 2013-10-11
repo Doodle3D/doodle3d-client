@@ -1,0 +1,127 @@
+/*
+  TOP LOGO
+*/
+.centerpanel {
+  left: 0;
+  margin-left: 0;
+  width: 100%;
+/*  background-color: rgba(0, 135, 255, 0.4);*/
+}
+.logopanel {
+  height: 40px;
+}
+.d3dlogo {
+  top: 0;
+  max-width: 399px;
+  height: 40px;
+  background-image: url('../img/logo/logo_smallest_wide.png');
+}
+.doodlecontainer {
+/*	position: absolute;*/
+  height: 85%;
+}
+/*.bottompanel {
+	display: none;
+}*/
+
+/*
+  LEFT
+*/
+.leftpanel {
+  width: 100px;
+  background-color: #fff;
+  z-index: 50;
+  transition: left .3s ease-out;
+}
+.hideleft {
+  left: -101px;
+}
+.shadowright {
+	box-shadow: 2px 0 4px rgba(42, 42, 41, 0.6);
+}
+.btnNew {
+  margin: 5% 5% 1% 5%;
+	width: 90%;
+}
+.btnSave {
+	margin-left:  9%;
+	width: 75%;
+}
+.btnOops {
+	margin-left:  6%;
+	width: 71%;
+}
+
+/*
+  RIGHT
+*/
+.rightpanel {
+  width: 100px;
+  background-color: #fff;
+  z-index: 50;
+  transition: right .3s ease-out;
+}
+.hideright {
+  right: -101px;
+}
+.shadowleft {
+	box-shadow: -2px 0 4px rgba(42, 42, 41, 0.6);
+}
+.btnPrint {
+  margin: 1% 5% 5% 5%;
+  width: 90%;
+}
+.btnStop {
+  margin: 5% 6% 1% 5%;
+  width: 70%;
+}
+
+
+/*
+  REST
+*/
+.sidebutton {
+  display: block;
+  position:absolute;
+/*  top: 50%;*/
+/*  margin-top: -20px;*/
+	top: 0px;
+  /*float:right;*/
+  width: 25px;
+  height: 38px;
+  border: 1px solid #808;
+  background: url('../img/arrows.png') no-repeat;
+  background-color: #eee;
+  cursor: pointer;
+
+  &:active {
+    background-color: #aaa;
+  }
+
+  .leftpanel & {
+    right: -27px;
+    background-position: 0px 0px;
+  }
+
+  .rightpanel & {
+    left: -27px;
+    background-position: -25px 0px;
+  }
+}
+
+.sidebuttonin {
+
+  &:active {
+    background-color: #888;
+  }
+
+  .leftpanel & {
+    background-color: #ccc;
+    background-position: -25px 0px;
+  }
+
+  .rightpanel & {
+    background-color: #ccc;
+    background-position: -0px 0px;
+  }
+}

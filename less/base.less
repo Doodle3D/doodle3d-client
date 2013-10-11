@@ -1,0 +1,115 @@
+/*
+
+  GLOBAL CONTAINER
+
+*/
+body {
+  background-color: #fcfcfc;
+  -moz-user-select: none;                /* disable cut copy paste */
+  -webkit-user-select: none;                /* disable cut copy paste */
+  overflow:hidden; /*   This chops off any overhanging divs */
+}
+img {
+  z-index: 5;
+  /*pointer-events:none;*/
+  /*-webkit-touch-callout: none;               *//*disable callout, image save panel */
+  /*-webkit-tap-highlight-color: transparent; *//* "turn off" link highlight */
+}
+/*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
+.btn {
+  background-repeat: no-repeat;
+/*	-webkit-user-select: none;*/
+  cursor: pointer
+}
+#landscape {
+  position:absolute;
+  background-color: #fff;
+  width: 100%;
+  max-width: 1024px;
+  max-height: 768px;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 5;
+  overflow: hidden;
+  margin:  0px auto;
+  outline: 2px solid #5e8c71;
+  box-shadow: 0 0 8px rgba(8, 8, 8, 0.25);
+}
+#portrait {
+	display: none;
+}
+.bgContainer {
+  position: absolute;
+  width:  100%;
+  height: 100%;
+  overflow: hidden;
+}
+.bgTop, .bgMiddle, .bgBottom {
+  opacity: 1.0;
+  transition: opacity .35s linear;
+  position: absolute;
+  left: 0px;
+  z-index: -5;
+}
+.bgTop {
+  top: 0px;
+}
+.bgMiddle {
+  top: 30%;
+}
+.bgBottom {
+  bottom: 0px;
+}
+.rightpanel, .leftpanel {
+  img {
+    cursor: pointer;
+  }
+}
+
+/*
+
+  CENTER PANEL
+
+*/
+@import "base_centerpanel.less";
+
+/*
+
+  LEFT PANEL
+
+*/
+@import "base_leftpanel.less";
+
+/*
+
+  RIGHT PANEL
+
+*/
+@import "base_rightpanel.less";
+
+
+
+
+/*
+
+  REST
+
+*/
+/* CLEARFIX */
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+  content: " "; /* 1 */
+  display: table; /* 2 */
+}
+.clearfix:after {
+  clear: both;
+}
+
+/* For IE 6/7 only*/
+.clearfix {
+  *zoom: 1;
+}
+

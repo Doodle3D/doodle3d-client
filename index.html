@@ -6,39 +6,42 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link rel="apple-touch-icon-precomposed" href="img/icon.png"/>
-  <link rel="icon" type="image/ico" href="favicon.ico"/>
-  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
+  <link rel="icon" type="image/ico" href="favicon_alt.ico"/>
+  <link href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon-precomposed" sizes="144x144" />
 
-  <link href="css/normalize.css" rel="stylesheet" media="screen">
-  <link href="css/fixedPosInterface.css" rel="stylesheet" media="screen">
-  <link href="css/d3d_btns.css" rel="stylesheet" media="screen">
-  <link href="css/popups.css" rel="stylesheet">
+  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+  <link href="css/styles.css" rel="stylesheet" media="screen">
   <link href="css/debug.css" rel="stylesheet" media="screen">
-  
+
 </head>
 <body>
-<div class="debugContainer">
-  <div class="debugBtn"></div>
-  <div class="agentInfo"></div>
-</div>
-<div id="landscape">
-  <div class="uiButtonsContainer">
-    <img class="bgTop" src="img/bg_top.png" />
+<div id="landscape" class="clearfix">
+
+  <!-- background images -->
+  <div class="bgContainer">
+    <img class="bgTop"    src="img/bg_top.png" />
     <img class="bgMiddle" src="img/bg_middle.png" />
     <img class="bgBottom" src="img/bg_bottom.png" />
-    <div class="buttons">
-      <div id="d3dlogo" onclick="location.reload()"></div>
-      <div class="btn" id="btnNew"></div>
-      <img class="btn" id="btnPrevious" src="img/buttons/btnLeft.png">
-      <img class="btn" id="btnNext" src="img/buttons/btnRight.png">
-      <img class="btn" id="btnSave" src="img/buttons/btnSave.png">
-      <div class="btn" id="btnOops"></div>
-      <img class="btn" id="btnPrint" src="img/buttons/btnPrint.png">
-      <img class="btn disabled" id="btnStop" src="img/buttons/btnStop.png">
-      <img class="btn" id="btnInfo" src="img/buttons/btnInfo.png">
-      <img class="btn" id="btnSettings" src="img/buttons/btnSettings.png">
+  </div>
+
+  <!-- left panel -->
+  <div class="leftpanel shadowright">
+    <div class='sidebutton shadowright'></div>
+    <img class="btnNew btn" src="img/buttons/btnNew.png" /><br/>
+    <div class="btnsPrevNext">
+      <img class="btnPrevious btn" src="img/buttons/btnLeft.png">
+      <img class="btnNext btn" src="img/buttons/btnRight.png">
     </div>
+    <img class="btnSave btn" src="img/buttons/btnSave.png" /><br/>
+    <img class="btnOops btn" src="img/buttons/btnOops.png" /><br/>
+  </div>
+
+  <!-- right panel -->
+  <div class="rightpanel shadowleft">
+    <div class='sidebutton shadowleft'></div>
+    <img class="btnPrint btn" src="img/buttons/btnPrint.png" /><br/>
+    <img class="btnStop btn disabled" src="img/buttons/btnStop.png" /><br/>
     <!-- not now
     <div id="printProgressContainer">
       <label for="progressbarContainer">Progress:</label><span class="progressAmount">0%</span>
@@ -50,45 +53,61 @@
     <div id="thermometerContainer">
       <canvas id="thermometerCanvas" width="100" height="125"></canvas>
     </div>
+    <div class="btnsSettingsInfo">
+      <img class="btnSettings btn" src="img/buttons/btnSettings.png">
+      <img class="btnInfo btn" src="img/buttons/btnInfo.png">
+    </div>
   </div>
-  <div id="drawAreaContainer">
-    <canvas id="mycanvas"></canvas>
-    <!--<svg id="svg">-->
-      <!--<path id="path" d="M200 100 L450 100 L450 350 L200 350 L200 100" fill="none" stroke="black" stroke-width="3"/>-->
-    <!--</svg>-->
-    <canvas id="preview"></canvas>
-    <canvas id="preview_tmp"></canvas>
-    <div class="manipulationBtns cf">
-      <div id="btnsUpDown">
-        <div class="manipulationBtn" id="btnMoveUp"></div>
-        <div class="manipulationBtn" id="btnMoveDown"></div>
+
+  <!-- center panel -->
+  <div class="centerpanel">
+    <div class="logopanel">
+      <div class="d3dlogo" onclick="location.reload()"></div>
+    </div>
+    <div class="drawareacontainer">
+      <div id="canvasContainers">
+        <div id="mycanvasContainer">
+          <canvas id="mycanvas"></canvas>
+        </div>
+        <div id="previewContainer">
+          <canvas id="preview"></canvas>
+        </div>
       </div>
-      <div id="btnsTurnLeftRight">
-        <div class="manipulationBtn" id="btnTwistLeft"></div>
-        <div class="manipulationBtn" id="btnTwistRight"></div>
+      <canvas id="preview_tmp"></canvas>
+      <div id="verticalShapes">
+        <div class="verticalshape straight"> </div>
+        <div class="verticalshape diverging"> </div>
+        <div class="verticalshape converging"> </div>
+        <div class="verticalshape sinus"> </div>
       </div>
     </div>
-    <div id="verticalShapes">
-      <div class="verticalshape straight"> </div>
-      <div class="verticalshape diverging"> </div>
-      <div class="verticalshape converging"> </div>
-      <div class="verticalshape sinus"> </div>
+    <div class="bottompanel">
+      <div class="manipulationBtns clearfix">
+        <div id="btnsUpDown">
+          <img class="manipulationBtn" id="btnMoveUp" src="img/buttons/btnUp.png" />
+          <img class="manipulationBtn" id="btnMoveDown" src="img/buttons/btnDown.png" />
+        </div>
+        <div id="btnsTurnLeftRight">
+          <img class="manipulationBtn" id="btnTwistLeft" src="img/buttons/btnTurnLeft.png" />
+          <img class="manipulationBtn" id="btnTwistRight"  src="img/buttons/btnTurnRight.png" />
+        </div>
+      </div>
     </div>
   </div>
   <div id="debug_textArea">
-    <textarea rows="5" cols="115" id="textdump"></textarea>
+    <textarea rows="5" cols="60" id="textdump"></textarea>
   </div>
   <div id="debug_display">
   </div>
   <div id="contentOverlay">
-    <div id="settings" class="popup">
-      <header>
-        <img src="img/settings_lable.png" alt="settings"/>
-      </header>
+    <div id="settings">
+      <div class="settingsLabelContainer">
+        <img class="settingsLabelImg" src="img/settings_lable.png" alt="settings" />
+      </div>
       <div class="content">
-        <div class="settings">henk</div>
-        <div class="manipulationBtns">
-          <div class="btnOK"></div>
+        <div class="settings"></div>
+        <div class="btnContainer">
+          <img src="img/buttons/btnOk_settings.png" class="btnOK" alt="settings"/>
         </div>
       </div>
     </div>
@@ -109,6 +128,7 @@
 <script src="js/Printer.js"></script>
 <script src="js/Thermometer.js"></script>
 <script src="js/utils.js"></script>
+<script src="js/sidebar.js"></script>
 <script src="js/main.js"></script>
 
 </body>

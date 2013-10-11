@@ -130,7 +130,8 @@ function generate_gcode(callback) {
   gcode = gcode.concat(startGcode);
 	
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
-  
+
+  var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
   var extruder = 0.0;
   var prev = new Point(); prev.set(0, 0);
 

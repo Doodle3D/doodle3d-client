@@ -11,8 +11,13 @@ var settingsWindow = new SettingsWindow();
 var firstTimeSettingsLoaded = true;
 
 
+var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previewContainer;
+
 $(function() {
   console.log("ready");
+
+
+  //TODO give this a more logical place in code
 
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");
@@ -35,9 +40,10 @@ $(function() {
   console.log("wifiboxIsRemote: " + wifiboxIsRemote);
   console.log("wifibox URL: " + wifiboxURL);
 
-  initLayouting();
   initDoodleDrawing();
   initPreviewRendering();
+  initLayouting();
+  initSidebars();
   initButtonBehavior();
   initVerticalShapes();
 
@@ -47,7 +53,7 @@ $(function() {
 	$(document).on(Printer.UPDATE,update);
 
 	settingsWindow.init(wifiboxURL);
-	$(document).on(SettingsWindow.SETTINGS_LOADED,settingsLoaded);
+	$(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
 
   if(debugMode) {
     console.log("debug mode is true");
@@ -57,6 +63,8 @@ $(function() {
     
     $("#debug_display").css("display", "block");
     
+//    $("#debugContainer").css("display", "block");
+
     /* TEMP CODE!! -> artificially populates the startgcode and endgcode textareas in the settings window */
     // todo remove this temporary code...
     /*

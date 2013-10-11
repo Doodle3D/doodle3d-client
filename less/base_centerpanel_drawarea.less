@@ -1,0 +1,128 @@
+// import vertical shapes additions
+@import "verticalshapes.less";
+
+//  DRAW AREA
+.drawareacontainer {
+  position: relative;
+  width: 100%;
+  height: 65%;
+  background-color: #fff;
+  border: 4px solid #000;
+  border-radius: 15px;
+  box-sizing: border-box;
+  z-index: 15px;
+}
+
+#canvasContainers {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#mycanvasContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78%;
+  height: 100%;
+}
+#mycanvas {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border-right: 2px solid #333;
+}
+
+#previewContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22%;
+//  max-width: 150px;
+  height: 100%;
+}
+#preview {
+  min-width: 50px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* DEBUG THING */
+#preview_tmp {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 500;
+  border: 1px solid #f80;
+  display: none;
+}
+.bottompanel {
+	position: relative;
+	bottom:  0px;
+	width: 100%;
+	height: 10%;
+}
+
+/*
+  DOODLE UP/DOWN/LEFT/RIGHT buttons
+*/
+.manipulationBtns {
+	margin: 2px 5px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	max-width: 340px;
+	max-height: 70px;
+	width: 45%;
+}
+
+.manipulationBtn {
+  width: 45%;
+  height: auto;
+  cursor: pointer;
+}
+
+#btnsUpDown {
+	float: left;
+	width: 45%;
+}
+#btnsUpDown > div {
+  float: left;
+  padding-right: 8px;
+  background-repeat: no-repeat;
+}
+
+#btnsTurnLeftRight {
+	float: right;
+	width: 45%;
+}
+#btnsTurnLeftRight >div {
+  float: left;
+  padding-right: 8px;
+  background-repeat: no-repeat;
+}
+
+#btnMoveUp {
+  max-width: 65px;
+}
+
+#btnMoveDown {
+  max-width: 64px;
+}
+
+#btnTwistLeft {
+  max-width: 59px;
+}
+
+#btnTwistRight {
+  max-width: 64px;
+}

@@ -9,17 +9,28 @@ body,th,td {
   font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif;
   font-size: 13px;
 }
+.settingsContainer {
+  position:relative;
+  max-width: 600px;
+  /*min-width: 370px;*/
+  width: 100%;
+  height: 100%;
+}
+/*form#settingsForm {*/
+  /*width: 100% auto;*/
+/*}*/
 form fieldset {
-  width: 600px;
+  max-width: 600px;
   border: 1px solid rgb(187, 187, 187);
   -webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
   margin-bottom: 20px;
-  padding: 8px 0 8px 8px;
+  padding: 8px;
+  /*padding-right: 8px;*/
 }
 form fieldset fieldset{
-	width: 580px;
+	max-width: 580px;
 	margin: 15px 0 5px 0;
 	clear: left;
 	float: left;
@@ -60,10 +71,14 @@ form textarea {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
-form textarea.gcode {
-  width: 270px;
-  height: 150px;
+form .startgcode_left {
+  float:left;
   margin-right: 20px;
+}
+form textarea.gcode {
+  max-width: 262px;
+  min-width: 200px;
+  height: 150px;
 }
 form small {
 	margin: 3px 0 0 0;
