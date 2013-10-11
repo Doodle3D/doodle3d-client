@@ -309,6 +309,7 @@ function setState(newState) { //TODO add hasControl
 	switch(newState) {
 		case Printer.IDLE_STATE:
 			btnPrint.removeClass("disabled"); // enable print button
+			btnPrint.unbind('touchstart mousedown');
 			btnPrint.bind('touchstart mousedown',print);
 			break;
 		default:
