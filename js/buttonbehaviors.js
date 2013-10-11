@@ -16,6 +16,7 @@ var displayTemp, displayProgress;
 
 var state;
 var prevState;
+var hasControl;
 
 function initButtonBehavior() {
   console.log("f:initButtonBehavior");
@@ -189,7 +190,7 @@ function initButtonBehavior() {
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
   if (sendPrintCommands) printer.stop();
-  setState(Printer.STOPPING_STATE);
+  setState(Printer.STOPPING_STATE,printer.hasControl);
 }
 
 
@@ -207,7 +208,7 @@ function print(e) {
   $("#textdump").text("");
   if (_points.length > 2) {
 
-    setState(Printer.BUFFERING_STATE);
+    setState(Printer.BUFFERING_STATE,printer.hasControl);
     var gcode = generate_gcode();
     //startPrint(gencode);
 
@@ -293,40 +294,35 @@ function previewTwistRight(redrawLess) {
 
 
 function update() {
-	setState(printer.state);
+	setState(printer.state,printer.hasControl);
 	
 	thermometer.update(printer.temperature, printer.targetTemperature);
 	//TODO: update progress
 }
 
-function setState(newState) { //TODO add hasControl 
-	if(newState == state) return;
+function setState(newState,newHasControl) { //TODO add hasControl 
+	if(newState == state && newHasControl == hasControl) return;
 	
-	console.log("setState: ",state," > ",newState);
+	console.log("setState: ",state," > ",newState," ( ",newHasControl,")");
 	setDebugText("State: "+newState);
 	
 	// print button
-	switch(newState) {
-		case Printer.IDLE_STATE:
+	var printEnabled = (newState == Printer.IDLE_STATE && newHasControl);
+	if(printEnabled) {
 			btnPrint.removeClass("disabled"); // enable print button
 			btnPrint.unbind('touchstart mousedown');
 			btnPrint.bind('touchstart mousedown',print);
-			break;
-		default:
+	} else {
 			btnPrint.addClass("disabled"); // disable print button
 			btnPrint.unbind('touchstart mousedown');
-			break;
 	}
 	
 	// stop button
-	switch(newState) {
-		case Printer.PRINTING_STATE:
-		case Printer.BUFFERING_STATE:
-			btnStop.removeClass("disabled");
-			break;
-		default:
-			btnStop.addClass("disabled");
-			break;
+	var stopEnabled = ((newState == Printer.PRINTING_STATE || newState == Printer.BUFFERING_STATE) && newHasControl);
+	if(stopEnabled) {
+		btnStop.removeClass("disabled");
+	} else {
+		btnStop.addClass("disabled");
 	}
 	
 	// thermometer
@@ -339,6 +335,7 @@ function setState(newState) { //TODO add hasControl
 			thermometer.show();
 			break;
 	}
+	
 	// progress indicator
 	switch(newState) {
 		case Printer.PRINTING_STATE: 
@@ -351,4 +348,5 @@ function setState(newState) { //TODO add hasControl
 	
 	prevState = state;
 	state = newState;
+	hasControl = newHasControl;
 }
