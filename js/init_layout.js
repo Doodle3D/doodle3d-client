@@ -1,26 +1,37 @@
 var drawAreaContainerMinHeight = 300;
 var drawAreaContainerMaxHeight = 450;
+
 function doOnResize() {
   //    console.log("doOnResize() >> " + new Date().getTime());
 //  $(".container").css("height", window.innerHeight);
 
-  $drawAreaContainer.css("marginLeft", -$drawAreaContainer.width()/2);
+  /* 2013-10-09 commented out -> no more need with new layouting
+   $drawAreaContainer.css("marginLeft", -$drawAreaContainer.width()/2);
   $drawAreaContainer.css("marginTop", -$drawAreaContainer.height() *.45);
 //  $drawAreaContainer.css("marginTop", -parseInt($drawAreaContainer.css("height")) * 0.45);
+//*/
 
-  canvas.width = $drawAreaContainer.width() - 150; // canvas.clientWidth;
-  canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
+  //  canvas.width = $drawAreaContainer.width() - preview.width; // canvas.clientWidth;
+  //  canvas.width = $("#mycanvasContainer").width();
+  canvas.width = drawCanvas.width();
+  canvas.height = drawCanvas.height(); // canvas.clientHeight;
+  //  canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
 
-  preview.width = 150;
+  //  preview.width = 150;
   preview.height = $drawAreaContainer.height();
+
+  canvasWidth = $canvas.width();
+  canvasHeight = $canvas.height();
+
   calcPreviewCanvasProperties();
+
 //  layerOffsetY = preview.height - 1.75 * layerCY;
 //  yStep = preview.height / 150;
 //  preview.width = parseInt($preview.css("width"), 10);
 //  preview.height = parseInt($preview.css("height"), 10);
 
-  canvasWidth = canvas.width;
-  canvasHeight = canvas.height;
+//  canvasWidth = canvas.width;
+//  canvasHeight = canvas.height;
 
   drawCanvasTopLeftCoords[0] = drawCanvas.offset().left;
   drawCanvasTopLeftCoords[1] = drawCanvas.offset().top;
@@ -75,27 +86,33 @@ function initLayouting() {
 //  doodleCanvas = $("#mycanvas")[0];
 //  doodleCanvasContext = doodleCanvas.getContext('2d');
 
-  $drawAreaContainer = $("#drawAreaContainer");
+  $drawAreaContainer = $(".drawareacontainer");
+  /* 2013-10-09 commented out -> no more need with new layouting
   $drawAreaContainer.css("margin", 0);
   $drawAreaContainer.css("marginLeft", -$drawAreaContainer.width()/2);
   $drawAreaContainer.css("marginTop", -$drawAreaContainer.height() *.45);
+  //*/
 
-  canvas.width = $drawAreaContainer.width() - 150; // canvas.clientWidth;
-  canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
+//  console.log("   preview.width: " + preview.width + ", $preview.width(): " + $preview.width());
+//  canvas.width = $drawAreaContainer.width() - preview.width; // canvas.clientWidth;
+//  canvas.width = $("#mycanvasContainer").width();
+  canvas.width = drawCanvas.width();
+  canvas.height = drawCanvas.height(); // canvas.clientHeight;
+//  canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
 
-  preview.width = 150;
+//  preview.width = 150;
   preview.height = $drawAreaContainer.height();
 
-  canvasWidth = canvas.width;
-  canvasHeight = canvas.height;
+  canvasWidth = $canvas.width();
+  canvasHeight = $canvas.height();
 
   $drawAreaContainer.show();
 
   // window.innerHeight
   console.log("window.innerHeight: " + window.innerHeight);
   console.log("window.innerWidth: " + window.innerWidth);
-  console.log("$('#drawAreaContainer').innerHeight(): " + $("#drawAreaContainer").innerHeight());
-  console.log("$('#drawAreaContainer').offset().top: " + $("#drawAreaContainer").offset().top);
+  console.log("$drawAreaContainer.innerHeight(): " + $drawAreaContainer.innerHeight());
+  console.log("$drawAreaContainer.offset().top: " + $drawAreaContainer.offset().top);
 
 
   /*  2013-07-26 not doing this resizing stuff now, it's not working well yet

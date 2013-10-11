@@ -3,11 +3,6 @@ var $preview;
 var preview;
 var previewCtx;
 
-$preview = $("#preview");
-
-preview = document.getElementById('preview');
-previewCtx = preview.getContext('2d');
-
 var preview_tmp;
 var previewCtx_tmp;
 
@@ -24,6 +19,10 @@ var redrawInterval = 1000 / 30; // ms
 
 function initPreviewRendering() {
   console.log("f:initPreviewRendering()");
+
+  $preview = $("#preview");
+  preview = $preview[0];
+  previewCtx = preview.getContext('2d');
 
   // DEBUG --> mbt preview_tmp (voor de toImageData truc)
   var _ratio  = preview.width / canvas.width;

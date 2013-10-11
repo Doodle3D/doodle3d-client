@@ -11,7 +11,7 @@ var btnNew, btnPrevious, btnNext;
 var btnOops, btnStop, btnClear;
 var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
-var btnDebug; // debug
+//var btnDebug; // debug
 var displayTemp, displayProgress;
 
 var displayTempEnabled = false;
@@ -23,43 +23,43 @@ var state = IDLE_STATE;
 var prevState = state;
 
 function initButtonBehavior() {
-  console.log("f:initButtonBehavior >> btnNew = " + btnNew);
+  console.log("f:initButtonBehavior");
 
-  btnClear= $("#btnClear");
-  btnOops = $("#btnOops");
+//  btnClear= $(".btnClear");
+  btnOops = $(".btnOops");
   btnMoveUp = $("#btnMoveUp");
   btnMoveDown = $("#btnMoveDown");
   btnTwistLeft = $("#btnTwistLeft");
   btnTwistRight = $("#btnTwistRight");
-  btnInfo = $("#btnInfo");
-  btnSettings = $("#btnSettings");
-  btnNew = $("#btnNew");
-  btnPrint= $("#btnPrint");
-  btnStop = $("#btnStop");
-  displayTemp = $("#displayTemp");
+  btnInfo = $(".btnInfo");
+  btnSettings = $(".btnSettings");
+  btnNew = $(".btnNew");
+  btnPrint= $(".btnPrint");
+  btnStop = $(".btnStop");
+  displayTemp = $("#thermometerContainer");
   displayProgress = $("#printProgressContainer");
 
-//  btnPrevious = $("#btnPrevious");
-//  btnNext = $("#btnNext");
+  btnPrevious = $(".btnPrevious");
+  btnNext = $(".btnNext");
 
   //debug
-  btnDebug = $(".debugBtn");
+  //btnDebug = $(".debugBtn");
 
-	btnNew.bind('touchstart mousedown',clearDoodle);
-	btnPrint.bind('touchstart mousedown',print);
+	btnNew.on('touchstart mousedown', clearDoodle);
+	btnPrint.on('touchstart mousedown', print);
 
 	// not using these at the moment
 	$("#btnPrevious").css("opacity", "0.3");
-	$("#btnNext").css("opacity", "0.3");
+	btnNext.css("opacity", "0.3");
 	$("#btnSave").css("opacity", "0.3");
-	$("#btnInfo").css("opacity", "0.3");
+	btnInfo.css("opacity", "0.3");
 
-  btnClear.click(function(e) {
-    e.preventDefault();
-    //      console.log("clear");
-
-    clearDoodle();
-  });
+//  btnClear.click(function(e) {
+//    e.preventDefault();
+//    //      console.log("clear");
+//
+//    clearDoodle();
+//  });
 
   function startOops(e) {
     //      console.log("btnOops mouse down");
@@ -180,14 +180,16 @@ function initButtonBehavior() {
   });
 
   // DEBUG
+  /*
   //  $(".agentInfo").css("display", "none");
   btnDebug.click(function(e) {
     console.log("debugClick");
     $(".agentInfo").toggleClass("agentInfoToggle");
     e.preventDefault();
   })
+  //*/
 
-  btnStop.bind('touchstart mousedown',stopPrint);
+  btnStop.on('touchstart mousedown',stopPrint);
 }
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);

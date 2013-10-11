@@ -7,10 +7,10 @@
   border: 4px solid #000;
   border-radius: 15px;
   box-sizing: border-box;
-  z-index: 15;
+  z-index: 15px;
 }
+
 #canvasContainers {
-  display:table;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -23,8 +23,10 @@
 }
 
 #mycanvasContainer {
-  display:table-cell;
-  width: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78%;
   height: 100%;
 }
 #mycanvas {
@@ -32,19 +34,21 @@
   height: 100%;
   margin: 0;
   padding: 0;
-/*float: left;*/
   border-right: 2px solid #333;
 }
 
 #previewContainer {
-  display:table-cell;
-  width: 150px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22%;
+//  max-width: 150px;
   height: 100%;
 }
 #preview {
-  width: 150px;
+  min-width: 50px;
+  width: 100%;
   height: 100%;
-  float: right;
   margin: 0;
   padding: 0;
 }

@@ -11,12 +11,8 @@ var svgPathParamsRegExp = /([LM])(\d*) (\d*)/;
 
 var dragging = false;
 
-var $canvas = $("#mycanvas");
-var canvas = $("#mycanvas")[0];
-var ctx = canvas.getContext('2d');
-
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+var $canvas, canvas, ctx;
+var canvasWidth, canvasHeight;
 
 var drawCanvas;
 var drawCanvasTopLeftCoords = [0, 0];
@@ -41,6 +37,14 @@ var lineweight = 2;
 function initDoodleDrawing() {
   console.log("f:initDoodleDrawing()");
 
+  $canvas = $("#mycanvas");
+  canvas = $canvas[0];
+  ctx = canvas.getContext('2d');
+
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
+
+
   //*
   //TODO make these jquery eventhandlers (works for all)
   if (!canvas.addEventListener) {
@@ -61,8 +65,8 @@ function initDoodleDrawing() {
   }
   //*/
 
-  drawCanvas = $("#drawAreaContainer");
-//  drawCanvas = $("#mycanvasContainer"); // $("#drawAreaContainer")
+//  drawCanvas = $(".drawareacontainer");
+  drawCanvas = $("#mycanvasContainer"); // $("#drawAreaContainer")
 
   console.log("drawCanvasTopLeftCoords: " + drawCanvasTopLeftCoords);
 //  drawCanvasTopLeftCoords[0] = drawCanvas.css("left").match(/[0-9]/g).join("");
