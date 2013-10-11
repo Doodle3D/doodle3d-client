@@ -5,9 +5,9 @@
 */
 body {
   background-color: #fcfcfc;
-  -moz-user-select: none;                /* disable cut copy paste */
-  -webkit-user-select: none;                /* disable cut copy paste */
-  overflow:hidden; /*   This chops off any overhanging divs */
+  -moz-user-select: none; /* disable cut copy paste */
+  -webkit-user-select: none; /* disable cut copy paste */
+  overflow:hidden; /* This chops off any overhanging divs */
 }
 img {
   z-index: 5;
@@ -19,7 +19,7 @@ img {
 .btn {
   background-repeat: no-repeat;
 /*	-webkit-user-select: none;*/
-  cursor: pointer
+  cursor: pointer;
 }
 #landscape {
   position:absolute;
@@ -66,6 +66,14 @@ img {
   img {
     cursor: pointer;
   }
+}
+.disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+#btnStop.disabled {
+  display: none;
 }
 
 /*

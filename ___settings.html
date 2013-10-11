@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>settings</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+  <link href="css/settings.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div class="settingsContainer">
+  <form id="settingsForm">
+    <!--<fieldset>
+      <legend>3D printer</legend>
+      <label for="printerType">Type:</label>
+      <select id="printerType" name="printer.type">
+        <option value="rigidbot">Rigidbot</option>
+	      <option value="ultimaker">Ultimaker</option>
+	      <option value="makerbot_replicator2">MakerBot Replicator2</option>
+        <option value="makerbot_thingomatic">MakerBot Thing-o-matic</option>
+        <option value="printrbot">Printrbot</option>
+        <option value="bukobot">Bukobot</option>
+        <option value="cartesio">Cartesio</option>
+        <option value="cyrus">Cyrus</option>
+        <option value="delta_rostockmax">Delta RostockMax</option>
+        <option value="deltamaker">Deltamaker</option>
+        <option value="eventorbot">EventorBot</option>
+        <option value="felix">Felix</option>
+        <option value="gigabot">Gigabot</option>
+        <option value="kossel">Kossel</option>
+        <option value="leapfrog_creatr">LeapFrog Creatr</option>
+        <option value="lulzbot_aO_101">LulzBot AO-101</option>
+        <option value="makergear_m2">MakerGear M2</option>
+        <option value="makergear_prusa">MakerGear Prusa</option>
+        <option value="makibox">Makibox</option>
+        <option value="orca_0_3">Orca 0.3</option>
+        <option value="ord_bot_hadron">ORD Bot Hadron</option>
+        <option value="printxel_3d">Printxel 3D</option>
+        <option value="prusa_i3">Prusa I3</option>
+        <option value="prusa_iteration_2">Prusa Iteration 2</option>
+        <option value="rapman">RapMan</option>
+        <option value="reprappro_huxley">RepRapPro Huxley</option>
+        <option value="reprappro_mendel">RepRapPro Mendel</option>
+        <option value="robo_3d_printer">RoBo 3D Printer</option>
+        <option value="shapercube">ShaperCube</option>
+        <option value="tantillus">Tantillus</option>
+        <option value="vision_3d_printer">Vision 3D Printer</option>
+      </select>
+      <br>
+      <label for="printerBaudrate">Baud rate:</label>
+      <select id="printerBaudrate" name="printer.baudrate">
+        <option value="115200">115200 bps</option>
+        <option value="2500000">2500000 bps</option>
+      </select>
+    </fieldset>-->
+
+		<fieldset id="printersettings">
+      <legend>Print settings</legend>
+      <label for="layerHeight">Layer height:</label><input id="layerHeight" type="number" step="0.01" class="small" name="printer.layerHeight">mm<br>
+      <label for="wallThickness">Wall thickness:</label><input id="wallThickness" type="number" step="0.1" class="small" name="printer.wallThickness">mm<br>
+      <label for="filamentThickness">Filament thickness:</label><input id="filamentThickness" step="0.01" type="number" class="small" name="printer.filamentThickness">mm<br>
+      <label for="temperature">Temperature:</label><input id="temperature" type="number" class="small" name="printer.temperature">degrees C<br>
+      <br>
+      <label for="speed">Speed:</label><input id="speed" type="number" name="printer.speed" class="small">mm/s<br>
+      <label for="travelSpeed">Travel speed:</label><input id="travelSpeed" type="number" name="printer.travelSpeed" class="small">mm/s<br>
+      <label for="enableTraveling">Enable traveling:</label><input id="enableTraveling" type="checkbox" name="printer.enableTraveling" value="enableTraveling"><br>
+      <label for="firstLayerSlow">First layer slow:</label><input id="firstLayerSlow" type="checkbox" name="printer.firstLayerSlow" value="firstLayerSlow"><br>
+      <label for="useSubLayers">Use sub-layers*:</label><input id="useSubLayers" type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
+      <small>* Continuously move platform while printing instead of once per layer</small>
+      <br>
+			<label for="useRetraction">Use retraction:</label><input id="useRetraction" type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
+      <label for="retractionAmount">Retraction amount:</label><input id="retractionAmount" type="number" class="small" name="printer.retraction.amount">mm<br>
+      <label for="retractionMinDistance">Retraction min distance:</label><input id="retractionMinDistance" type="number" class="small" name="printer.retraction.minDistance">mm<br>
+      <label for="retractionSpeed">Retraction speed:</label><input id="retractionSpeed" type="number" class="small" name="printer.retraction.speed">mm/s<br>
+      <br>
+			<label for="autoWarmUp">Auto warm-up:</label><input id="autoWarmUp" type="checkbox" name="printer.autoWarmUp" value="autoWarmUp"><br>
+      <label for="autoWarmUpCommand">Auto Warm up command:</label><input id="autoWarmUpCommand" type="text" name="printer.autoWarmUpCommand"><br>
+    </fieldset>
+
+		<fieldset id="doodlesettings">
+			<legend>Doodle3D settings</legend>
+			<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
+			<label for="maxObjectHeight">Max object height:</label><input id="maxObjectHeight" type="number" class="small" name="printer.maxObjectHeight">mm<br>
+			<label for="screenToMillimeterScale">Pixels to mm scale:</label><input id="screenToMillimeterScale" type="number" step="0.1" class="small" name="printer.screenToMillimeterScale"><br>
+		</fieldset>
+
+		<fieldset>
+      <legend>Network settings</legend>
+      <label>Connection type:</label>
+      <div>
+      	<label for="ap"><input type="radio" name="connectiontype" value="ap" id="ap">Access point mode</label>
+				<label for="client"><input type="radio" name="connectiontype" value="client" id="client">Client mode</label>
+			</div>
+
+	    <fieldset id="apSettings">
+	      <legend>Access point settings</legend>
+	      <label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="network.ap.address" id="ipaddress"><br>
+	      <label for="netmask">Wi-Fi box netmask:</label><input type="text" name="network.ap.netmask" id="netmask"><br>
+	      <label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="network.ap.ssid" id="ssid"> <br>
+	      <small>* The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
+	      <input type="button" name="create" value="Create" class="button" id="createAP"/>
+          <span id="apModeState"></span>
+	    </fieldset>
+
+	    <fieldset id="clientSettings">
+	      <legend>Client mode settings</legend>
+	      <label for="network">Network:</label>
+	      <select id="network" name="network.client.network">
+	        <option value="rigidbot">Fablab Amersfoort</option>
+		      <option value="ultimaker">Globe4D</option>
+	      </select>
+	      <input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br>
+	      <label for="password" id="passwordLabel">Password:</label><input type="password" name="network.client.password" id="password"><br>
+	      <input type="button" name="connect" value="Connect" class="button" id="connectToNetwork"/>
+          <span id="clientModeState"></span>
+	    </fieldset>
+		</fieldset>
+
+    <fieldset>
+      <legend>GCODE settings</legend>
+      <div class="startgcode_left">
+        <label for="startgcode">Start:</label><br/>
+        <textarea id="startgcode" class="gcode" name="printer.startgcode">
+        </textarea>
+
+      </div>
+      <div>
+        <label for="endgcode">End:</label><br/>
+        <textarea id="endgcode" class="gcode" name="printer.endgcode">
+        </textarea>
+      </div>
+      <!-- 2013-10-09 replaced by DIV solution (but keeping here in comments temporarily as lookup...)
+      <table>
+        <tr>
+          <td>
+            <label for="startgcode">Start:</label><br>
+            <textarea id="startgcode" class="gcode" name="printer.startgcode">
+            </textarea>
+
+          </td>
+          <td>
+            <label for="endgcode">End:</label><br>
+            <textarea id="endgcode" class="gcode" name="printer.endgcode">
+            </textarea>
+          </td>
+        </tr>
+      </table>
+      -->
+    </fieldset>
+  </form><br/>
+</div>
+</body>
+</html>

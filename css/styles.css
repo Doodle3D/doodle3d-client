@@ -11,7 +11,7 @@ body {
 	-ms-user-select: none;
 	user-select: none; /* disable cut copy paste */
 /* disable cut copy paste */
-overflow: hidden; /*   This chops off any overhanging divs */
+overflow: hidden; /* This chops off any overhanging divs */
 }
 
 img {
@@ -93,6 +93,17 @@ cursor: pointer;
 	cursor: pointer;
 }
 
+.disabled {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
+	cursor: default;
+}
+
+#btnStop.disabled {
+	display: none;
+}
+
 /*
 
 CENTER PANEL
@@ -167,7 +178,7 @@ cursor: pointer;
 	-moz-box-sizing: border-box;
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
-	z-index: 15px;
+	z-index: 15;
 }
 
 #canvasContainers {
@@ -573,9 +584,6 @@ SETTINGS POPUP
 }
 
 #contentOverlay #settings > .content {
-	margin: 3% 12%;
-	margin-top: 12%;
-	max-height: 388px;
 	display: table-row;
 	width: 100%;
 }
