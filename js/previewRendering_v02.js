@@ -40,12 +40,12 @@ function initPreviewRendering() {
 function calcPreviewCanvasProperties() {
   console.log("f:calcPreviewCanvasProperties()");
 
+  globalScale = preview.width / canvasWidth;
   layerCX			= (canvasWidth / 2) * globalScale;  // defined in canvasDrawing_v01.js
   layerCY			= (canvasHeight / 2) * globalScale; // defined in canvasDrawing_v01.js
-  layerOffsetY = preview.height - 1.75 * layerCY;
-  yStep 			= (preview.height * (2 * previewVerticalPadding)) / maxNumLayers;
-
-//  previewVerticalPadding
+//  layerOffsetY = preview.height - 1.75 * layerCY;
+  layerOffsetY = preview.height * (1 - previewVerticalPadding.bottom);
+  yStep 			= (preview.height - (preview.height * (previewVerticalPadding.top + previewVerticalPadding.bottom))) / maxNumLayers;
 }
 
 // TODO (perhaps) : make the twist limit dynamic, depending on what's printable (w.r.t. overlapping)
@@ -58,7 +58,7 @@ var globalScale = 0.3;		// global scale of preview (width preview / width canvas
 var globalAlpha = 0.20;   // global alpha of preview
 var scaleY 			= 0.4; 		// additional vertical scale per path for 3d effect
 var viewerScale = 0.65;   // additional scale to fit into preview nicely (otherwise is fills out totally)
-var previewVerticalPadding = .15; // %
+var previewVerticalPadding = { "top" : .15, "bottom" : 0.12 }; // %
 var strokeWidth = 2;      //4;
 //var rStep 			= Math.PI/40; //Math.PI/40; //
 var rStep 			= previewDefaults.rotation; // Math.PI/180; //Math.PI/40; //
@@ -125,7 +125,8 @@ function redrawPreview(redrawLess) {
 
     previewCtx.save();
 
-    previewCtx.translate(layerCX, layerOffsetY + layerCY + y);
+//    previewCtx.translate(layerCX, layerOffsetY + layerCY + y);
+    previewCtx.translate(layerCX, layerOffsetY + y);
 //    previewCtx.setTransform(1, 0, 0, scaleY, layerCX, layerOffsetY+layerCY+y);
     previewCtx.scale(viewerScale, scaleY * viewerScale);
     previewCtx.rotate(r);
@@ -200,7 +201,8 @@ function renderToImageDataPreview() {
 
       previewCtx.save();
 
-      previewCtx.translate(layerCX,layerOffsetY+layerCY+y);
+//      previewCtx.translate(layerCX,layerOffsetY+layerCY+y);
+      previewCtx.translate(layerCX,layerOffsetY+y);
       previewCtx.scale(1, scaleY)
       previewCtx.rotate(r);
       previewCtx.translate(-layerCX,-layerCY);
@@ -245,7 +247,8 @@ function redrawRenderedPreview(redrawLess) {
     }
     previewCtx.save();
 
-    previewCtx.translate(layerCX,layerOffsetY+layerCY+y);
+    previewCtx.translate(layerCX,layerOffsetY+y);
+//    previewCtx.translate(layerCX,layerOffsetY+layerCY+y);
     previewCtx.scale(1, scaleY)
     previewCtx.rotate(r);
     previewCtx.translate(-layerCX,-layerCY);
@@ -310,7 +313,8 @@ function updatePreview(_x, _y, redrawLess) {
 
     previewCtx.save();
 
-    previewCtx.translate(layerCX, layerOffsetY + layerCY + y);
+//    previewCtx.translate(layerCX, layerOffsetY + layerCY + y);
+    previewCtx.translate(layerCX, layerOffsetY + y);
     previewCtx.scale(viewerScale, scaleY * viewerScale);
     previewCtx.rotate(r);
     previewCtx.translate((-doodleTransform[0]) * (globalScale * doodleTransform[2]), (-doodleTransform[1]) * (globalScale * doodleTransform[3]));

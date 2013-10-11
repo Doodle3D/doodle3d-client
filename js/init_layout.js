@@ -1,3 +1,4 @@
+// TODO refactor this stuff, there's much to wipe
 var drawAreaContainerMinHeight = 300;
 var drawAreaContainerMaxHeight = 450;
 
@@ -13,15 +14,17 @@ function doOnResize() {
 
   //  canvas.width = $drawAreaContainer.width() - preview.width; // canvas.clientWidth;
   //  canvas.width = $("#mycanvasContainer").width();
-  canvas.width = drawCanvas.width();
-  canvas.height = drawCanvas.height(); // canvas.clientHeight;
+  canvas.width = $canvas.width();
+  canvas.height = $canvas.height(); // canvas.clientHeight;
   //  canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
 
-  //  preview.width = 150;
+  preview.width = $preview.width();
   preview.height = $drawAreaContainer.height();
 
-  canvasWidth = $canvas.width();
-  canvasHeight = $canvas.height();
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
+
+  console.log("   preview.width: " + preview.width + ", $preview.width(): " + $preview.width());
 
   calcPreviewCanvasProperties();
 
@@ -96,15 +99,15 @@ function initLayouting() {
 //  console.log("   preview.width: " + preview.width + ", $preview.width(): " + $preview.width());
 //  canvas.width = $drawAreaContainer.width() - preview.width; // canvas.clientWidth;
 //  canvas.width = $("#mycanvasContainer").width();
-  canvas.width = drawCanvas.width();
-  canvas.height = drawCanvas.height(); // canvas.clientHeight;
+  canvas.width = $canvas.width();
+  canvas.height = $canvas.height(); // canvas.clientHeight;
 //  canvas.height = $drawAreaContainer.height(); // canvas.clientHeight;
 
-//  preview.width = 150;
+  preview.width = $preview.width();
   preview.height = $drawAreaContainer.height();
 
-  canvasWidth = $canvas.width();
-  canvasHeight = $canvas.height();
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
 
   $drawAreaContainer.show();
 
