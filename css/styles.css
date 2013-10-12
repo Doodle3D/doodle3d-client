@@ -136,34 +136,25 @@ CENTER PANEL
 
 #verticalShapes {
 	position: absolute;
-	right: -56px;
+	right: 0;
 	bottom: 15px;
+	margin-right: -8.5%;
+	width: 8%;
 }
 
-#verticalShapes .verticalshape {
-	width: 50px;
-	height: 50px;
+#verticalShapes > div {
 	border: 2px solid #333;
 	border-radius: 0px 5px 5px 0px;
-	margin-top: 4px; /*background-color:  #f0f;
-	*/
-cursor: pointer;
+	margin-top: 4px;
+	background-color: #fff;
+	cursor: pointer;
 }
 
-#verticalShapes .verticalshape.straight {
-	background: url('../img/vertical_shape_icons/straight.png') no-repeat;
-}
-
-#verticalShapes .verticalshape.diverging {
-	background: url('../img/vertical_shape_icons/diverging.png') no-repeat;
-}
-
-#verticalShapes .verticalshape.converging {
-	background: url('../img/vertical_shape_icons/converging.png') no-repeat;
-}
-
-#verticalShapes .verticalshape.sinus {
-	background: url('../img/vertical_shape_icons/sinus.png') no-repeat;
+#verticalShapes > div img.verticalshape {
+	width: 100%;
+	max-width: 50px;
+	height: auto;
+	vertical-align: bottom;
 }
 
 .drawareacontainer {

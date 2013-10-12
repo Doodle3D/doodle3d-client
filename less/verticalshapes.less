@@ -1,20 +1,22 @@
 #verticalShapes {
   position:absolute;
-  right: -56px;
+  right: 0;
   bottom: 15px;
+  margin-right: -8.5%;
+  width: 8%;
 
-  .verticalshape {
-    width: 50px;
-    height: 50px;
+  >div {
     border: 2px solid #333;
     border-radius: 0px 5px 5px 0px;
     margin-top: 4px;
-  /*background-color: #f0f;*/
+    background-color: #fff;
     cursor: pointer;
 
-    &.straight { background: url('../img/vertical_shape_icons/straight.png') no-repeat; }
-    &.diverging { background: url('../img/vertical_shape_icons/diverging.png') no-repeat; }
-    &.converging { background: url('../img/vertical_shape_icons/converging.png') no-repeat; }
-    &.sinus { background: url('../img/vertical_shape_icons/sinus.png') no-repeat; }
+    img.verticalshape {
+      width: 100%;
+      max-width: 50px;
+      height: auto;
+      vertical-align: bottom;
+    }
   }
 }
