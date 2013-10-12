@@ -122,7 +122,7 @@ function Printer() {
 		console.log("Printer:sendPrintPart sendIndex: " + sendIndex + "/" + this.gcode.length + ", sendLength: " + sendLength);
 		
     var firstOne = (sendIndex == 0)? true : false;
-    var start = true; // start printing right away
+    var start = firstOne; // start printing right away
     
     var completed = false;
     if (this.gcode.length < (sendIndex + sendLength)) {
