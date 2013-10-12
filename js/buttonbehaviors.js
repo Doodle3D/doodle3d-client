@@ -185,7 +185,7 @@ function initButtonBehavior() {
   })
   //*/
 
-  btnStop.on('touchstart mousedown',stopPrint);
+  //btnStop.on('touchstart mousedown',stopPrint);
 }
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
@@ -321,8 +321,11 @@ function setState(newState,newHasControl) { //TODO add hasControl
 	var stopEnabled = ((newState == Printer.PRINTING_STATE || newState == Printer.BUFFERING_STATE) && newHasControl);
 	if(stopEnabled) {
 		btnStop.removeClass("disabled");
+		btnStop.unbind('touchstart mousedown');
+		btnStop.bind('touchstart mousedown',stopPrint);
 	} else {
 		btnStop.addClass("disabled");
+		btnStop.unbind('touchstart mousedown');
 	}
 	
 	// thermometer
