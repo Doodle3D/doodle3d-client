@@ -89,21 +89,6 @@ cursor: pointer;
 	bottom: 0px;
 }
 
-.rightpanel img,.leftpanel img {
-	cursor: pointer;
-}
-
-.disabled {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-	filter: alpha(opacity=30);
-	opacity: 0.3;
-	cursor: default;
-}
-
-#btnStop.disabled {
-	display: none;
-}
-
 /*
 
 CENTER PANEL
@@ -322,19 +307,19 @@ HEIGHT-related RESPONSIVE STUFF
 
 @media screen and (max-height: 525px) {
 	.d3dlogo {
-	max-width: 399px;
 	top: 20%;
 	height: 57px;
-	background-image: url('../img/logo/logo_smaller_wide.png');
+	max-width: 307px;
+	background-image: url('../img/logo/logo_smaller.png');
 }
 
 }
 
 @media screen and (max-height: 375px) {
 	.d3dlogo {
-	max-width: 399px;
 	height: 40px;
-	background-image: url('../img/logo/logo_smallest_wide.png');
+	max-width: 216px;
+	background-image: url('../img/logo/logo_smallest.png');
 }
 
 }
@@ -501,6 +486,20 @@ THERMOMETER
 }
 
 /*
+under all the above styles w.r.t. the cascading effect
+ */
+.disabled {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
+	cursor: default;
+}
+
+#btnStop.disabled {
+	display: none;
+}
+
+/*
 
 REST
 
@@ -630,9 +629,9 @@ SETTINGS POPUP
 
 .d3dlogo {
 	top: 0;
-	max-width: 399px;
 	height: 40px;
-	background-image: url('../img/logo/logo_smallest_wide.png');
+	max-width: 216px;
+	background-image: url('../img/logo/logo_smallest.png');
 }
 
 .doodlecontainer {
