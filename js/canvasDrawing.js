@@ -62,7 +62,7 @@ function initDoodleDrawing() {
     canvas.addEventListener('touchstart',onCanvasTouchDown,false);
     canvas.addEventListener('touchmove',onCanvasTouchMove,false);
     canvas.addEventListener('touchend',onCanvasTouchEnd,false);
-    document.body.addEventListener('touchmove',prevent,false);
+    if (!debugMode) document.body.addEventListener('touchmove',prevent,false);
   }
   //*/
 
