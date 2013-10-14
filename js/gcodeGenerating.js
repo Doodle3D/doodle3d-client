@@ -10,7 +10,7 @@ gcodeStart.push("G92 E0"); 					// zero the extruded length
 gcodeStart.push("G1 F200 E10");			// extrude 10mm of feed stock
 gcodeStart.push("G92 E0");					// zero the extruded length again
 //gcodeStart.push("G92 X-100 Y-100 E0"); // zero the extruded length again and make center the start position
-gcodeStart.push("G1 F9000");				
+gcodeStart.push("G1 F9000");
 gcodeStart.push("G90"); 						// absolute positioning
 gcodeStart.push("M117 Printing Doodle...  ");	// display message (20 characters to clear whole screen)
 
@@ -101,9 +101,9 @@ function generate_gcode(callback) {
   console.log("");
   //*/
 
-  // max amount of real world layers 
+  // max amount of real world layers
   var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
-  
+
   // translate numLayers in preview to objectHeight in real world
   //objectHeight = Math.ceil(numLayers / 5); // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
   //objectHeight = numLayers; // in settings objectHeight = 20, in previewRendering_v01.js numLayers is 100, hence the / 5
@@ -113,7 +113,7 @@ function generate_gcode(callback) {
   var rStepGCode = rStep * maxNumLayers/layers; ///maxNumLayers*maxObjectHeight;
   // correct direction
   rStepGCode = -rStepGCode;
-	
+
   // todo hier een array van PATHS maken wat de losse paths zijn
 
   // copy array without reference -> http://stackoverflow.com/questions/9885821/copying-of-an-array-of-objects-to-another-array-without-object-reference-in-java
@@ -125,10 +125,11 @@ function generate_gcode(callback) {
 //  return;
 
   console.log("printer temperature: ",temperature);
-	gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
+	gcode.push("M104 S" + temperature); // set target temperature and do not wait for the extruder to reach it
+  //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
   // add gcode begin commands
   gcode = gcode.concat(startGcode);
-	
+
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
 
   var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
@@ -204,7 +205,7 @@ function generate_gcode(callback) {
       }
     }
 //    console.log("f:generategcode() >> paths.length: " + paths.length);
-		
+
     // loop over the subpaths (the separately drawn lines)
     for (var j = 0; j < paths.length; j++) { // TODO paths > subpaths
       // this line is probably for drawing efficiency, alternating going from 0->end and end->0 (i.e. to and fro)
@@ -234,7 +235,7 @@ function generate_gcode(callback) {
 //          console.log("enableTraveling && isTraveling >> doRetract: " + doRetract + ", retractionspeed: " + retractionspeed);
           if (doRetract) gcode.push("G0 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
           gcode.push("G0 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
-          if (doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal 
+          if (doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal
         } else {
 //          console.log("       else");
           extruder += prev.distance(to) * wallThickness * layerHeight / filamentThickness;

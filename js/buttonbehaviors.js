@@ -189,6 +189,7 @@ function initButtonBehavior() {
 }
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
+  if (!confirm("Weet je zeker dat je de huidige print wilt stoppen?")) return;
   if (sendPrintCommands) printer.stop();
   setState(Printer.STOPPING_STATE,printer.hasControl);
 }
@@ -229,6 +230,7 @@ function print(e) {
     console.log("f:print >> not enough points!");
   }
 
+  alert("Je tekening zal nu geprint worden.");
 
   //	$.post("/doodle3d.of", { data:output }, function(data) {
   //	btnPrint.disabled = false;
@@ -295,17 +297,17 @@ function previewTwistRight(redrawLess) {
 
 function update() {
 	setState(printer.state,printer.hasControl);
-	
+
 	thermometer.update(printer.temperature, printer.targetTemperature);
 	//TODO: update progress
 }
 
-function setState(newState,newHasControl) { //TODO add hasControl 
+function setState(newState,newHasControl) { //TODO add hasControl
 	if(newState == state && newHasControl == hasControl) return;
-	
+
 	console.log("setState: ",state," > ",newState," ( ",newHasControl,")");
 	setDebugText("State: "+newState);
-	
+
 	// print button
 	var printEnabled = (newState == Printer.IDLE_STATE && newHasControl);
 	if(printEnabled) {
@@ -316,7 +318,7 @@ function setState(newState,newHasControl) { //TODO add hasControl
 			btnPrint.addClass("disabled"); // disable print button
 			btnPrint.unbind('touchstart mousedown');
 	}
-	
+
 	// stop button
 	var stopEnabled = ((newState == Printer.PRINTING_STATE || newState == Printer.BUFFERING_STATE) && newHasControl);
 	if(stopEnabled) {
@@ -327,7 +329,7 @@ function setState(newState,newHasControl) { //TODO add hasControl
 		btnStop.addClass("disabled");
 		btnStop.unbind('touchstart mousedown');
 	}
-	
+
 	// thermometer
 	switch(newState) {
 		case Printer.UNKNOWN_STATE:
@@ -338,17 +340,17 @@ function setState(newState,newHasControl) { //TODO add hasControl
 			thermometer.show();
 			break;
 	}
-	
+
 	// progress indicator
 	switch(newState) {
-		case Printer.PRINTING_STATE: 
+		case Printer.PRINTING_STATE:
 			displayProgress.show(); // TODO: Show progress
 			break;
 		default:
 			displayProgress.hide(); // TODO: hide progress
 			break;
 	}
-	
+
 	prevState = state;
 	state = newState;
 	hasControl = newHasControl;
