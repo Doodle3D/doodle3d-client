@@ -18,6 +18,9 @@ var state;
 var prevState;
 var hasControl;
 
+var gcodeGenerateDelayer;
+var gcodeGenerateDelay = 50;
+
 function initButtonBehavior() {
   console.log("f:initButtonBehavior");
 
@@ -207,35 +210,41 @@ function nextDoodle(e) {
 function print(e) {
 	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
 
-  $(".btnPrint").css("display","none");
+  //$(".btnPrint").css("display","none");
 
-  $("#textdump").text("");
+  
   if (_points.length > 2) {
 
-    //setState(Printer.BUFFERING_STATE,printer.hasControl);
+  	//setState(Printer.BUFFERING_STATE,printer.hasControl);
     printer.overruleState(Printer.BUFFERING_STATE);
-    var gcode = generate_gcode();
-    //startPrint(gencode);
+    
+    btnStop.css("display","none");
+    
+    // we put the gcode generation in a little delay 
+    // so that for example the print button is disabled right away
+    clearTimeout(gcodeGenerateDelayer);
+    gcodeGenerateDelayer = setTimeout(function() { 
+    	var gcode = generate_gcode();
+			//startPrint(gencode);
 
-    if (sendPrintCommands) {
-      printer.print(gcode);
-    } else {
-      console.log("sendPrintCommands is false: not sending print command to 3dprinter");
-    }
+			if (sendPrintCommands) {
+				printer.print(gcode);
+			} else {
+				console.log("sendPrintCommands is false: not sending print command to 3dprinter");
+			}
 
-    //if (debugMode) {
-      //console.log("f:print() >> debugMode is true, dumping gcode to textarea #textdump");
-      $("#textdump").text(gcode.join("\n"));
-    //}
-
-    //  copyToClipboard(gencode);
-    //*/
+			if (debugMode) {
+				$("#textdump").text("");
+				$("#textdump").text(gcode.join("\n"));
+			}
+			
+    }, gcodeGenerateDelay);
   } else {
     console.log("f:print >> not enough points!");
   }
 
-  alert("Je tekening zal nu geprint worden");
-  $(".btnPrint").css("display","block");
+  //alert("Je tekening zal nu geprint worden");
+  //$(".btnPrint").css("display","block");
 
 
   //	$.post("/doodle3d.of", { data:output }, function(data) {
