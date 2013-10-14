@@ -152,7 +152,7 @@ function Printer() {
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
-		        	if(self.state == Printer.STATE_PRINTING) {
+		        	if(self.state == Printer.STATE_PRINTING || self.state == Printer.STATE_BUFFERING) {
 		        		console.log("sending next part");
 		        		self.sendPrintPart(sendIndex + sendLength, sendLength);
 		        	}
