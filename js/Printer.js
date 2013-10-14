@@ -45,6 +45,8 @@ function Printer() {
 	
 	this.maxGCodeSize = 10;						// max size of gcode in MB's (estimation)
 	
+	this.stateOverruled = false;
+	
 	// Events
 	Printer.UPDATE = "update";
 	
@@ -152,8 +154,10 @@ function Printer() {
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
-		        	if(self.state == Printer.STATE_PRINTING || self.state == Printer.STATE_BUFFERING) {
-		        		console.log("sending next part");
+		        	
+		        	console.log("Printer:sendPrintPart:gcode part received (state: ",self.state,")"); 
+		        	if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
+		        		console.log("Printer:sendPrintPart:sending next part");
 		        		self.sendPrintPart(sendIndex + sendLength, sendLength);
 		        	}
 		        }
@@ -195,7 +199,9 @@ function Printer() {
 	}
 	
 	this.checkStatus = function() {
-		//console.log("Printer:checkStatus");
+		console.log("Printer:checkStatus");
+		this.stateOverruled = false;
+		console.log("  stateOverruled: ",this.stateOverruled);
     var self = this;
     if (communicateWithWifibox) {
       $.ajax({
@@ -203,7 +209,7 @@ function Printer() {
         dataType: 'json',
         timeout: this.timeoutTime,
         success: function(response){
-          console.log("Printer:status: ",response.data.state," response: ",response);
+          console.log("  Printer:status: ",response.data.state); //," response: ",response);
           
           self.handleStatusUpdate(response);
           
@@ -223,12 +229,17 @@ function Printer() {
     }
 	}
 	this.handleStatusUpdate = function(response) {
+		console.log("Printer:handleStatusUpdate");
 		var data = response.data;
 		if(response.status != "success") {
 			self.state = Printer.UNKNOWN_STATE;
 		} else {
 			// state
-			self.state 								= data.state;
+			console.log("  stateOverruled: ",this.stateOverruled);
+			if(!this.stateOverruled) {
+				self.state 								= data.state;
+				console.log("  state > ",self.state);
+			}
 			
 			// temperature
 			self.temperature 					= data.hotend;
@@ -246,6 +257,14 @@ function Printer() {
 				console.log("progress: ",self.currentLine+"/"+self.totalLines+" ("+self.bufferedLines+") ("+self.state+")");
 			}
 		}
+		$(document).trigger(Printer.UPDATE);
+	}
+	this.overruleState = function(newState) {
+		this.stateOverruled = true;
+		console.log("  stateOverruled: ",this.stateOverruled);
+		
+		self.state = newState;
+		
 		$(document).trigger(Printer.UPDATE);
 	}
 }

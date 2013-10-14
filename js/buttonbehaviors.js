@@ -191,7 +191,8 @@ function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
   if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
   if (sendPrintCommands) printer.stop();
-  setState(Printer.STOPPING_STATE,printer.hasControl);
+  //setState(Printer.STOPPING_STATE,printer.hasControl);
+  printer.overruleState(Printer.STOPPING_STATE);
 }
 
 
@@ -211,7 +212,8 @@ function print(e) {
   $("#textdump").text("");
   if (_points.length > 2) {
 
-    setState(Printer.BUFFERING_STATE,printer.hasControl);
+    //setState(Printer.BUFFERING_STATE,printer.hasControl);
+    printer.overruleState(Printer.BUFFERING_STATE);
     var gcode = generate_gcode();
     //startPrint(gencode);
 
