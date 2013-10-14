@@ -189,7 +189,7 @@ function initButtonBehavior() {
 }
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
-  if (!confirm("Weet je zeker dat je de huidige print wilt stoppen?")) return;
+  if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
   if (sendPrintCommands) printer.stop();
   setState(Printer.STOPPING_STATE,printer.hasControl);
 }
@@ -205,6 +205,8 @@ function nextDoodle(e) {
 
 function print(e) {
 	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
+
+  $(".btnPrint").css("display","none");
 
   $("#textdump").text("");
   if (_points.length > 2) {
@@ -230,7 +232,9 @@ function print(e) {
     console.log("f:print >> not enough points!");
   }
 
-  alert("Je tekening zal nu geprint worden.");
+  alert("Je tekening zal nu geprint worden");
+  $(".btnPrint").css("display","block");
+
 
   //	$.post("/doodle3d.of", { data:output }, function(data) {
   //	btnPrint.disabled = false;
