@@ -449,28 +449,20 @@ PROGRESS GUAGE
 }
 
 #progressbarCanvasContainer {
-	/*position:  absolute;
-	*/
-position: relative; /*right:  0;
-	*/
-/*top:  10%;
-	*/
-width: 30%;
-	float: right; /*height:  auto;
-	*/
+	position: relative;
+	width: 50%;
+	float: right;
 
--webkit-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	-webkit-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-moz-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-o-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-ms-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	right: -36%;
+	right: -50%;
 }
 
 #progressbarCanvas {
-	/*position:  absolute;
-	*/
-top: 0;
+	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
@@ -497,13 +489,8 @@ THERMOMETER
 }
 
 #thermometerContainer {
-	/*position:  absolute;
-	*/
-position: relative; /*right:  0;
-	*/
-/*top:  40%;
-	*/
-width: 25%;
+	position: relative;
+	width: 45%;
 	float: right;
 
 	-webkit-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -511,13 +498,11 @@ width: 25%;
 	-o-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-ms-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	right: -30%;
+	right: -45%;
 }
 
 #thermometerCanvas {
-	/*position:  absolute;
-	*/
-top: 0;
+	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
