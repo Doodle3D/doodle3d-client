@@ -151,7 +151,7 @@ function Printer() {
 				  	if (completed) {
 		          console.log("Printer:sendPrintPart:gcode sending completed");
 		          this.gcode = [];
-		          btnStop.css("display","block");
+		          btnStop.css("display","block"); // hack 
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode

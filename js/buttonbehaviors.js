@@ -192,7 +192,7 @@ function initButtonBehavior() {
 }
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
-  if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
+  //if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
   if (sendPrintCommands) printer.stop();
   //setState(Printer.STOPPING_STATE,printer.hasControl);
   printer.overruleState(Printer.STOPPING_STATE);
@@ -218,7 +218,7 @@ function print(e) {
   	//setState(Printer.BUFFERING_STATE,printer.hasControl);
     printer.overruleState(Printer.BUFFERING_STATE);
     
-    btnStop.css("display","none");
+    btnStop.css("display","none"); // hack
     
     // we put the gcode generation in a little delay 
     // so that for example the print button is disabled right away
