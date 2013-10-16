@@ -25,8 +25,10 @@ gcodeEnd.push("G90"); 							// absolute positioning
 gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)*/
 
 
+var MAX_POINTS_TO_PRINT = 400000; //80000; //40000; 
 var gcode = [];
-function generate_gcode(callback) {
+
+function generate_gcode() {
   console.log("f:generategcode()");
 
   var startGcode = [];
@@ -124,7 +126,6 @@ function generate_gcode(callback) {
 
   // copy array without reference -> http://stackoverflow.com/questions/9885821/copying-of-an-array-of-objects-to-another-array-without-object-reference-in-java
   var points = JSON.parse(JSON.stringify(_points));
-  console.log("f:generategcode() >> points.length: " + points.length);
 
 //  console.log("f:generategcode() >> paths: " + paths.toString());
 //  console.log("paths.toString(): " + paths.toString());
@@ -153,6 +154,19 @@ function generate_gcode(callback) {
   console.log("f:generategcode() >> layers: " + layers);
   if (layers == Infinity) return;
 
+	// check feasibility of design
+	var pointsToPrint = points.length * layers*(objectHeight/maxObjectHeight)
+	//console.log("  points.length: ",points.length);
+	//console.log("  numLayers: ",(layers*(objectHeight/maxObjectHeight)));
+	//console.log("  pointsToPrint: ",pointsToPrint);
+	//console.log("  MAX_POINTS_TO_PRINT: ",MAX_POINTS_TO_PRINT);
+  
+  if(pointsToPrint > MAX_POINTS_TO_PRINT) {
+  	alert("Sorry, your doodle to to complex and / or to high");
+  	console.log("WARNING: to many points to convert to gcode");
+  	return [];
+  }
+	
   for (var layer = 0; layer < layers; layer++) {
 
     var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
@@ -262,21 +276,10 @@ function generate_gcode(callback) {
       break;
     }
   }
-
   // add gcode end commands
   gcode = gcode.concat(endGcode);
-
-  // debug
-//  var _gc = gc.join("\n");
-//  console.log("f:generategcode() >> _gc = " + _gc);
-
-  // Return the gcode array, joined to one string with '\n' (line break) as the join parameter
-  // This should result in a nice long string with line breaks
-  if (callback == undefined) {
-	  return gcode;
-  } else {
-    // post
-  }
+  
+  return gcode;
 }
 
 function scaleFunction(percent) {
