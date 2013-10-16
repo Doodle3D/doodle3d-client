@@ -267,5 +267,13 @@ function Printer() {
 		self.state = newState;
 		
 		$(document).trigger(Printer.UPDATE);
+		
+		this.resetStatusCheckInterval();
+	}
+	this.resetStatusCheckInterval = function() {
+		console.log("resetStatusCheckInterval");
+		clearTimeout(self.checkStatusDelay);
+		clearTimeout(self.retryCheckStatusDelay);
+		self.checkStatusDelay = setTimeout(function() { self.checkStatus() }, self.checkStatusInterval);
 	}
 }
