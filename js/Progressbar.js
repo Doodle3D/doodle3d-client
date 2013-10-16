@@ -16,11 +16,16 @@ function Progressbar() {
   this.$canvas;
   this.canvas;
   this.context;
+  this.$container;
 
   this.isInitted = false;
 
-  this.init = function(targCanvas) {
+  this.enabled = true;
+
+  this.init = function(targCanvas, targCanvasContainer) {
     console.log("Thermometer.init()");
+
+    this.$container = targCanvasContainer;
 
     this.$canvas = targCanvas;
     this.canvas = this.$canvas[0];
@@ -87,5 +92,15 @@ function Progressbar() {
     } else {
       console.log("Progressbar.setTemperature() -> thermometer not initialized!");
     }
+  }
+  this.show = function() {
+    this.$container.addClass("progressbarAppear");
+    //  	this.$container.show();
+    this.enabled = true;
+  }
+  this.hide = function() {
+    this.$container.removeClass("progressbarAppear");
+    //  	this.$container.hide();
+      this.enabled = false;
   }
 }

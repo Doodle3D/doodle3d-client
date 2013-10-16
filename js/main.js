@@ -5,6 +5,7 @@ var wifiboxIsRemote = false;        // when you want to run the client on a comp
 var autoUpdate = true; 							// auto retrieve updates about temperature and progress from printer
 
 var printer =  new Printer();
+var progressbar = new Progressbar();
 var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
 
@@ -53,6 +54,10 @@ $(function() {
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
 
+  progressbar = new Progressbar();
+  progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
+
+
   printer.init();
 	$(document).on(Printer.UPDATE,update);
 
@@ -93,8 +98,25 @@ $(function() {
     }, 1000);
     //*/
   }
+  showhideInterval = setInterval(showOrHideThermo, 2500);
+});
 
-})
+var showhideInterval;
+var showOrHide = false;
+
+function showOrHideThermo() {
+  console.log("f:showOrHideThermo()");
+  if (showOrHide) {
+    thermometer.hide();
+    progressbar.hide();
+  } else {
+    thermometer.show();
+    progressbar.show();
+
+  }
+  showOrHide = !showOrHide;
+}
+
 function settingsLoaded() {
 	console.log("settingsLoaded");
 	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);

@@ -39,9 +39,15 @@
 
   <!-- right panel -->
   <div class="rightpanel shadowleft">
-    <div class='sidebutton shadowleft'></div>
-    <img class="btnPrint btn" src="img/buttons/btnPrint.png" /><br/>
-    <img class="btnStop btn disabled" src="img/buttons/btnStop.png" /><br/>
+    <!--<div class='sidebutton shadowleft'></div>-->
+    <!--<div><img class="btnPrint btn" src="img/buttons/btnPrint.png" /></div>-->
+    <!--<div><img class="btnStop btn disabled" src="img/buttons/btnStop.png" /></div>-->
+    <div class="clearfix">
+      <img class="btnPrint btn" src="img/buttons/btnPrint.png" />
+    </div>
+    <div class="clearfix">
+      <img class="btnStop btn disabled" src="img/buttons/btnStop.png" />
+    </div>
     <!-- not now
     <div id="printProgressContainer">
       <label for="progressbarContainer">Progress:</label><span class="progressAmount">0%</span>
@@ -50,9 +56,25 @@
       </div>
     </div>
     -->
+    <div class="progressbarCanvasContainerParent clearfix">
+      <div id="progressbarCanvasContainer">
+        <canvas id="progressbarCanvas" width="93" height="82"></canvas>
+      </div>
+    </div>
+    <div class="thermometerContainerParent clearfix">
+      <div id="thermometerContainer">
+        <canvas id="thermometerCanvas" width="90" height="120"></canvas>
+      </div>
+    </div>
+
+    <!--<div id="thermometerContainer" class="clearfix">-->
+      <!--<canvas id="thermometerCanvas" width="90" height="120"></canvas>-->
+    <!--</div>-->
+    <!-- 2013-10-16 tmp backup
     <div id="thermometerContainer">
       <canvas id="thermometerCanvas" width="100" height="125"></canvas>
     </div>
+    -->
     <div class="btnsSettingsInfo">
       <img class="btnSettings btn" src="img/buttons/btnSettings.png">
       <img class="btnInfo btn" src="img/buttons/btnInfo.png">
@@ -128,6 +150,7 @@
 <script src="js/gcodeGenerating.js"></script>
 <script src="js/init_layout.js"></script>
 <script src="js/Printer.js"></script>
+<script src="js/Progressbar.js"></script>
 <script src="js/Thermometer.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/sidebar.js"></script>

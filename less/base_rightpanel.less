@@ -3,9 +3,9 @@
   position: absolute;
   width: 17%;
 /*  background-color: rgba(255, 0, 254, 0.4);*/
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
+  top: 0;
+  right: 0;
+  bottom: 0;
 }
 .btnPrint {
   margin: 1% 5% 5% 0%;
@@ -22,12 +22,12 @@
   height: auto;
 }
 .btnsSettingsInfo {
-	position: absolute;
-	bottom: 25px;
-	right: 5px;
-	width: 80%;
+  position: absolute;
+  bottom: 25px;
+  right: 5px;
+  width: 80%;
   margin: 1% 5%;
-	max-width:  160px;
+  max-width:  160px;
 }
 .btnInfo {
 	width: 40%;
@@ -41,59 +41,140 @@
 	float: right;
 }
 
+/*
+
+  PROGRESSGUAGE AND THERMOMETER SHARED STYLES
+
+*/
+.progressbarAppear, .thermometerAppear {
+//  margin-right: 1.5% !important;
+  right: 1.5% !important;
+}
+
 
 /*
 
-  PRINT PROGRESS DISPLAY
+  PROGRESS GUAGE
 
 */
-#printProgressContainer {
-  position: absolute;
-  right: 30px;
-  top: 370px;
-  width: 110px;
-  margin: 5px 0px;
-  font-weight: bold;
-  display:none;
+.progressbarCanvasContainerParent {
+  position:relative;
+  width:100%;
 }
-#progressbarContainer {
-  margin: 3px 0px;
-  width: inherit;
-  height: 20px;
-  background-color: #fff;
-  border: 2px solid #333;
-  border-radius: 5px;
-  -o-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-}
-.progressAmount {
-  margin: 0px 5px;
-}
-#progressbar {
+#progressbarCanvasContainer {
+/*position: absolute;*/
   position: relative;
-/*margin-bottom: -20px;*/
-  width: 0%;
-  height: 100%;
-  background-color: #4c4;
-  border: 0px solid #f0f;
-  border-radius: 3px;
-  -o-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+/*right: 0;*/
+/*top: 10%;*/
+  width: 30%;
+  float:right;
+/*height: auto;*/
+
+  transition: right .40s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  right: -36%;
 }
+
+#progressbarCanvas {
+/*position: absolute;*/
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  border: solid #000;
+  border-width: 2px 0 2px 2px;
+  border-radius: 15px 0 0 15px;
+  padding: 5px 0px 5px 5px;
+
+  -webkit-box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
+  box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
+}
+
+
+//#printProgressContainer {
+//  position: absolute;
+//  right: 30px;
+//  top: 370px;
+//  width: 110px;
+//  margin: 5px 0px;
+//  font-weight: bold;
+//  display:none;
+//}
+//#progressbarContainer {
+//  margin: 3px 0px;
+//  width: inherit;
+//  height: 20px;
+//  background-color: #fff;
+//  border: 2px solid #333;
+//  border-radius: 5px;
+//  -o-border-radius: 5px;
+//  -moz-border-radius: 5px;
+//  -webkit-border-radius: 5px;
+//}
+//.progressAmount {
+//  margin: 0px 5px;
+//}
+//#progressbar {
+//  position: relative;
+///*margin-bottom: -20px;*/
+//  width: 0%;
+//  height: 100%;
+//  background-color: #4c4;
+//  border: 0px solid #f0f;
+//  border-radius: 3px;
+//  -o-border-radius: 3px;
+//  -moz-border-radius: 3px;
+//  -webkit-border-radius: 3px;
+//}
 
 /*
 
   THERMOMETER
 
 */
+.thermometerContainerParent {
+  position:relative;
+  width:100%;
+}
 #thermometerContainer {
-  position: absolute;
-  right: 25px;
-  top: 370px;
+/*position: absolute;*/
+  position: relative;
+/*right: 0;*/
+/*top: 40%;*/
+  width: 25%;
+  float: right;
+
+  transition: right .50s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  right: -30%;
 }
+
 #thermometerCanvas {
-/*background: #59b2b8;*/
-/*zoom: 2;*/
+/*position: absolute;*/
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  border: solid #000;
+  border-width: 2px 0 2px 2px;
+  border-radius: 15px 0 0 15px;
+  padding: 5px 0px 5px 5px;
+
+  -webkit-box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
+  box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
 }
+
+
+//#thermometerContainer {
+//  position: absolute;
+//  right: 25px;
+//  top: 370px;
+//}
+//#thermometerCanvas {
+///*background: #59b2b8;*/
+///*zoom: 2;*/
+//}

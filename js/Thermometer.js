@@ -124,11 +124,15 @@ function Thermometer() {
     }
   }
   this.show = function() {
-  	this.$container.show();
+    this.$container.addClass("thermometerAppear");
+//    $("#progressbarCanvasContainer").addClass("thermometerAppear");
+//  	this.$container.show();
   	this.enabled = true;
   }
   this.hide = function() {
-  	this.$container.hide();
+    this.$container.removeClass("thermometerAppear");
+//    $("#progressbarCanvasContainer").removeClass("thermometerAppear");
+//  	this.$container.hide();
   	this.enabled = false;
   }
 }
