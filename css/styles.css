@@ -634,19 +634,22 @@ SETTINGS POPUP
 	background-image: url('../img/logo/logo_smallest.png');
 }
 
-.doodlecontainer {
+.drawareacontainer {
 	/*	position:  absolute;
 	*/
-height: 85%;
+height: 70%;
 }
 
-/*.bottompanel  {
-	
-	display:  none;
-	
+.bottompanel {
+	height: 10%;
 }
 
-*/
+.bottompanel .manipulationBtns {
+	margin: 2px -27;
+	right: 22%;
+	width: 38%;
+}
+
 /*
 	LEFT
 	 */
@@ -729,7 +732,7 @@ height: 85%;
 	*/
 /*  margin-top:  -20px;
 	*/
-top: 0px; /*float: right;
+top: 40px; /*float: right;
 	*/
 width: 25px;
 	height: 38px;
