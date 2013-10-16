@@ -10,6 +10,8 @@ var settingsWindow = new SettingsWindow();
 
 var firstTimeSettingsLoaded = true;
 
+var wifiboxURL; // Using the uhttpd lua handler as default, because of better performance
+var wifiboxCGIBinURL; // CGI-bin, for some network stuff, where it needs to restart the webserver for example
 
 var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previewContainer;
 
@@ -26,9 +28,11 @@ $(function() {
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
   
 	if (wifiboxIsRemote) {
-		wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
+		wifiboxURL = "http://192.168.5.1/d3dapi";
+		wifiboxCGIBinURL = "http://192.168.5.1/cgi-bin/d3dapi";
 	} else {
 		wifiboxURL = "http://" + window.location.host + "/d3dapi";
+		wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
 	}
 
   if (!communicateWithWifibox) {
@@ -52,7 +56,7 @@ $(function() {
   printer.init();
 	$(document).on(Printer.UPDATE,update);
 
-	settingsWindow.init(wifiboxURL);
+	settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
 
   if(debugMode) {

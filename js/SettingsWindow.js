@@ -28,6 +28,7 @@ var settings = {
 
 function SettingsWindow() {
 	this.wifiboxURL;
+	this.wifiboxCGIBinURL
 	this.window;
 	this.form;
 	this.timeoutTime = 3000;
@@ -78,8 +79,9 @@ function SettingsWindow() {
   
 	var self = this;
 
-	this.init = function(wifiboxURL) {
+	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
 		this.wifiboxURL = wifiboxURL;
+		this.wifiboxCGIBinURL = wifiboxCGIBinURL;
 
 		this.window = $("#settings");
 		this.window.find(".btnOK").click(this.submitwindow);
@@ -520,7 +522,7 @@ function SettingsWindow() {
 		console.log("  postData: ",postData);
 		if (communicateWithWifibox) {
 		  $.ajax({
-			  url: self.wifiboxURL + "/network/associate",
+			  url: self.wifiboxCGIBinURL + "/network/associate",
 			  type: "POST",
 			  data: postData,
 			  dataType: 'json',
@@ -545,7 +547,7 @@ function SettingsWindow() {
   this.createAP = function() {
 		if (communicateWithWifibox) {
 		  $.ajax({
-			  url: self.wifiboxURL + "/network/openap",
+			  url: self.wifiboxCGIBinURL + "/network/openap",
 			  type: "POST",
 			  dataType: 'json',
 			  timeout: self.timeoutTime,
