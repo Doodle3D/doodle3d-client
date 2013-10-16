@@ -192,7 +192,7 @@ function initButtonBehavior() {
 }
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
-  if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
+  //if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
   if (sendPrintCommands) printer.stop();
   //setState(Printer.STOPPING_STATE,printer.hasControl);
   printer.overruleState(Printer.STOPPING_STATE);
@@ -212,23 +212,26 @@ function print(e) {
 
   //$(".btnPrint").css("display","none");
 
-  
   if (_points.length > 2) {
 
   	//setState(Printer.BUFFERING_STATE,printer.hasControl);
     printer.overruleState(Printer.BUFFERING_STATE);
     
-    btnStop.css("display","none");
+    btnStop.css("display","none"); // hack
     
     // we put the gcode generation in a little delay 
     // so that for example the print button is disabled right away
     clearTimeout(gcodeGenerateDelayer);
     gcodeGenerateDelayer = setTimeout(function() { 
+    	
     	var gcode = generate_gcode();
-			//startPrint(gencode);
-
-			if (sendPrintCommands) {
-				printer.print(gcode);
+    	if (sendPrintCommands) {
+    		if(gcode.length > 0) {
+    			printer.print(gcode);
+    		} else {
+    			printer.overruleState(Printer.IDLE_STATE);
+    			printer.startStatusCheckInterval();
+    		}
 			} else {
 				console.log("sendPrintCommands is false: not sending print command to 3dprinter");
 			}

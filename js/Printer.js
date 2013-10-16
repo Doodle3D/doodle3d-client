@@ -61,7 +61,7 @@ function Printer() {
     console.log("  wifiboxURL: ",this.wifiboxURL);
     
     if(autoUpdate) {
-	    this.checkStatus();
+    	this.startStatusCheckInterval();
     }
  	}
 	
@@ -151,7 +151,7 @@ function Printer() {
 				  	if (completed) {
 		          console.log("Printer:sendPrintPart:gcode sending completed");
 		          this.gcode = [];
-		          btnStop.css("display","block");
+		          btnStop.css("display","block"); // hack 
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
@@ -163,6 +163,12 @@ function Printer() {
 		        	}
 		        }
 		      }
+			  	// after we know the first gcode packed has bin received or failed
+					// (and the driver had time to update the printer.state) 
+					// we start checking the status again
+					if(sendIndex == 0) {
+						self.startStatusCheckInterval();
+					}
 				}
 			}).fail(function() { 
 				console.log("Printer:sendPrintPart: failed");
@@ -171,6 +177,11 @@ function Printer() {
 					console.log("request printer:sendPrintPart failed retry");
 					self.sendPrintPart(sendIndex, sendLength) 
 				},self.retryDelay); // retry after delay
+				
+				// after we know the gcode packed has bin received or failed
+				// (and the driver had time to update the printer.state) 
+				// we start checking the status again
+				self.startStatusCheckInterval();
 			});
 		} else {
       console.log ("Printer >> f:sendPrintPart() >> communicateWithWifibox is false, so not executing this function");
@@ -188,17 +199,38 @@ function Printer() {
 			  timeout: this.timeoutTime,
 			  success: function(data){
 				  console.log("Printer:stop response: ", data);
+				  
+				  // after we know the stop has bin received or failed
+					// (and the driver had time to update the printer.state) 
+					// we start checking the status again
+					self.startStatusCheckInterval();
 			  }
 			}).fail(function() { 
 				console.log("Printer:stop: failed");
 				clearTimeout(self.retryStopDelay);
 				self.retryStopDelay = setTimeout(function() { self.stop() },self.retryDelay); // retry after delay
+				
+				// after we know the stop has bin received or failed
+				// (and the driver had time to update the printer.state) 
+				// we start checking the status again
+				self.startStatusCheckInterval();
 			});
 		} else {
       console.log ("Printer >> f:communicateWithWifibox() >> communicateWithWifibox is false, so not executing this function");
     }
 	}
-	
+	this.startStatusCheckInterval = function() {
+		console.log("Printer:startStatusCheckInterval");
+		self.checkStatus();
+		clearTimeout(self.checkStatusDelay);
+		clearTimeout(self.retryCheckStatusDelay);
+		self.checkStatusDelay = setTimeout(function() { self.checkStatus() }, self.checkStatusInterval);
+	}
+	this.stopStatusCheckInterval = function() {
+		console.log("Printer:stopStatusCheckInterval");
+		clearTimeout(self.checkStatusDelay);
+		clearTimeout(self.retryCheckStatusDelay);
+	}
 	this.checkStatus = function() {
 		console.log("Printer:checkStatus");
 		this.stateOverruled = false;
@@ -267,5 +299,7 @@ function Printer() {
 		self.state = newState;
 		
 		$(document).trigger(Printer.UPDATE);
+		
+		this.stopStatusCheckInterval();
 	}
 }
