@@ -1,4 +1,4 @@
-var gcodeStart = [];
+/*var gcodeStart = [];
 gcodeStart.push(";Generated with Doodle3D");
 gcodeStart.push("G21"); 						// metric values
 gcodeStart.push("G91"); 						// relative positioning
@@ -22,7 +22,7 @@ gcodeEnd.push("G1 Z+0.5 E-5 X-20 Y-20 F9000"); // move Z up a bit and retract fi
 gcodeEnd.push("G28 X0 Y0"); 				// move X/Y to min endstops, so the head is out of the way
 gcodeEnd.push("M84"); 							// disable axes / steppers
 gcodeEnd.push("G90"); 							// absolute positioning
-gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)
+gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)*/
 
 
 var gcode = [];
@@ -31,36 +31,42 @@ function generate_gcode(callback) {
 
   var startGcode = [];
   var endGcode = [];
+  
+  // get gcode start statements
+	/*console.log("settings['printer.startgcode']: ",settings["printer.startgcode"]);
+	console.log("settings['printer.endgcode']: ",settings["printer.endgcode"]);
+	
+	if ($("#startgcode").val().trim().length != 0) {
+		console.log("   found contents for start-gcode in settings.html")
+		startGcode = $("#startgcode").val().trim().split("\n");
+	} else {
+		console.log("   no start-gcode in settings.html, using defaults")
+		startGcode = startGcode.concat(gcodeStart);
+	}
+	
+	// get gcode end statements
+	if ($("#endgcode").val().trim().length != 0) {
+		console.log("   found contents for end-gcode in settings.html")
+		endGcode = $("#endgcode").val().trim().split("\n");
+	} else {
+		console.log("   no end-gcode in settings.html, using defaults")
+		endGcode = endGcode.concat(gcodeEnd);
+	}
 
+	console.log("f:generate_gcode() >> startGcode:");
+	console.log(startGcode);
+	console.log("");
+	console.log("f:generate_gcode() >> endGcode:");
+	console.log(endGcode);*/
+	
+	startGcode = settings["printer.startgcode"].split("\n");
+	endGcode = settings["printer.endgcode"].split("\n");
+	
   // TODO 2013-09-18 evaluate if this should stay here
   // this was added when Rick mailed us wrt the Ultimaker delivery of Doodle3D
   var gCodeOffsetX = 110; // mm
   var gCodeOffsetY = 110; // mm
-
-  // get gcode start statements
-  if ($("#startgcode").val().trim().length != 0) {
-    console.log("   found contents for start-gcode in settings.html")
-    startGcode = $("#startgcode").val().trim().split("\n");
-  } else {
-    console.log("   no start-gcode in settings.html, using defaults")
-    startGcode = startGcode.concat(gcodeStart);
-  }
-
-  console.log("f:generate_gcode() >> startGcode:");
-  console.log(startGcode);
-  console.log("");
-  console.log("f:generate_gcode() >> endGcode:");
-  console.log(endGcode);
-
-  // get gcode end statements
-  if ($("#endgcode").val().trim().length != 0) {
-    console.log("   found contents for end-gcode in settings.html")
-    endGcode = $("#endgcode").val().trim().split("\n");
-  } else {
-    console.log("   no end-gcode in settings.html, using defaults")
-    endGcode = endGcode.concat(gcodeEnd);
-  }
-
+  
   gcode = [];
 
   console.log("settings: ",settings);
@@ -238,7 +244,8 @@ function generate_gcode(callback) {
           if (doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal
         } else {
 //          console.log("       else");
-          extruder += prev.distance(to) * wallThickness * layerHeight / filamentThickness;
+          //extruder += prev.distance(to) * wallThickness * layerHeight / filamentThickness;
+          extruder += prev.distance(to) * wallThickness * layerHeight / (Math.pow((filamentThickness/2), 2) * Math.PI);
           gcode.push("G1 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (speed * 60).toFixed(3) + " E" + extruder.toFixed(3));
         }
 
