@@ -125,8 +125,8 @@ function generate_gcode(callback) {
 //  return;
 
   console.log("printer temperature: ",temperature);
-	gcode.push("M104 S" + temperature); // set target temperature and do not wait for the extruder to reach it
-  //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
+	//gcode.push("M104 S" + temperature); // set target temperature and do not wait for the extruder to reach it
+  gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
   // add gcode begin commands
   gcode = gcode.concat(startGcode);
 
