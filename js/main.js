@@ -98,7 +98,24 @@ $(function() {
     }, 1000);
     //*/
   }
+  showhideInterval = setInterval(showOrHideThermo, 2500);
 });
+
+var showhideInterval;
+var showOrHide = false;
+
+function showOrHideThermo() {
+  console.log("f:showOrHideThermo()");
+  if (showOrHide) {
+    thermometer.hide();
+    progressbar.hide();
+  } else {
+    thermometer.show();
+    progressbar.show();
+
+  }
+  showOrHide = !showOrHide;
+}
 
 function settingsLoaded() {
 	console.log("settingsLoaded");

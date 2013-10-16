@@ -434,8 +434,16 @@ top: 0;
 PROGRESSGUAGE AND THERMOMETER SHARED STYLES
 
  */
-.progressbarAppear,.thermometerAppear {
-	right: 1.5% !important;
+.progressbarAppear {
+	/*margin-right:  1.5% !important;
+	*/
+right: -0.5% !important;
+}
+
+.thermometerAppear {
+	/*margin-right:  1.5% !important;
+	*/
+right: -6.5% !important;
 }
 
 /*
@@ -446,19 +454,29 @@ PROGRESS GUAGE
 .progressbarCanvasContainerParent {
 	position: relative;
 	width: 100%;
+	padding-top: 5px;
 }
 
 #progressbarCanvasContainer {
 	position: relative;
 	width: 50%;
 	float: right;
+	border: solid #000;
+	border-width: 2px 0 2px 2px;
+	border-radius: 15px 0 0 15px; /*padding:  5px 0px 5px 5px;
+	*/
+padding: 5px;
+	background-color: #fff;
+
+	-webkit-box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
+	box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
 
 	-webkit-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-moz-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-o-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-ms-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	right: -50%;
+	right: -60%;
 }
 
 #progressbarCanvas {
@@ -469,13 +487,6 @@ PROGRESS GUAGE
 	width: 100%;
 	height: auto;
 	background-color: #fff;
-	border: solid #000;
-	border-width: 2px 0 2px 2px;
-	border-radius: 15px 0 0 15px;
-	padding: 5px 0px 5px 5px;
-
-	-webkit-box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
-	box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
 }
 
 /*
@@ -486,19 +497,28 @@ THERMOMETER
 .thermometerContainerParent {
 	position: relative;
 	width: 100%;
+	padding-top: 5px;
 }
 
 #thermometerContainer {
 	position: relative;
 	width: 45%;
 	float: right;
+	background-color: #fff;
+	border: solid #000;
+	border-width: 2px 0 2px 2px;
+	border-radius: 15px 0 0 15px;
+	padding: 5px;
+
+	-webkit-box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
+	box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
 
 	-webkit-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-moz-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-o-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-ms-transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	right: -45%;
+	right: -55%;
 }
 
 #thermometerCanvas {
@@ -509,13 +529,6 @@ THERMOMETER
 	width: 100%;
 	height: auto;
 	background-color: #fff;
-	border: solid #000;
-	border-width: 2px 0 2px 2px;
-	border-radius: 15px 0 0 15px;
-	padding: 5px 0px 5px 5px;
-
-	-webkit-box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
-	box-shadow: 0 2px 5px rgba(37, 37, 37, 0.35);
 }
 
 /*
