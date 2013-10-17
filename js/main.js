@@ -53,8 +53,6 @@ $(function() {
   initVerticalShapes();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
-
-  progressbar = new Progressbar();
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
 
@@ -98,10 +96,10 @@ $(function() {
     }, 1000);
     //*/
   }
-  showhideInterval = setInterval(showOrHideThermo, 2500);
+  //showhideInterval = setInterval(showOrHideThermo, 2500);
 });
 
-var showhideInterval;
+/*var showhideInterval;
 var showOrHide = false;
 
 function showOrHideThermo() {
@@ -115,7 +113,7 @@ function showOrHideThermo() {
 
   }
   showOrHide = !showOrHide;
-}
+}*/
 
 function settingsLoaded() {
 	console.log("settingsLoaded");

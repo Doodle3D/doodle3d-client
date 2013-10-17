@@ -12,7 +12,6 @@ var btnOops, btnStop, btnClear;
 var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
 //var btnDebug; // debug
-var displayTemp, displayProgress;
 
 var state;
 var prevState;
@@ -35,8 +34,6 @@ function initButtonBehavior() {
   btnNew = $(".btnNew");
   btnPrint= $(".btnPrint");
   btnStop = $(".btnStop");
-  displayTemp = $("#thermometerContainer");
-  displayProgress = $("#printProgressContainer");
 
   btnPrevious = $(".btnPrevious");
   btnNext = $(".btnNext");
@@ -317,7 +314,7 @@ function update() {
 	setState(printer.state,printer.hasControl);
 
 	thermometer.update(printer.temperature, printer.targetTemperature);
-	//TODO: update progress
+	progressbar.update(printer.currentLine, printer.totalLines);
 }
 
 function setState(newState,newHasControl) { //TODO add hasControl
@@ -362,10 +359,10 @@ function setState(newState,newHasControl) { //TODO add hasControl
 	// progress indicator
 	switch(newState) {
 		case Printer.PRINTING_STATE:
-			displayProgress.show(); // TODO: Show progress
+			progressbar.show(); 
 			break;
 		default:
-			displayProgress.hide(); // TODO: hide progress
+			progressbar.hide();
 			break;
 	}
 
