@@ -31,39 +31,6 @@ var gcode = [];
 function generate_gcode() {
   console.log("f:generategcode()");
 
-  var startGcode = [];
-  var endGcode = [];
-  
-  // get gcode start statements
-	/*console.log("settings['printer.startgcode']: ",settings["printer.startgcode"]);
-	console.log("settings['printer.endgcode']: ",settings["printer.endgcode"]);
-	
-	if ($("#startgcode").val().trim().length != 0) {
-		console.log("   found contents for start-gcode in settings.html")
-		startGcode = $("#startgcode").val().trim().split("\n");
-	} else {
-		console.log("   no start-gcode in settings.html, using defaults")
-		startGcode = startGcode.concat(gcodeStart);
-	}
-	
-	// get gcode end statements
-	if ($("#endgcode").val().trim().length != 0) {
-		console.log("   found contents for end-gcode in settings.html")
-		endGcode = $("#endgcode").val().trim().split("\n");
-	} else {
-		console.log("   no end-gcode in settings.html, using defaults")
-		endGcode = endGcode.concat(gcodeEnd);
-	}
-
-	console.log("f:generate_gcode() >> startGcode:");
-	console.log(startGcode);
-	console.log("");
-	console.log("f:generate_gcode() >> endGcode:");
-	console.log(endGcode);*/
-	
-	startGcode = settings["printer.startgcode"].split("\n");
-	endGcode = settings["printer.endgcode"].split("\n");
-	
   // TODO 2013-09-18 evaluate if this should stay here
   // this was added when Rick mailed us wrt the Ultimaker delivery of Doodle3D
   var gCodeOffsetX = 110; // mm
@@ -88,7 +55,18 @@ function generate_gcode() {
   var retractionspeed 	      = settings["printer.retraction.speed"];
   var retractionminDistance   = settings["printer.retraction.minDistance"];
   var retractionamount 	      = settings["printer.retraction.amount"];
-
+  var preheatTemperature      = settings["printer.heatup.temperature"];
+  
+  var startGcode = settings["printer.startgcode"];
+	startGcode = startGcode.replace("{printingTemp}",temperature);
+	startGcode = startGcode.replace("{preheatTemp}",preheatTemperature);
+	startGcode = startGcode.split("\n");
+	
+	var endGcode = settings["printer.endgcode"];
+	endGcode = endGcode.replace("{printingTemp}",temperature);
+	endGcode = endGcode.replace("{preheatTemp}",preheatTemperature);
+	endGcode = endGcode.split("\n");
+	
   /*
   console.log("f:generate_gcode >> EFFE CHECKEN:");
   console.log("   speed: " + speed);
@@ -130,13 +108,13 @@ function generate_gcode() {
 //  console.log("f:generategcode() >> paths: " + paths.toString());
 //  console.log("paths.toString(): " + paths.toString());
 //  return;
-
-  console.log("printer temperature: ",temperature);
-	//gcode.push("M104 S" + temperature); // set target temperature and do not wait for the extruder to reach it
-  gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
+  
+  //gcode.push("M104 S" + temperature); // set target temperature and do not wait for the extruder to reach it
+  //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
+  
   // add gcode begin commands
   gcode = gcode.concat(startGcode);
-
+  
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
 
   var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
