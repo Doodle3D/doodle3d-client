@@ -8,6 +8,7 @@ var printer =  new Printer();
 var progressbar = new Progressbar();
 var thermometer = new Thermometer();
 var settingsWindow = new SettingsWindow();
+var message = new Message();
 
 var firstTimeSettingsLoaded = true;
 
@@ -55,7 +56,8 @@ $(function() {
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
-
+  message.init($("#message"));
+  
   printer.init();
 	$(document).on(Printer.UPDATE,update);
 
