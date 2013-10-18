@@ -19,6 +19,8 @@ function Printer() {
 	Printer.PRINTING_STATE 			= "printing";
 	Printer.STOPPING_STATE 			= "stopping";				// when you stop (abort) a print it prints the endcode
 
+	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being send to the printer, leaving will result in a incomplete 3D print";
+	
 	this.temperature 				= 0;
 	this.targetTemperature 	= 0;
 	this.currentLine 				= 0;
@@ -95,6 +97,8 @@ function Printer() {
     console.log("Printer:print");
     console.log("  gcode total # of lines: " + gcode.length);
     
+    self.addLeaveWarning();
+		
     /*for (i = 0; i < gcode.length; i++) {
 			gcode[i] += " (" + i + ")";
 		}*/
@@ -151,7 +155,8 @@ function Printer() {
 				  	if (completed) {
 		          console.log("Printer:sendPrintPart:gcode sending completed");
 		          this.gcode = [];
-		          btnStop.css("display","block"); // hack 
+		          btnStop.css("display","block"); // hack
+		          self.removeLeaveWarning();
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
@@ -301,5 +306,14 @@ function Printer() {
 		$(document).trigger(Printer.UPDATE);
 		
 		this.stopStatusCheckInterval();
+	}
+	
+	this.removeLeaveWarning = function() {
+		window.onbeforeunload = null;
+	}
+	this.addLeaveWarning = function() {
+		window.onbeforeunload = function() {
+				return Printer.ON_BEFORE_UNLOAD_MESSAGE;
+		};
 	}
 }
