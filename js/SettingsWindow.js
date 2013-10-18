@@ -147,9 +147,9 @@ function SettingsWindow() {
 		  url: this.wifiboxURL + "/config/all",
 		  dataType: 'json',
 		  timeout: this.timeoutTime,
-		  success: function(data){
-		  	console.log("Settings:loadSettings response: ",data);
-        settings = data.data;
+		  success: function(response){
+		  	console.log("Settings:loadSettings response: ",response);
+        settings = response.data;
 		  	console.log("  settings: ",settings);
 		  	self.fillForm();
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
@@ -202,22 +202,24 @@ function SettingsWindow() {
 			  data: newSettings,
 			  dataType: 'json',
 			  timeout: this.timeoutTime,
-			  success: function(data){
-			  	console.log("Settings:saveSettings response: ",data);
-			  	if(data.status == "error") {
+			  success: function(response){
+			  	console.log("Settings:saveSettings response: ",response);
+			  	if(response.status == "error") {
 			  		clearTimeout(self.retrySaveSettingsDelay);
 						self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings) },self.retryDelay); // retry after delay
 			  	} else {
-			  		var savedSettings = data.data;
+			  		var data = response.data;
+			  		var validation = data.validation;
 			  		self.clearValidationErrors();
 			  		var validated = true;
-				  	$.each(savedSettings, function(key, val) {
+				  	$.each(validation, function(key, val) {
 			        if (val != "ok") {
 			          console.log("ERROR: setting '" + key + "' not successfully set. Message: " + val);
 			          self.displayValidationError(key,val);
 			          validated = false;
 			        }
 			      });
+				  	settings.substituted_ssid = data.substituted_ssid;
 				  	if(complete && validated) complete();
 			  	}
 				}
@@ -236,15 +238,9 @@ function SettingsWindow() {
 		formElement.after(errorMsg);
 	}
 	this.clearValidationErrors = function() {
-		console.log("clearValidationErrors");
-		console.log("  remove: ",self.form.find(".errorMsg").remove());
 		var formElements = self.form.find(".error");
-		console.log("  formElements: ",formElements);
 		formElements.each( function(index,element) {
-			
-			var element = $(element);
-			console.log("    element: ",element);
-			element.removeClass("error");
+			$(element).removeClass("error");
 		});
 	}
 	
@@ -398,7 +394,7 @@ function SettingsWindow() {
 								var networkSelector = self.form.find("#network");
 								networkSelector.val(SettingsWindow.NOT_CONNECTED);
 								
-								if(data.ssid) { 
+								if(data.ssid && data.status == SettingsWindow.API_CREATED) { 
 										self.currentAP = data.ssid;
 								}
 								break;
@@ -492,16 +488,16 @@ function SettingsWindow() {
       case SettingsWindow.CONNECTED:
         btnConnect.removeAttr("disabled");
       
-      	var fieldText = "Connected to: "+this.currentNetwork+".";
+      	var fieldText = "Connected to: <b>"+this.currentNetwork+"</b>.";
       	if(this.currentLocalIP != undefined && this.currentLocalIP != "") {
       		var a = "<a href='http://"+this.currentLocalIP+"' target='_black'>"+this.currentLocalIP+"</a>";
-      		fieldText += " Local ip: "+a;
+      		fieldText += " (IP: "+a+")";
       	}
         field.html(fieldText);
         break;
       case SettingsWindow.CONNECTING:
         btnConnect.attr("disabled", true);
-        field.html("Connecting...");
+        field.html("Connecting... Reconnect by connecting your device to <b>"+this.selectedNetwork+"</b> and going to <a href='http://connect.doodle3d.com'>connect.doodle3d.com</a>");
         break;
       case SettingsWindow.CONNECTING_FAILED:
       	btnConnect.removeAttr("disabled");
@@ -520,11 +516,11 @@ function SettingsWindow() {
 				break;
 			case SettingsWindow.AP:
 				btnCreate.removeAttr("disabled");
-				field.html("Is access point: "+this.currentAP);
+				field.html("Is access point: <b>"+this.currentAP+"</b>");
 				break;
 			case SettingsWindow.CREATING_AP:
 				btnCreate.attr("disabled", true);
-				field.html("Creating access point...");
+				field.html("Creating access point... Reconnect by connecting your device to <b>"+settings.substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>");
 				break;
 		}
 		this.apModeState = state;
@@ -574,6 +570,7 @@ function SettingsWindow() {
 			
 			// save network related settings and on complete, create access point
 			self.saveSettings(self.readForm(),function() {
+				self.setAPModeState(SettingsWindow.CREATING_AP); // get latest substituted ssid
 				$.ajax({
 					url: self.wifiboxCGIBinURL + "/network/openap",
 					type: "POST",
