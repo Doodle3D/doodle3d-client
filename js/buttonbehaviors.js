@@ -12,7 +12,6 @@ var btnOops, btnStop, btnClear;
 var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
 var btnInfo, btnSettings;
 //var btnDebug; // debug
-var displayTemp, displayProgress;
 
 var state;
 var prevState;
@@ -35,8 +34,6 @@ function initButtonBehavior() {
   btnNew = $(".btnNew");
   btnPrint= $(".btnPrint");
   btnStop = $(".btnStop");
-  displayTemp = $("#thermometerContainer");
-  displayProgress = $("#printProgressContainer");
 
   btnPrevious = $(".btnPrevious");
   btnNext = $(".btnNext");
@@ -317,13 +314,15 @@ function update() {
 	setState(printer.state,printer.hasControl);
 
 	thermometer.update(printer.temperature, printer.targetTemperature);
-	//TODO: update progress
+	progressbar.update(printer.currentLine, printer.totalLines);
 }
 
-function setState(newState,newHasControl) { //TODO add hasControl
+function setState(newState,newHasControl) { 
 	if(newState == state && newHasControl == hasControl) return;
 
-	console.log("setState: ",state," > ",newState," ( ",newHasControl,")");
+	prevState = state;
+	
+	console.log("setState: ",prevState," > ",newState," ( ",newHasControl,")");
 	setDebugText("State: "+newState);
 
 	// print button
@@ -350,26 +349,38 @@ function setState(newState,newHasControl) { //TODO add hasControl
 
 	// thermometer
 	switch(newState) {
-		case Printer.UNKNOWN_STATE:
-		case Printer.DISCONNECTED_STATE:
-			thermometer.hide();
+		case Printer.IDLE_STATE:
+		case Printer.BUFFERING_STATE:
+		case Printer.PRINTING_STATE:
+		case Printer.STOPPING_STATE:
+			thermometer.show();	
 			break;
 		default:
-			thermometer.show();
+			thermometer.hide();	
 			break;
 	}
 
 	// progress indicator
 	switch(newState) {
 		case Printer.PRINTING_STATE:
-			displayProgress.show(); // TODO: Show progress
+			progressbar.show(); 
 			break;
 		default:
-			displayProgress.hide(); // TODO: hide progress
+			progressbar.hide();
 			break;
 	}
-
-	prevState = state;
+	
+	if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
+		message.set("Lost connection to WiFi box",Message.ERROR);
+	}	else if(prevState == Printer.WIFIBOX_DISCONNECTED_STATE) {
+		message.set("Connected to WiFi box",Message.INFO,true);
+	} else if(newState == Printer.DISCONNECTED_STATE) {
+		message.set("Printer disconnected",Message.WARNING,true);
+	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE || 
+						prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE) {
+		message.set("Printer connected",Message.INFO,true);
+	}
+	
 	state = newState;
 	hasControl = newHasControl;
 }

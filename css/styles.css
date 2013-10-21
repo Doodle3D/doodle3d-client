@@ -658,6 +658,40 @@ SETTINGS POPUP
 	cursor: pointer;
 }
 
+#message {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0.4em 0.5em;
+	border-radius: 0 0 0 10px;
+	border: 2px solid #333;
+	border-width: 0 0 2px 2px;
+	font-weight: bold;
+
+	-webkit-box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+	box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+	color: #333;
+	white-space: nowrap;
+	display: none;
+}
+
+#message.error {
+	background: #EB313C;
+	color: #fff;
+}
+
+#message.warning {
+	background: #E9A86E;
+}
+
+#message.notice {
+	background: #93CAF4;
+}
+
+#message.info {
+	background: #97DD8A;
+}
+
 @media only screen and (max-width: 480px),only screen and (max-width: 720px) and (min-device-pixel-ratio: 1.5),only screen and (max-width: 720px) and (-webkit-min-device-pixel-ratio: 1.5) {
 	/*
 	TOP LOGO

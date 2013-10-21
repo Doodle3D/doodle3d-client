@@ -49,7 +49,7 @@ function Progressbar() {
   }
 
   this.update = function(part, total) {
-    console.log("Progressbar.update(" + part + "," + total + ")");
+    //console.log("Progressbar.update(" + part + "," + total + ")");
 
     var pct = part / total;
     if (this.isInitted) {
@@ -59,7 +59,7 @@ function Progressbar() {
       var progress = part / total;
       progress = Math.min(progress, 1.0);
       progress = Math.max(progress, 0);
-      console.log("progressbar >> f:update() >> progress: " + progress);
+      //console.log("progressbar >> f:update() >> progress: " + progress);
 
       // clear
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

@@ -94,3 +94,11 @@ form .button {
 form #passwordLabel, form #password {
 	display: none;
 }
+
+form input.error, form textarea.error, form select.error {
+	border: #f00 solid 2px;
+}
+form .errorMsg {
+	color: #f00;
+	margin: 0 0 0 1em;
+}

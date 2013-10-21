@@ -12,13 +12,16 @@ function setPrintprogress(val) {
 
 function Printer() {
 	
-	Printer.UNKNOWN_STATE 			= "unknown";
-	Printer.DISCONNECTED_STATE 	= "disconnected";
-	Printer.IDLE_STATE 					= "idle"; 					// printer found, but idle
-	Printer.BUFFERING_STATE 		= "buffering";			// printer is buffering (recieving) data, but not yet printing
-	Printer.PRINTING_STATE 			= "printing";
-	Printer.STOPPING_STATE 			= "stopping";				// when you stop (abort) a print it prints the endcode
+	Printer.WIFIBOX_DISCONNECTED_STATE 	= "wifibox disconnected";
+	Printer.UNKNOWN_STATE 							= "unknown";				// happens when a printer is connection but there isn't communication yet
+	Printer.DISCONNECTED_STATE 					= "disconnected";		// printer disconnected
+	Printer.IDLE_STATE 									= "idle"; 					// printer found, but idle
+	Printer.BUFFERING_STATE 						= "buffering";			// printer is buffering (recieving) data, but not yet printing
+	Printer.PRINTING_STATE 							= "printing";
+	Printer.STOPPING_STATE 							= "stopping";				// when you stop (abort) a print it prints the endcode
 
+	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being send to the printer, leaving will result in a incomplete 3D print";
+	
 	this.temperature 				= 0;
 	this.targetTemperature 	= 0;
 	this.currentLine 				= 0;
@@ -95,6 +98,9 @@ function Printer() {
     console.log("Printer:print");
     console.log("  gcode total # of lines: " + gcode.length);
     
+    message.set("Sending doodle to printer...",Message.NOTICE);
+    self.addLeaveWarning();
+		
     /*for (i = 0; i < gcode.length; i++) {
 			gcode[i] += " (" + i + ")";
 		}*/
@@ -151,7 +157,9 @@ function Printer() {
 				  	if (completed) {
 		          console.log("Printer:sendPrintPart:gcode sending completed");
 		          this.gcode = [];
-		          btnStop.css("display","block"); // hack 
+		          btnStop.css("display","block"); // hack
+		          self.removeLeaveWarning();
+		          message.set("Doodle is send to printer...",Message.INFO,true);
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
@@ -234,7 +242,7 @@ function Printer() {
 	this.checkStatus = function() {
 		console.log("Printer:checkStatus");
 		this.stateOverruled = false;
-		console.log("  stateOverruled: ",this.stateOverruled);
+		//console.log("  stateOverruled: ",this.stateOverruled);
     var self = this;
     if (communicateWithWifibox) {
       $.ajax({
@@ -242,7 +250,7 @@ function Printer() {
         dataType: 'json',
         timeout: this.timeoutTime,
         success: function(response){
-          console.log("  Printer:status: ",response.data.state); //," response: ",response);
+          //console.log("  Printer:status: ",response.data.state); //," response: ",response);
           
           self.handleStatusUpdate(response);
           
@@ -252,26 +260,27 @@ function Printer() {
         }
       }).fail(function() {
           console.log("Printer:checkStatus: failed");
-          self.state = Printer.UNKNOWN_STATE;
+          self.state = Printer.WIFIBOX_DISCONNECTED_STATE;
           clearTimeout(self.checkStatusDelay);
           clearTimeout(self.retryCheckStatusDelay);
           self.retryCheckStatusDelay = setTimeout(function() { self.checkStatus() },self.retryDelay); // retry after delay
+          $(document).trigger(Printer.UPDATE);
         });
     } else {
       console.log ("Printer >> f:checkStatus() >> communicateWithWifibox is false, so not executing this function");
     }
 	}
 	this.handleStatusUpdate = function(response) {
-		console.log("Printer:handleStatusUpdate");
+		console.log("Printer:handleStatusUpdate response: ",response);
 		var data = response.data;
 		if(response.status != "success") {
 			self.state = Printer.UNKNOWN_STATE;
 		} else {
 			// state
-			console.log("  stateOverruled: ",this.stateOverruled);
+			//console.log("  stateOverruled: ",this.stateOverruled);
 			if(!this.stateOverruled) {
 				self.state 								= data.state;
-				console.log("  state > ",self.state);
+				//console.log("  state > ",self.state);
 			}
 			
 			// temperature
@@ -301,5 +310,14 @@ function Printer() {
 		$(document).trigger(Printer.UPDATE);
 		
 		this.stopStatusCheckInterval();
+	}
+	
+	this.removeLeaveWarning = function() {
+		window.onbeforeunload = null;
+	}
+	this.addLeaveWarning = function() {
+		window.onbeforeunload = function() {
+				return Printer.ON_BEFORE_UNLOAD_MESSAGE;
+		};
 	}
 }

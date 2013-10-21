@@ -113,8 +113,9 @@ function SettingsWindow() {
 	this.submitwindow = function(e) {
 		e.preventDefault();
 	  e.stopPropagation();
-	  self.saveSettings();
-	  self.hideSettings();
+	  self.saveSettings(self.readForm(),function(){
+	  	self.hideSettings();
+	  });
 	  
 	  clearTimeout(self.retryRetrieveNetworkStatusDelay);
 	}
@@ -146,9 +147,9 @@ function SettingsWindow() {
 		  url: this.wifiboxURL + "/config/all",
 		  dataType: 'json',
 		  timeout: this.timeoutTime,
-		  success: function(data){
-		  	console.log("Settings:loadSettings response: ",data);
-        settings = data.data;
+		  success: function(response){
+		  	console.log("Settings:loadSettings response: ",response);
+        settings = response.data;
 		  	console.log("  settings: ",settings);
 		  	self.fillForm();
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
@@ -162,45 +163,6 @@ function SettingsWindow() {
     this.refreshNetworks();
     this.retrieveNetworkStatus(false);
 	}
-
-	this.saveSettings = function(callback) {
-	  console.log("Settings:saveSettings");
-
-	  this.readForm();
-
-	  if (communicateWithWifibox) {
-		  $.ajax({
-			  url: this.wifiboxURL + "/config",
-			  type: "POST",
-			  data: settings,
-			  dataType: 'json',
-			  timeout: this.timeoutTime,
-			  success: function(data){
-			  	console.log("Settings:saveSettings response: ",data);
-			  	if(data.status == "error") {
-			  		clearTimeout(self.retrySaveSettingsDelay);
-						self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
-			  	} else {
-			  		var savedSettings = data.data;
-				  	$.each(savedSettings, function(index, val) {
-			        if (val != "ok") {
-			          console.log("ERROR: value '" + index + "' not successfully set. Message: " + val);
-			        }
-			      });
-			      // TODO something like a callback or feedback that saving went well / or failed
-			      if (callback != undefined) {
-			        callback();
-			      }
-			  	}
-				}
-			}).fail(function() {
-				console.log("Settings:saveSettings: failed");
-				clearTimeout(self.retrySaveSettingsDelay);
-				self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
-			});
-	  }
-	}
-
 	this.fillForm = function() {
 		console.log("SettingsWindow:fillForm");
 
@@ -232,15 +194,68 @@ function SettingsWindow() {
 		});
 	}
 
+	this.saveSettings = function(newSettings,complete) {
+	 if (communicateWithWifibox) {
+		  $.ajax({
+			  url: this.wifiboxURL + "/config",
+			  type: "POST",
+			  data: newSettings,
+			  dataType: 'json',
+			  timeout: this.timeoutTime,
+			  success: function(response){
+			  	console.log("Settings:saveSettings response: ",response);
+			  	if(response.status == "error") {
+			  		clearTimeout(self.retrySaveSettingsDelay);
+						self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings) },self.retryDelay); // retry after delay
+			  	} else {
+			  		var data = response.data;
+			  		var validation = data.validation;
+			  		self.clearValidationErrors();
+			  		var validated = true;
+				  	$.each(validation, function(key, val) {
+			        if (val != "ok") {
+			          console.log("ERROR: setting '" + key + "' not successfully set. Message: " + val);
+			          self.displayValidationError(key,val);
+			          validated = false;
+			        }
+			      });
+				  	settings.substituted_ssid = data.substituted_ssid;
+				  	if(complete && validated) complete();
+			  	}
+				}
+			}).fail(function() {
+				console.log("Settings:saveSettings: failed");
+				clearTimeout(self.retrySaveSettingsDelay);
+				self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings) },self.retryDelay); // retry after delay
+			});
+	  }
+	}
+	this.displayValidationError = function(key,msg) {
+		var formElement = self.form.find("[name|='"+key+"']");
+		console.log("formElement: ",formElement);
+		formElement.addClass("error");
+		var errorMsg = "<p class='errorMsg'>"+msg+"</p>"
+		formElement.after(errorMsg);
+	}
+	this.clearValidationErrors = function() {
+		var formElements = self.form.find(".error");
+		formElements.each( function(index,element) {
+			$(element).removeClass("error");
+		});
+	}
+	
 	this.readForm = function() {
-		console.log("SettingsWindow:readForm");
-		var selects = this.form.find("select");
+		//console.log("SettingsWindow:readForm");
+		var settings = {};
+		var selects = self.form.find("select");
 		selects.each( function(index,element) {
 			var element = $(element);
-			settings[element.attr('name')] = element.val();
+			if(element.attr('name') != "network.client.network") {
+				settings[element.attr('name')] = element.val();
+			}
 		});
 
-		var inputs = this.form.find("input");
+		var inputs = self.form.find("input");
 		inputs.each( function(index,element) {
 			var element = $(element);
 			switch(element.attr("type")) {
@@ -254,14 +269,14 @@ function SettingsWindow() {
 			}
 		});
 
-		var textareas = this.form.find("textarea");
+		var textareas = self.form.find("textarea");
 		textareas.each( function(index,element) {
 			var element = $(element);
 			settings[element.attr('name')] = element.val();
 		});
-		console.log(settings);
+		//console.log(settings);
+		return settings;
 	}
-
 
 	/*
 	 * Networks ui
@@ -379,7 +394,7 @@ function SettingsWindow() {
 								var networkSelector = self.form.find("#network");
 								networkSelector.val(SettingsWindow.NOT_CONNECTED);
 								
-								if(data.ssid) { 
+								if(data.ssid && data.status == SettingsWindow.API_CREATED) { 
 										self.currentAP = data.ssid;
 								}
 								break;
@@ -473,16 +488,16 @@ function SettingsWindow() {
       case SettingsWindow.CONNECTED:
         btnConnect.removeAttr("disabled");
       
-      	var fieldText = "Connected to: "+this.currentNetwork+".";
+      	var fieldText = "Connected to: <b>"+this.currentNetwork+"</b>.";
       	if(this.currentLocalIP != undefined && this.currentLocalIP != "") {
       		var a = "<a href='http://"+this.currentLocalIP+"' target='_black'>"+this.currentLocalIP+"</a>";
-      		fieldText += " Local ip: "+a;
+      		fieldText += " (IP: "+a+")";
       	}
         field.html(fieldText);
         break;
       case SettingsWindow.CONNECTING:
         btnConnect.attr("disabled", true);
-        field.html("Connecting...");
+        field.html("Connecting... Reconnect by connecting your device to <b>"+this.selectedNetwork+"</b> and going to <a href='http://connect.doodle3d.com'>connect.doodle3d.com</a>");
         break;
       case SettingsWindow.CONNECTING_FAILED:
       	btnConnect.removeAttr("disabled");
@@ -501,11 +516,11 @@ function SettingsWindow() {
 				break;
 			case SettingsWindow.AP:
 				btnCreate.removeAttr("disabled");
-				field.html("Is access point: "+this.currentAP);
+				field.html("Is access point: <b>"+this.currentAP+"</b>");
 				break;
 			case SettingsWindow.CREATING_AP:
 				btnCreate.attr("disabled", true);
-				field.html("Creating access point...");
+				field.html("Creating access point... Reconnect by connecting your device to <b>"+settings.substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>");
 				break;
 		}
 		this.apModeState = state;
@@ -514,26 +529,31 @@ function SettingsWindow() {
 	this.connectToNetwork = function() {
 		console.log("connectToNetwork");
 		if(self.selectedNetwork == undefined) return;
-		postData = {
+		var postData = {
 			ssid:self.selectedNetwork,
 			phrase:self.form.find("#password").val(),
       recreate:true
 		}
 		console.log("  postData: ",postData);
 		if (communicateWithWifibox) {
-		  $.ajax({
-			  url: self.wifiboxCGIBinURL + "/network/associate",
-			  type: "POST",
-			  data: postData,
-			  dataType: 'json',
-			  timeout: self.timeoutTime,
-			  success: function(response){
-			  	console.log("Settings:connectToNetwork response: ",response);
-				}
-			}).fail(function() {
-				console.log("Settings:connectToNetwork: timeout (normal behavior)");
-				//clearTimeout(self.retrySaveSettingsDelay);
-				//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
+			
+			// save network related settings and on complete, connect to network
+			self.saveSettings(self.readForm(),function() {
+				
+				$.ajax({
+					url: self.wifiboxCGIBinURL + "/network/associate",
+					type: "POST",
+					data: postData,
+					dataType: 'json',
+					timeout: self.timeoutTime,
+					success: function(response){
+						console.log("Settings:connectToNetwork response: ",response);
+					}
+				}).fail(function() {
+					console.log("Settings:connectToNetwork: timeout (normal behavior)");
+					//clearTimeout(self.retrySaveSettingsDelay);
+					//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
+				});
 			});
 	  }
     self.setClientModeState(SettingsWindow.CONNECTING,"");
@@ -545,28 +565,34 @@ function SettingsWindow() {
 	}
 
   this.createAP = function() {
+  	console.log("createAP");
 		if (communicateWithWifibox) {
-		  $.ajax({
-			  url: self.wifiboxCGIBinURL + "/network/openap",
-			  type: "POST",
-			  dataType: 'json',
-			  timeout: self.timeoutTime,
-			  success: function(response){
-			  	console.log("Settings:createAP response: ",response);
+			
+			// save network related settings and on complete, create access point
+			self.saveSettings(self.readForm(),function() {
+				self.setAPModeState(SettingsWindow.CREATING_AP); // get latest substituted ssid
+				$.ajax({
+					url: self.wifiboxCGIBinURL + "/network/openap",
+					type: "POST",
+					dataType: 'json',
+					timeout: self.timeoutTime,
+					success: function(response){
+						console.log("Settings:createAP response: ",response);
+					}
+				}).fail(function() {
+					console.log("Settings:createAP: timeout (normal behavior)");
+					//clearTimeout(self.retrySaveSettingsDelay);
+					//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
+				});
+				
+				self.setAPModeState(SettingsWindow.CREATING_AP,"");
 
-				}
-			}).fail(function() {
-				console.log("Settings:createAP: timeout (normal behavior)");
-				//clearTimeout(self.retrySaveSettingsDelay);
-				//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
+				// after switching wifi network or creating a access point we delay the status retrieval
+				// because the webserver needs time to switch
+				clearTimeout(self.retrieveNetworkStatusDelay);
+				self.retrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus(true) },self.retrieveNetworkStatusDelayTime);
 			});
 	  }
-    self.setAPModeState(SettingsWindow.CREATING_AP,"");
-
-    // after switching wifi network or creating a access point we delay the status retrieval
-    // because the webserver needs time to switch
-    clearTimeout(self.retrieveNetworkStatusDelay);
- 		self.retrieveNetworkStatusDelay = setTimeout(function() { self.retrieveNetworkStatus(true) },self.retrieveNetworkStatusDelayTime);
   }
 }
 
