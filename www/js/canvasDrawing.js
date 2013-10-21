@@ -300,6 +300,49 @@ function onCanvasMouseDown(e) {
   draw(x, y, 0.5);
 }
 
+function saveToSvg() {
+	var lastX = 0, lastY = 0, lastIsMove;
+	var data = ''; //TODO: change data to an array which is collapsed after the loop?
+	var svg = '';
+
+	var boundsWidth = doodleBounds[3] - doodleBounds[1];
+	var boundsHeight = doodleBounds[2] - doodleBounds[0];
+
+	svg += '<?xml version="1.0" standalone="no"?>\n';
+	svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n';
+	svg += '<svg width="' + boundsWidth + '" height="' + boundsHeight + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
+	svg += '\t<desc>Doodle 3D sketch</desc>\n';
+
+	for (var i = 0; i < _points.length; ++i) {
+		var x = _points[i][0], y = _points[i][1], isMove = _points[i][2];
+		var dx = x - lastX, dy = y - lastY;
+
+		if (i == 0)
+			data += 'M'; //emit absolute move on first pair of coordinates
+		else if (isMove != lastIsMove)
+			data += isMove ? 'm' : 'l';
+
+		data += dx + ',' + dy + ' ';
+
+		lastX = x;
+		lastY = y;
+		lastIsMove = isMove;
+	}
+
+	svg += '\t<path d="' + data + '" fill="none" stroke="black" stroke-width="1" />\n';
+
+	var field = 'height', value = numLayers;
+	svg += '\t<!-- ' + field + ': ' + value + ' -->\n';
+	field = 'outlineShape', value = VERTICALSHAPE;
+	svg += '\t<!-- ' + field + ': ' + value + ' -->\n';
+	field = 'twist', value = rStep;
+	svg += '\t<!-- ' + field + ': ' + value + ' -->\n';
+
+	svg += '</svg>\n';
+
+	return svg;
+}
+
 var prevPoint = {x:-1, y:-1};
 function onCanvasMouseMove(e) {
 //  console.log("f:onCanvasMouseMove()");
