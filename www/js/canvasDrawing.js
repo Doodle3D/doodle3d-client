@@ -302,17 +302,17 @@ function onCanvasMouseDown(e) {
 
 function saveToSvg() {
 	var lastX = 0, lastY = 0, lastIsMove;
-	var data = ''; //TODO: change data to an array which is collapsed after the loop?
 	var svg = '';
 
-	var boundsWidth = doodleBounds[3] - doodleBounds[1];
-	var boundsHeight = doodleBounds[2] - doodleBounds[0];
+	var boundsWidth = doodleBounds[2] - doodleBounds[0];
+	var boundsHeight = doodleBounds[3] - doodleBounds[1];
 
 	svg += '<?xml version="1.0" standalone="no"?>\n';
 	svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n';
 	svg += '<svg width="' + boundsWidth + '" height="' + boundsHeight + '" version="1.1" xmlns="http://www.w3.org/2000/svg">\n';
 	svg += '\t<desc>Doodle 3D sketch</desc>\n';
 
+	var data = '';
 	for (var i = 0; i < _points.length; ++i) {
 		var x = _points[i][0], y = _points[i][1], isMove = _points[i][2];
 		var dx = x - lastX, dy = y - lastY;
@@ -329,18 +329,21 @@ function saveToSvg() {
 		lastIsMove = isMove;
 	}
 
-	svg += '\t<path d="' + data + '" fill="none" stroke="black" stroke-width="1" />\n';
+	svg += '\t<path transform="translate(' + -doodleBounds[0] + ',' + -doodleBounds[1] + ')" d="' + data + '" fill="none" stroke="black" stroke-width="2" />\n';
 
-	var field = 'height', value = numLayers;
-	svg += '\t<!-- ' + field + ': ' + value + ' -->\n';
-	field = 'outlineShape', value = VERTICALSHAPE;
-	svg += '\t<!-- ' + field + ': ' + value + ' -->\n';
-	field = 'twist', value = rStep;
-	svg += '\t<!-- ' + field + ': ' + value + ' -->\n';
+	var makeField = function(k,v) { return k + ': ' + v + '; '; }
+	svg += '<!-- ' + makeField('height', numLayers) + makeField('outlineShape', VERTICALSHAPE) + makeField('twist', rStep) + '-->\n';
 
 	svg += '</svg>\n';
 
 	return svg;
+}
+
+function loadFromSvg(svgData) {
+	//clear out points
+	//read svg and fill points (and update bounds)
+	//NOTE: generate the fields comment with some magic value so we can easily detect this while parsing
+	//update any state necessary to have the canvas/client re-init itself to the new data
 }
 
 var prevPoint = {x:-1, y:-1};
