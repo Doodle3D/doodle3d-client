@@ -454,7 +454,6 @@ PROGRESS GUAGE
 .progressbarCanvasContainerParent {
 	position: relative;
 	width: 100%;
-	padding-top: 5px;
 }
 
 #progressbarCanvasContainer {
@@ -477,6 +476,7 @@ padding: 5px;
 	-ms-transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	right: -60%;
+	margin-top: 5%;
 }
 
 #progressbarCanvas {
@@ -497,7 +497,7 @@ THERMOMETER
 .thermometerContainerParent {
 	position: relative;
 	width: 100%;
-	padding-top: 5px;
+	padding-top: 10px;
 }
 
 #thermometerContainer {

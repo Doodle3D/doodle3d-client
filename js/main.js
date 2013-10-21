@@ -71,7 +71,10 @@ $(function() {
     $("#preview_tmp").css("display", "block");
     
     $("#debug_display").css("display", "block");
-    
+
+    // show and hide the progressguage and thermometer
+    showhideInterval = setInterval(showOrHideThermo, 2500);
+
 //    $("#debugContainer").css("display", "block");
 
     /* TEMP CODE!! -> artificially populates the startgcode and endgcode textareas in the settings window */
@@ -98,7 +101,6 @@ $(function() {
     }, 1000);
     //*/
   }
-  showhideInterval = setInterval(showOrHideThermo, 2500);
 });
 
 var showhideInterval;
