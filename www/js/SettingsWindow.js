@@ -195,7 +195,8 @@ function SettingsWindow() {
 	}
 
 	this.saveSettings = function(newSettings,complete) {
-	 if (communicateWithWifibox) {
+		settings = newSettings; // store new settings in global settings
+		if (communicateWithWifibox) {
 		  $.ajax({
 			  url: this.wifiboxURL + "/config",
 			  type: "POST",
