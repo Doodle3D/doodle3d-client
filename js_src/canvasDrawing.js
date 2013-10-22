@@ -263,43 +263,6 @@ function adjustPreviewTransformation() {
 }
 
 
-/* * * * * * * * * *
- *
- *  MOUSE/TOUCH EVENTHANDLERS
- *
- * * * * * * * * * */
-function onCanvasMouseDown(e) {
-  //  console.log("onmousedown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
-  //  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
-  //  console.log("onmousedown >> e: " + e);
-  //  console.log(e);
-//  console.log("f:onCanvasMouseDown()");
-  dragging = true;
-
-  prevCountingTime = new Date().getTime();
-  movementCounter = 0
-
-//  _points.push([e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, true]);
-//  adjustBounds(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-//  adjustPreviewTransformation();
-//  draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 0.5);
-
-  var x, y;
-  if (e.offsetX != undefined) {
-    x = e.offsetX;
-    y = e.offsetY;
-  } else {
-    x = e.layerX;
-    y = e.layerY;
-  }
-//  console.log("     x: " + x + ", y: " + y);
-
-  _points.push([x, y, true]);
-  adjustBounds(x, y);
-  adjustPreviewTransformation();
-  draw(x, y, 0.5);
-}
-
 function loadFromSvg(svgData) {
 	var mode = '', x = 0, y = 0;
 
@@ -417,6 +380,44 @@ function saveToSvg() {
 	svg += '</svg>\n';
 
 	return svg;
+}
+
+
+/* * * * * * * * * *
+ *
+ *  MOUSE/TOUCH EVENTHANDLERS
+ *
+ * * * * * * * * * */
+function onCanvasMouseDown(e) {
+  //  console.log("onmousedown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
+  //  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
+  //  console.log("onmousedown >> e: " + e);
+  //  console.log(e);
+//  console.log("f:onCanvasMouseDown()");
+  dragging = true;
+
+  prevCountingTime = new Date().getTime();
+  movementCounter = 0
+
+//  _points.push([e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, true]);
+//  adjustBounds(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+//  adjustPreviewTransformation();
+//  draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 0.5);
+
+  var x, y;
+  if (e.offsetX != undefined) {
+    x = e.offsetX;
+    y = e.offsetY;
+  } else {
+    x = e.layerX;
+    y = e.layerY;
+  }
+//  console.log("     x: " + x + ", y: " + y);
+
+  _points.push([x, y, true]);
+  adjustBounds(x, y);
+  adjustPreviewTransformation();
+  draw(x, y, 0.5);
 }
 
 var prevPoint = {x:-1, y:-1};
