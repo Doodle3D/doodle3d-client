@@ -61,4 +61,18 @@ define Package/doodle3d-client/install
 	$(CP) $(PKG_BUILD_DIR)/www/library $(1)/www/
 endef
 
+define Package/doodle3d-client/postrm
+	# Try to remove all www directories used by the package, and intentionally leave anything non-empty alone
+	rmdir /www/css
+	rmdir /www/img/buttons
+	rmdir /www/img/logo
+	rmdir /www/img/vertical_shape_icons
+	rmdir /www/img/webpage_icons
+	rmdir /www/img
+	rmdir /www/js/libs
+	rmdir /www/js
+	rmdir /www/library/test
+	rmdir /www/library
+endef
+
 $(eval $(call BuildPackage,doodle3d-client))
