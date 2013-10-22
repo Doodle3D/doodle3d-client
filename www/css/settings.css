@@ -1,0 +1,109 @@
+form {
+  margin: 10px;
+  max-width: 600px;
+}
+form input {
+  margin: 1px;
+}
+
+body,th,td {
+  font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 13px;
+}
+.settingsContainer {
+  position:relative;
+  /*min-width: 370px;*/
+  width: 100%;
+  height: 100%;
+}
+/*form#settingsForm {*/
+  /*width: 100% auto;*/
+/*}*/
+form fieldset {
+  max-width: 600px;
+  border: 1px solid rgb(187, 187, 187);
+	border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 8px;
+  /*padding-right: 8px;*/
+}
+form fieldset fieldset{
+	max-width: 580px;
+	margin: 15px 0 5px 0;
+	clear: left;
+	float: left;
+}
+form fieldset legend {
+  margin-left: 10px;
+  font-weight: bold;
+}
+form label {
+  min-width: 150px;
+  display: block;
+  float: left;
+  margin: 1px 0 0 0;
+	clear: left;
+}
+form div {
+	float: left;
+}
+form input[type="text"], form input[type="number"], form input[type="password"] {
+  border: 1px solid rgb(144, 192, 255);
+  margin-right: 5px;
+  -webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+form input[type="text"].small, form input[type="number"].small, form input[type="password"].small {
+  width: 50px;
+}
+form input[type="text"].large, form input[type="number"].large, form input[type="password"].large {
+  width: 250px;
+}
+form input[type="radio"] {
+  margin: 4px 4px 0 0;
+}
+
+form textarea {
+  border: 1px solid rgb(144, 192, 255);
+  -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+form .startgcode_left {
+  float:left;
+  margin-right: 20px;
+}
+form textarea.gcode {
+  width: 252px;
+  /*max-width: 262px;*/
+  /*min-width: 200px;*/
+  height: 150px;
+}
+form small {
+	margin: 3px 0 0 0;
+	display: block;
+	clear: left;
+}
+form .button {
+	display: inline-block;
+}
+
+form #passwordLabel, form #password {
+	display: none;
+}
+
+form input.error, form textarea.error, form select.error {
+	border: #f00 solid 2px;
+}
+form .errorMsg {
+	color: #f00;
+	margin: 0 0 0 1em;
+}
+form dl dt {
+	float: left;
+	font-style: italic;
+	width: 10em;
+}

@@ -1,0 +1,45 @@
+.debugContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  background-color: #f0f;
+  display: none;
+}
+
+#debug_textArea {
+  position:absolute; 
+  bottom: 0; 
+  /*width: 800px; */
+  z-index: 500;
+  display: none;
+}
+
+.debugBtn {
+  width: 25px;
+  height: 25px;
+  background-color: #03b;
+  float:left;
+}
+
+.agentInfo {
+  background: #fff;
+  border: 1px #333 solid;
+  display: none;
+  float:left;
+  opacity: .7;
+}
+
+.agentInfoToggle {
+  display: block;
+}
+
+#debug_display { 
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	background-color: #fff;
+	opacity: .7;
+	color: #000;
+}
