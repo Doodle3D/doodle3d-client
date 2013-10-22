@@ -2,6 +2,8 @@
 .project
 
 .idea/*
+www/js/*.js
+www/css/*.css
 __index.html
 _index.html
 div_bgs.html
