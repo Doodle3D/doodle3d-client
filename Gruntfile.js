@@ -16,21 +16,22 @@ module.exports = function(grunt) {
       },
       dist: {
         src: [
-          'www/js/SettingsWindow.js',
-          'www/js/d3dServerInterfacing.js',
-          'www/js/verticalShapes.js',
-          'www/js/buttonbehaviors.js',
-          'www/js/canvasDrawing.js',
-          'www/js/previewRendering.js',
-          'www/js/gcodeGenerating.js',
-          'www/js/init_layout.js',
-          'www/js/Printer.js',
-          'www/js/Progressbar.js',
-          'www/js/Thermometer.js',
-          'www/js/utils.js',
-          'www/js/sidebar.js',
-          'www/js/message.js',
-          'www/js/main.js'
+          'js_src/SettingsWindow.js',
+          'js_src/UpdatePanel.js',
+          'js_src/d3dServerInterfacing.js',
+          'js_src/verticalShapes.js',
+          'js_src/buttonbehaviors.js',
+          'js_src/canvasDrawing.js',
+          'js_src/previewRendering.js',
+          'js_src/gcodeGenerating.js',
+          'js_src/init_layout.js',
+          'js_src/Printer.js',
+          'js_src/Progressbar.js',
+          'js_src/Thermometer.js',
+          'js_src/utils.js',
+          'js_src/sidebar.js',
+          'js_src/Message.js',
+          'js_src/main.js'
         ],
         dest: 'www/js/<%= pkg.name %>.js'
       }
@@ -38,15 +39,21 @@ module.exports = function(grunt) {
     uglify: {
       options: {
 //        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-        mangle: false,
+        mangle: true,
         beautify: false,
         compress: {},
         report: 'min',
         preserveComments: 'false'
       },
       build: {
-        src: ['www/js/*.js', '!www/js/<%= pkg.name %>.min.js'],
-        dest: 'www/js/<%= pkg.name %>.min.js'
+        files: {
+//          'www/js/<%= pkg.name %>.min.js' : ['www/js/*.js', '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js']
+          'www/js/<%= pkg.name %>.min.js' : ['www/js/<%= pkg.name %>.js']
+        }
+//        src: 'www/js/*.js',
+//        dest: 'www/js/min/blabla.js'
+//        src: ['www/js/*.js', '!www/js/<%= pkg.name %>.min.js'],
+//        dest: 'www/js/<%= pkg.name %>.min.js'
       }
     },
     jshint: {
@@ -85,11 +92,11 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-//      javascript: {
-//        files: ["www/js/*", '!www/js/*.min.js'],
-//        //        tasks: ["less", "css_prefix"]
-//        tasks: ["uglify"]
-//      },
+      javascript: {
+        files: ["js_src/*", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
+        tasks: ["concat", "uglify"]
+//        tasks: ["jshint", "concat", "uglify"]
+      },
       styles: {
         files: ["less/*"],
         tasks: ["less", "autoprefixer", "cssmin"]
@@ -133,8 +140,8 @@ module.exports = function(grunt) {
     'less',
     'autoprefixer',
     'cssmin',
-//    'concat',
-//    'uglify',
+    'concat',
+    'uglify',
 //    'jshint',
     'watch'
   ]);
