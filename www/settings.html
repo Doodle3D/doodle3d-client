@@ -55,7 +55,7 @@
       </select>
     </fieldset>-->
 
-		<fieldset id="printersettings">
+	<fieldset id="printersettings">
       <legend>Print settings</legend>
       <label for="layerHeight">Layer height:</label><input id="layerHeight" type="number" step="0.01" class="small" name="printer.layerHeight">mm<br>
       <label for="wallThickness">Wall thickness:</label><input id="wallThickness" type="number" step="0.1" class="small" name="printer.wallThickness">mm<br>
@@ -78,68 +78,71 @@
       <label for="heatupTemperature">Auto preaheat temperature:</label><input id="heatupTemperature" type="number" class="small" name="printer.heatup.temperature"><br>
     </fieldset>
 
-		<fieldset id="doodlesettings">
-			<legend>Doodle3D settings</legend>
-			<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
-			<label for="maxObjectHeight">Max object height:</label><input id="maxObjectHeight" type="number" class="small" name="printer.maxObjectHeight">mm<br>
-			<label for="screenToMillimeterScale">Pixels to mm scale:</label><input id="screenToMillimeterScale" type="number" step="0.1" class="small" name="printer.screenToMillimeterScale"><br>
-		</fieldset>
+	<fieldset id="doodlesettings">
+		<legend>Doodle3D settings</legend>
+		<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
+		<label for="maxObjectHeight">Max object height:</label><input id="maxObjectHeight" type="number" class="small" name="printer.maxObjectHeight">mm<br>
+		<label for="screenToMillimeterScale">Pixels to mm scale:</label><input id="screenToMillimeterScale" type="number" step="0.1" class="small" name="printer.screenToMillimeterScale"><br>
+	</fieldset>
 
-		<fieldset>
-      <legend>Network settings</legend>
-      <label>Connection type:</label>
-      <div>
-      	<label for="ap"><input type="radio" name="connectiontype" value="ap" id="ap">Access point mode</label>
-				<label for="client"><input type="radio" name="connectiontype" value="client" id="client">Client mode</label>
-			</div>
+	<fieldset>
+		<legend>Network settings</legend>
+		<label>Connection type:</label>
+		<div>
+      		<label for="ap"><input type="radio" name="connectiontype" value="ap" id="ap">Access point mode</label>
+			<label for="client"><input type="radio" name="connectiontype" value="client" id="client">Client mode</label>
+		</div>
 
 	    <fieldset id="apSettings">
-	      <legend>Access point settings</legend>
-	      <label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="network.ap.ssid" id="ssid"> <br>
-	      <small>* The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
-	      <br>
-	      <label for="apKey">Password:</label><input type="text" class="large" name="network.ap.key" id="apKey"> <br>
-	      <label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="network.ap.address" id="ipaddress"><br>
-	      <label for="netmask">Wi-Fi box netmask:</label><input type="text" name="network.ap.netmask" id="netmask"><br>
-	      <input type="button" name="create" value="Create" class="button" id="createAP"/>
-        <span id="apModeState"></span><br/>
-        <br/>
-        <small>When you can't connect to your device, you can always use an ethernet cable and go to <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>.</small>
+	      	<legend>Access point settings</legend>
+	      	<label for="ssid">Wi-Fi box ssid*:</label><input type="text" class="large" name="network.ap.ssid" id="ssid"> <br>
+	      	<small>* The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
+	      	<br>
+	      	<label for="apKey">Password:</label><input type="text" class="large" name="network.ap.key" id="apKey"> <br>
+	      	<label for="ipaddress">Wi-Fi box IP address:</label><input type="text" name="network.ap.address" id="ipaddress"><br>
+	      	<label for="netmask">Wi-Fi box netmask:</label><input type="text" name="network.ap.netmask" id="netmask"><br>
+	      	<input type="button" name="create" value="Create" class="button" id="createAP"/>
+			<span id="apModeState"></span><br/>
+       	 	<br/>
+       	 	<small>When you can't connect to your device, you can always use an ethernet cable and go to <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>.</small>
 	    </fieldset>
 
 	    <fieldset id="clientSettings">
-	      <legend>Client mode settings</legend>
+	      	<legend>Client mode settings</legend>
 	      
-	      <label for="wifiboxid">Wi-Fi box id*:</label><input type="text" name="network.cl.wifiboxid" id="wifiboxid"><br>
-        <small>* Is used on <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>. <br/>
-        The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
-	      <br>
-	      <label for="network">Network:</label>
-	      <select id="network" name="network.client.network">
-	      </select>
-	      <input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br>
-	      <label for="password" id="passwordLabel">Password:</label><input type="password" name="network.client.password" id="password"><br>
-	      <input type="button" name="connect" value="Connect" class="button" id="connectToNetwork"/>
-        <span id="clientModeState"></span><br/>
-        <br/>
-        <small>When you can't connect to your device, you can always use an ethernet cable and go to <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>.</small>
-	    </fieldset>
+	      	<label for="wifiboxid">Wi-Fi box id*:</label><input type="text" name="network.cl.wifiboxid" id="wifiboxid"><br>
+        	<small>* Is used on <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>. <br/>
+        	The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
+	      	<br>
+	      	<label for="network">Network:</label>
+	      	<select id="network" name="network.client.network"></select>
+	      	<input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br>
+	      	<label for="password" id="passwordLabel">Password:</label><input type="password" name="network.client.password" id="password"><br>
+	      	<input type="button" name="connect" value="Connect" class="button" id="connectToNetwork"/>
+        	<span id="clientModeState"></span><br/>
+        	<br/>
+        	<small>When you can't connect to your device, you can always use an ethernet cable and go to <a href="http://connect.doodle3d.com">connect.doodle3d.com</a>.</small>
 		</fieldset>
+	</fieldset>
+
+	<fieldset id="updatePanel">
+ 		<legend>Update</legend>
+ 		<input type="button" name="update" value="Update" class="button" id="update"/>
+        <span id="updateState"></span><br/>
+        <small id="updateInfo"></small>
+ 	</fieldset>
 
     <fieldset>
-      <legend>GCODE settings</legend>
-      <div class="startgcode_left">
-        <label for="startgcode">Start:</label><br/>
-        <textarea id="startgcode" class="gcode" name="printer.startgcode">
-        </textarea>
-
-      </div>
-      <div>
-        <label for="endgcode">End:</label><br/>
-        <textarea id="endgcode" class="gcode" name="printer.endgcode">
-        </textarea>
-      </div>
-      <small>The text <em>{printingTemp}</em> will be replaced by the printing temperature and <em>{preheatTemp}</em> will be replaced by the preaheat temperature.</small>
+ 		<legend>GCODE settings</legend>
+      	<div class="startgcode_left">
+       		<label for="startgcode">Start:</label><br/>
+       		<textarea id="startgcode" class="gcode" name="printer.startgcode"></textarea>
+     	</div>
+      	<div>
+        	<label for="endgcode">End:</label><br/>
+        	<textarea id="endgcode" class="gcode" name="printer.endgcode"></textarea>
+      	</div>
+      	<small>The text <em>{printingTemp}</em> will be replaced by the printing temperature and <em>{preheatTemp}</em> will be replaced by the preaheat temperature.</small>
     </fieldset>
   </form><br/>
 </div>
