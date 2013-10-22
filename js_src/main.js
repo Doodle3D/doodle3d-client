@@ -17,6 +17,9 @@ var wifiboxCGIBinURL; // CGI-bin, for some network stuff, where it needs to rest
 
 var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previewContainer;
 
+var showhideInterval;
+var showOrHide = false;
+
 $(function() {
   console.log("ready");
 
@@ -73,7 +76,7 @@ $(function() {
     $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
-    showhideInterval = setInterval(showOrHideThermo, 2500);
+    //showhideInterval = setInterval(showOrHideThermo, 2500);
 
 //    $("#debugContainer").css("display", "block");
 
@@ -102,9 +105,6 @@ $(function() {
     //*/
   }
 });
-
-var showhideInterval;
-var showOrHide = false;
 
 function showOrHideThermo() {
   console.log("f:showOrHideThermo()");

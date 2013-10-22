@@ -49,7 +49,7 @@ function SettingsWindow() {
   this.clientModeState = SettingsWindow.NOT_CONNECTED;
   this.currentAP;
   this.apModeState = SettingsWindow.NO_AP;
-
+  
   // after switching wifi network or creating a access point we delay the status retrieval
   // because the webserver needs time to switch
   this.retrieveNetworkStatusDelay;   // setTimout delay
@@ -68,7 +68,6 @@ function SettingsWindow() {
   SettingsWindow.NO_AP           		= "no ap";
   SettingsWindow.AP              		= "ap";
   SettingsWindow.CREATING_AP     		= "creating ap";
-
   
   SettingsWindow.API_CONNECTING_FAILED  = -1
   SettingsWindow.API_NOT_CONNECTED 			= 0
@@ -76,6 +75,15 @@ function SettingsWindow() {
   SettingsWindow.API_CONNECTED 					= 2
   SettingsWindow.API_CREATING 					= 3 
   SettingsWindow.API_CREATED 						= 4 
+  
+  // network mode
+  SettingsWindow.NETWORK_MODE_NEITHER  			= "neither";
+  SettingsWindow.NETWORK_MODE_CLIENT  			= "clientMode";
+  SettingsWindow.NETWORK_MODE_ACCESS_POINT  = "accessPointMode";
+  
+  this.networkMode = SettingsWindow.NETWORK_MODE_NEITHER;
+  
+  this.updatePanel = new UpdatePanel();
   
 	var self = this;
 
@@ -108,6 +116,10 @@ function SettingsWindow() {
 		  btnConnect.on('touchstart mousedown',self.connectToNetwork);
 			btnCreate.on('touchstart mousedown',self.createAP);
 		  networkSelector.change(self.networkSelectorChanged);
+		  
+		  // update panel
+		  var $updatePanelElement = self.form.find("#updatePanel");
+		  self.updatePanel.init(wifiboxURL,$updatePanelElement);
 	  });
 	}
 	this.submitwindow = function(e) {
@@ -360,6 +372,8 @@ function SettingsWindow() {
               	//console.log("  not connected & not a access point");
           			self.apFieldSet.show();
           			self.clientFieldSet.show();
+          			
+          			self.networkMode = SettingsWindow.NETWORK_MODE_NEITHER;
               	break;
 							case SettingsWindow.API_CONNECTING_FAILED:
 							case SettingsWindow.API_CONNECTING:
@@ -380,7 +394,7 @@ function SettingsWindow() {
 								} else {
 									self.currentLocalIP = ""
 								}
-							  
+								self.networkMode = SettingsWindow.NETWORK_MODE_CLIENT;
 								break;
 							case SettingsWindow.API_CREATING:
 							case SettingsWindow.API_CREATED:
@@ -398,8 +412,10 @@ function SettingsWindow() {
 								if(data.ssid && data.status == SettingsWindow.API_CREATED) { 
 										self.currentAP = data.ssid;
 								}
+								self.networkMode = SettingsWindow.NETWORK_MODE_ACCESS_POINT;
 								break;
 						}
+            self.updatePanel.setNetworkMode(self.networkMode);
             
             // update status message
             switch(data.status) {
@@ -456,6 +472,8 @@ function SettingsWindow() {
 
 	this.selectNetwork = function(ssid) {
 		console.log("select network: ",ssid);
+		if(ssid == "") return;
+		console.log("  checked");
 		this.selectedNetwork = ssid;
     if(this.networks == undefined || ssid == SettingsWindow.NOT_CONNECTED) {
     	this.hideWiFiPassword();

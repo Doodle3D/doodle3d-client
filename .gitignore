@@ -1,2 +1,29 @@
-node_modules
 .project
+.idea/*
+__index.html
+_index.html
+div_bgs.html
+img/thermo_bg_2.png
+img/thermo_fg_2.png
+img/logo/logo_full_8bit.png
+img/logo/logo_small BACKUP.png
+img/logo/logo_small_8bit.png
+img/logo/logo_smaller.png
+img/logo/logo_smaller_8bit.png
+img/logo/logo_smaller_wide_8bit.png
+img/logo/logo_smallest.png
+css/_backup20131010/*
+css/_backup20131011/*
+d3d_btns.css
+index.html.orig
+js/Thermometer.js.orig
+js/buttonbehaviors.js.orig
+js/gcodeGenerating_v01.js.orig
+js/init_layout backup20130918.js
+js/main.js.orig
+js/previewRendering_v02.js.orig
+less/verticalshapes.css
+less/verticalshapes_backup.css
+__settings.html
+css/_settings.css
+node_modules/*
