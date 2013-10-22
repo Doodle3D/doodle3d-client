@@ -300,6 +300,86 @@ function onCanvasMouseDown(e) {
   draw(x, y, 0.5);
 }
 
+function loadFromSvg(svgData) {
+	var mode = '', x = 0, y = 0;
+
+	console.log("loading " + svgData.length + " bytes of data...");
+
+	clearDoodle();
+
+	var p = svgData.indexOf("<path");
+	if (p == -1) { console.log("loadFromSvg: could not find parsing start point"); return false; }
+	p = svgData.indexOf('d="', p);
+	if (p == -1) { console.log("loadFromSvg: could not find parsing start point"); return false; }
+	p += 3; //skip 'd="'
+
+	var skipSpace = function() { while (svgData.charAt(p) == ' ') p++; }
+	var parseCommand = function() {
+		while (true) {
+			skipSpace();
+			var c = svgData.charAt(p);
+			if (c == 'M' || c == 'm' || c == 'l') { //new command letter
+				mode = c;
+			} else if (c == '"') { //end of command chain
+				return true;
+			} else { //something else, must be a pair of coordinates...
+				var tx = 0, ty = 0, numberEnd = 0, len = 0;
+				numberEnd = svgData.indexOf(',', p);
+				if (numberEnd == -1) { console.log("could not find comma in coordinate pair"); return false; }
+				len = numberEnd - p;
+				tx = parseInt(svgData.substr(p, len));
+				p += len + 1;
+				skipSpace();
+				numberEnd = svgData.indexOf(' ', p);
+				if (numberEnd == -1) { console.log("could not find space after coordinate pair"); return false; }
+				len = numberEnd - p;
+				ty = parseInt(svgData.substr(p, len));
+				p += len;
+
+				if (mode == 'M' || mode == 'L') {
+					x = tx; y = ty;
+				} else if (mode == 'm' || mode == 'l') {
+					x += tx; y += ty;
+				} else {
+					console.log("loadFromSvg: found coordinate pair but mode was never set");
+					return false;
+				}
+
+				var isMove = mode == 'm' || mode == 'M';
+
+				//TODO: create function for adding a point?
+				//console.log("inserting "+x+","+y+" ",isMove);
+				updatePrevX = x;
+				updatePrevY = y;
+				_points.push([x, y, isMove]);
+				adjustBounds(x, y);
+				adjustPreviewTransformation();
+
+				if (isMove) draw(x, y, .5);
+				else draw(x, y);
+			}
+			p++;
+		}
+
+		return true;
+	};
+
+	parseCommand(); //depends on value of p, so don't move this without taking that into consideration
+
+	//find <!--d3d-keys
+	//loop until invalid character found (namely the '-' of '-->'): skipSpace(); parse '(\w+):\w*(\w+)'; assign corresp. var if key matches
+
+	renderToImageDataPreview();
+
+	/* TODO: behaviour for prev/next buttons:
+	 * - call update/status once to init number of saved sketches - 0 means both buttons disabled, otherwise set current to -1, total amount to number and enable left (i.e. clicking that loads last saved sketch)
+	 * - when going back and forth, update current and enable/disable both buttons when borders (i.e. 1 and total amount) are reached
+	 * - when saving, set current to -1 again and update total amount
+	 */
+
+	return true;
+}
+
 function saveToSvg() {
 	var lastX = 0, lastY = 0, lastIsMove;
 	var svg = '';
@@ -332,18 +412,11 @@ function saveToSvg() {
 	svg += '\t<path transform="translate(' + -doodleBounds[0] + ',' + -doodleBounds[1] + ')" d="' + data + '" fill="none" stroke="black" stroke-width="2" />\n';
 
 	var makeField = function(k,v) { return k + ': ' + v + '; '; }
-	svg += '<!-- ' + makeField('height', numLayers) + makeField('outlineShape', VERTICALSHAPE) + makeField('twist', rStep) + '-->\n';
+	svg += '<!--d3d-keys ' + makeField('height', numLayers) + makeField('outlineShape', VERTICALSHAPE) + makeField('twist', rStep) + '-->\n';
 
 	svg += '</svg>\n';
 
 	return svg;
-}
-
-function loadFromSvg(svgData) {
-	//clear out points
-	//read svg and fill points (and update bounds)
-	//NOTE: generate the fields comment with some magic value so we can easily detect this while parsing
-	//update any state necessary to have the canvas/client re-init itself to the new data
 }
 
 var prevPoint = {x:-1, y:-1};

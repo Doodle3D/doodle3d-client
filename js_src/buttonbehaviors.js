@@ -188,6 +188,31 @@ function initButtonBehavior() {
 
   //btnStop.on('touchstart mousedown',stopPrint);
 
+  	var btnLoadSketch = $('#btnLoadSketch');
+  	btnLoadSketch.mouseup(function(e) {
+  		var sketchId = $('#sketchId').val();
+  		console.log("loading sketch with id " + sketchId);
+
+		wifiboxURL = "http://192.168.5.1/d3dapi";
+		$.ajax({
+			url: wifiboxURL + "/sketch/" + sketchId,
+			dataType: 'json',
+			type: 'GET',
+			//timeout: this.timeoutTime,
+			success: function(response) {
+				if (response.status == 'error' || response.status == 'fail') {
+					console.log("loadSketch fail/error: " + response.msg + " -- ", response);
+				} else {
+					console.log("loadSketch success: loaded id #" + response.data.id, response);
+					//console.log("sketch content:\n" + response.data.data);
+					loadFromSvg(response.data.data);
+				}
+			}
+		}).fail(function() {
+			console.log("loadSketch failed: ", response);
+		});
+  	});
+
 	btnSave.mouseup(function(e) {
 		svg = saveToSvg();
 		console.log("generated SVG [" + _points.length + " points, " + svg.length + " bytes]:\n" + svg);
@@ -200,10 +225,11 @@ function initButtonBehavior() {
 			data: { data: svg },
 			//timeout: this.timeoutTime,
 			success: function(response) {
-				if (response.status == 'error' || response.status == 'fail')
-					console.log("saveSketch fail/error: ", response);
-				else
+				if (response.status == 'error' || response.status == 'fail') {
+					console.log("saveSketch fail/error: " + response.msg + " -- ", response);
+				} else {
 					console.log("saveSketch success: saved with id #" + response.data.id, response);
+				}
 			}
 		}).fail(function() {
 			console.log("saveSketch failed: ", response);
