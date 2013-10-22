@@ -76,7 +76,7 @@ $(function() {
     $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
-    showhideInterval = setInterval(showOrHideThermo, 2500);
+    //showhideInterval = setInterval(showOrHideThermo, 2500);
 
 //    $("#debugContainer").css("display", "block");
 

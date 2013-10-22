@@ -61,6 +61,7 @@
       <label for="wallThickness">Wall thickness:</label><input id="wallThickness" type="number" step="0.1" class="small" name="printer.wallThickness">mm<br>
       <label for="filamentThickness">Filament thickness:</label><input id="filamentThickness" step="0.01" type="number" class="small" name="printer.filamentThickness">mm<br>
       <label for="temperature">Temperature:</label><input id="temperature" type="number" class="small" name="printer.temperature">degrees C<br>
+      <label for="bedTemperature">Bed temperature:</label><input id="bedTemperature" type="number" class="small" name="printer.bed.temperature">degrees C<br>
       <br>
       <label for="speed">Speed:</label><input id="speed" type="number" name="printer.speed" class="small">mm/s<br>
       <label for="travelSpeed">Travel speed:</label><input id="travelSpeed" type="number" name="printer.travelSpeed" class="small">mm/s<br>
@@ -69,13 +70,14 @@
       <label for="useSubLayers">Use sub-layers*:</label><input id="useSubLayers" type="checkbox" name="printer.useSubLayers" value="firstLayerSlow"><br>
       <small>* Continuously move platform while printing instead of once per layer</small>
       <br>
-			<label for="useRetraction">Use retraction:</label><input id="useRetraction" type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
+	  <label for="useRetraction">Use retraction:</label><input id="useRetraction" type="checkbox" name="printer.retraction.enabled" value="useRetraction"><br>
       <label for="retractionAmount">Retraction amount:</label><input id="retractionAmount" type="number" class="small" name="printer.retraction.amount">mm<br>
       <label for="retractionMinDistance">Retraction min distance:</label><input id="retractionMinDistance" type="number" class="small" name="printer.retraction.minDistance">mm<br>
       <label for="retractionSpeed">Retraction speed:</label><input id="retractionSpeed" type="number" class="small" name="printer.retraction.speed">mm/s<br>
       <br>
-			<label for="heatupEnabled">Auto preheat:</label><input id="heatupEnabled" type="checkbox" name="printer.heatup.enabled" value="heatupEnabled"><br>
-      <label for="heatupTemperature">Auto preheat temperature:</label><input id="heatupTemperature" type="number" class="small" name="printer.heatup.temperature"><br>
+	  <label for="heatupEnabled">Auto preheat:</label><input id="heatupEnabled" type="checkbox" name="printer.heatup.enabled" value="heatupEnabled"><br>
+      <label for="heatupTemperature">Preheat temperature:</label><input id="heatupTemperature" type="number" class="small" name="printer.heatup.temperature"><br>
+      <label for="heatupBedTemperature">Preheat bed temperature:</label><input id="heatupBedTemperature" type="number" class="small" name="printer.heatup.bed.temperature"><br>
     </fieldset>
 
 	<fieldset id="doodlesettings">
@@ -142,7 +144,15 @@
         	<label for="endgcode">End:</label><br/>
         	<textarea id="endgcode" class="gcode" name="printer.endgcode"></textarea>
       	</div>
-      	<small>The text <em>{printingTemp}</em> will be replaced by the printing temperature and <em>{preheatTemp}</em> will be replaced by the preheat temperature.</small>
+      	<small>
+      		The following texts are replaced:
+      		<dl>
+      			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
+      			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
+      			<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
+      			<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
+      		</dl>
+      	</small>
     </fieldset>
   </form><br/>
 </div>

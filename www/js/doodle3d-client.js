@@ -2215,6 +2215,7 @@ function generate_gcode() {
   var layerHeight 			      = settings["printer.layerHeight"];
   var maxObjectHeight		      = settings["printer.maxObjectHeight"];
   var temperature 			      = settings["printer.temperature"];
+  var bedTemperature 			    = settings["printer.bed.temperature"];
   var useSubLayers 			      = settings["printer.useSubLayers"];
   var enableTraveling 	      = settings["printer.enableTraveling"];
   var retractionEnabled 	    = settings["printer.retraction.enabled"];
@@ -2222,15 +2223,14 @@ function generate_gcode() {
   var retractionminDistance   = settings["printer.retraction.minDistance"];
   var retractionamount 	      = settings["printer.retraction.amount"];
   var preheatTemperature      = settings["printer.heatup.temperature"];
+  var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
   
   var startGcode = settings["printer.startgcode"];
-	startGcode = startGcode.replace("{printingTemp}",temperature);
-	startGcode = startGcode.replace("{preheatTemp}",preheatTemperature);
+  startGcode = subsituteVariables(startGcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
 	startGcode = startGcode.split("\n");
 	
 	var endGcode = settings["printer.endgcode"];
-	endGcode = endGcode.replace("{printingTemp}",temperature);
-	endGcode = endGcode.replace("{preheatTemp}",preheatTemperature);
+	endGcode = subsituteVariables(endGcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
 	endGcode = endGcode.split("\n");
 	
   /*
@@ -2424,6 +2424,16 @@ function generate_gcode() {
   gcode = gcode.concat(endGcode);
   
   return gcode;
+}
+
+function subsituteVariables(gcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature) {
+	
+	gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
+	gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);
+	gcode = gcode.replace(/{preheatTemp}/gi			,preheatTemperature);
+	gcode = gcode.replace(/{preheatBedTemp}/gi 	,preheatBedTemperature);
+	
+	return gcode;
 }
 
 function scaleFunction(percent) {
@@ -3333,7 +3343,7 @@ $(function() {
     $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
-    showhideInterval = setInterval(showOrHideThermo, 2500);
+    //showhideInterval = setInterval(showOrHideThermo, 2500);
 
 //    $("#debugContainer").css("display", "block");
 

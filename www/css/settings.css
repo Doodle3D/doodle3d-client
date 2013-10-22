@@ -102,3 +102,8 @@ form .errorMsg {
 	color: #f00;
 	margin: 0 0 0 1em;
 }
+form dl dt {
+	float: left;
+	font-style: italic;
+	width: 10em;
+}
