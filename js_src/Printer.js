@@ -159,7 +159,7 @@ function Printer() {
 		          this.gcode = [];
 		          btnStop.css("display","block"); // hack
 		          self.removeLeaveWarning();
-		          message.set("Doodle is send to printer...",Message.INFO,true);
+		          message.set("Doodle is sent to printer...",Message.INFO,true);
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
