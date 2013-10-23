@@ -329,8 +329,25 @@ function loadFromSvg(svgData) {
 
 	parseCommand(); //depends on value of p, so don't move this without taking that into consideration
 
-	//find <!--d3d-keys
-	//loop until invalid character found (namely the '-' of '-->'): skipSpace(); parse '(\w+):\w*(\w+)'; assign corresp. var if key matches
+	//TODO: untested from here
+	const fieldDefMarker = "<!--<![CDATA[d3d-keys";
+	p = svgData.indexOf(fieldDefMarker);
+	if (p == -1) { console.log("loadFromSvg: could not find metadata marker"); return false; }
+	p += fieldDefMarker.length;
+	skipSpace();
+
+	var endP = svgData.indexOf("]]>-->", p);
+	if (endP == -1) { console.log("loadFromSvg: could not find metadata end-marker"); return false; }
+	var metaFields = JSON.parse(svgData.substr(p, endP - p));
+	//TODO: log error and return false if parsing failed
+	for (var k in metaFields) {
+		var v = metaFields[k];
+		switch (k) {
+			case "height": numLayers = v; break;
+			case "outlineShape": VERTICALSHAPE = v; break;
+			case "twist": rStep = v; break;
+		}
+	}
 
 	renderToImageDataPreview();
 
@@ -343,6 +360,8 @@ function loadFromSvg(svgData) {
 	return true;
 }
 
+//SVG validator: http://validator.w3.org/
+//SVG viewer: http://svg-edit.googlecode.com/svn/branches/2.6/editor/svg-editor.html
 function saveToSvg() {
 	var lastX = 0, lastY = 0, lastIsMove;
 	var svg = '';
@@ -374,8 +393,8 @@ function saveToSvg() {
 
 	svg += '\t<path transform="translate(' + -doodleBounds[0] + ',' + -doodleBounds[1] + ')" d="' + data + '" fill="none" stroke="black" stroke-width="2" />\n';
 
-	var makeField = function(k,v) { return k + ': ' + v + '; '; }
-	svg += '<!--d3d-keys ' + makeField('height', numLayers) + makeField('outlineShape', VERTICALSHAPE) + makeField('twist', rStep) + '-->\n';
+	var fields = JSON.stringify({'height': numLayers, 'outlineShape': VERTICALSHAPE, 'twist': rStep});
+	svg += '\t<!--<![CDATA[d3d-keys ' + fields + ']]>-->\n';
 
 	svg += '</svg>\n';
 
