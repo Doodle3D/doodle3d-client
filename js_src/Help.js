@@ -57,9 +57,10 @@ function GrandTour(_name) {
       }
     }
 
-    // bring up all the elements
+    // bring up thermometer and progressbar to explain them
     thermometer.show();
     progressbar.show();
+
 //    if ($.cookie("Doodle3DFirstTime") == 'ridden') {
 //      console.log("we've been here before...");
 //      $(this).joyride('set_li', false, 4);
@@ -129,9 +130,9 @@ function GrandTour(_name) {
     $(document).trigger(helpTours.TOURFINISHED, self.name);
 
     // hide the elements which were summoned for the purposes of the tour
-    thermometer.hide();
-    progressbar.hide();
-    message.hide();
+//    thermometer.hide();
+//    progressbar.hide();
+//    message.hide();
 
     // after seeing the grand tour for the first time ever, set cookie 'Doodle3DFirstTime' to true
     if (!$.cookie("Doodle3DFirstTime")) {
@@ -238,15 +239,28 @@ function initHelp() {
 
     helpTours.init( function () {
 
-      // only trigger starttour if user is seeing Doodle3D for the first time
-      if ($.cookie("Doodle3DFirstTime") != "ridden") {
-        console.log("initHelp >> intro tour has not been given yet > let's go!");
-        setTimeout(helpTours.startTour, 750, helpTours.tours.grandTour, helpTours);
-      } else if (parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
+
+      if (parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
         console.log("initHelp >> Doodle3DFirstTime cookie is set, Doodle3DVisitCounter is < 4");
+        if ($.cookie("Doodle3DFirstTime") != "ridden") {
+          setTimeout(helpTours.startTour, 750, helpTours.tours.grandTour, helpTours);
+        } else {
+          setTimeout(helpTours.startTour, 750, helpTours.tours.infoReminderTour, helpTours);
+        }
         // remind user of our nifty tour
+      } else if (parseInt($.cookie("Doodle3DVisitCounter")) == helpTours.numTimesToShowNagPopup && $.cookie("Doodle3DFirstTime") != "ridden") {
+        // remind
         setTimeout(helpTours.startTour, 750, helpTours.tours.infoReminderTour, helpTours);
       }
+//            // only trigger starttour if user is seeing Doodle3D for the first time
+//      if ($.cookie("Doodle3DFirstTime") != "ridden") {
+//        console.log("initHelp >> intro tour has not been given yet > let's go!");
+//        setTimeout(helpTours.startTour, 750, helpTours.tours.grandTour, helpTours);
+//      } else if (parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
+//        console.log("initHelp >> Doodle3DFirstTime cookie is set, Doodle3DVisitCounter is < 4");
+//        // remind user of our nifty tour
+//        setTimeout(helpTours.startTour, 750, helpTours.tours.infoReminderTour, helpTours);
+//      }
     });
   });
 
@@ -256,7 +270,7 @@ var helpTours;
 function HelpTours() {
   console.log("HelpTours");
 
-  this.numTimesToShowNagPopup = 4;
+  this.numTimesToShowNagPopup = 2;
 
   this.WELCOMETOUR    = "welcometour";
   this.INFOREMINDER   = "inforeminder";
@@ -345,8 +359,26 @@ function HelpTours() {
   }
 
   this.tourEnded = function(e, n) {
-    console.log("HelpTours >> f:tourEnded >> this.tourActive: " + self.tourActive + ", name: " + n);
+    console.log("HelpTours >> f:tourEnded >> self.tourActive: " + self.tourActive + ", name: " + n);
 
+//    if (self.tourActive) {
+//      //          console.log("    killing previous joyride... ");
+//      if (self.currActiveTour.active == true) {
+//        $(window).joyride('end');
+//        self.currActiveTour = undefined;
+//      }
+//      //          console.log("    setting tourActive to false....");
+//      self.tourActive = false;
+//      //          console.log("    scope.tourActive: " + scope.tourActive);
+//    }
+//    $(window).joyride('destroy');
+
+    $(window).joyride('destroy');
+    self.currActiveTour = undefined;
     self.tourActive = false;
+
+    thermometer.hide();
+    progressbar.hide();
+    printer.checkStatus();
   }
 }
