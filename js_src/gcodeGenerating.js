@@ -142,7 +142,7 @@ function generate_gcode() {
 	console.log("pointsToPrint: ",pointsToPrint);
 		
   if(pointsToPrint > MAX_POINTS_TO_PRINT) {
-  	alert("Sorry, your doodle too complex and / or to high");
+  	alert("Sorry, your doodle is too complex or too high. Please try to simplify it.");
   	console.log("ERROR: to many points too convert to gcode");
   	return [];
   }
