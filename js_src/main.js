@@ -107,6 +107,19 @@ $(function() {
   }
 });
 
+function enableButton(elem, handler) {
+	//var elem = $('#'+domId);
+	elem.removeClass("disabled");
+ 	elem.unbind('touchstart mousedown');
+ 	elem.bind('touchstart mousedown', handler);
+}
+
+function disableButton(elem) {
+	//var elem = $('#'+domId);
+	elem.addClass("disabled");
+ 	elem.unbind('touchstart mousedown');
+}
+
 function showOrHideThermo() {
   console.log("f:showOrHideThermo()");
   if (showOrHide) {
