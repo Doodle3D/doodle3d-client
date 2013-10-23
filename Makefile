@@ -48,6 +48,7 @@ define Package/doodle3d-client/install
 	$(CP) $(PKG_BUILD_DIR)/www/favicon* $(1)/www/
 	$(CP) $(PKG_BUILD_DIR)/www/index.html $(1)/www/
 	$(CP) $(PKG_BUILD_DIR)/www/settings.html $(1)/www/
+	$(CP) $(PKG_BUILD_DIR)/www/helpcontent.html $(1)/www/
 	
 	$(CP) $(PKG_BUILD_DIR)/www/css/debug.min.css $(1)/www/css/
 	$(CP) $(PKG_BUILD_DIR)/www/css/settings.min.css $(1)/www/css/

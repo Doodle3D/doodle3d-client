@@ -122,8 +122,14 @@ function Printer() {
     console.log("  gcodeSize: ",gcodeSize);
     
     if(gcodeSize > Printer.MAX_GCODE_SIZE) {
-    	alert("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+this.maxGCodeSize+"MB)");
-    	console.log("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+this.maxGCodeSize+"MB)");
+    	alert("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+    	console.log("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+    	
+    	this.overruleState(Printer.IDLE_STATE);
+    	this.startStatusCheckInterval();
+    	message.hide();
+    	self.removeLeaveWarning();
+    	
     	return;
     }
     
@@ -325,6 +331,7 @@ function Printer() {
 	}
 	this.addLeaveWarning = function() {
 		window.onbeforeunload = function() {
+				console.log("WARNING:"+Printer.ON_BEFORE_UNLOAD_MESSAGE);
 				return Printer.ON_BEFORE_UNLOAD_MESSAGE;
 		};
 	}
