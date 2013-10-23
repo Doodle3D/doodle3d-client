@@ -51,7 +51,7 @@ function GrandTour(_name) {
         // executing this 3 times because there doesn't seem to be a 'go to step X' method
 //        $(this).joyride('set_li', false);
         $(this).joyride('set_li', false);
-        $(this).joyride('set_li', false);
+//        $(this).joyride('set_li', false);
       } else {
         $(this).joyride('set_li', false);
       }
@@ -60,18 +60,14 @@ function GrandTour(_name) {
     // bring up thermometer and progressbar to explain them
     thermometer.show();
     progressbar.show();
+    message.hide();
 
-//    if ($.cookie("Doodle3DFirstTime") == 'ridden') {
-//      console.log("we've been here before...");
-//      $(this).joyride('set_li', false, 4);
-//    }
-    //    if (index == 0) {
-    //      console.log("...yeah");
-    //      $(this).joyride('set_li', false, 1);
-    //    }
   };
   this.preStepCallback = function(index, tip) {
-    console.log("GrandTour >> f:preStepCallback() >> index: " + index);
+//    console.log("GrandTour >> f:preStepCallback() >> index: " + index);
+//    console.log("GrandTour >> f:preStepCallback() >> tip: " , tip);
+//    console.log("GrandTour >> f:preStepCallback() >> $(this): " , $(this));
+//    console.log("GrandTour >> f:preStepCallback() >> tipsettings: " , $(this)[0].tipSettings);
 
     var dataset = $(this)[0].$li[0].dataset;
     if (dataset.action != undefined) {
@@ -82,8 +78,8 @@ function GrandTour(_name) {
           break;
         case "showMessage":
           console.log("    action: showMessage");
-          message.set("Just a notification...", Message.NOTICE);
-          message.show();
+          message.set("This is a status message...", Message.NOTICE);
+//          message.show();
           break;
         case "showProgressBar":
           console.log("    action: showProgressBar");
@@ -104,18 +100,18 @@ function GrandTour(_name) {
       console.log("    THERE *WAS* AN ACTION!");
       switch (dataset.action) {
         case "sayHello":
-          console.log("    action: sayHello");
+//          console.log("    action: sayHello");
           break;
         case "showMessage":
-          console.log("    action: showMessage");
+//          console.log("    action: showMessage");
 //          message.hide();
           break;
         case "showProgressBar":
-          console.log("    action: showProgressBar");
+//          console.log("    action: showProgressBar");
 //          progressbar.hide();
           break;
         case "showThermometer":
-          console.log("    action: showThermometer");
+//          console.log("    action: showThermometer");
 //          thermometer.hide();
           break;
       }
@@ -361,24 +357,13 @@ function HelpTours() {
   this.tourEnded = function(e, n) {
     console.log("HelpTours >> f:tourEnded >> self.tourActive: " + self.tourActive + ", name: " + n);
 
-//    if (self.tourActive) {
-//      //          console.log("    killing previous joyride... ");
-//      if (self.currActiveTour.active == true) {
-//        $(window).joyride('end');
-//        self.currActiveTour = undefined;
-//      }
-//      //          console.log("    setting tourActive to false....");
-//      self.tourActive = false;
-//      //          console.log("    scope.tourActive: " + scope.tourActive);
-//    }
-//    $(window).joyride('destroy');
-
     $(window).joyride('destroy');
     self.currActiveTour = undefined;
     self.tourActive = false;
 
     thermometer.hide();
     progressbar.hide();
+    message.hide();
     printer.checkStatus();
   }
 }

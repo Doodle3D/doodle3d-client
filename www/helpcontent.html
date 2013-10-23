@@ -1,68 +1,106 @@
 <!-- Tip Content -->
 <ol id="help_d3dIntro">
   <li data-button="OK" class="d3dInfoWelcomePanel">
-    <h1>Welcome to Doodle3D</h1>
+    <h1>Welcome to Doodle3D!</h1>
     <p></p>
-    <p>It looks like it's your first time here. How about we give you a quick tour?</p>
-    <p> </p>
+    <p>It looks like it's your first time here. Why not take the time to let us quickly introduce you to the app? It only takes a minute and
+      it will help getting you acquainted with the interface. Just follow the steps and if you want to stop simply click the x
+      in the top-right corner, or press escape.</p>
+    <p>For more in-depth help you can visit <a href="http://www.doodle3d.com/help" target="_blank">doodle3d.com/help</a>.</p>
   </li>
   <li data-class="leftpanel" class="custom" data-button="OK" data-options="tipLocation:right">
-    <h2>leftpanel</h2>
-    <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
-    <p><a href="#">linkme beautiful</a>.</p>
+    <h2>Left panel</h2>
+    <p>Let's first look at the left panel. It's mainly geared towards creating, saving and retrieving doodles.</p>
   </li>
   <li data-class="btnNew" class="custom" data-text="Next" data-options="tipLocation:right">
     <h2>New</h2>
-    <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
-    <p><a href="#">linkme beautiful</a>.</p>
-  </li>
-  <li data-class="btnsPrevNext" data-button="Next" data-options="tipLocation:right" data-action="sayHello">
-    <h2>previous and next</h2>
-    <p>Get the details right by styling Joyride with a custom stylesheet!</p>
+    <p>This button creates a new drawing. Pressing the button will clear the current screen and offers you a clean slate to doodle on.</p>
   </li>
   <li data-class="btnSave" data-button="Next" data-options="tipLocation:right">
     <h2>Save</h2>
-    <p>Get the details right by styling Joyride with a custom stylesheet!</p>
+    <p>Saves your doodle to the local Doodle3D Wi-Fi box.</p>
+  </li>
+  <li data-class="btnsPrevNext" data-button="Next" data-options="tipLocation:right;tipAdjustmentY:-25" data-action="sayHello">
+    <h2>View saved doodles</h2>
+    <p>Use the buttons '<' and '>' to flip through all the saved doodles on your Wi-Fi box.</p>
   </li>
   <li data-class="btnOops" data-button="Next" data-options="tipLocation:right">
     <h2>Oops</h2>
-    <p>It works right aligned.</p>
+    <p>The oops button discards your last steps in drawing your doodle. You can actually keep pressing the button to return to the first step if you want.</p>
+  </li>
+  <!--<li data-button="Next">-->
+    <!--<h2>doodle area</h2>-->
+    <!--<p>Some info on the doodle area</p>-->
+  <!--</li>-->
+  <li data-id="mycanvas" class="d3dDoodleCanvasPanel" data-button="Next" data-options="tipLocation:right;tipAdjustmentX:0">
+    <h2>Doodle area</h2>
+    <p>This is the drawing canvas. Unleash your inner artist!</p>
+  </li>
+  <li data-id="preview" data-button="Next" data-options="tipLocation:left">
+    <h2>Preview</h2>
+    <p>The preview field shows a preview of how your doodle will look in real life.</p>
   </li>
   <li data-button="Next">
-    <h2>Now for the right panel</h2>
-    <p>It works as a modal too!</p>
+    <h2>Manipulating your doodle</h2>
+    <p>In the bottom-right corner of the doodle area are buttons to influence your doodle's visual appearance. Find out how they work!</p>
   </li>
-  <li data-class="rightpanel" data-button="Next" data-options="tipLocation:left">
+  <li data-id="btnsUpDown" data-button="Next" data-options="tipLocation:top">
+    <h2>Stretch up/down</h2>
+    <p>Using these buttons you can stretch your doodle vertically. This enables you to determine what height the doodle gets when printed.</p>
+  </li>
+  <li data-id="btnsTurnLeftRight" data-button="Next" data-options="tipLocation:top">
+    <h2>Rotate left/right</h2>
+    <p>These buttons enable you to rotate your doodle counterclockwise or clockwise.</p>
+  </li>
+  <li data-id="verticalShapes" data-button="Next" data-options="tipLocation:left">
+    <h2>vertical outlines</h2>
+    <p>select vertical outlines</p>
+  </li>
+  <!--<li data-button="Next">-->
+    <!--<h2>Now for the right panel</h2>-->
+    <!--<p>It works as a modal too!</p>-->
+  <!--</li>-->
+  <li data-class="rightpanel" data-button="Next" data-options="tipLocation:left;tipAdjustmentY:40">
     <h2>Right Panel</h2>
-    <p>It works with classes, and only on the first visible element with that class.</p>
+    <p>The right panel is geared towards printing, feedback of printer status and controlling your Doodle3D settings.</p>
   </li>
-  <li data-class="btnPrint" data-button="Next" data-options="tipLocation:left">
+  <li data-class="btnPrint" data-button="Next" data-options="tipLocation:left;tipAdjustmentY:40">
     <h2>Print</h2>
-    <p>It works with classes, and only on the first visible element with that class.</p>
+    <p>Pressing the print button will print your doodle on the connected 3D printer. Make sure the design is exactly what you want it to be, the printer is connected and turned on, the startup temperature of your printer is reached and the right filament is installed.</p>
   </li>
   <li data-class="btnStop" data-button="Next" data-options="tipLocation:left">
     <h2>Stop</h2>
-    <p>It works with classes, and only on the first visible element with that class.</p>
+    <p>If the print is in progress and you want it to stop printing, press the Stop button on the right hand side of the screen. This will make the printer stop printing the doodle. It can take up to a few seconds for the printer to react.</p>
   </li>
-  <li data-id="progressbarCanvasContainer" data-button="Next" data-options="tipLocation:left" data-action="showProgressBar">
-    <h2>progressguage</h2>
-    <p>It works with classes, and only on the first visible element with that class.</p>
+  <li data-id="progressbarCanvasContainer" data-button="Next" data-options="tipLocation:left">
+    <h2>Progress bar</h2>
+    <p>Shows the progress of the current printjob. This panel appears automatically when a print job is sent.</p>
   </li>
-  <li data-id="thermometerContainer" data-button="Next" data-options="tipLocation:left" data-action="showThermometer">
-    <h2>Thermometer</h2>
-    <p>It works with classes, and only on the first visible element with that class.</p>
+  <li data-id="thermometerContainer" class="temperatureGauge" data-button="Next" data-options="tipLocation:left">
+    <h2>Temperature gauge</h2>
+    <p>
+      The temperature gauge displays the printer's temperature. It indicates the current temperature and tells you when your printer is ready to print. If your Wi-Fi box is not connected to a printer (or it isn't detecting one) this gauge will disappear.
+      <br/>
+      The gauge shows three steps in the process:
+    <div class="temperature blue">blue</div><div>: Temperature is too low</div>
+    <div class="temperature orange">orange</div><div>: Temperature is low but rising</div>
+    <div class="temperature red">red</div><div>: Temperature is OK</div>
+    </p>
   </li>
-  <li data-button="Show me" data-action="showMessage">
+  <li data-class="btnSettings" data-button="OK" data-options="tipLocation:top;tipAdjustmentX:-15">
+    <h2>Settings</h2>
+    <p>All the technical nitty-gritty regarding the settings of your Wi-Fi box and your 3D printer.</p>
+  </li>
+  <li data-id="message" data-button="OK" data-options="tipLocation:bottom" data-action="showMessage">
     <h2>Status messages</h2>
-    <p>Status messages can inform you about the connection between Doodle3D and your 3D printer</p>
+    <p>This message panel keeps you up to date on the status of your Doodle3D Wi-Fi box and the connected 3d printer.
+      If something's wrong, this message panel will keep you informed.
+    </p>
   </li>
-  <li data-id="message" data-button="OK" data-options="tipLocation:bottom">
-    <h2>Status messages</h2>
-    <p>Status messages can inform you about the connection between Doodle3D and your 3D printer</p>
-  </li>
-  <li data-button="Finish">
-    <h2>That was the tour</h2>
-    <p>You're now ready to start using Doodle3d!</p>
+  <li data-button="Finish" class="d3dInfoWelcomePanel">
+    <h2>That was the grand tour!</h2>
+    <p>You're now ready to start using Doodle3D. Enjoy doodling away and if you need some help just click on the ( i ) button in the right panel. Enjoy Doodle3D!</p>
+    <p>For more in-depth support you can always visit <a href="http://www.doodle3d.com/help" target="_blank">doodle3d.com/help</a>.</p>
   </li>
   <!--<li data-class="btnInfo" data-button="Got it" data-options="tipLocation:top">-->
     <!--<h2>Reminder</h2>-->
@@ -73,14 +111,16 @@
 <ol id="help_InfoReminder">
   <li data-class="btnInfo" data-button="Got it" data-options="tipLocation:top">
     <h2>Reminder</h2>
-    <p>You can always find this tour in the info window.</p>
+    <p>You can always access the general tour of Doodle3D in the info window.</p>
+    <p>For more in-depth help you can always visit <a href="http://www.doodle3d.com/help" target="_blank">doodle3d.com/help</a>.</p>
   </li>
 </ol>
 
 <ol id="help_grandTourFinishedInfoReminder">
   <li data-class="btnInfo" data-button="Got it" data-options="tipLocation:top">
     <h2>Reminder</h2>
-    <p>You can always find this tour in the info window.</p>
+    <p>You can always access the general tour of Doodle3D in the info window.</p>
+    <p>For more in-depth help you can always visit <a href="http://www.doodle3d.com/help" target="_blank">doodle3d.com/help</a>.</p>
   </li>
 </ol>
 

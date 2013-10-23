@@ -370,19 +370,19 @@ function setState(newState,newHasControl) {
 
 	/* settings button */
 	switch(newState) {
-	case Printer.IDLE_STATE:
-		enableButton(btnSettings, openSettingsWindow);
-		break;
-	case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
-	case Printer.BUFFERING_STATE: /* fall-through */
-	case Printer.PRINTING_STATE: /* fall-through */
-	case Printer.STOPPING_STATE:
-		disableButton(btnSettings);
-		break;
-	default:
-		enableButton(btnSettings, openSettingsWindow);
-		break;
-}
+    case Printer.IDLE_STATE:
+      enableButton(btnSettings, openSettingsWindow);
+      break;
+    case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
+    case Printer.BUFFERING_STATE: /* fall-through */
+    case Printer.PRINTING_STATE: /* fall-through */
+    case Printer.STOPPING_STATE:
+      disableButton(btnSettings);
+      break;
+    default:
+      enableButton(btnSettings, openSettingsWindow);
+      break;
+  }
 
 	if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
 		message.set("Lost connection to WiFi box",Message.ERROR);
