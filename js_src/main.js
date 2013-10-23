@@ -20,6 +20,10 @@ var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previ
 var showhideInterval;
 var showOrHide = false;
 
+var numSavedSketches = -1;
+var currentSketchId = -1;
+var isModified = false;
+
 $(function() {
   console.log("ready");
 
@@ -31,7 +35,7 @@ $(function() {
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
-  
+
 	if (wifiboxIsRemote) {
 		wifiboxURL = "http://192.168.5.1/d3dapi";
 		wifiboxCGIBinURL = "http://192.168.5.1/cgi-bin/d3dapi";
@@ -60,19 +64,22 @@ $(function() {
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
   message.init($("#message"));
-  
+
   printer.init();
 	$(document).on(Printer.UPDATE,update);
 
 	settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
 
+	getSavedSketchStatus();
+	setSketchModified(false);
+
   if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
     $("#preview_tmp").css("display", "block");
-    
+
     $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
@@ -105,6 +112,67 @@ $(function() {
     //*/
   }
 });
+
+function enableButton(domId, handler) {
+	var elem = $(domId)
+	elem.removeClass("disabled");
+	elem.unbind('touchstart mousedown');
+	elem.bind('touchstart mousedown', handler);
+}
+
+function disableButton(domId) {
+	var elem = $(domId)
+	elem.addClass("disabled");
+	elem.unbind('touchstart mousedown');
+}
+
+function getSavedSketchStatus() {
+	$.ajax({
+		url: wifiboxURL + "/sketch/status",
+		dataType: 'json',
+		type: 'GET',
+		//timeout: this.timeoutTime,
+		success: function(response) {
+			if (response.status == 'error' || response.status == 'fail') {
+				console.log("getSavedSketchStatus fail/error: " + response.msg + " -- ", response);
+			} else {
+				console.log("getSavedSketchStatus success: num. saved: " + response.data.number_of_sketches + ", space available: " + response.data.available);
+				numSavedSketches = response.data.number_of_sketches;
+			}
+		}
+	}).fail(function() {
+		console.log("getSavedSketchStatus failed: ", response);
+	});
+}
+
+function setSketchModified(isModified, doNotClearCurrent) {
+	console.log("setModified: " + isModified + (typeof(doNotClearCurrent) !== 'undefined' ? " (doNotClearCurrent: "+doNotClearCurrent+")" : "")); //TEMP
+
+	if (isModified) { enableButton(btnSave, saveSketch); }
+	else { disableButton(btnSave); }
+
+	if (typeof(doNotClearCurrent) !== 'undefined' && !doNotClearCurrent) setCurrentSketchId(-1);
+	sketchModified  = isModified;
+}
+
+function setCurrentSketchId(sId) {
+	console.log("setCurrentSketchId: " + sId + " / " + numberOfSketches);
+	var enablePrev = false, enableNext = false;
+	if (numberOfSketches == 0) {
+		/* variables are initialized to false, so nothing to be done here */
+	} else if (numberOfSketches > 0) {
+		//if we are not at a saved sketch, consider all saved sketches as 'previous' ones
+		enablePrev = currentSketchId > 1 || currentSketchId == -1;
+		enableNext = currentSketchId < numberOfSketches;
+	}
+
+	if (enablePrev) { enableButton(btnPrevious, prevDoodle); }
+	else { disableButton(btnPrevious); }
+
+	if (enableNext) { enableButton(btnNext, nextDoodle); }
+	else { disableButton(btnNext); }
+
+}
 
 function showOrHideThermo() {
   console.log("f:showOrHideThermo()");

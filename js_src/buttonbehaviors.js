@@ -188,57 +188,70 @@ function initButtonBehavior() {
 
   //btnStop.on('touchstart mousedown',stopPrint);
 
+  	//TEMP function to test sketch loading
   	var btnLoadSketch = $('#btnLoadSketch');
   	btnLoadSketch.mouseup(function(e) {
   		var sketchId = $('#sketchId').val();
   		console.log("loading sketch with id " + sketchId);
 
-		wifiboxURL = "http://192.168.5.1/d3dapi";
-		$.ajax({
-			url: wifiboxURL + "/sketch/" + sketchId,
-			dataType: 'json',
-			type: 'GET',
-			//timeout: this.timeoutTime,
-			success: function(response) {
-				if (response.status == 'error' || response.status == 'fail') {
-					console.log("loadSketch fail/error: " + response.msg + " -- ", response);
-				} else {
-					console.log("loadSketch success: loaded id #" + response.data.id, response);
-					//console.log("sketch content:\n" + response.data.data);
-					loadFromSvg(response.data.data);
-				}
-			}
-		}).fail(function() {
-			console.log("loadSketch failed: ", response);
-		});
+  		loadSketch(sketchId);
   	});
 
-	btnSave.mouseup(function(e) {
-		svg = saveToSvg();
-		console.log("generated SVG [" + _points.length + " points, " + svg.length + " bytes]:\n" + svg);
+	//btnPrevious.mouseup(function(e) { prevDoodle(); });
+	//btnNext.mouseup(function(e) { nextDoodle(); });
+}
 
-		wifiboxURL = "http://192.168.5.1/d3dapi";
-		$.ajax({
-			url: wifiboxURL + "/sketch",
-			dataType: 'json',
-			type: 'POST',
-			data: { data: svg },
-			//timeout: this.timeoutTime,
-			success: function(response) {
-				if (response.status == 'error' || response.status == 'fail') {
-					console.log("saveSketch fail/error: " + response.msg + " -- ", response);
-				} else {
-					console.log("saveSketch success: saved with id #" + response.data.id, response);
+function loadSketch(sketchId) {
+	wifiboxURL = "http://192.168.5.1/d3dapi";
+	$.ajax({
+		url: wifiboxURL + "/sketch/" + sketchId,
+		dataType: 'json',
+		type: 'GET',
+//			timeout: this.timeoutTime,
+		success: function(response) {
+			if (response.status == 'error' || response.status == 'fail') {
+				console.log("loadSketch fail/error: " + response.msg + " -- ", response);
+			} else {
+				console.log("loadSketch success: loaded id #" + response.data.id, response);
+				//console.log("sketch content:\n" + response.data.data);
+				if (loadFromSvg(response.data.data)) {
+					setSketchModified(false, true);
+					setCurrentSketchId(response.data.id);
 				}
 			}
-		}).fail(function() {
-			console.log("saveSketch failed: ", response);
-		});
+		}
+	}).fail(function() {
+		console.log("loadSketch failed: ", response);
 	});
-
-	btnPrevious.mouseup(function(e) { prevDoodle(); });
-	btnNext.mouseup(function(e) { nextDoodle(); });
 }
+
+//btnSave.mouseup(saveSketch);
+function saveSketch() {
+	svg = saveToSvg();
+	console.log("generated SVG [" + _points.length + " points, " + svg.length + " bytes]:\n" + svg);
+
+	wifiboxURL = "http://192.168.5.1/d3dapi";
+	$.ajax({
+		url: wifiboxURL + "/sketch",
+		dataType: 'json',
+		type: 'POST',
+		data: { data: svg },
+		//timeout: this.timeoutTime,
+		success: function(response) {
+			if (response.status == 'error' || response.status == 'fail') {
+				console.log("saveSketch fail/error: " + response.msg + " -- ", response);
+			} else {
+				console.log("saveSketch success: saved with id #" + response.data.id, response);
+				setSketchModified(false, true);
+				numberOfSketches = response.data.id;
+				setCurrentSketchId(response.data.id);
+			}
+		}
+	}).fail(function() {
+		console.log("saveSketch failed: ", response);
+	});
+});
+
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
   //if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
@@ -250,9 +263,19 @@ function stopPrint() {
 
 function prevDoodle(e) {
   console.log("f:prevDoodle()");
+  //TODO: if (enabled) {
+	  var sketchId = (currentSketchId > 0) ? currentSketchId : numberOfSketches;
+	  if (sketchId > 1) sketchId--;
+	  loadSketch(sketchId);
+  //}
 }
 function nextDoodle(e) {
   console.log("f:nextDoodle()");
+  //TODO: if (enabled) {
+	  var sketchId = (currentSketchId > 0) ? currentSketchId : numberOfSketches;
+	  if (sketchId < numberOfSketches) sketchId++;
+	  loadSketch(sketchId);
+  //}
 }
 
 function print(e) {
@@ -333,6 +356,7 @@ function previewUp(redrawLess) {
   //    console.log("f:previewUp()");
   if (numLayers < maxNumLayers) {
     numLayers++;
+    setSketchModified(true);
   }
 //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
@@ -341,6 +365,7 @@ function previewDown(redrawLess) {
   //    console.log("f:previewDown()");
   if (numLayers > minNumLayers) {
     numLayers--;
+    setSketchModified(true);
   }
 //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
@@ -348,13 +373,19 @@ function previewDown(redrawLess) {
 function previewTwistLeft(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
   //    console.log("f:previewTwistLeft()");
-  if (rStep > -previewRotationLimit) rStep -= twistIncrement;
+  if (rStep > -previewRotationLimit) {
+	  rStep -= twistIncrement;
+	  setSketchModified(true);
+  }
   //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
 }
 function previewTwistRight(redrawLess) {
   //    console.log("f:previewTwistRight()");
-  if (rStep < previewRotationLimit) rStep += twistIncrement;
+  if (rStep < previewRotationLimit) {
+	  rStep += twistIncrement;
+	  setSketchModified(true);
+  }
   //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
 }

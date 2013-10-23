@@ -263,6 +263,7 @@ function adjustPreviewTransformation() {
 }
 
 
+//TODO: use local variables instead of _points,numLayers,VERTICALSHAPE and rStep so we can leave a current doodle in tact if an error occurs while parsing
 function loadFromSvg(svgData) {
 	var mode = '', x = 0, y = 0;
 
@@ -310,7 +311,7 @@ function loadFromSvg(svgData) {
 
 				var isMove = mode == 'm' || mode == 'M';
 
-				//TODO: create function for adding a point?
+				//TODO: create script-wide function for adding points?
 				//console.log("inserting "+x+","+y+" ",isMove);
 				updatePrevX = x;
 				updatePrevY = y;
@@ -329,7 +330,6 @@ function loadFromSvg(svgData) {
 
 	parseCommand(); //depends on value of p, so don't move this without taking that into consideration
 
-	//TODO: untested from here
 	const fieldDefMarker = "<!--<![CDATA[d3d-keys";
 	p = svgData.indexOf(fieldDefMarker);
 	if (p == -1) { console.log("loadFromSvg: could not find metadata marker"); return false; }
@@ -350,12 +350,6 @@ function loadFromSvg(svgData) {
 	}
 
 	renderToImageDataPreview();
-
-	/* TODO: behaviour for prev/next buttons:
-	 * - call update/status once to init number of saved sketches - 0 means both buttons disabled, otherwise set current to -1, total amount to number and enable left (i.e. clicking that loads last saved sketch)
-	 * - when going back and forth, update current and enable/disable both buttons when borders (i.e. 1 and total amount) are reached
-	 * - when saving, set current to -1 again and update total amount
-	 */
 
 	return true;
 }
@@ -437,6 +431,7 @@ function onCanvasMouseDown(e) {
   adjustBounds(x, y);
   adjustPreviewTransformation();
   draw(x, y, 0.5);
+  setSketchModified(true);
 }
 
 var prevPoint = {x:-1, y:-1};
@@ -497,6 +492,8 @@ function onCanvasMouseMove(e) {
 //      redrawPreview();
     }
   }
+
+  setSketchModified(true);
 }
 prevUpdateFullPreview = 0; // 0 is not a timeframe but refers to the _points array
 prevUpdateFullPreviewInterval = 25; // refers to number of points, not a timeframe
@@ -537,6 +534,7 @@ function onCanvasTouchDown(e) {
   adjustBounds(x, y);
   adjustPreviewTransformation();
   draw(x, y, .5);
+  setSketchModified(true);
 
   movementCounter = 0;
 
@@ -604,6 +602,8 @@ function onCanvasTouchMove(e) {
     }
     prevRedrawTime = new Date().getTime();
   }
+
+  setSketchModified(true);
 }
 
 function onCanvasTouchEnd(e) {
