@@ -25,7 +25,7 @@ gcodeEnd.push("G90"); 							// absolute positioning
 gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)*/
 
 
-var MAX_POINTS_TO_PRINT = 400000; //80000; //40000; 
+var MAX_POINTS_TO_PRINT = 200000; //400000; //80000; //40000; 
 var gcode = [];
 
 function generate_gcode() {
@@ -139,9 +139,11 @@ function generate_gcode() {
 	//console.log("  pointsToPrint: ",pointsToPrint);
 	//console.log("  MAX_POINTS_TO_PRINT: ",MAX_POINTS_TO_PRINT);
   
+	console.log("pointsToPrint: ",pointsToPrint);
+		
   if(pointsToPrint > MAX_POINTS_TO_PRINT) {
   	alert("Sorry, your doodle to to complex and / or to high");
-  	console.log("WARNING: to many points to convert to gcode");
+  	console.log("ERROR: to many points to convert to gcode");
   	return [];
   }
 	
