@@ -173,7 +173,7 @@ function initButtonBehavior() {
   btnInfo.mouseup(function(e) {
     e.preventDefault();
     console.log("btnInfo mouse up");
-    helpTours.startTour(helpTours.WELCOMETOUR);
+    if (!clientInfo.isSmartphone) helpTours.startTour(helpTours.WELCOMETOUR);
   });
 
   // DEBUG
