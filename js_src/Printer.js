@@ -122,8 +122,8 @@ function Printer() {
     console.log("  gcodeSize: ",gcodeSize);
     
     if(gcodeSize > Printer.MAX_GCODE_SIZE) {
-    	alert("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
-    	console.log("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+    	alert("Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+    	console.log("Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
     	
     	this.overruleState(Printer.IDLE_STATE);
     	this.startStatusCheckInterval();
