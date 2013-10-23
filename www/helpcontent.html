@@ -1,94 +1,64 @@
-<div class="my-tour-overlay"></div>
-
-<ol class='tourbus-legs' id='tour1'>
-
-  <!-- FIRST WELCOME -->
-  <li data-orientation='centered' data-highlight='true'>
-    <h2>Welcome to Doodle3D</h2>
-    <p>This is your first time starting the app. How about we show you around a bit?</p>
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Yes</a>
-    <a href='javascript:void(0);' class='prevnextBtn endIntroTour'>No</a>
+<!-- Tip Content -->
+<ol id="help_d3dIntro">
+  <li data-button="OK" class="d3dInfoWelcomePanel">
+    <h1>Welcome to Doodle3D</h1>
+    <p></p>
+    <p>It looks like it's your first time here. How about we give you a quick tour?</p>
+    <p> </p>
   </li>
-
-  <!-- LEFT PANEL -->
-  <li data-el='.leftpanel' data-orientation='right' data-width='300' data-highlight='true'>
-    <h2>Leftpanel</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+  <li data-class="leftpanel" class="custom" data-button="OK" data-options="tipLocation:right">
+    <h2>leftpanel</h2>
+    <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
+    <p><a href="#">linkme beautiful</a>.</p>
   </li>
-  <li data-el='.new' data-orientation='right' data-width='300'>
+  <li data-class="btnNew" class="custom" data-text="Next" data-options="tipLocation:right">
     <h2>New</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+    <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
+    <p><a href="#">linkme beautiful</a>.</p>
   </li>
-  <li data-el='.prevnext' data-orientation='right' data-width='300'>
-    <h2>PrevNext</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
-  </li>
-  <li data-el='.save' data-orientation='right' data-width='300'>
+  <li data-class="btnSave" data-button="Next" data-options="tipLocation:right">
     <h2>Save</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+    <p>Get the details right by styling Joyride with a custom stylesheet!</p>
   </li>
-  <li data-el='.oops' data-orientation='right' data-width='300'>
+  <li data-button="Next">
+    <h2>Modal</h2>
+    <p>It works as a modal too!</p>
+  </li>
+  <li data-class="btnOops" data-button="Next" data-options="tipLocation:right">
     <h2>Oops</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+    <p>It works right aligned.</p>
   </li>
-
-  <!-- RIGHT PANEL -->
-  <li data-el='.rightpanel' data-orientation='left' data-width='300' data-highlight='true'>
-    <h2>Leftpanel</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+  <li data-class="rightpanel" data-button="Next" data-options="tipLocation:left">
+    <h2>Print</h2>
+    <p>It works with classes, and only on the first visible element with that class.</p>
   </li>
-  <li data-el='.print' data-orientation='left' data-width='300'>
-    <h2>print</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+  <li data-class="btnPrint" data-button="Next" data-options="tipLocation:left">
+    <h2>Print</h2>
+    <p>It works with classes, and only on the first visible element with that class.</p>
   </li>
-  <li data-el='.stop' data-orientation='left' data-width='300'>
-    <h2>stop</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
+  <li data-class="btnStop" data-button="Close" data-options="tipLocation:left">
+    <h2>Stop</h2>
+    <p>It works with classes, and only on the first visible element with that class.</p>
   </li>
-  <li data-el='.progress' data-orientation='left' data-width='300'>
-    <h2>progress</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
-  </li>
-  <li data-el='.thermo' data-orientation='left' data-width='300'>
-    <h2>thermo</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-next'>Next...</a>
-  </li>
-  <li data-el='.info' data-orientation='left' data-width='300'>
-    <h2>info</h2>
-    <p>Random text which makes it all seem like there's something to say...</p>
-    <!--<a href='javascript:void(0);' class='prevnextBtn tourbus-prev'>Previous...</a>-->
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-stop'>Got it...</a>
-  </li>
-
-
 </ol>
-<ol class='tourbus-legs' id='tour2'>
 
-  <li data-el='.info' data-orientation='left' data-width='200'>
-    <h2>INFO</h2>
-    <p>check out the info here anytime..</p>
-    <a href='javascript:void(0);' class='prevnextBtn tourbus-stop'>Got it</a>
+<ol id="help_InfoReminder">
+  <li data-class="btnInfo" data-button="Got it" data-options="tipLocation:top">
+    <h2>Reminder</h2>
+    <p>You can always find this tour in the info window.</p>
   </li>
-
-
 </ol>
+
+<!-- Tip Content -->
+
+<!--<ol id="joyrideTour">-->
+  <!--<li data-class="new" data-text="Next" class="custom" data-options="tipLocation:right">-->
+    <!--<h2>New</h2>-->
+    <!--<p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>-->
+    <!--<p><a href="#">linkme beautiful</a>.</p>-->
+  <!--</li>-->
+  <!--<li data-class="print" data-button="Close" data-options="tipLocation:left">-->
+    <!--<h2>Print</h2>-->
+    <!--<p>It works with classes, and only on the first visible element with that class.</p>-->
+  <!--</li>-->
+<!--</ol>-->

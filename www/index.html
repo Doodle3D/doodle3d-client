@@ -11,8 +11,9 @@
 
   <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
-  <link href="css/styles.css" rel="stylesheet" media="screen">
-  <link href="css/debug.css" rel="stylesheet" media="screen">
+  <link href="css/styles.min.css" rel="stylesheet" media="screen">
+  <link href="css/debug.min.css" rel="stylesheet" media="screen">
+  <!--<link href="css/joyride-2-1.css" rel="stylesheet" media="screen">-->
 
 </head>
 <body>
@@ -53,15 +54,6 @@
         <canvas id="thermometerCanvas" width="90" height="120"></canvas>
       </div>
     </div>
-
-    <!--<div id="thermometerContainer" class="clearfix">-->
-      <!--<canvas id="thermometerCanvas" width="90" height="120"></canvas>-->
-    <!--</div>-->
-    <!-- 2013-10-16 tmp backup
-    <div id="thermometerContainer">
-      <canvas id="thermometerCanvas" width="100" height="125"></canvas>
-    </div>
-    -->
     <div class="btnsSettingsInfo">
       <img class="btnSettings btn" src="img/buttons/btnSettings.png">
       <img class="btnInfo btn" src="img/buttons/btnInfo.png">
@@ -129,9 +121,15 @@
 <div id="portrait">
   <img class="vertImage" src="img/bg_vertical.png"/>
 </div>
-<script src="js/libs/jquery-1.8.3.min.js"></script>
-<!--<script src="js/doodle3d-client.js"></script>-->
-<script src="js/doodle3d-client.min.js"></script>
+<div id="helpContainer"></div>
+<script src="js/libs/jquery-1.9.1.min.js"></script>
+<script src="js/libs/jquery-cookie.min.js"></script>
+<!--<script src="js/jquery.scrollTo-min.js"></script>-->
+<!--<script src="js/libs/imagesloaded-pkgd.min.js"></script>-->
+<script src="../js_src/libs/jquery-joyride-2-1.js"></script>
+<!--<script src="js/libs/jquery-joyride-2-1.min.js"></script>-->
+<script src="js/doodle3d-client.js"></script>
+<!--<script src="js/doodle3d-client.min.js"></script>-->
 
 <!-- DEBUG -->
 <!--
