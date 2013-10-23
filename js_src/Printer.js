@@ -46,7 +46,7 @@ function Printer() {
 	this.retryStopDelay;							// retry setTimout instance
 	this.retryPreheatDelay;						// retry setTimout instance
 	
-	this.maxGCodeSize = 10;						// max size of gcode in MB's (estimation)
+	Printer.MAX_GCODE_SIZE = 10;						// max size of gcode in MB's (estimation)
 	
 	this.stateOverruled = false;
 	
@@ -121,7 +121,8 @@ function Printer() {
     var gcodeSize = gcodeLineSize*gcode.length/1024/1024; // estimate gcode size in MB's
     console.log("  gcodeSize: ",gcodeSize);
     
-    if(gcodeSize > this.maxGCodeSize) {
+    if(gcodeSize > Printer.MAX_GCODE_SIZE) {
+    	alert("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+this.maxGCodeSize+"MB)");
     	console.log("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+this.maxGCodeSize+"MB)");
     	return;
     }
