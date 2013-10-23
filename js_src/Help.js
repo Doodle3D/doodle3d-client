@@ -4,6 +4,7 @@ function GrandTour(_name) {
   console.log("GrandTour");
   this.tour = "";
   this.name = _name;
+  this.active = false;
   var self = this;
 
   this.init = function() {
@@ -20,17 +21,18 @@ function GrandTour(_name) {
         'nubPosition': 'auto',           // override on a per tooltip bases
         'scrollSpeed': 300,              // Page scrolling speed in ms
         //      'timer': 2000,                   // 0 = off, all other numbers = time(ms)
-        'startTimerOnClick': true,       // true/false to start timer on first click
+//        'startTimerOnClick': true,       // true/false to start timer on first click
         'nextButton': true,              // true/false for next button visibility
         'tipAnimation': 'fade',           // 'pop' or 'fade' in each tip
-        'pauseAfter': [],                // array of indexes where to pause the tour after
-        'tipAnimationFadeSpeed': 250,    // if 'fade'- speed in ms of transition
+//        'pauseAfter': [],                // array of indexes where to pause the tour after
+        'tipAnimationFadeSpeed': 350,    // if 'fade'- speed in ms of transition
 //        'cookieMonster': true,           // true/false for whether cookies are used
 //        'cookieDomain': false,           // set to false or yoursite.com
 //        'cookieName': 'Doodle3DFirstTime',         // choose your own cookie name
         //      'localStorage': true,         //
         //      'localStorageKey': 'Doodle3DFirstTime',         // choose your own cookie name
         'preRideCallback' : self.preRideCallback,
+        'preStepCallback': self.preStepCallback,       // A method to call before each step
         'postStepCallback': self.postStepCallback,       // A method to call after each step
         'postRideCallback': self.postRideCallback        // a method to call once the tour closes
       });
@@ -40,41 +42,126 @@ function GrandTour(_name) {
 
   this.preRideCallback = function(index, tip) {
     console.log("GrandTour >> f:preRideCallback() >> index: " + index);
-    if ($.cookie("Doodle3DFirstTime") == "ridden" && index == 0) {
-      console.log("we've been here before...");
-      //    $(this).joyride('set_li', false, 1);
+    if (index == 0 && $.cookie("Doodle3DFirstTime") == "ridden") {
+      console.log("GrandTour >> f:preRideCallback() >> we've been here before...");
+
+      if ($.cookie("grandTourFinished")) {
+        // grand tour was previously finished (eh.. is that useful?)
+
+        // executing this 3 times because there doesn't seem to be a 'go to step X' method
+//        $(this).joyride('set_li', false);
+        $(this).joyride('set_li', false);
+        $(this).joyride('set_li', false);
+      } else {
+        $(this).joyride('set_li', false);
+      }
     }
-        if ($.cookie("Doodle3DFirstTime") == 'ridden') {
-          console.log("we've been here before...");
-          $(this).joyride('set_li', false);
-        }
+
+    // bring up all the elements
+    thermometer.show();
+    progressbar.show();
+//    if ($.cookie("Doodle3DFirstTime") == 'ridden') {
+//      console.log("we've been here before...");
+//      $(this).joyride('set_li', false, 4);
+//    }
     //    if (index == 0) {
     //      console.log("...yeah");
     //      $(this).joyride('set_li', false, 1);
     //    }
   };
+  this.preStepCallback = function(index, tip) {
+    console.log("GrandTour >> f:preStepCallback() >> index: " + index);
+
+    var dataset = $(this)[0].$li[0].dataset;
+    if (dataset.action != undefined) {
+      console.log("    THERE'S AN ACTION!");
+      switch (dataset.action) {
+        case "sayHello":
+          console.log("    action: sayHello");
+          break;
+        case "showMessage":
+          console.log("    action: showMessage");
+          message.set("Just a notification...", Message.NOTICE);
+          message.show();
+          break;
+        case "showProgressBar":
+          console.log("    action: showProgressBar");
+          progressbar.show();
+          break;
+        case "showThermometer":
+          console.log("    action: showThermometer");
+          thermometer.show();
+          break;
+      }
+    }
+  };
   this.postStepCallback = function(index, tip) {
     console.log("GrandTour >> f:postStepCallback() >> index: " + index);
+
+    var dataset = $(this)[0].$li[0].dataset;
+    if (dataset.action != undefined) {
+      console.log("    THERE *WAS* AN ACTION!");
+      switch (dataset.action) {
+        case "sayHello":
+          console.log("    action: sayHello");
+          break;
+        case "showMessage":
+          console.log("    action: showMessage");
+//          message.hide();
+          break;
+        case "showProgressBar":
+          console.log("    action: showProgressBar");
+//          progressbar.hide();
+          break;
+        case "showThermometer":
+          console.log("    action: showThermometer");
+//          thermometer.hide();
+          break;
+      }
+    }
   };
   this.postRideCallback = function(index, tip) {
-    console.log("GrandTour >> f:postRideCallback() >> index: " + index);
+//    console.log("GrandTour >> f:postRideCallback() >> index: " + index + ", self.active: " + self.active);
+//    console.log("GrandTour >> f:postRideCallback() >> this: " , self);
+
+    self.active = false;
 
     $(document).trigger(helpTours.TOURFINISHED, self.name);
 
+    // hide the elements which were summoned for the purposes of the tour
+    thermometer.hide();
+    progressbar.hide();
+    message.hide();
+
+    // after seeing the grand tour for the first time ever, set cookie 'Doodle3DFirstTime' to true
+    if (!$.cookie("Doodle3DFirstTime")) {
+      $.cookie("Doodle3DFirstTime", 'ridden', { expires: 365, domain: false, path: '/' });
+    }
+
     if (index < $(this)[0].$tip_content.length - 1) {
-      console.log("doPostRideCallback >> ENDED BEFORE END");
-      helpTours.startTour(helpTours.INFOREMINDER);
+      console.log("GrandTour >> f:postRideCallback() >> tour terminated before its true end");
+      // tour wasn't finished
+
+      // tour was ended prematurely. For only the first few visits, nag the user about being able to revisit the tour..
+      if (parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
+        helpTours.startTour(helpTours.INFOREMINDER, helpTours);
+      }
 //      infoReminderTour.start();
     } else {
-      console.log("doPostRideCallback >> this is the end my friend...");
+      // tour was finished
+      console.log("GrandTour >> f:postRideCallback() >> tour ended at its true end");
       // we should be at the end...
-      $.cookie("Doodle3DFirstTime", 'ridden', { expires: 365, domain: false, path: '/' });
+      if (!$.cookie("grandTourFinished") && parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
+        helpTours.startTour(helpTours.INFOREMINDER, helpTours);
+      }
+      $.cookie("grandTourFinished", 'yes', { expires: 365, domain: false, path: '/' });
     }
 
   };
 
   this.start = function() {
-    console.log("GrandTour >> f:start()");
+    console.log("GrandTour >> f:start() >> this: " , this);
+    this.active = true;
     $(window).joyride('restart');
 //    self.tour();
   };
@@ -85,6 +172,7 @@ function InfoReminderTour(_name) {
   console.log("InfoReminderTour");
   this.tour = "";
   this.name = _name;
+  this.active = false;
   var self = this;
 
   this.init = function(callback) {
@@ -97,12 +185,12 @@ function InfoReminderTour(_name) {
         expose: true,
         'tipAdjustmentX': 15,
         'tipAdjustmentY': 15,
-        'tipLocation': 'left',         // 'top' or 'bottom' in relation to parent
+        'tipLocation': 'bottom',         // 'top' or 'bottom' in relation to parent
         'nubPosition': 'auto',           // override on a per tooltip bases
         'scrollSpeed': 300,              // Page scrolling speed in ms
         'nextButton': true,              // true/false for next button visibility
         'tipAnimation': 'fade',           // 'pop' or 'fade' in each tip
-        'tipAnimationFadeSpeed': 250,    // if 'fade'- speed in ms of transition
+        'tipAnimationFadeSpeed': 350,    // if 'fade'- speed in ms of transition
         'preRideCallback' : self.preRideCallback,
         'postStepCallback': self.postStepCallback,       // A method to call after each step
         'postRideCallback': self.postRideCallback        // a method to call once the tour closes
@@ -120,11 +208,13 @@ function InfoReminderTour(_name) {
   };
   this.postRideCallback = function(index, tip) {
     console.log("InfoReminderTour >> f:postRideCallback() >> index: " + index + ", tip: " , tip);
+    this.active = false;
     $(document).trigger(helpTours.TOURFINISHED, self.name);
   };
 
   this.start = function() {
     console.log("InfoReminderTour >> f:start()");
+    this.active = true;
     $(window).joyride('restart');
 //    self.tour();
   };
@@ -133,26 +223,31 @@ function InfoReminderTour(_name) {
 function initHelp() {
   console.log("f:initHelp()");
 
+  // track number of visits of this user
+  if ($.cookie("Doodle3DVisitCounter") == null) {
+    $.cookie("Doodle3DVisitCounter", '0');
+  } else {
+    $.cookie("Doodle3DVisitCounter", parseInt($.cookie("Doodle3DVisitCounter")) + 1);
+  }
 
-
-//  grandTour = new GrandTour();
-//  infoReminderTour = new InfoReminderTour();
-
-  // first call inits the tour
-//  joyride2();
-
+  // load the html file which describes the tour contents
   $("#helpContainer").load("helpcontent.html", function() {
     console.log("helpContent loaded");
-    helpTours = new HelpTours();
-    helpTours.init();
 
-//    grandTour.init();
-////    infoReminderTour.init();
-//
-//    if ($.cookie("Doodle3DFirstTime") != "ridden") {
-//      console.log("intro tour has not been given yet > let's go!");
-//      setTimeout(grandTour.start, 1000);
-//    }
+    helpTours = new HelpTours();
+
+    helpTours.init( function () {
+
+      // only trigger starttour if user is seeing Doodle3D for the first time
+      if ($.cookie("Doodle3DFirstTime") != "ridden") {
+        console.log("initHelp >> intro tour has not been given yet > let's go!");
+        setTimeout(helpTours.startTour, 750, helpTours.tours.grandTour, helpTours);
+      } else if (parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
+        console.log("initHelp >> Doodle3DFirstTime cookie is set, Doodle3DVisitCounter is < 4");
+        // remind user of our nifty tour
+        setTimeout(helpTours.startTour, 750, helpTours.tours.infoReminderTour, helpTours);
+      }
+    });
   });
 
 }
@@ -161,64 +256,97 @@ var helpTours;
 function HelpTours() {
   console.log("HelpTours");
 
+  this.numTimesToShowNagPopup = 4;
+
   this.WELCOMETOUR    = "welcometour";
   this.INFOREMINDER   = "inforeminder";
   this.TOURFINISHED   = "tourfinished";
+  this.tours = {
+    'grandTour'           : this.WELCOMETOUR,
+    'infoReminderTour'    : this.INFOREMINDER
+  };
 
+  this.currActiveTour = "";
   this.tourActive = false;
 
   var self = this;
 
-  this.init = function() {
-    console.log("HelpTours >> f:init");
+  this.init = function(callback) {
+    console.log("HelpTours >> f:init >> self: " + self);
     $(document).on(this.TOURFINISHED, this.tourEnded);
 
     grandTour = new GrandTour(this.WELCOMETOUR);
     infoReminderTour = new InfoReminderTour(this.INFOREMINDER);
 
-    if ($.cookie("Doodle3DFirstTime") != "ridden") {
-      console.log("HelpTours >> f:init >> intro tour has not been given yet > let's go! (this.WELCOMETOUR = " + this.WELCOMETOUR + ")");
-      setTimeout(this.startTour, 1000, this.WELCOMETOUR);
-    }
+//    this.tours["grandTour"] = self.WELCOMETOUR;
+//    this.tours["infoReminderTour "]= self.INFOREMINDER;
+    console.log("HelpTours >> f:init >> this.tours: " , this.tours);
+
+    if (callback != undefined) callback();
   };
 
 
-  this.startTour = function(which) {
-    console.log("HelpTours >> f:startTour >> target to start: '" + which);
+  this.startTour = function(which, scope) {
+    if (scope == undefined) scope = this;
+//    console.log("HelpTours >> f:startTour >> scope: " , scope);
+//    console.log("HelpTours >> f:startTour >> currActiveTour: " , scope.currActiveTour.name);
+//    console.log("HelpTours >> f:startTour >> currActiveTour.active: " , scope.currActiveTour.active);
+//    console.log("HelpTours >> f:startTour >> target to start: '" + which);
+
+
     switch (which) {
-      case self.WELCOMETOUR:
+      case scope.WELCOMETOUR:
         // do welcometour
-        console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR >> self.tourActive = " + self.tourActive);
-        if (this.tourActive) {
-          $(window).joyride('end');
-          this.tourActive = false;
+//        console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR >> scope.tourActive = " + scope.tourActive);
+        console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR");
+        if (scope.tourActive) {
+          if (scope.currActiveTour.active == true) {
+            $(window).joyride('end');
+            scope.currActiveTour = undefined;
+          }
+          scope.tourActive = false;
         }
         $(window).joyride('destroy');
-        grandTour.init();
-        grandTour.start();
-        this.tourActive = true;
+//        var self = this;
+          grandTour.init();
+        setTimeout(function(scp) {
+          grandTour.start();
+          scp.currActiveTour = grandTour;
+          scp.tourActive = true;
+        }, 250, scope);
 //        $(window).joyride('restart');
 
         break;
       case self.INFOREMINDER:
         // do info reminder
-        console.log("HelpTours >> f:startTour >> case self.INFOREMINDER >> self.tourActive = " + self.tourActive);
-        if (this.tourActive) {
-          $(window).joyride('end');
-          this.tourActive = false;
+//        console.log("HelpTours >> f:startTour >> case self.INFOREMINDER >> scope.tourActive = " + scope.tourActive);
+        console.log("HelpTours >> f:startTour >> case self.INFOREMINDER");
+        if (scope.tourActive) {
+//          console.log("    killing previous joyride... ");
+          if (scope.currActiveTour.active == true) {
+            $(window).joyride('end');
+            scope.currActiveTour = undefined;
+          }
+//          console.log("    setting tourActive to false....");
+          scope.tourActive = false;
+//          console.log("    scope.tourActive: " + scope.tourActive);
         }
         $(window).joyride('destroy');
-        infoReminderTour.init();
-        infoReminderTour.start();
-        this.tourActive = true;
+//        var self = this;
+          infoReminderTour.init();
+        setTimeout(function(scp) {
+          infoReminderTour.start();
+          scp.currActiveTour = infoReminderTour;
+          scp.tourActive = true;
+        }, 250, scope);
 
         break;
     }
   }
 
   this.tourEnded = function(e, n) {
-    console.log("HelpTours >> f:tourEnded >> name: " + n);
+    console.log("HelpTours >> f:tourEnded >> this.tourActive: " + self.tourActive + ", name: " + n);
 
-    this.tourActive = false;
+    self.tourActive = false;
   }
 }

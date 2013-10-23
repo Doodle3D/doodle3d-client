@@ -20,9 +20,10 @@ var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previ
 var showhideInterval;
 var showOrHide = false;
 
+var clientInfo = {};
+
 $(function() {
   console.log("ready");
-
 
   //TODO give this a more logical place in code
 
@@ -49,13 +50,17 @@ $(function() {
   console.log("wifiboxIsRemote: " + wifiboxIsRemote);
   console.log("wifibox URL: " + wifiboxURL);
 
+  // rudimentary client info
+  clientInfo.isMobileDevice = isMobileDevice();
+  clientInfo.isSmartphone = isSmartphone();
+
   initDoodleDrawing();
   initPreviewRendering();
   initLayouting();
   initSidebars();
   initButtonBehavior();
   initVerticalShapes();
-  initHelp();
+  if (!clientInfo.isSmartphone) initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));

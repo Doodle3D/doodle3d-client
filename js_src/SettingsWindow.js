@@ -250,16 +250,13 @@ function SettingsWindow() {
 	}
 	this.displayValidationError = function(key,msg) {
 		var formElement = self.form.find("[name|='"+key+"']");
-		console.log("formElement: ",formElement);
 		formElement.addClass("error");
 		var errorMsg = "<p class='errorMsg'>"+msg+"</p>"
 		formElement.after(errorMsg);
 	}
 	this.clearValidationErrors = function() {
-		var formElements = self.form.find(".error");
-		formElements.each( function(index,element) {
-			$(element).removeClass("error");
-		});
+		self.form.find(".errorMsg").remove();
+		self.form.find(".error").removeClass("error");
 	}
 
 	this.readForm = function() {

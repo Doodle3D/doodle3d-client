@@ -12,6 +12,9 @@ function Progressbar() {
   this.quartPI = .5 * Math.PI;
   this.twoPI = 2 * Math.PI;
 
+  // To make the progressbar start with a minimal amount of 'progress'
+  // so that you can visually see that there is progress
+  this.progressPadding = Math.PI * .1;
 
   this.$canvas;
   this.canvas;
@@ -73,7 +76,7 @@ function Progressbar() {
       this.context.beginPath();
       this.context.moveTo(45, 45);
       this.context.lineTo(45, 0);
-      this.context.arc(45, 45, 45, -this.quartPI, -this.quartPI + (progress * (this.twoPI)), false); // circle bottom of thermometer
+      this.context.arc(45, 45, 45, -this.quartPI, -this.quartPI + this.progressPadding + (progress * (this.twoPI - this.progressPadding)), false); // circle bottom of thermometer
       this.context.lineTo(45, 45);
       this.context.clip();
 

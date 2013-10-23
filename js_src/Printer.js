@@ -11,7 +11,7 @@ function setPrintprogress(val) {
 //*/
 
 function Printer() {
-
+	
 	Printer.WIFIBOX_DISCONNECTED_STATE 	= "wifibox disconnected";
 	Printer.UNKNOWN_STATE 							= "unknown";				// happens when a printer is connection but there isn't communication yet
 	Printer.DISCONNECTED_STATE 					= "disconnected";		// printer disconnected
@@ -21,22 +21,22 @@ function Printer() {
 	Printer.STOPPING_STATE 							= "stopping";				// when you stop (abort) a print it prints the endcode
 
 	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being send to the printer, leaving will result in a incomplete 3D print";
-
+	
 	this.temperature 				= 0;
 	this.targetTemperature 	= 0;
 	this.currentLine 				= 0;
 	this.totalLines					= 0;
 	this.bufferedLines			= 0;
 	this.state							= Printer.UNKNOWN_STATE;
-	this.hasControl					= true;	// whether this client has control access
-
-	this.wifiboxURL;
-
+	this.hasControl					= true;	// whether this client has control access 
+	
+	this.wifiboxURL; 
+	
 	this.checkStatusInterval 				= 3000;
 	this.checkStatusDelay;
 	this.timeoutTime 								= 3000;
 	this.sendPrintPartTimeoutTime 	= 5000;
-
+	
 	this.gcode; 											// gcode to be printed
 	this.sendLength = 1500; 					// max amount of gcode lines per post (limited because WiFi box can't handle to much)
 
@@ -45,16 +45,16 @@ function Printer() {
 	this.retryCheckStatusDelay; 			// retry setTimout instance
 	this.retryStopDelay;							// retry setTimout instance
 	this.retryPreheatDelay;						// retry setTimout instance
-
-	this.maxGCodeSize = 10;						// max size of gcode in MB's (estimation)
-
+	
+	Printer.MAX_GCODE_SIZE = 10;						// max size of gcode in MB's (estimation)
+	
 	this.stateOverruled = false;
-
+	
 	// Events
 	Printer.UPDATE = "update";
-
+	
 	var self = this;
-
+	
 	this.init = function() {
     console.log("Printer:init");
 		//this.wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
@@ -62,21 +62,21 @@ function Printer() {
 		this.wifiboxURL = wifiboxURL;
 		//this.wifiboxURL = "proxy5.php";
     console.log("  wifiboxURL: ",this.wifiboxURL);
-
+    
     if(autoUpdate) {
     	this.startStatusCheckInterval();
     }
  	}
-
+	
 	this.preheat = function() {
     console.log("Printer:preheat");
-
+    
     if(	this.state == Printer.BUFFERING_STATE ||
     		this.state == Printer.PRINTING_STATE ||
     		this.state == Printer.STOPPING_STATE) {
     	return;
     }
-
+    
     var self = this;
     if (communicateWithWifibox) {
 	    $.ajax({
@@ -91,7 +91,7 @@ function Printer() {
 						self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
 			  	}
 				}
-			}).fail(function() {
+			}).fail(function() { 
 				console.log("Printer:preheat: failed");
 				clearTimeout(self.retryPreheatDelay);
 				self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
@@ -100,34 +100,41 @@ function Printer() {
       console.log ("Printer >> f:preheat() >> communicateWithWifibox is false, so not executing this function");
     }
 	}
-
+	
 	this.print = function(gcode) {
     console.log("Printer:print");
     console.log("  gcode total # of lines: " + gcode.length);
-
+    
     message.set("Sending doodle to printer...",Message.NOTICE);
     self.addLeaveWarning();
-
+		
     /*for (i = 0; i < gcode.length; i++) {
 			gcode[i] += " (" + i + ")";
 		}*/
-
+		
 		this.sendIndex = 0;
     this.gcode = gcode;
-
+    
     //console.log("  gcode[20]: ",gcode[20]);
     var gcodeLineSize = this.byteSize(gcode[20]);
     //console.log("  gcodeLineSize: ",gcodeLineSize);
     var gcodeSize = gcodeLineSize*gcode.length/1024/1024; // estimate gcode size in MB's
     console.log("  gcodeSize: ",gcodeSize);
-
-    if(gcodeSize > this.maxGCodeSize) {
-    	console.log("Error: Printer:print: gcode file is probably to big ("+gcodeSize+"MB) (max: "+this.maxGCodeSize+"MB)");
+    
+    if(gcodeSize > Printer.MAX_GCODE_SIZE) {
+    	alert("Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+    	console.log("Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+    	
+    	this.overruleState(Printer.IDLE_STATE);
+    	this.startStatusCheckInterval();
+    	message.hide();
+    	self.removeLeaveWarning();
+    	
     	return;
     }
-
+    
     //this.targetTemperature = settings["printer.temperature"]; // slight hack
-
+    
 		this.sendPrintPart(this.sendIndex, this.sendLength);
 	}
 	this.byteSize = function(s){
@@ -135,10 +142,10 @@ function Printer() {
 	}
 	this.sendPrintPart = function(sendIndex,sendLength) {
 		console.log("Printer:sendPrintPart sendIndex: " + sendIndex + "/" + this.gcode.length + ", sendLength: " + sendLength);
-
+		
     var firstOne = (sendIndex == 0)? true : false;
     var start = firstOne; // start printing right away
-
+    
     var completed = false;
     if (this.gcode.length < (sendIndex + sendLength)) {
       console.log("  sending less than max sendLength (and last)");
@@ -147,7 +154,7 @@ function Printer() {
       completed = true;
     }
     var gcodePart = this.gcode.slice(sendIndex, sendIndex+sendLength);
-
+    
     var postData = { gcode: gcodePart.join("\n"), first: firstOne, start: start};
     var self = this;
     if (communicateWithWifibox) {
@@ -159,7 +166,7 @@ function Printer() {
 			  timeout: this.sendPrintPartTimeoutTime,
 			  success: function(data){
 			  	console.log("Printer:sendPrintPart response: ",data);
-
+			  	
 			  	if(data.status == "success") {
 				  	if (completed) {
 		          console.log("Printer:sendPrintPart:gcode sending completed");
@@ -170,8 +177,8 @@ function Printer() {
 		          //self.targetTemperature = settings["printer.temperature"]; // slight hack
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
-
-		        	console.log("Printer:sendPrintPart:gcode part received (state: ",self.state,")");
+		        	
+		        	console.log("Printer:sendPrintPart:gcode part received (state: ",self.state,")"); 
 		        	if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
 		        		console.log("Printer:sendPrintPart:sending next part");
 		        		self.sendPrintPart(sendIndex + sendLength, sendLength);
@@ -179,22 +186,22 @@ function Printer() {
 		        }
 		      }
 			  	// after we know the first gcode packed has bin received or failed
-					// (and the driver had time to update the printer.state)
+					// (and the driver had time to update the printer.state) 
 					// we start checking the status again
 					if(sendIndex == 0) {
 						self.startStatusCheckInterval();
 					}
 				}
-			}).fail(function() {
+			}).fail(function() { 
 				console.log("Printer:sendPrintPart: failed");
 				clearTimeout(self.retrySendPrintPartDelay);
 				self.retrySendPrintPartDelay = setTimeout(function() {
 					console.log("request printer:sendPrintPart failed retry");
-					self.sendPrintPart(sendIndex, sendLength)
+					self.sendPrintPart(sendIndex, sendLength) 
 				},self.retryDelay); // retry after delay
-
+				
 				// after we know the gcode packed has bin received or failed
-				// (and the driver had time to update the printer.state)
+				// (and the driver had time to update the printer.state) 
 				// we start checking the status again
 				self.startStatusCheckInterval();
 			});
@@ -202,7 +209,7 @@ function Printer() {
       console.log ("Printer >> f:sendPrintPart() >> communicateWithWifibox is false, so not executing this function");
     }
 	}
-
+	
 	this.stop = function() {
     console.log("Printer:stop");
 		var self = this;
@@ -214,19 +221,19 @@ function Printer() {
 			  timeout: this.timeoutTime,
 			  success: function(data){
 				  console.log("Printer:stop response: ", data);
-
+				  
 				  // after we know the stop has bin received or failed
-					// (and the driver had time to update the printer.state)
+					// (and the driver had time to update the printer.state) 
 					// we start checking the status again
 					self.startStatusCheckInterval();
 			  }
-			}).fail(function() {
+			}).fail(function() { 
 				console.log("Printer:stop: failed");
 				clearTimeout(self.retryStopDelay);
 				self.retryStopDelay = setTimeout(function() { self.stop() },self.retryDelay); // retry after delay
-
+				
 				// after we know the stop has bin received or failed
-				// (and the driver had time to update the printer.state)
+				// (and the driver had time to update the printer.state) 
 				// we start checking the status again
 				self.startStatusCheckInterval();
 			});
@@ -258,9 +265,9 @@ function Printer() {
         timeout: this.timeoutTime,
         success: function(response){
           //console.log("  Printer:status: ",response.data.state); //," response: ",response);
-
+          
           self.handleStatusUpdate(response);
-
+          
           clearTimeout(self.checkStatusDelay);
           clearTimeout(self.retryCheckStatusDelay);
           self.checkStatusDelay = setTimeout(function() { self.checkStatus() }, self.checkStatusInterval);
@@ -289,11 +296,11 @@ function Printer() {
 				self.state 								= data.state;
 				//console.log("  state > ",self.state);
 			}
-
+			
 			// temperature
 			self.temperature 					= data.hotend;
 			self.targetTemperature 		= data.hotend_target;
-
+			
 			// progress
 			self.currentLine 					= data.current_line;
 			self.totalLines 					= data.total_lines;
@@ -301,7 +308,7 @@ function Printer() {
 
 			// access
 			self.hasControl						= data.has_control;
-
+			
 			if(self.state == Printer.PRINTING_STATE || self.state == Printer.STOPPING_STATE) {
 				console.log("progress: ",self.currentLine+"/"+self.totalLines+" ("+self.bufferedLines+") ("+self.state+")");
 			}
@@ -311,19 +318,20 @@ function Printer() {
 	this.overruleState = function(newState) {
 		this.stateOverruled = true;
 		console.log("  stateOverruled: ",this.stateOverruled);
-
+		
 		self.state = newState;
-
+		
 		$(document).trigger(Printer.UPDATE);
-
+		
 		this.stopStatusCheckInterval();
 	}
-
+	
 	this.removeLeaveWarning = function() {
 		window.onbeforeunload = null;
 	}
 	this.addLeaveWarning = function() {
 		window.onbeforeunload = function() {
+				console.log("WARNING:"+Printer.ON_BEFORE_UNLOAD_MESSAGE);
 				return Printer.ON_BEFORE_UNLOAD_MESSAGE;
 		};
 	}

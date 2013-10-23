@@ -10,7 +10,7 @@ function Message() {
 	this.$element;
 	
 	var self = this;
-	var autoHideDelay = 2000;
+	var autoHideDelay = 5000;
 	var autohideTimeout;
 	
 	this.init = function($element) {
