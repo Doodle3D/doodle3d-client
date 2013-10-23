@@ -70,6 +70,13 @@ function Printer() {
 	
 	this.preheat = function() {
     console.log("Printer:preheat");
+    
+    if(	this.state == Printer.BUFFERING_STATE ||
+    		this.state == Printer.PRINTING_STATE ||
+    		this.state == Printer.STOPPING_STATE) {
+    	return;
+    }
+    
     var self = this;
     if (communicateWithWifibox) {
 	    $.ajax({
