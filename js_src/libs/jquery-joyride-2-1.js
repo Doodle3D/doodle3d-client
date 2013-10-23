@@ -484,7 +484,7 @@
             if (methods.bottom()) {
               settings.$next_tip.css({
                 top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight() + topAdjustment),
-                left: settings.$target.offset().left  - settings.$next_tip.outerWidth() + leftAdjustment});
+                left: settings.$target.offset().left  - (settings.$next_tip.outerWidth() * 0.70) + leftAdjustment});
 
               if (/right/i.test(settings.tipSettings.nubPosition)) {
                 settings.$next_tip.css('left', settings.$target.offset().left + settings.$target.outerWidth());
@@ -503,7 +503,7 @@
             } else if (methods.right()) {
 
               settings.$next_tip.css({
-                top: settings.$target.offset().top + topAdjustment,
+                top: settings.$target.offset().top + (topAdjustment*0.5), // HACK
                 left: (settings.$target.outerWidth() + settings.$target.offset().left + nub_width) + leftAdjustment});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'left');
@@ -511,7 +511,7 @@
             } else if (methods.left()) {
 
               settings.$next_tip.css({
-                top: settings.$target.offset().top + topAdjustment,
+                top: settings.$target.offset().top + (topAdjustment*0.5), // HACK
                 left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_width) - leftAdjustment});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'right');
