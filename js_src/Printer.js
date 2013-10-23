@@ -325,6 +325,7 @@ function Printer() {
 	}
 	this.addLeaveWarning = function() {
 		window.onbeforeunload = function() {
+				console.log("WARNING:"+Printer.ON_BEFORE_UNLOAD_MESSAGE);
 				return Printer.ON_BEFORE_UNLOAD_MESSAGE;
 		};
 	}
