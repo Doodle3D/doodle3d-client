@@ -160,11 +160,8 @@ function initButtonBehavior() {
       loadSettings();
     });
   }*/
-  btnSettings.bind('touchstart mousedown',function () {
-    //e.preventDefault();
-    //console.log("btnSettings clicked");
-    settingsWindow.showSettings();
-  });
+  enableButton(btnSettings, openSettingsWindow);
+
 //  btnSettings.on('touchend', function(e) {
 //    e.preventDefault();
 //    console.log("btnSettings touchend");
@@ -214,14 +211,14 @@ function print(e) {
 
   	//setState(Printer.BUFFERING_STATE,printer.hasControl);
     printer.overruleState(Printer.BUFFERING_STATE);
-    
+
     btnStop.css("display","none"); // hack
-    
-    // we put the gcode generation in a little delay 
+
+    // we put the gcode generation in a little delay
     // so that for example the print button is disabled right away
     clearTimeout(gcodeGenerateDelayer);
-    gcodeGenerateDelayer = setTimeout(function() { 
-    	
+    gcodeGenerateDelayer = setTimeout(function() {
+
     	var gcode = generate_gcode();
     	if (sendPrintCommands) {
     		if(gcode.length > 0) {
@@ -238,7 +235,7 @@ function print(e) {
 				$("#textdump").text("");
 				$("#textdump").text(gcode.join("\n"));
 			}
-			
+
     }, gcodeGenerateDelay);
   } else {
     console.log("f:print >> not enough points!");
@@ -318,11 +315,11 @@ function update() {
 	progressbar.update(printer.currentLine, printer.totalLines);
 }
 
-function setState(newState,newHasControl) { 
+function setState(newState,newHasControl) {
 	if(newState == state && newHasControl == hasControl) return;
 
 	prevState = state;
-	
+
 	console.log("setState: ",prevState," > ",newState," ( ",newHasControl,")");
 	setDebugText("State: "+newState);
 
@@ -350,38 +347,60 @@ function setState(newState,newHasControl) {
 
 	// thermometer
 	switch(newState) {
-		case Printer.IDLE_STATE:
-		case Printer.BUFFERING_STATE:
-		case Printer.PRINTING_STATE:
+		case Printer.IDLE_STATE: /* fall-through */
+		case Printer.BUFFERING_STATE: /* fall-through */
+		case Printer.PRINTING_STATE: /* fall-through */
 		case Printer.STOPPING_STATE:
-			thermometer.show();	
+			thermometer.show();
 			break;
 		default:
-			thermometer.hide();	
+			thermometer.hide();
 			break;
 	}
 
 	// progress indicator
 	switch(newState) {
 		case Printer.PRINTING_STATE:
-			progressbar.show(); 
+			progressbar.show();
 			break;
 		default:
 			progressbar.hide();
 			break;
 	}
-	
+
+	/* settings button */
+	switch(newState) {
+	case Printer.IDLE_STATE:
+		enableButton(btnSettings, openSettingsWindow);
+		break;
+	case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
+	case Printer.BUFFERING_STATE: /* fall-through */
+	case Printer.PRINTING_STATE: /* fall-through */
+	case Printer.STOPPING_STATE:
+		disableButton(btnSettings);
+		break;
+	default:
+		enableButton(btnSettings, openSettingsWindow);
+		break;
+}
+
 	if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
 		message.set("Lost connection to WiFi box",Message.ERROR);
 	}	else if(prevState == Printer.WIFIBOX_DISCONNECTED_STATE) {
 		message.set("Connected to WiFi box",Message.INFO,true);
 	} else if(newState == Printer.DISCONNECTED_STATE) {
 		message.set("Printer disconnected",Message.WARNING,true);
-	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE || 
+	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
 						prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE) {
 		message.set("Printer connected",Message.INFO,true);
+	}	else if(prevState == Printer.PRINTING_STATE && newState == Printer.STOPPING_STATE) {
+		console.log("stopmsg show");
+		message.set("Printer stopping",Message.INFO,false);
+	}	else if(prevState == Printer.STOPPING_STATE && newState == Printer.IDLE_STATE) {
+		console.log("stopmsg hide");
+		message.hide();
 	}
-	
+
 	state = newState;
 	hasControl = newHasControl;
 }
