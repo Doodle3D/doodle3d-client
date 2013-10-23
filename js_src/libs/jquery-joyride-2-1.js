@@ -632,11 +632,14 @@
         expose = $(settings.template.expose);
         settings.$body.append(expose);
 //        console.log("JOYRIDE >> EXPOSE INFO >> el[0].clientWidth: " + el[0].clientWidth + ", el: " , el , ", el[0]: " , el[0] , ", el.offset: " , el.offset() , ", el.clientWidth: " + el.clientWidth + ", el.outerWidth: " + el.outerWidth(true))
+//        console.log("JOYRIDE >> EXPOSE INFO >> el.css('margin'): " + el.css('margin'));
+//        console.log("JOYRIDE >> EXPOSE INFO >> el.css('margin-left'): " + el.css('margin-left'));
         expose.css({
-          top: el.offset().top,
-          left: el.offset().left,
-          width: el[0].clientWidth,
-          height: el[0].clientHeight
+//          margin: el.css('margin'),
+          top: el.offset().top - 2,         // CAVEMAN PADDING!
+          left: el.offset().left - 2,       // CAVEMAN PADDING!
+          width: el[0].clientWidth + 4,     // CAVEMAN PADDING!
+          height: el[0].clientHeight + 4    // CAVEMAN PADDING!
 //          width: el.outerWidth(true),
 //          height: el.outerHeight(true)
         });
@@ -651,10 +654,14 @@
         }
         el.data('expose-css',origCSS);
         exposeCover.css({
-          top: el.offset().top,
-          left: el.offset().left,
-          width: el.outerWidth(true),
-          height: el.outerHeight(true)
+          top: el.offset().top - 2,         // CAVEMAN PADDING!
+          left: el.offset().left - 2,       // CAVEMAN PADDING!
+          width: el[0].clientWidth + 4,     // CAVEMAN PADDING!
+          height: el[0].clientHeight + 4    // CAVEMAN PADDING!
+//          top: el.offset().top,
+//          left: el.offset().left,
+//          width: el.outerWidth(true),
+//          height: el.outerHeight(true)
         });
         settings.$body.append(exposeCover);
         expose.addClass(randId);

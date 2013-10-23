@@ -1,14 +1,16 @@
 //@helpBlue: #2470E2;
+@modalBgColor: rgba(0,0,0, 0.30);
 @darkBlue: #013;
 @helpBlue: #1B76FF;
 @helpFullBlue: rgb(0,85,214);
 @helpDarkBlue: darken(desaturate(@helpBlue, 25%), 35%);
+@tipBgColor: rgba(255, 255, 255, 1.0);
 
 /* Default styles for the container */
 .joyride-tip-guide {
   position: absolute;
 //  background: #000;
-  background: rgba(255, 255, 255, 0.92);
+  background: @tipBgColor;
   display: none;
   color: @darkBlue;
 //  color: rgb(0,99,255);
@@ -248,12 +250,7 @@
   position: fixed;
   height: 100%;
   width: 100%;
-//  background: rgb(0,0,0);
-//  background: transparent;
-  background: rgba(0,0,0, 0.30);
-//  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-//  filter: alpha(opacity=50);
-//  opacity: 0.5;
+  background: @modalBgColor;
   z-index: 100;
   display: none;
   top: 0;
@@ -262,12 +259,10 @@
 }
 
 .joyride-expose-wrapper {
-  background-color: #ffffff;
+  background-color: #fff;
   position: absolute;
   z-index: 102;
-  -moz-box-shadow: 0px 0px 30px #ffffff;
-  -webkit-box-shadow: 0px 0px 30px #ffffff;
-  box-shadow: 0px 0px 30px #ffffff;
+  box-shadow: 0px 0px 30px #fff;
   border-radius: 5px;
 }
 
