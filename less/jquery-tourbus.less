@@ -11,7 +11,17 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
   border-radius: 4px;
   background: white;
+
+  /*
+    remove top padding/margin on headings
+    because the interior of the leg has padding
+  */
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    padding-top: 0;
+  }
 }
+
 /* Interior of leg, clearfixed */
 .tourbus-leg-inner {
   padding: 20px;
@@ -40,19 +50,7 @@
 	box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
 	margin-right: 8px;
 }
-/*
-  remove top padding/margin on headings
-  because the interior of the leg has padding
-*/
-.tourbus-leg h1,
-.tourbus-leg h2,
-.tourbus-leg h3,
-.tourbus-leg h4,
-.tourbus-leg h5,
-.tourbus-leg h6 {
-  margin-top: 0;
-  padding-top: 0;
-}
+
 /* Tourbus leg arrow */
 .tourbus-arrow:before,
 .tourbus-arrow:after {

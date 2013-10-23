@@ -55,6 +55,7 @@ $(function() {
   initSidebars();
   initButtonBehavior();
   initVerticalShapes();
+  initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));

@@ -48,7 +48,7 @@ function initButtonBehavior() {
 	$("#btnPrevious").css("opacity", "0.3");
 	btnNext.css("opacity", "0.3");
 	$("#btnSave").css("opacity", "0.3");
-	btnInfo.css("opacity", "0.3");
+//	btnInfo.css("opacity", "0.3");
 
 //  btnClear.click(function(e) {
 //    e.preventDefault();
@@ -173,6 +173,7 @@ function initButtonBehavior() {
   btnInfo.mouseup(function(e) {
     e.preventDefault();
     console.log("btnInfo mouse up");
+    helpTours.startTour(helpTours.WELCOMETOUR);
   });
 
   // DEBUG

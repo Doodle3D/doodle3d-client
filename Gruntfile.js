@@ -14,10 +14,11 @@ module.exports = function(grunt) {
       options: {
 //         separator: ';'
       },
-      dist: {
+      js: {
         src: [
           'js_src/SettingsWindow.js',
           'js_src/UpdatePanel.js',
+          'js_src/Help.js',
           'js_src/d3dServerInterfacing.js',
           'js_src/verticalShapes.js',
           'js_src/buttonbehaviors.js',
@@ -42,18 +43,25 @@ module.exports = function(grunt) {
         mangle: true,
         beautify: false,
         compress: {},
-        report: 'min',
+//        report: 'min',
         preserveComments: 'false'
       },
-      build: {
+      js: {
         files: {
-//          'www/js/<%= pkg.name %>.min.js' : ['www/js/*.js', '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js']
           'www/js/<%= pkg.name %>.min.js' : ['www/js/<%= pkg.name %>.js']
         }
-//        src: 'www/js/*.js',
-//        dest: 'www/js/min/blabla.js'
-//        src: ['www/js/*.js', '!www/js/<%= pkg.name %>.min.js'],
-//        dest: 'www/js/<%= pkg.name %>.min.js'
+      },
+      jslibs: {
+        cwd: "js_src/libs/",
+//        src: ['js_src/libs/*.js', '!js_src/libs/*.min.js'],  // source files mask
+        src: ['*.js', '!*.min.js'],  // source files mask
+        dest: 'www/js/libs/',    // destination folder
+        expand: true,    // allow dynamic building
+        flatten: true,   // remove all unnecessary nesting
+        ext: '.min.js'   // replace .js to .min.js
+//        files: {
+//          'www/js/<%= pkg.name %>.min.js' : ['www/js/<%= pkg.name %>.js']
+//        }
       }
     },
     jshint: {
@@ -94,7 +102,12 @@ module.exports = function(grunt) {
     watch: {
       javascript: {
         files: ["js_src/*", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
-        tasks: ["concat", "uglify"]
+        tasks: ["concat:js", "uglify:js"]
+//        tasks: ["jshint", "concat", "uglify"]
+      },
+      javascriptLibs: {
+        files: ["js_src/libs/*"],
+        tasks: ["uglify:jslibs"]
 //        tasks: ["jshint", "concat", "uglify"]
       },
       styles: {
