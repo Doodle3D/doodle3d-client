@@ -35,6 +35,7 @@ function SettingsWindow() {
 	this.wifiboxURL;
 	this.wifiboxCGIBinURL
 	this.window;
+	this.btnOK;
 	this.form;
 	this.timeoutTime = 3000;
 	this.retryDelay = 2000; 					// retry setTimout delay
@@ -97,8 +98,10 @@ function SettingsWindow() {
 		this.wifiboxCGIBinURL = wifiboxCGIBinURL;
 
 		this.window = $("#settings");
-		this.window.find(".btnOK").click(this.submitwindow);
-	  this.window.find(".settingsContainer").load("settings.html", function() {
+		this.btnOK = this.window.find(".btnOK");
+		enableButton(this.btnOK,this.submitwindow);
+	  
+		this.window.find(".settingsContainer").load("settings.html", function() {
       console.log("Settings:finished loading settings.html, now loading settings...");
 
       self.form = self.window.find("form");
@@ -128,10 +131,13 @@ function SettingsWindow() {
 	  });
 	}
 	this.submitwindow = function(e) {
+		disableButton(self.btnOK,self.submitwindow);
 		e.preventDefault();
 	  e.stopPropagation();
 	  self.saveSettings(self.readForm(),function(){
-	  	self.hideSettings();
+	  	self.hideSettings(function() {
+	  		enableButton(self.btnOK,self.submitwindow);
+	  	});
 	  });
 
 	  clearTimeout(self.retryRetrieveNetworkStatusDelay);
@@ -146,10 +152,11 @@ function SettingsWindow() {
 	    document.body.removeEventListener('touchmove',prevent,false);
 	  });
 	}
-	this.hideSettings = function() {
+	this.hideSettings = function(complete) {
 		$("#contentOverlay").fadeOut(375, function() {
       document.body.addEventListener('touchmove',prevent,false);
 //      self.window.css("display","none");
+      complete();
     });
 	}
 
