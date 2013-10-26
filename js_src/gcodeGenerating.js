@@ -31,10 +31,6 @@ var gcode = [];
 function generate_gcode() {
   console.log("f:generategcode()");
 
-  // TODO 2013-09-18 evaluate if this should stay here
-  // this was added when Rick mailed us wrt the Ultimaker delivery of Doodle3D
-  var gCodeOffsetX = 110; // mm
-  var gCodeOffsetY = 110; // mm
   
   gcode = [];
 
@@ -58,6 +54,11 @@ function generate_gcode() {
   var retractionamount 	      = settings["printer.retraction.amount"];
   var preheatTemperature      = settings["printer.heatup.temperature"];
   var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
+  var printerBedWidth      		= settings["printer.bed.width"];
+  var printerBedHeight      	= settings["printer.bed.height"];
+  
+  var gCodeOffsetX = printerBedWidth/2; //110; // mm
+  var gCodeOffsetY = printerBedHeight/2; //110; // mm
   
   var startGcode = settings["printer.startgcode"];
   startGcode = subsituteVariables(startGcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
