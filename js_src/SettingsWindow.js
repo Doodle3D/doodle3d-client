@@ -134,10 +134,14 @@ function SettingsWindow() {
 		disableButton(self.btnOK,self.submitwindow);
 		e.preventDefault();
 	  e.stopPropagation();
-	  self.saveSettings(self.readForm(),function(){
-	  	self.hideSettings(function() {
+	  self.saveSettings(self.readForm(),function(success){
+	  	if(success) {
+				self.hideSettings(function() {
+					enableButton(self.btnOK,self.submitwindow);
+				});
+	  	} else {
 	  		enableButton(self.btnOK,self.submitwindow);
-	  	});
+	  	}
 	  });
 
 	  clearTimeout(self.retryRetrieveNetworkStatusDelay);
@@ -231,7 +235,7 @@ function SettingsWindow() {
 			  	console.log("Settings:saveSettings response: ",response);
 			  	if(response.status == "error") {
 			  		clearTimeout(self.retrySaveSettingsDelay);
-						self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings) },self.retryDelay); // retry after delay
+						self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings,complete) },self.retryDelay); // retry after delay
 			  	} else {
 			  		var data = response.data;
 			  		var validation = data.validation;
@@ -245,13 +249,13 @@ function SettingsWindow() {
 			        }
 			      });
 				  	settings.substituted_ssid = data.substituted_ssid;
-				  	if(complete && validated) complete();
+				  	if(complete) complete(validated);
 			  	}
 				}
 			}).fail(function() {
 				console.log("Settings:saveSettings: failed");
 				clearTimeout(self.retrySaveSettingsDelay);
-				self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings) },self.retryDelay); // retry after delay
+				self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings,complete) },self.retryDelay); // retry after delay
 			});
 	  }
 	}
@@ -566,8 +570,8 @@ function SettingsWindow() {
 		if (communicateWithWifibox) {
 
 			// save network related settings and on complete, connect to network
-			self.saveSettings(self.readForm(),function() {
-
+			self.saveSettings(self.readForm(),function(success) {
+				if(!success) return;
 				$.ajax({
 					url: self.wifiboxCGIBinURL + "/network/associate",
 					type: "POST",
@@ -597,7 +601,8 @@ function SettingsWindow() {
 		if (communicateWithWifibox) {
 
 			// save network related settings and on complete, create access point
-			self.saveSettings(self.readForm(),function() {
+			self.saveSettings(self.readForm(),function(success) {
+				if(!success) return;
 				self.setAPModeState(SettingsWindow.CREATING_AP); // get latest substituted ssid
 				$.ajax({
 					url: self.wifiboxCGIBinURL + "/network/openap",
