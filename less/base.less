@@ -17,7 +17,6 @@ img {
 /*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
 .btn {
   background-repeat: no-repeat;
-/*	-webkit-user-select: none;*/
   cursor: pointer;
 }
 #landscape {
@@ -33,8 +32,17 @@ img {
 //  z-index: 5;
   overflow: hidden;
   margin:  0 auto;
-  outline: 2px solid #5e8c71;
-  box-shadow: 0 0 8px rgba(8, 8, 8, 0.25);
+
+//  box-sizing: border-box;
+//  border: 2px solid #5e8c71;
+//  -moz-box-sizing:border-box;
+//  -webkit-box-sizing:border-box;//  border-width: 0 2px 2px 2px;
+
+  // solution from: http://stackoverflow.com/questions/14085822/css-firefox-box-shadow-and-outline
+  box-shadow: 0 0 0 2px #5e8c71,
+  0 0 8px 4px rgba(8, 8, 8, 0.25);
+
+//  outline: 2px solid #5e8c71;
 }
 #portrait {
 	display: none;
