@@ -142,6 +142,7 @@ function SettingsWindow() {
 				self.hideSettings(function() {
 					enableButton(self.btnOK,self.submitwindow);
 				});
+				self.signin();
 	  	} else {
 	  		enableButton(self.btnOK,self.submitwindow);
 	  	}
@@ -151,12 +152,10 @@ function SettingsWindow() {
 	}
 
 	this.showSettings = function() {
-	  console.log("f:showSettings()");
-
-	  this.loadSettings(); // reload settings
-//		this.window.css("display","table");
-	  $("#contentOverlay").fadeIn(375, function() {
-	    document.body.removeEventListener('touchmove',prevent,false);
+	  this.loadSettings(function() { // reload settings
+	  	$("#contentOverlay").fadeIn(375, function() {
+				document.body.removeEventListener('touchmove',prevent,false);
+			});
 	  });
 	}
 	this.hideSettings = function(complete) {
@@ -167,7 +166,7 @@ function SettingsWindow() {
     });
 	}
 
-	this.loadSettings = function() {
+	this.loadSettings = function(complete) {
 		if (!communicateWithWifibox) {
 			console.log("     communicateWithWifibox is false: settings aren't being loaded from wifibox...")
 			return;
@@ -184,6 +183,7 @@ function SettingsWindow() {
 		  	console.log("  settings: ",settings);
 		  	self.fillForm();
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
+		  	if(complete) complete();
 			}
 		}).fail(function() {
 			console.log("Settings:loadSettings: failed");
@@ -332,6 +332,20 @@ function SettingsWindow() {
 		}
 	}
 
+	this.signin = function() {
+		$.ajax({
+			url: self.wifiboxCGIBinURL + "/network/signin",
+			type: "GET",
+			dataType: 'json',
+			timeout: self.timeoutTime,
+			success: function(response){
+				console.log("Settings:signin response: ",response);
+			}
+		}).fail(function() {
+			console.log("Settings:signin: failed");
+		});
+	}
+	
 	/*
 	 * Networks ui
 	 */
