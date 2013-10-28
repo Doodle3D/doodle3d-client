@@ -65,19 +65,14 @@ function generate_gcode() {
   var startCode = "";
   var endCode = "";
   
-  switch(printerType) {
-		case "makerbot_generic":
-		case "makerbot_replicator2":
-		case "makerbot_thingomatic":
-			startCode = settings["printer.startcode.x3g"];
-			endCode = settings["printer.endcode.x3g"];
-			break;
-		default:
-			startCode = settings["printer.startcode.marlin"];
-			endCode = settings["printer.endcode.marlin"];
-			break;
+  if(settingsWindow.isMarlinPrinter(printerType)) {
+  	startCode = settings["printer.startcode.marlin"];
+    endCode = settings["printer.endcode.marlin"];
+	} else {
+		startCode = settings["printer.startcode.x3g"];
+		endCode = settings["printer.endcode.x3g"];
 	}
-  
+
   startCode = subsituteVariables(startCode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
 	startCode = startCode.split("\n");
 	

@@ -310,16 +310,24 @@ function SettingsWindow() {
 	
 	this.printerSelectorChanged = function(e) {
 		var selectedOption = self.printerSelector.find("option:selected");
-		switch(selectedOption.val()) {
+		if(self.isMarlinPrinter(selectedOption.val())) {
+			self.x3gSettings.hide();
+			self.gcodeSettings.show();
+		} else {
+			self.gcodeSettings.hide();
+			self.x3gSettings.show();
+		}
+	}
+	
+	this.isMarlinPrinter = function(printer) {
+		switch(printer) {
 			case "makerbot_generic":
 			case "makerbot_replicator2":
 			case "makerbot_thingomatic":
-				self.gcodeSettings.hide();
-				self.x3gSettings.show();
+				return false;
 				break;
 			default:
-				self.x3gSettings.hide();
-				self.gcodeSettings.show();
+				return true;
 				break;
 		}
 	}
