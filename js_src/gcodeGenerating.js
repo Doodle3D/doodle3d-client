@@ -35,7 +35,6 @@ function generate_gcode() {
   gcode = [];
 
   console.log("settings: ",settings);
-  var printerType 						= settings["printer.type"];
   var speed 						      = settings["printer.speed"]
   var normalSpeed 			      = speed;
   var bottomSpeed 			      = speed*0.5;
@@ -61,24 +60,9 @@ function generate_gcode() {
   var gCodeOffsetX = printerBedWidth/2; //110; // mm
   var gCodeOffsetY = printerBedHeight/2; //110; // mm
   
+  var startCode = generateStartCode();
+  var endCode = generateEndCode();
   
-  var startCode = "";
-  var endCode = "";
-  
-  if(settingsWindow.isMarlinPrinter(printerType)) {
-  	startCode = settings["printer.startcode.marlin"];
-    endCode = settings["printer.endcode.marlin"];
-	} else {
-		startCode = settings["printer.startcode.x3g"];
-		endCode = settings["printer.endcode.x3g"];
-	}
-
-  startCode = subsituteVariables(startCode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
-	startCode = startCode.split("\n");
-	
-	endCode = subsituteVariables(endCode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
-	endCode = endCode.split("\n");
-	
   /*
   console.log("f:generate_gcode >> EFFE CHECKEN:");
   console.log("   speed: " + speed);
@@ -274,7 +258,39 @@ function generate_gcode() {
   return gcode;
 }
 
-function subsituteVariables(gcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature) {
+function generateStartCode() {
+	var printerType = settings["printer.type"];
+	
+	var startCode = "";
+	if(settingsWindow.isMarlinPrinter(printerType)) {
+		startCode = settings["printer.startcode.marlin"];
+	} else {
+		startCode = settings["printer.startcode.x3g"];
+	}
+	startCode = subsituteVariables(startCode);
+	startCode = startCode.split("\n");
+	return startCode;
+}
+function generateEndCode() {
+	var printerType = settings["printer.type"];
+	
+	var endCode = "";
+	if(settingsWindow.isMarlinPrinter(printerType)) {
+		endCode = settings["printer.endcode.marlin"];
+	} else {
+		endCode = settings["printer.endcode.x3g"];
+	}
+	endCode = subsituteVariables(endCode);
+	endCode = endCode.split("\n");
+	return endCode;
+}
+
+function subsituteVariables(gcode) {
+	//,temperature,bedTemperature,preheatTemperature,preheatBedTemperature
+	var temperature 			      = settings["printer.temperature"];
+	var bedTemperature 			    = settings["printer.bed.temperature"];
+	var preheatTemperature      = settings["printer.heatup.temperature"];
+	var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
 	
 	gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
 	gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);

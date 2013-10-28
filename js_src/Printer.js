@@ -212,11 +212,15 @@ function Printer() {
 	
 	this.stop = function() {
     console.log("Printer:stop");
+    endCode = generateEndCode();
+    console.log("  endCode: ",endCode);
+    var postData = { gcode: endCode.join("\n")};
 		var self = this;
 		if (communicateWithWifibox) {
 	    $.ajax({
 			  url: this.wifiboxURL + "/printer/stop",
 			  type: "POST",
+			  data: postData,
 			  dataType: 'json',
 			  timeout: this.timeoutTime,
 			  success: function(data){
