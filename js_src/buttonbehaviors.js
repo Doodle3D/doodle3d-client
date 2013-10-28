@@ -58,16 +58,18 @@ function initButtonBehavior() {
 //  });
 
   function startOops(e) {
-    //      console.log("btnOops mouse down");
+    console.log("f:startOops()");
     e.preventDefault();
     btnOopsInterval = setInterval( function() {
       oopsUndo();
-    }, 1000/50);
+    }, 1000/40);
   }
   function stopOops(e) {
-    //      console.log("btnOops mouse up");
+    console.log("f:stopOops()");
     e.preventDefault();
     clearInterval(btnOopsInterval);
+    redrawDoodle(true);
+    redrawPreview();
   }
   btnOops.on('touchstart', function(e) { startOops(e); });
   btnOops.on('touchend', function(e) { stopOops(e); });
@@ -273,7 +275,14 @@ function resetPreview() {
 function oopsUndo() {
   //    console.log("f:oopsUndo()");
   _points.pop();
-  redrawDoodle();
+
+  if (clientInfo.isSmartphone) {
+    // do not recalc the whole preview's bounds during undo if client device is a smartphone
+    redrawDoodle(false);
+  } else {
+    // recalc the whole preview's bounds during if client device is not a smartphone
+    redrawDoodle(true);
+  }
   redrawPreview();
 }
 function previewUp(redrawLess) {

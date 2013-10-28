@@ -164,8 +164,18 @@ function clearDoodle() {
   resetVerticalShapes();
 }
 
-function redrawDoodle() {
-  console.log("f:redrawDoodle()");
+function redrawDoodle(recalcBoundsAndTransforms) {
+  if (recalcBoundsAndTransforms == undefined) recalcBoundsAndTransforms = false;
+  console.log("f:redrawDoodle() >> recalcBoundsAndTransforms = " + recalcBoundsAndTransforms);
+
+  if (recalcBoundsAndTransforms == true) {
+    doodleBounds = [-1, -1, -1, -1]; // left, top, right, bottom
+    doodleTransform = [0, 0, 1.0, 1.0]; // [ x, y, scaleX, scaleY ]
+    for (var i = 0; i < _points.length; i++) {
+      adjustBounds(_points[i][0], _points[i][1]);
+      adjustPreviewTransformation();
+    }
+  }
 
   clearMainView();
 
@@ -184,7 +194,7 @@ function redrawDoodle() {
 
  function adjustBounds(x, y) {
   var newPointsOutsideOfCurrentBounds = false;
-      console.log("f:adjustBounds("+x+","+y+")");
+//      console.log("f:adjustBounds("+x+","+y+")");
 
   if (doodleBounds[0] == -1) {
     // if doodleBounds[0] is -1 then it isn't initted yet, so x and y are both the min and max vals
@@ -212,35 +222,14 @@ function redrawDoodle() {
    doodleBounds[3] = y;
    newPointsOutsideOfCurrentBounds = true;
  }
-//  doodleBounds[0] = Math.min(doodleBounds[0], x); // left
-//  doodleBounds[2] = Math.max(doodleBounds[2], x); // right
-//
-//  doodleBounds[1] = Math.min(doodleBounds[1], y); // top
-//  doodleBounds[3] = Math.max(doodleBounds[3], y); // bottom
 
-  // draw the bounding rect (DEBUG)
-  /*
-  ctx.beginPath();
-  ctx.rect(doodleBounds[0],doodleBounds[1], doodleBounds[2] - doodleBounds[0], doodleBounds[3] - doodleBounds[1]);
-  ctx.lineWidth = .2;
-  ctx.strokeStyle = "#333"
-  ctx.stroke();
-  ctx.closePath();
-  //*/
-
-  //    console.log("   new bounds: " + doodleBounds);
-
-   return newPointsOutsideOfCurrentBounds;
+ return newPointsOutsideOfCurrentBounds;
 }
 
 // does what exactly?
 function adjustPreviewTransformation() {
   //    console.log("f:adjustPreviewTransformation()");
 
-//  doodleTransform[0] = doodleBounds[0] - (doodleBounds[2] - doodleBounds[0]) / 2;
-//  doodleTransform[1] = doodleBounds[1] - (doodleBounds[3] - doodleBounds[1]) / 2;
-//  doodleTransform[0] = doodleBounds[0] - ((doodleBounds[2] - doodleBounds[0]) / 2);
-//  doodleTransform[1] = doodleBounds[1] - ((doodleBounds[3] - doodleBounds[1]) / 2);
   doodleTransform[0] = doodleBounds[0];
   doodleTransform[1] = doodleBounds[1];
 
@@ -269,20 +258,14 @@ function adjustPreviewTransformation() {
  *
  * * * * * * * * * */
 function onCanvasMouseDown(e) {
-  //  console.log("onmousedown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
-  //  console.log("onmousedown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
-  //  console.log("onmousedown >> e: " + e);
-  //  console.log(e);
 //  console.log("f:onCanvasMouseDown()");
+  //  console.log("onCanvasMouseDown >> e.offsetX,e.offsetY = " + e.offsetX+","+e.offsetY);
+  //  console.log("onCanvasMouseDown >> e.layerX,e.layerY= " + e.layerX+","+e.layerY);
+  //  console.log("onCanvasMouseDown >> e: " , e);
   dragging = true;
 
   prevCountingTime = new Date().getTime();
   movementCounter = 0
-
-//  _points.push([e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, true]);
-//  adjustBounds(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-//  adjustPreviewTransformation();
-//  draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 0.5);
 
   var x, y;
   if (e.offsetX != undefined) {
@@ -316,18 +299,19 @@ function onCanvasMouseMove(e) {
   }
 
   if (prevPoint.x != -1 || prevPoint.y != -1) {
-    var dist = Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2));
+    var dist = Math.sqrt(((prevPoint.x - x) * (prevPoint.x - x)) + ((prevPoint.y - y) * (prevPoint.y - y)));
     if (dist > 5) { // replace by setting: doodle3d.simplify.minDistance
       _points.push([x, y, false]);
-      adjustBounds(x, y)
+      adjustBounds(x, y);
       adjustPreviewTransformation();
       draw(x, y);
       prevPoint.x = x;
       prevPoint.y = y;
     }
   } else {
+    // this is called once, every time you start to draw a line
     _points.push([x, y, false]);
-    adjustBounds(x, y)
+    adjustBounds(x, y);
     adjustPreviewTransformation();
     draw(x, y);
     prevPoint.x = x;
@@ -342,20 +326,13 @@ function onCanvasMouseMove(e) {
   if (new Date().getTime() - prevRedrawTime > redrawInterval) {
     // redrawing the whole preview the first X points ensures that the doodleBounds is set well
     prevRedrawTime = new Date().getTime();
-    if (_points.length < 50) {
+    // Keep fully updating the preview if device is not a smartphone.
+    // (An assumption is made here that anything greater than a smartphone will have sufficient
+    // performance to always redraw the preview.)
+    if (_points.length < 50 || !clientInfo.isSmartphone) {
       redrawPreview();
     } else {
       updatePreview(x, y, true);
-      /*
-       if (_points.length - prevUpdateFullPreview > prevUpdateFullPreviewInterval) {
-       console.log("f:onTouchMove >> passed prevUpdateFullPreviewInterval, updating full preview");
-       redrawPreview();
-       prevUpdateFullPreview = _points.length;
-       } else {
-       updatePreview(x, y, true);
-       }
-       //*/
-//      redrawPreview();
     }
   }
 }
