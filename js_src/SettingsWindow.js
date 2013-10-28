@@ -151,12 +151,10 @@ function SettingsWindow() {
 	}
 
 	this.showSettings = function() {
-	  console.log("f:showSettings()");
-
-	  this.loadSettings(); // reload settings
-//		this.window.css("display","table");
-	  $("#contentOverlay").fadeIn(375, function() {
-	    document.body.removeEventListener('touchmove',prevent,false);
+	  this.loadSettings(function() { // reload settings
+	  	$("#contentOverlay").fadeIn(375, function() {
+				document.body.removeEventListener('touchmove',prevent,false);
+			});
 	  });
 	}
 	this.hideSettings = function(complete) {
@@ -167,7 +165,7 @@ function SettingsWindow() {
     });
 	}
 
-	this.loadSettings = function() {
+	this.loadSettings = function(complete) {
 		if (!communicateWithWifibox) {
 			console.log("     communicateWithWifibox is false: settings aren't being loaded from wifibox...")
 			return;
@@ -184,6 +182,7 @@ function SettingsWindow() {
 		  	console.log("  settings: ",settings);
 		  	self.fillForm();
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
+		  	if(complete) complete();
 			}
 		}).fail(function() {
 			console.log("Settings:loadSettings: failed");
