@@ -57,7 +57,7 @@ function Thermometer() {
 
       var progress = curr / targ;
 
-      progress = Math.min(progress, 1.0);
+//      progress = Math.min(progress, 1.0);
       progress = Math.max(progress, 0);
 
       var h = this.thermoHeight; // 94 // px
