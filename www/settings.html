@@ -48,6 +48,7 @@
         <option value="tantillus">Tantillus</option>
         <option value="vision_3d_printer">Vision 3D Printer</option>
         <option value="marlin_generic">Generic Marlin Printer</option>
+        <option value="makerbot_generic">Generic Makerbot Printer</option>
       </select><br/>
       <label for="printerBedWidth">Bed width:</label><input id="printerBedWidth" type="number" class="small" name="printer.bed.width">mm<br>
       <label for="printerBedHeight">Bed height:</label><input id="printerBedHeight" type="number" class="small" name="printer.bed.height">mm<br>
@@ -132,15 +133,16 @@
         <small id="updateInfo"></small>
  	</fieldset>
 
-    <fieldset>
+    <fieldset id="gcodeSettings">
  		<legend>GCODE settings</legend>
-      	<div class="startgcode_left">
-       		<label for="startgcode">Start:</label><br/>
-       		<textarea id="startgcode" class="gcode" name="printer.startgcode"></textarea>
+ 		<small class="intro">GCode settings for all printers that use Marlin firmware</small>
+ 		<div class="startgcode_left">
+       		<label for="startgcodeMarlin">Start:</label><br/>
+       		<textarea id="startgcodeMarlin" class="gcode" name="printer.startcode.marlin"></textarea>
      	</div>
       	<div>
-        	<label for="endgcode">End:</label><br/>
-        	<textarea id="endgcode" class="gcode" name="printer.endgcode"></textarea>
+        	<label for="endgcodeMarlin">End:</label><br/>
+        	<textarea id="endcodeMarlin" class="gcode" name="printer.endcode.marlin"></textarea>
       	</div>
       	<small>
       		The following texts are replaced:
@@ -152,6 +154,28 @@
       		</dl>
       	</small>
     </fieldset>
+    <fieldset id="x3gSettings">
+ 		<legend>X3G settings</legend>
+ 		<small class="intro">X3G settings for all printers that use Sailfish firmware, like Makerbots.</small>
+ 		<div class="startgcode_left">
+       		<label for="startgcodeX3G">Start:</label><br/>
+       		<textarea id="startcodeX3G" class="gcode" name="printer.startcode.x3g"></textarea>
+     	</div>
+      	<div>
+        	<label for="endgcodeX3G">End:</label><br/>
+        	<textarea id="endcodeX3G" class="gcode" name="printer.endcode.x3g"></textarea>
+      	</div>
+      	<small>
+      		The following texts are replaced:
+      		<dl>
+      			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
+      			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
+      			<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
+      			<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
+      		</dl>
+      	</small>
+    </fieldset>
+    
   </form><br/>
 </div>
 </body>

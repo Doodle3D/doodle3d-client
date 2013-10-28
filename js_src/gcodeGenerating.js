@@ -35,6 +35,7 @@ function generate_gcode() {
   gcode = [];
 
   console.log("settings: ",settings);
+  var printerType 						= settings["printer.type"];
   var speed 						      = settings["printer.speed"]
   var normalSpeed 			      = speed;
   var bottomSpeed 			      = speed*0.5;
@@ -60,13 +61,28 @@ function generate_gcode() {
   var gCodeOffsetX = printerBedWidth/2; //110; // mm
   var gCodeOffsetY = printerBedHeight/2; //110; // mm
   
-  var startGcode = settings["printer.startgcode"];
-  startGcode = subsituteVariables(startGcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
-	startGcode = startGcode.split("\n");
+  
+  var startCode = "";
+  var endCode = "";
+  
+  switch(printerType) {
+		case "makerbot_generic":
+		case "makerbot_replicator2":
+		case "makerbot_thingomatic":
+			startCode = settings["printer.startcode.x3g"];
+			endCode = settings["printer.endcode.x3g"];
+			break;
+		default:
+			startCode = settings["printer.startcode.marlin"];
+			endCode = settings["printer.endcode.marlin"];
+			break;
+	}
+  
+  startCode = subsituteVariables(startCode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
+	startCode = startCode.split("\n");
 	
-	var endGcode = settings["printer.endgcode"];
-	endGcode = subsituteVariables(endGcode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
-	endGcode = endGcode.split("\n");
+	endCode = subsituteVariables(endCode,temperature,bedTemperature,preheatTemperature,preheatBedTemperature);
+	endCode = endCode.split("\n");
 	
   /*
   console.log("f:generate_gcode >> EFFE CHECKEN:");
@@ -114,7 +130,7 @@ function generate_gcode() {
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
   
   // add gcode begin commands
-  gcode = gcode.concat(startGcode);
+  gcode = gcode.concat(startCode);
   
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
 
@@ -258,7 +274,7 @@ function generate_gcode() {
     }
   }
   // add gcode end commands
-  gcode = gcode.concat(endGcode);
+  gcode = gcode.concat(endCode);
   
   return gcode;
 }

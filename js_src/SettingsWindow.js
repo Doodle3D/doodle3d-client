@@ -44,8 +44,7 @@ function SettingsWindow() {
 	this.retryLoadSettingsDelay; 			// retry setTimout instance
 	this.retrySaveSettingsDelay; 			// retry setTimout instance
 	this.retryRetrieveNetworkStatusDelay;// retry setTimout instance
-
-
+	
 	this.apFieldSet;
 	this.clientFieldSet;
 	this.networks;
@@ -108,7 +107,8 @@ function SettingsWindow() {
 			self.form.submit(function (e) { self.submitwindow(e) });
 
       self.loadSettings();
-
+      	
+      self.printerSelector 	= self.form.find("#printerType");
       var btnAP 						= self.form.find("label[for='ap']");
 		  var btnClient 				= self.form.find("label[for='client']");
 		  var btnRefresh 				= self.form.find("#refreshNetworks");
@@ -117,14 +117,17 @@ function SettingsWindow() {
 		  var networkSelector 	= self.form.find("#network");
 		  self.apFieldSet 			= self.form.find("#apSettings");
 		  self.clientFieldSet 	= self.form.find("#clientSettings");
-
+		  self.gcodeSettings		= self.form.find("#gcodeSettings");
+		  self.x3gSettings			= self.form.find("#x3gSettings");
+		  				
 		  btnAP.on('touchstart mousedown',self.showAPSettings);
 		  btnClient.on('touchstart mousedown',self.showClientSettings);
 		  btnRefresh.on('touchstart mousedown',self.refreshNetworks);
 		  btnConnect.on('touchstart mousedown',self.connectToNetwork);
 			btnCreate.on('touchstart mousedown',self.createAP);
+			self.printerSelector.change(self.printerSelectorChanged);
 		  networkSelector.change(self.networkSelectorChanged);
-
+		  	
 		  // update panel
 		  var $updatePanelElement = self.form.find("#updatePanel");
 		  self.updatePanel.init(wifiboxURL,$updatePanelElement);
@@ -220,6 +223,7 @@ function SettingsWindow() {
 			var value = settings[element.attr('name')];
 			element.val(value);
 		});
+		self.printerSelectorChanged();
 	}
 
 	this.saveSettings = function(newSettings,complete) {
@@ -302,6 +306,22 @@ function SettingsWindow() {
 		});
 		//console.log(settings);
 		return settings;
+	}
+	
+	this.printerSelectorChanged = function(e) {
+		var selectedOption = self.printerSelector.find("option:selected");
+		switch(selectedOption.val()) {
+			case "makerbot_generic":
+			case "makerbot_replicator2":
+			case "makerbot_thingomatic":
+				self.gcodeSettings.hide();
+				self.x3gSettings.show();
+				break;
+			default:
+				self.x3gSettings.hide();
+				self.gcodeSettings.show();
+				break;
+		}
 	}
 
 	/*
