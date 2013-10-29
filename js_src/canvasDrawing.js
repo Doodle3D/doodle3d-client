@@ -166,7 +166,7 @@ function clearDoodle() {
 
 function redrawDoodle(recalcBoundsAndTransforms) {
   if (recalcBoundsAndTransforms == undefined) recalcBoundsAndTransforms = false;
-  console.log("f:redrawDoodle() >> recalcBoundsAndTransforms = " + recalcBoundsAndTransforms);
+//  console.log("f:redrawDoodle() >> recalcBoundsAndTransforms = " + recalcBoundsAndTransforms);
 
   if (recalcBoundsAndTransforms == true) {
     doodleBounds = [-1, -1, -1, -1]; // left, top, right, bottom

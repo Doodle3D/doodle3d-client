@@ -353,6 +353,8 @@
 
       // detect phones with media queries if supported.
       is_phone : function () {
+        return false; // 2013-10-29 Adriaan Wormgoor - hard-falsed this
+
         if (Modernizr) {
           return Modernizr.mq('only screen and (max-width: 767px)');
         }

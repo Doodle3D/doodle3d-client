@@ -38,7 +38,7 @@ function initPreviewRendering() {
 }
 
 function calcPreviewCanvasProperties() {
-  console.log("f:calcPreviewCanvasProperties()");
+//  console.log("f:calcPreviewCanvasProperties()");
 
   globalScale = preview.width / canvasWidth;
   layerCX			= (canvasWidth / 2) * globalScale;  // defined in canvasDrawing_v01.js

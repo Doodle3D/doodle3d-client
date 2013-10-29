@@ -31,20 +31,6 @@
   padding: 10px 10px 15px 15px;
 }
 
-// Mobile
-//@media only screen and (max-width: 767px) {
-//  .joyride-tip-guide {
-//    width: 95% !important;
-//    -moz-border-radius: 0;
-//    -webkit-border-radius: 0;
-//    border-radius: 0;
-//    left: 2.5% !important;
-//  }
-//  .joyride-tip-guide-wrapper {
-//    width: 100%;
-//  }
-//}
-
 
 /* Add a little css triangle pip, older browser just miss out on the fanciness of it */
 .joyride-tip-guide span.joyride-nub {
@@ -144,7 +130,7 @@
 
 .joyride-tip-guide {
   h1, h2, h3, h4, h5, h6 {
-    line-height: 1.25;
+    line-height: 1.25em;
     margin: 0;
     font-weight: bold;
 //    color: #2DDF34;
@@ -153,20 +139,20 @@
   }
 }
 
-.joyride-tip-guide h1 { font-size: 30px; }
-.joyride-tip-guide h2 { font-size: 26px; }
-.joyride-tip-guide h3 { font-size: 22px; }
-.joyride-tip-guide h4 { font-size: 18px; }
-.joyride-tip-guide h5 { font-size: 16px; }
-.joyride-tip-guide h6 { font-size: 14px; }
+.joyride-tip-guide h1 { font-size: 1.85em; }
+.joyride-tip-guide h2 { font-size: 1.7em; }
+.joyride-tip-guide h3 { font-size: 1.55em; }
+.joyride-tip-guide h4 { font-size: 1.4em; }
+.joyride-tip-guide h5 { font-size: 1.25em; }
+.joyride-tip-guide h6 { font-size: 1.1em; }
 
 
 .joyride-tip-guide {
   p {
   //  margin: 0 0 18px 0;
     margin: 5px 0 25px;
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 1.1em;
+    line-height: 1.3em;
   }
 
   a {
@@ -318,3 +304,33 @@
   left: 0;
   border-radius: 5px;
 }
+
+// Mobile
+@media only screen and (max-width: 767px) {
+  .joyride-tip-guide {
+  //    width: 75% !important;
+//    border-radius: 0;
+    p {
+      margin: 5px 0 18px;
+      font-size: 1.0em;
+    }
+
+    .joyride-next-tip {
+//      width: auto;
+//      padding: 6px 18px 4px;
+      font-size: 1.0em;
+    }
+
+    h1 { font-size: 1.60em; }
+    h2 { font-size: 1.48em; }
+    h3 { font-size: 1.36em; }
+    h4 { font-size: 1.24em; }
+    h5 { font-size: 1.12em; }
+    h6 { font-size: 1.0em; }
+
+  }
+  .joyride-tip-guide-wrapper {
+    width: 80%;
+  }
+}
+

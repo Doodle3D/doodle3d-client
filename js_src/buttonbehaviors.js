@@ -169,11 +169,16 @@ function initButtonBehavior() {
 //    console.log("btnSettings touchend");
 //  });
 
-  btnInfo.mouseup(function(e) {
-    e.preventDefault();
-    console.log("btnInfo mouse up");
-    if (!clientInfo.isSmartphone) helpTours.startTour(helpTours.WELCOMETOUR);
-  });
+  // 29-okt-2013 - we're not doing help for smartphones at the moment
+  if (clientInfo.isSmartphone) {
+    btnInfo.addClass("disabled");
+  } else {
+    btnInfo.mouseup(function(e) {
+      e.preventDefault();
+      console.log("btnInfo mouse up");
+      helpTours.startTour(helpTours.WELCOMETOUR);
+    });
+  }
 
   // DEBUG
   /*
