@@ -33,8 +33,13 @@ function initPreviewRendering() {
 
   previewCtx_tmp = preview_tmp.getContext('2d');
 
+//  doodleImageCapture = new Image();
+
   calcPreviewCanvasProperties();
   redrawPreview();
+
+  // needed to
+//  doodleImageCapture = new Image();
 }
 
 function calcPreviewCanvasProperties() {
@@ -226,7 +231,7 @@ function renderToImageDataPreview() {
 // it is assumed that the preview has been rendered to an Image object, which will be used to draw the preview with (much better performance)
 function redrawRenderedPreview(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
-  console.log("f:redrawRenderedPreview()");
+//  console.log("f:redrawRenderedPreview()");
 
   previewCtx.clearRect(0, 0, preview.width, preview.height);
   previewCtx.lineWidth = strokeWidth;

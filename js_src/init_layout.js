@@ -22,7 +22,6 @@ function doOnResize() {
 
   redrawDoodle();
   redrawPreview();
-
 }
 
 function initLayouting() {

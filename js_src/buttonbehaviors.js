@@ -64,7 +64,8 @@ function initButtonBehavior() {
     e.preventDefault();
     clearInterval(btnOopsInterval);
     redrawDoodle(true);
-    redrawPreview();
+    renderToImageDataPreview();
+//    redrawPreview();
   }
   btnOops.on('touchstart', function(e) { startOops(e); });
   btnOops.on('touchend', function(e) { stopOops(e); });
@@ -74,17 +75,19 @@ function initButtonBehavior() {
   function startMoveUp(e) {
     e.preventDefault();
     //      console.log("btnMoveUp mouse down");
-    previewUp(true);
-    clearInterval(btnMoveUpInterval);
-    btnMoveUpInterval = setInterval( function() {
+    if (_points.length > 1) {
       previewUp(true);
-    }, 1000/30);
+      clearInterval(btnMoveUpInterval);
+      btnMoveUpInterval = setInterval( function() {
+        previewUp(true);
+      }, 1000/30);
+    }
   }
   function stopMoveUp(e) {
     e.preventDefault();
-    console.log("btnMoveUp mouse up");
+//    console.log("btnMoveUp mouse up");
     clearInterval(btnMoveUpInterval);
-    previewUp();
+    if (_points.length > 1) previewUp();
   }
   btnMoveUp.mousedown(function(e) { startMoveUp(e) });
   btnMoveUp.mouseup(function(e) { stopMoveUp(e) });
@@ -94,17 +97,19 @@ function initButtonBehavior() {
   function startMoveDown(e) {
     e.preventDefault();
     //      console.log("btnMoveDown mouse down");
-    previewDown(true);
-    clearInterval(btnMoveDownInterval);
-    btnMoveDownInterval = setInterval( function() {
+    if (_points.length > 1) {
       previewDown(true);
-    }, 1000/30);
+      clearInterval(btnMoveDownInterval);
+      btnMoveDownInterval = setInterval( function() {
+        previewDown(true);
+      }, 1000/30);
+    }
   }
   function stopMoveDown(e) {
     e.preventDefault();
-    console.log("btnMoveDown mouse up");
+//    console.log("btnMoveDown mouse up");
     clearInterval(btnMoveDownInterval);
-    previewDown();
+    if (_points.length > 1) previewDown();
   }
   btnMoveDown.mousedown(function(e) { startMoveDown(e) });
   btnMoveDown.mouseup(function(e) { stopMoveDown(e) });
@@ -114,17 +119,19 @@ function initButtonBehavior() {
   function startTwistLeft(e) {
     e.preventDefault();
     //      console.log("btnTwistLeft mouse down");
-    previewTwistLeft(true);
-    clearInterval(btnTwistLeftInterval);
-    btnTwistLeftInterval = setInterval( function() {
+    if (_points.length > 1) {
       previewTwistLeft(true);
-    }, 1000/30);
+      clearInterval(btnTwistLeftInterval);
+      btnTwistLeftInterval = setInterval( function() {
+        previewTwistLeft(true);
+      }, 1000/30);
+    }
   }
   function stopTwistLeft(e) {
     e.preventDefault();
     //      console.log("btnTwistLeft mouse up");
     clearInterval(btnTwistLeftInterval);
-    previewTwistLeft();
+    if (_points.length > 1) previewTwistLeft();
   }
   btnTwistLeft.mousedown(function(e) { startTwistLeft(e) });
   btnTwistLeft.mouseup(function(e) { stopTwistLeft(e) });
@@ -134,17 +141,19 @@ function initButtonBehavior() {
   function startTwistRight(e) {
     e.preventDefault();
     //      console.log("btnTwistRight mouse down");
-    previewTwistRight(true);
-    clearInterval(btnTwistRightInterval);
-    btnTwistRightInterval = setInterval( function() {
+    if (_points.length > 1) {
       previewTwistRight(true);
-    }, 1000/30);
+      clearInterval(btnTwistRightInterval);
+      btnTwistRightInterval = setInterval( function() {
+        previewTwistRight(true);
+      }, 1000/30);
+    }
   }
   function stopTwistRight(e) {
     e.preventDefault();
     //      console.log("btnTwistRight mouse up");
     clearInterval(btnTwistRightInterval);
-    previewTwistRight();
+    if (_points.length > 1) previewTwistRight();
   }
   btnTwistRight.mousedown(function(e) { startTwistRight(e) });
   btnTwistRight.mouseup(function(e) { stopTwistRight(e) });
@@ -266,6 +275,9 @@ function resetPreview() {
   previewCtx.save();
   previewCtx.clearRect(0,0,canvas.width, canvas.height);
   previewCtx.restore();
+
+  // also make new Image, otherwise the previously cached preview can be redrawn with move up/down or twist left/right
+  doodleImageCapture = new Image();
 
   // reset height and rotation to default values
   numLayers 	= previewDefaults.numLayers;     // current number of preview layers
