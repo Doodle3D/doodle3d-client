@@ -346,6 +346,10 @@ function SettingsWindow() {
 		});
 	}
 	
+	this.downloadlogs = function() {
+		window.location.href = self.wifiboxURL + "/info/logfiles"
+	}
+	
 	/*
 	 * Networks ui
 	 */
