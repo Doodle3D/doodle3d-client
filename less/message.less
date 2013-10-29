@@ -1,31 +1,33 @@
 #message {
-	position: absolute;
-	top: 0;
-	right: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  padding: 0.4em 0.5em;
+  border-radius: 0 0 0 10px;
+  border: 2px solid #333;
+  border-width: 0 0 2px 2px;
+  font-weight: bold;
+  box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+
+  color: #333;
+  white-space:nowrap;
+
+  z-index: 5;
 	
-	padding: 0.4em 0.5em;
-	border-radius: 0 0 0 10px;
-	border: 2px solid #333;
-	border-width: 0 0 2px 2px;
-	font-weight: bold;
-	box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
-	
-	color: #333;
-	white-space:nowrap; 
-	
-	display:none;
-	
-	&.error {
-		background: #EB313C;
-		color: #fff;
-	}
-	&.warning {
-		background: #E9A86E;	
-	}
-	&.notice {
-		background: #93CAF4;
-	}
-	&.info {
-		background: #97DD8A;
-	}
+  display:none;
+
+  &.error {
+      background: #EB313C;
+      color: #fff;
+  }
+  &.warning {
+      background: #E9A86E;
+  }
+  &.notice {
+      background: #93CAF4;
+  }
+  &.info {
+      background: #97DD8A;
+  }
 }
