@@ -37,18 +37,13 @@ function initButtonBehavior() {
 
   btnPrevious = $(".btnPrevious");
   btnNext = $(".btnNext");
+  btnSave = $(".btnSave");
 
   //debug
   //btnDebug = $(".debugBtn");
 
 	btnNew.on('touchstart mousedown', clearDoodle);
 	btnPrint.on('touchstart mousedown', print);
-
-	// not using these at the moment
-	$("#btnPrevious").css("opacity", "0.3");
-	btnNext.css("opacity", "0.3");
-	$("#btnSave").css("opacity", "0.3");
-//	btnInfo.css("opacity", "0.3");
 
 //  btnClear.click(function(e) {
 //    e.preventDefault();
@@ -397,6 +392,25 @@ function setState(newState,newHasControl) {
       enableButton(btnSettings, openSettingsWindow);
       break;
   }
+	
+	/* save, next and prev buttons */
+	switch(newState) {
+		/*case Printer.WIFIBOX_DISCONNECTED_STATE:
+			disableButton(btnPrevious);
+			disableButton(btnNext);
+			disableButton(btnSave);
+			break;
+		default:
+			enableButton(btnPrevious, null);
+			enableButton(btnNext, null);
+			enableButton(btnSave, null);
+			break;*/
+		default:
+			disableButton(btnPrevious);
+			disableButton(btnNext);
+			disableButton(btnSave);
+			break;
+	}
 
 	if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
 		message.set("Lost connection to WiFi box",Message.ERROR);
