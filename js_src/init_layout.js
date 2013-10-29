@@ -13,7 +13,7 @@ function doOnResize() {
   canvasWidth = canvas.width;
   canvasHeight = canvas.height;
 
-  console.log("   preview.width: " + preview.width + ", $preview.width(): " + $preview.width());
+//  console.log("   preview.width: " + preview.width + ", $preview.width(): " + $preview.width());
 
   calcPreviewCanvasProperties();
 
@@ -22,7 +22,6 @@ function doOnResize() {
 
   redrawDoodle();
   redrawPreview();
-
 }
 
 function initLayouting() {
