@@ -291,12 +291,19 @@ function subsituteVariables(gcode) {
 	var bedTemperature 			    = settings["printer.bed.temperature"];
 	var preheatTemperature      = settings["printer.heatup.temperature"];
 	var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
-	
+  var printerType             = settings["printer.type"];
+  
+  switch (printerType) {
+    case "makerbot_replicator2": printerType = "r2x"; break;
+    case "makerbot_thingomatic": printerType = "t6"; break;
+  }
+
 	gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
 	gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);
 	gcode = gcode.replace(/{preheatTemp}/gi			,preheatTemperature);
 	gcode = gcode.replace(/{preheatBedTemp}/gi 	,preheatBedTemperature);
-	
+  gcode = gcode.replace(/{printerType}/gi     ,printerType);
+
 	return gcode;
 }
 
