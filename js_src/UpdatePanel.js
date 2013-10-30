@@ -202,7 +202,8 @@ function UpdatePanel() {
 					text = "Installing update... (will take a minute)";
 					break;
 				case UpdatePanel.INSTALLED: 
-					text = "Update complete, please <a href='javascript:location.reload(true);'>refresh Page</a>.";
+					text = "Update complete, please reconnect by connecting your device to <b>"+settings.substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>";
+					//text = "Update complete, please <a href='javascript:location.reload(true);'>refresh Page</a>.";
 					break;
 				case UpdatePanel.INSTALL_FAILED: 
 					text = "Installing update failed.";
