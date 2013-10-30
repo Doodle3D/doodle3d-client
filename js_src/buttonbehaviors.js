@@ -45,6 +45,10 @@ function initButtonBehavior() {
 	btnNew.on('touchstart mousedown', clearDoodle);
 	btnPrint.on('touchstart mousedown', print);
 
+  getSavedSketchStatus();
+  setSketchModified(false);
+  //updatePrevNextButtonStateOnClear();
+
 //  btnClear.click(function(e) {
 //    e.preventDefault();
 //    //      console.log("clear");
@@ -205,13 +209,13 @@ function stopPrint() {
 }
 
 
-function prevDoodle(e) {
-  console.log("f:prevDoodle()");
-  console.log("f:prevDoodle()");
-}
-function nextDoodle(e) {
-  console.log("f:nextDoodle()");
-}
+// function prevDoodle(e) {
+//   console.log("f:prevDoodle()");
+//   console.log("f:prevDoodle()");
+// }
+// function nextDoodle(e) {
+//   console.log("f:nextDoodle()");
+// }
 
 function print(e) {
 	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
@@ -302,6 +306,8 @@ function previewUp(redrawLess) {
   if (numLayers < maxNumLayers) {
     numLayers++;
   }
+  setSketchModified(true);
+
 //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
 }
@@ -310,6 +316,7 @@ function previewDown(redrawLess) {
   if (numLayers > minNumLayers) {
     numLayers--;
   }
+  setSketchModified(true);
 //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
 }
@@ -319,12 +326,14 @@ function previewTwistLeft(redrawLess) {
   if (rStep > -previewRotationLimit) rStep -= twistIncrement;
   //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
+  setSketchModified(true);
 }
 function previewTwistRight(redrawLess) {
   //    console.log("f:previewTwistRight()");
   if (rStep < previewRotationLimit) rStep += twistIncrement;
   //  redrawPreview(redrawLess);
   redrawRenderedPreview(redrawLess);
+  setSketchModified(true);
 }
 
 
@@ -407,20 +416,14 @@ function setState(newState,newHasControl) {
 	
 	/* save, next and prev buttons */
 	switch(newState) {
-		/*case Printer.WIFIBOX_DISCONNECTED_STATE:
+		case Printer.WIFIBOX_DISCONNECTED_STATE:
 			disableButton(btnPrevious);
 			disableButton(btnNext);
 			disableButton(btnSave);
 			break;
 		default:
-			enableButton(btnPrevious, null);
-			enableButton(btnNext, null);
-			enableButton(btnSave, null);
-			break;*/
-		default:
-			disableButton(btnPrevious);
-			disableButton(btnNext);
-			disableButton(btnSave);
+			updatePrevNextButtonState();
+			if (isModified) enableButton(btnSave, saveSketch);
 			break;
 	}
 

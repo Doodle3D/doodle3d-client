@@ -32,7 +32,8 @@ module.exports = function(grunt) {
           'js_src/utils.js',
           'js_src/sidebar.js',
           'js_src/Message.js',
-          'js_src/main.js'
+          'js_src/main.js',
+          'js_src/sketches.js'
         ],
         dest: 'www/js/<%= pkg.name %>.js'
       }
