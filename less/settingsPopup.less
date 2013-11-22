@@ -64,23 +64,28 @@
         border: 1px solid rgb(187, 187, 187);
         border-radius: 5px;
       }
-      > .btnContainer {
+      > .right {
         width: 15%;
         height: 100%;
         float:right;
         position:relative;
         right: 0;
 
-        > .btnOK {
-          position: absolute;
-          bottom: 3%;
-          right: 7%;
-          max-width: 85px;
-          min-width: 42px;
-          width: 88%;
-          height: auto;
-          margin: 0 2% 2% 0;
-          cursor: pointer;
+				> .btnContainer {
+					position: absolute;
+					bottom: 3%;
+					right: 7%;
+					width: 100%;
+
+		      > .btn {
+		        max-width: 85px;
+		        min-width: 42px;
+		        width: 88%;
+		        height: auto;
+		        margin: 8% 2% 2% 0;
+		        cursor: pointer;
+		        float:right;
+		      }
         }
       }
     }
