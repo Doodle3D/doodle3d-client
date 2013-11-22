@@ -296,6 +296,7 @@ function subsituteVariables(gcode) {
   switch (printerType) {
     case "makerbot_replicator2": printerType = "r2x"; break; //FIXME: this should be r2, with a separate type for r2x
     case "makerbot_thingomatic": printerType = "t6"; break;
+    default: printerType = "r2"; break;
   }
 
 	gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
