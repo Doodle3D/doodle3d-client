@@ -25,13 +25,13 @@ gcodeEnd.push("G90"); 							// absolute positioning
 gcodeEnd.push("M117 Done                ");	// display message (20 characters to clear whole screen)*/
 
 
-var MAX_POINTS_TO_PRINT = 200000; //400000; //80000; //40000; 
+var MAX_POINTS_TO_PRINT = 200000; //400000; //80000; //40000;
 var gcode = [];
 
 function generate_gcode() {
   console.log("f:generategcode()");
 
-  
+
   gcode = [];
 
   console.log("settings: ",settings);
@@ -56,13 +56,13 @@ function generate_gcode() {
   var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
   var printerBedWidth      		= settings["printer.bed.width"];
   var printerBedHeight      	= settings["printer.bed.height"];
-  
+
   var gCodeOffsetX = printerBedWidth/2; //110; // mm
   var gCodeOffsetY = printerBedHeight/2; //110; // mm
-  
+
   var startCode = generateStartCode();
   var endCode = generateEndCode();
-  
+
   /*
   console.log("f:generate_gcode >> EFFE CHECKEN:");
   console.log("   speed: " + speed);
@@ -104,13 +104,13 @@ function generate_gcode() {
 //  console.log("f:generategcode() >> paths: " + paths.toString());
 //  console.log("paths.toString(): " + paths.toString());
 //  return;
-  
+
   //gcode.push("M104 S" + temperature); // set target temperature and do not wait for the extruder to reach it
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
-  
+
   // add gcode begin commands
   gcode = gcode.concat(startCode);
-  
+
   //gcode.push("M109 S" + temperature); // set target temperature and wait for the extruder to reach it
 
   var layers = maxObjectHeight / layerHeight; //maxObjectHeight instead of objectHeight
@@ -134,15 +134,15 @@ function generate_gcode() {
 	//console.log("  numLayers: ",(layers*(objectHeight/maxObjectHeight)));
 	//console.log("  pointsToPrint: ",pointsToPrint);
 	//console.log("  MAX_POINTS_TO_PRINT: ",MAX_POINTS_TO_PRINT);
-  
+
 	console.log("pointsToPrint: ",pointsToPrint);
-		
+
   if(pointsToPrint > MAX_POINTS_TO_PRINT) {
   	alert("Sorry, your doodle is too complex or too high. Please try to simplify it.");
   	console.log("ERROR: to many points too convert to gcode");
   	return [];
   }
-	
+
   for (var layer = 0; layer < layers; layer++) {
 
     var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
@@ -254,13 +254,13 @@ function generate_gcode() {
   }
   // add gcode end commands
   gcode = gcode.concat(endCode);
-  
+
   return gcode;
 }
 
 function generateStartCode() {
 	var printerType = settings["printer.type"];
-	
+
 	var startCode = "";
 	if(settingsWindow.isMarlinPrinter(printerType)) {
 		startCode = settings["printer.startcode.marlin"];
@@ -273,7 +273,7 @@ function generateStartCode() {
 }
 function generateEndCode() {
 	var printerType = settings["printer.type"];
-	
+
 	var endCode = "";
 	if(settingsWindow.isMarlinPrinter(printerType)) {
 		endCode = settings["printer.endcode.marlin"];
@@ -292,9 +292,9 @@ function subsituteVariables(gcode) {
 	var preheatTemperature      = settings["printer.heatup.temperature"];
 	var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
   var printerType             = settings["printer.type"];
-  
+
   switch (printerType) {
-    case "makerbot_replicator2": printerType = "r2x"; break;
+    case "makerbot_replicator2": printerType = "r2x"; break; //FIXME: this should be r2, with a separate type for r2x
     case "makerbot_thingomatic": printerType = "t6"; break;
   }
 
