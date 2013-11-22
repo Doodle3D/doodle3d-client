@@ -3,6 +3,7 @@
 
 .idea/*
 www/js/*.js
+www/js/libs/*.js
 www/css/styles.css
 www/css/*.min.css
 __index.html

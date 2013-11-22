@@ -43,6 +43,7 @@ function SettingsWindow() {
 
 	this.retryLoadSettingsDelay; 			// retry setTimout instance
 	this.retrySaveSettingsDelay; 			// retry setTimout instance
+	this.retryResetSettingsDelay 			// retry setTimout instance
 	this.retryRetrieveNetworkStatusDelay;// retry setTimout instance
 	
 	this.apFieldSet;
@@ -119,7 +120,8 @@ function SettingsWindow() {
 		  self.clientFieldSet 	= self.form.find("#clientSettings");
 		  self.gcodeSettings		= self.form.find("#gcodeSettings");
 		  self.x3gSettings			= self.form.find("#x3gSettings");
-		  				
+		  self.btnRestoreSettings = self.form.find("#restoreSettings");
+		  
 		  btnAP.on('touchstart mousedown',self.showAPSettings);
 		  btnClient.on('touchstart mousedown',self.showClientSettings);
 		  btnRefresh.on('touchstart mousedown',self.refreshNetworks);
@@ -127,6 +129,8 @@ function SettingsWindow() {
 			btnCreate.on('touchstart mousedown',self.createAP);
 			self.printerSelector.change(self.printerSelectorChanged);
 		  networkSelector.change(self.networkSelectorChanged);
+		  self.btnRestoreSettings.on('touchstart mousedown',self.resetSettings);
+		  
 		  	
 		  // update panel
 		  var $updatePanelElement = self.form.find("#updatePanel");
@@ -260,6 +264,40 @@ function SettingsWindow() {
 				console.log("Settings:saveSettings: failed");
 				clearTimeout(self.retrySaveSettingsDelay);
 				self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings,complete) },self.retryDelay); // retry after delay
+			});
+	  }
+	}
+	this.resetSettings = function() {
+		console.log("resetSettings");
+		//$("#restoreSettings").addClass("disabled");
+		self.btnRestoreSettings.attr("disabled", true);
+		
+		//console.log("  self.wifiboxURL: ",self.wifiboxURL);
+		
+		if (communicateWithWifibox) {
+		  $.ajax({
+			  url: self.wifiboxURL + "/config/resetall",
+			  type: "POST",
+			  dataType: 'json',
+			  timeout: this.timeoutTime,
+			  success: function(response){
+			  	console.log("Settings:resetSettings response: ",response);
+			  	if(response.status == "error") {
+			  		clearTimeout(self.retryResetSettingsDelay);
+						self.retryResetSettingsDelay = setTimeout(function() { self.resetSettings() },self.retryDelay); // retry after delay
+			  	} else {
+			  		settings = response.data;
+						console.log("  settings: ",settings);
+						self.fillForm();
+						$(document).trigger(SettingsWindow.SETTINGS_LOADED);
+						
+						self.btnRestoreSettings.removeAttr("disabled");
+			  	}
+				}
+			}).fail(function() {
+				console.log("Settings:resetSettings: failed");
+				clearTimeout(self.retryResetSettingsDelay);
+				self.retryResetSettingsDelay = setTimeout(function() { self.resetSettings() },self.retryDelay); // retry after delay
 			});
 	  }
 	}
