@@ -18,6 +18,7 @@ module.exports = function(grunt) {
         src: [
           'js_src/SettingsWindow.js',
           'js_src/UpdatePanel.js',
+          'js_src/PrinterPanel.js',
           'js_src/Help.js',
           'js_src/d3dServerInterfacing.js',
           'js_src/verticalShapes.js',

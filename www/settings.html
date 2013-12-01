@@ -12,7 +12,7 @@
 <body>
 <div class="settingsContainer">
   <form id="settingsForm">
-    <fieldset>
+    <fieldset id="printerPanel">
       <legend>3D printer</legend>
       <label for="printerType">Type:</label>
       <select id="printerType" name="printer.type">
@@ -52,6 +52,27 @@
       </select><br/>
       <label for="printerBedWidth">Bed width:</label><input id="printerBedWidth" type="number" class="small" name="printer.bed.width">mm<br>
       <label for="printerBedHeight">Bed height:</label><input id="printerBedHeight" type="number" class="small" name="printer.bed.height">mm<br>
+      <fieldset id="gcodePanel">
+ 		<legend>GCODE settings</legend>
+ 		<div class="startgcode_left">
+       		<label for="startgcode">Start:</label><br/>
+       		<textarea id="startgcode" class="gcode" name="printer.startcode"></textarea>
+     	</div>
+      	<div>
+        	<label for="endgcode">End:</label><br/>
+        	<textarea id="endgcode" class="gcode" name="printer.endcode"></textarea>
+      	</div>
+      	<small>
+      		The following texts are replaced:
+      		<dl>
+      			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
+      			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
+      			<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
+      			<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
+      			<dt>{printerType}</dt><dd>Printer type</dd>
+      		</dl>
+      	</small>
+      </fieldset>
     </fieldset>
 
 	<fieldset id="printersettings">
@@ -133,49 +154,6 @@
         <small id="updateInfo"></small>
  	</fieldset>
 
-    <fieldset id="gcodeSettings">
- 		<legend>GCODE settings</legend>
- 		<small class="intro">GCode settings for all printers that use Marlin firmware</small>
- 		<div class="startgcode_left">
-       		<label for="startgcodeMarlin">Start:</label><br/>
-       		<textarea id="startgcodeMarlin" class="gcode" name="printer.startcode.marlin"></textarea>
-     	</div>
-      	<div>
-        	<label for="endgcodeMarlin">End:</label><br/>
-        	<textarea id="endcodeMarlin" class="gcode" name="printer.endcode.marlin"></textarea>
-      	</div>
-      	<small>
-      		The following texts are replaced:
-      		<dl>
-      			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
-      			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
-      			<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
-      			<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
-      		</dl>
-      	</small>
-    </fieldset>
-    <fieldset id="x3gSettings">
- 		<legend>GCODE settings</legend>
- 		<small class="intro">GCODE settings for Makerbots.</small>
- 		<div class="startgcode_left">
-       		<label for="startgcodeX3G">Start:</label><br/>
-       		<textarea id="startcodeX3G" class="gcode" name="printer.startcode.x3g"></textarea>
-     	</div>
-      	<div>
-        	<label for="endgcodeX3G">End:</label><br/>
-        	<textarea id="endcodeX3G" class="gcode" name="printer.endcode.x3g"></textarea>
-      	</div>
-      	<small>
-      		The following texts are replaced:
-      		<dl>
-      			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
-      			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
-      			<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
-      			<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
-            <dt>{printerType}</dt><dd>Printer type</dd>
-      		</dl>
-      	</small>
-    </fieldset>
     <fieldset id="debugPanel">
  		<legend>Debug</legend>
  		<input type="button" onclick="settingsWindow.downloadlogs()" name="downloadlogs" value="Download logs" class="button" id="downloadlogs"/>
