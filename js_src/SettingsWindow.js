@@ -90,6 +90,7 @@ function SettingsWindow() {
   this.networkMode = SettingsWindow.NETWORK_MODE_NEITHER;
 
   this.updatePanel = new UpdatePanel();
+  this.printerPanel = new PrinterPanel();
 
 	var self = this;
 
@@ -109,7 +110,7 @@ function SettingsWindow() {
 
       self.loadSettings();
       	
-      self.printerSelector 	= self.form.find("#printerType");
+      
       var btnAP 						= self.form.find("label[for='ap']");
 		  var btnClient 				= self.form.find("label[for='client']");
 		  var btnRefresh 				= self.form.find("#refreshNetworks");
@@ -118,8 +119,6 @@ function SettingsWindow() {
 		  var networkSelector 	= self.form.find("#network");
 		  self.apFieldSet 			= self.form.find("#apSettings");
 		  self.clientFieldSet 	= self.form.find("#clientSettings");
-		  self.gcodeSettings		= self.form.find("#gcodeSettings");
-		  self.x3gSettings			= self.form.find("#x3gSettings");
 		  self.btnRestoreSettings = self.form.find("#restoreSettings");
 		  
 		  btnAP.on('touchstart mousedown',self.showAPSettings);
@@ -127,14 +126,18 @@ function SettingsWindow() {
 		  btnRefresh.on('touchstart mousedown',self.refreshNetworks);
 		  btnConnect.on('touchstart mousedown',self.connectToNetwork);
 			btnCreate.on('touchstart mousedown',self.createAP);
-			self.printerSelector.change(self.printerSelectorChanged);
 		  networkSelector.change(self.networkSelectorChanged);
 		  self.btnRestoreSettings.on('touchstart mousedown',self.resetSettings);
 		  
-		  	
 		  // update panel
 		  var $updatePanelElement = self.form.find("#updatePanel");
 		  self.updatePanel.init(wifiboxURL,$updatePanelElement);
+		  
+		  // printer panel
+			var $printerPanelElement = self.form.find("#printerPanel");
+			self.printerPanel.init(wifiboxURL,$printerPanelElement);
+			self.printerPanel.fillForm = self.fillForm;
+			
 	  });
 	}
 	this.submitwindow = function(e) {
@@ -185,7 +188,7 @@ function SettingsWindow() {
 		  	console.log("Settings:loadSettings response: ",response);
         settings = response.data;
 		  	console.log("  settings: ",settings);
-		  	self.fillForm();
+		  	self.fillForm(settings);
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 		  	if(complete) complete();
 			}
@@ -198,16 +201,16 @@ function SettingsWindow() {
     this.refreshNetworks();
     this.retrieveNetworkStatus(false);
 	}
-	this.fillForm = function() {
-		console.log("SettingsWindow:fillForm");
-
+	this.fillForm = function(settings,form) { 
+		if(!form) form = this.form; // if no form specified, fill whole form
+		
 		//fill form with loaded settings
-		var selects = this.form.find("select");
+		var selects = form.find("select");
 		selects.each( function(index,element) {
 			var element = $(element);
 			element.val(settings[element.attr('name')]);
 		});
-		var inputs = this.form.find("input");
+		var inputs = form.find("input");
 		inputs.each( function(index,element) {
 			var element = $(element);
 			//console.log("printer setting input: ",index,element.attr("type"),element.attr('name')); //,element);
@@ -221,13 +224,12 @@ function SettingsWindow() {
 					break;
 			}
 		});
-		var textareas = this.form.find("textarea");
+		var textareas = form.find("textarea");
 		textareas.each( function(index,element) {
 			var element = $(element);
 			var value = settings[element.attr('name')];
 			element.val(value);
 		});
-		self.printerSelectorChanged();
 	}
 
 	this.saveSettings = function(newSettings,complete) {
@@ -288,7 +290,7 @@ function SettingsWindow() {
 			  	} else {
 			  		settings = response.data;
 						console.log("  settings: ",settings);
-						self.fillForm();
+						self.fillForm(settings);
 						$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 						
 						self.btnRestoreSettings.removeAttr("disabled");
@@ -344,30 +346,6 @@ function SettingsWindow() {
 		});
 		//console.log(settings);
 		return settings;
-	}
-	
-	this.printerSelectorChanged = function(e) {
-		var selectedOption = self.printerSelector.find("option:selected");
-		if(self.isMarlinPrinter(selectedOption.val())) {
-			self.x3gSettings.hide();
-			self.gcodeSettings.show();
-		} else {
-			self.gcodeSettings.hide();
-			self.x3gSettings.show();
-		}
-	}
-	
-	this.isMarlinPrinter = function(printer) {
-		switch(printer) {
-			case "makerbot_generic":
-			case "makerbot_replicator2":
-			case "makerbot_thingomatic":
-				return false;
-				break;
-			default:
-				return true;
-				break;
-		}
 	}
 
 	this.signin = function() {

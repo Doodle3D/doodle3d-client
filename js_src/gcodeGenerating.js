@@ -260,26 +260,14 @@ function generate_gcode() {
 
 function generateStartCode() {
 	var printerType = settings["printer.type"];
-
-	var startCode = "";
-	if(settingsWindow.isMarlinPrinter(printerType)) {
-		startCode = settings["printer.startcode.marlin"];
-	} else {
-		startCode = settings["printer.startcode.x3g"];
-	}
+	var startCode = settings["printer.startcode"];
 	startCode = subsituteVariables(startCode);
 	startCode = startCode.split("\n");
 	return startCode;
 }
 function generateEndCode() {
 	var printerType = settings["printer.type"];
-
-	var endCode = "";
-	if(settingsWindow.isMarlinPrinter(printerType)) {
-		endCode = settings["printer.endcode.marlin"];
-	} else {
-		endCode = settings["printer.endcode.x3g"];
-	}
+	var endCode = settings["printer.endcode"];
 	endCode = subsituteVariables(endCode);
 	endCode = endCode.split("\n");
 	return endCode;
@@ -296,7 +284,7 @@ function subsituteVariables(gcode) {
   switch (printerType) {
     case "makerbot_replicator2": printerType = "r2x"; break; //FIXME: this should be r2, with a separate type for r2x
     case "makerbot_thingomatic": printerType = "t6"; break;
-    default: printerType = "r2"; break;
+    case "makerbot_generic": printerType = "r2"; break;
   }
 
 	gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
