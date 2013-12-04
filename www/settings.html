@@ -54,24 +54,26 @@
       <label for="printerBedHeight">Bed height:</label><input id="printerBedHeight" type="number" class="small" name="printer.bed.height">mm<br>
       <fieldset id="gcodePanel">
  		<legend>GCODE settings</legend>
- 		<div class="startgcode_left">
-       		<label for="startgcode">Start:</label><br/>
-       		<textarea id="startgcode" class="gcode" name="printer.startcode"></textarea>
-     	</div>
-      	<div>
-        	<label for="endgcode">End:</label><br/>
-        	<textarea id="endgcode" class="gcode" name="printer.endcode"></textarea>
+ 		<div>
+ 			<div class="startgcode_left">
+     	  		<label for="startgcode">Start:</label><br/>
+      	 		<textarea id="startgcode" class="gcode" name="printer.startcode"></textarea>
+     		</div>
+     	 	<div>
+     		   	<label for="endgcode">End:</label><br/>
+     		   	<textarea id="endgcode" class="gcode" name="printer.endcode"></textarea>
+     	 	</div>
+    	  	<small>
+    	  		The following texts are replaced:
+    	  		<dl>
+    	  			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
+     	 			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
+      				<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
+      				<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
+      				<dt>{printerType}</dt><dd>Printer type</dd>
+      			</dl>
+      		</small>
       	</div>
-      	<small>
-      		The following texts are replaced:
-      		<dl>
-      			<dt>{printingTemp}</dt><dd>Printing temperature</dd>
-      			<dt>{printingBedTemp}</dt><dd>Printing bed temperature</dd>
-      			<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
-      			<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
-      			<dt>{printerType}</dt><dd>Printer type</dd>
-      		</dl>
-      	</small>
       </fieldset>
     </fieldset>
 

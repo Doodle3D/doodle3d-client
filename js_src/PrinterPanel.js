@@ -23,6 +23,9 @@ function PrinterPanel() {
 		formElements.each( function(index,element) {
 			self.printerSettingsNames.push(element.name);
 		});
+		
+		var gcodePanel = element.find("#gcodePanel");
+		gcodePanel.coolfieldset({collapsed:true});
 	}
 	this.printerSelectorChanged = function(e) {
 		console.log("PrinterPanel:printerSelectorChanged");

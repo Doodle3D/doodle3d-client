@@ -35,10 +35,34 @@ form fieldset fieldset{
 	clear: left;
 	float: left;
 }
+form fieldset.collapsed {
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-width: 1px 0 0 0;
+	float:none;
+}
+form fieldset.collapsible {
+	padding: 0;
+}
+form fieldset.collapsible div{
+	margin: 8px;
+}
 form fieldset legend {
   margin-left: 10px;
   font-weight: bold;
 }
+form fieldset.collapsible legend {
+	padding-left: 10px;
+	cursor: pointer;
+}
+form fieldset.expanded legend {
+	background: transparent url(../img/buttons/expanded.gif) no-repeat center left;
+}
+form fieldset.collapsed legend {
+	background: transparent url(../img/buttons/collapsed.gif) no-repeat center left;
+}
+
 form label {
   min-width: 150px;
   display: block;
