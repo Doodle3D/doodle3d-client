@@ -159,6 +159,7 @@ function SettingsWindow() {
 	}
 
 	this.showSettings = function() {
+		keyboardShortcutsEnabled = false;
 	  this.loadSettings(function() { // reload settings
 	  	$("#contentOverlay").fadeIn(375, function() {
 				document.body.removeEventListener('touchmove',prevent,false);
@@ -166,6 +167,7 @@ function SettingsWindow() {
 	  });
 	}
 	this.hideSettings = function(complete) {
+		keyboardShortcutsEnabled = true;
 		$("#contentOverlay").fadeOut(375, function() {
       document.body.addEventListener('touchmove',prevent,false);
 //      self.window.css("display","none");
@@ -364,6 +366,14 @@ function SettingsWindow() {
 	
 	this.downloadlogs = function() {
 		window.location.href = self.wifiboxURL + "/info/logfiles"
+	}
+
+	this.downloadGcode = function() {
+		var gcode = generate_gcode();
+		if (gcode!=undefined) {
+			var blob = new Blob([gcode.join("\n")], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, "doodle3d.gcode");
+		}
 	}
 	
 	/*

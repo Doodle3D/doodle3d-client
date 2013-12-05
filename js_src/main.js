@@ -25,8 +25,6 @@ var clientInfo = {};
 $(function() {
   console.log("ready");
 
-  //TODO give this a more logical place in code
-
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
@@ -59,6 +57,7 @@ $(function() {
   initLayouting();
   initSidebars();
   initButtonBehavior();
+  initKeyboard();
   initVerticalShapes();
   if (!clientInfo.isSmartphone) initHelp();
 

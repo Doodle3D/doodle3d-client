@@ -246,10 +246,10 @@ function print(e) {
 				console.log("sendPrintCommands is false: not sending print command to 3dprinter");
 			}
 
-			if (debugMode) {
-				$("#textdump").text("");
-				$("#textdump").text(gcode.join("\n"));
-			}
+			// if (debugMode) {
+			// 	$("#textdump").text("");
+			// 	$("#textdump").text(gcode.join("\n"));
+			// }
 
     }, gcodeGenerateDelay);
   } else {
@@ -336,7 +336,11 @@ function previewTwistRight(redrawLess) {
   setSketchModified(true);
 }
 
-
+function resetTwist() {
+  rStep = 0;
+  redrawRenderedPreview();
+  setSketchModified(true);
+}
 
 function update() {
 	setState(printer.state,printer.hasControl);

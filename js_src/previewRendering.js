@@ -7,7 +7,7 @@ var preview_tmp;
 var previewCtx_tmp;
 
 var previewDefaults = {
-  rotation: Math.PI/90,
+  rotation: 0, //Math.PI/90,
   numLayers: 10
 }
 
