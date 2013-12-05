@@ -76,7 +76,7 @@ $(function() {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
-    $("#preview_tmp").css("display", "block");
+    //$("#preview_tmp").css("display", "block");
     
     $("#debug_display").css("display", "block");
 
