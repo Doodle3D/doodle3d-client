@@ -284,7 +284,8 @@ function subsituteVariables(gcode) {
   var printerType             = settings["printer.type"];
 
   switch (printerType) {
-    case "makerbot_replicator2": printerType = "r2x"; break; //FIXME: this should be r2, with a separate type for r2x
+    case "makerbot_replicator2": printerType = "r2"; break; 
+    case "makerbot_replicator2x": printerType = "r2x"; break;
     case "makerbot_thingomatic": printerType = "t6"; break;
     case "makerbot_generic": printerType = "r2"; break;
   }
