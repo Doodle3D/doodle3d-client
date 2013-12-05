@@ -45,7 +45,8 @@
 				showFieldsetContent(fieldset, setting);
 			}
 			
-			legend.bind('touchstart mousedown', function() {
+			// legend.bind('touchstart mousedown', function() {
+			legend.bind('click', function() {
 				if(fieldset.hasClass("collapsed")) {
 					showFieldsetContent(fieldset, setting);
 				} else {

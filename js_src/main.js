@@ -32,8 +32,9 @@ $(function() {
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
   
 	if (wifiboxIsRemote) {
-		wifiboxURL = "http://192.168.5.1/d3dapi";
-		wifiboxCGIBinURL = "http://192.168.5.1/cgi-bin/d3dapi";
+    var hostname = "http://10.0.0.45"; //http://192.168.5.1";
+		wifiboxURL = hostname+"/d3dapi";
+		wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
 	} else {
 		wifiboxURL = "http://" + window.location.host + "/d3dapi";
 		wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
