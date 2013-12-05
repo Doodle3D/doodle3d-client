@@ -145,6 +145,8 @@ function generate_gcode() {
 
   for (var layer = 0; layer < layers; layer++) {
 
+    gcode.push(";LAYER:"+layer);
+
     var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
 
     if (p.length < 2) return;
