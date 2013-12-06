@@ -80,7 +80,7 @@ function generate_gcode() {
 
   for (var layer = 0; layer < layers; layer++) {
 
-    gcode.push(";LAYER:"+layer);
+    //gcode.push(";LAYER:"+layer); //this will be added in a next release to support GCODE previewing in CURA
 
     var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
 
