@@ -83,7 +83,10 @@ var debug_redrawSimplification = 6;
 function redrawPreview(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
 
-  if (_points.length < 2) return;
+  if (_points.length < 2) {
+	  previewCtx.clearRect(0, 0, preview.width, preview.height);
+	  return;
+  }
 
   if (!redrawLess) {
     //debug_redrawSimplification = Math.round(_points.length / 65);

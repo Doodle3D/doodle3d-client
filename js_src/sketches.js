@@ -54,7 +54,7 @@ function setCurrentSketchId(sId) {
 }
 
 function updatePrevNextButtonStateOnClear() {
-	enableButton(btnPrevious, prevDoodle);
+	if (numSavedSketches > 0) enableButton(btnPrevious, prevDoodle);
 	disableButton(btnNext);
 	currentSketchId = numSavedSketches+1; //after the end of the list
 	disableButton(btnSave);
