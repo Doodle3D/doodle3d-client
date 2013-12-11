@@ -30,9 +30,9 @@ $(function() {
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
-  
+
 	if (wifiboxIsRemote) {
-    // var hostname = "http://10.0.0.45"; 
+    // var hostname = "http://10.0.0.45";
     var hostname = "http://192.168.5.1";
 		wifiboxURL = hostname+"/d3dapi";
 		wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
@@ -67,7 +67,7 @@ $(function() {
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
   message.init($("#message"));
-  
+
   printer.init();
 	$(document).on(Printer.UPDATE,update);
 
@@ -79,7 +79,7 @@ $(function() {
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
     //$("#preview_tmp").css("display", "block");
-    
+
     $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
@@ -116,14 +116,14 @@ $(function() {
 function enableButton(elem, handler) {
 	//var elem = $('#'+domId);
 	elem.removeClass("disabled");
- 	elem.unbind('touchstart mousedown');
- 	elem.bind('touchstart mousedown', handler);
+ 	elem.unbind('click');
+ 	elem.bind('click', handler);
 }
 
 function disableButton(elem) {
 	//var elem = $('#'+domId);
 	elem.addClass("disabled");
- 	elem.unbind('touchstart mousedown');
+ 	elem.unbind('click');
 }
 
 function showOrHideThermo() {
