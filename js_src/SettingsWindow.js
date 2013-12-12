@@ -1,30 +1,5 @@
 //these settings are defined in the firmware (conf_defaults.lua) and will be initialized in loadSettings()
-var settings = {
-"network.ap.ssid": "d3d-ap-%%MAC_ADDR_TAIL%%",
-"network.ap.address": "192.168.10.1",
-"network.ap.netmask": "255.255.255.0",
-"printer.temperature": 220,
-"printer.maxObjectHeight": 150,
-"printer.layerHeight": 0.2,
-"printer.wallThickness": 0.7,
-"printer.screenToMillimeterScale": 0.3,
-"printer.speed": 50,
-"printer.travelSpeed": 200,
-"printer.filamentThickness": 2.85,
-"printer.enableTraveling": true,
-"printer.useSubLayers": true,
-"printer.firstLayerSlow": true,
-"printer.autoWarmUp": true,
-"printer.simplify.iterations": 10,
-"printer.simplify.minNumPoints": 15,
-"printer.simplify.minDistance": 3,
-"printer.retraction.enabled": true,
-"printer.retraction.speed": 50,
-"printer.retraction.minDistance": 1,
-"printer.retraction.amount": 5,
-"printer.autoWarmUpCommand": "M104 S220 (hardcoded temperature)"
-}
-
+var settings = { }
 
 //wrapper to prevent scoping issues in showSettings()
 function openSettingsWindow() {
@@ -45,51 +20,52 @@ function SettingsWindow() {
 	this.retrySaveSettingsDelay; 			// retry setTimout instance
 	this.retryResetSettingsDelay 			// retry setTimout instance
 	this.retryRetrieveNetworkStatusDelay;// retry setTimout instance
-	
+
 	this.apFieldSet;
 	this.clientFieldSet;
 	this.networks;
 	this.currentNetwork;               // the ssid of the network the box is on
-  this.selectedNetwork;              // the ssid of the selected network in the client mode settings
-  this.currentLocalIP = "";
-  this.clientModeState = SettingsWindow.NOT_CONNECTED;
-  this.currentAP;
-  this.apModeState = SettingsWindow.NO_AP;
+	this.selectedNetwork;              // the ssid of the selected network in the client mode settings
+	this.currentLocalIP = "";
+	this.clientModeState = SettingsWindow.NOT_CONNECTED;
+	this.currentAP;
+	this.apModeState = SettingsWindow.NO_AP;
 
-  // after switching wifi network or creating a access point we delay the status retrieval
-  // because the webserver needs time to switch
-  this.retrieveNetworkStatusDelay;   // setTimout delay
-  this.retrieveNetworkStatusDelayTime = 1000;
+	// after switching wifi network or creating a access point we delay the status retrieval
+	// because the webserver needs time to switch
+	this.retrieveNetworkStatusDelay;   // setTimout delay
+	this.retrieveNetworkStatusDelayTime = 1000;
 
 	// Events
 	SettingsWindow.SETTINGS_LOADED 		= "settingsLoaded";
 
-  // network client mode states
-  SettingsWindow.NOT_CONNECTED   		= "not connected";   // also used as first item in networks list
-  SettingsWindow.CONNECTED       		= "connected";
-  SettingsWindow.CONNECTING      		= "connecting";
-  SettingsWindow.CONNECTING_FAILED	= "connecting failed"
+	// network client mode states
+	SettingsWindow.NOT_CONNECTED   		= "not connected";   // also used as first item in networks list
+	SettingsWindow.CONNECTED       		= "connected";
+	SettingsWindow.CONNECTING      		= "connecting";
+	SettingsWindow.CONNECTING_FAILED	= "connecting failed"
 
-  // network access point mode states
-  SettingsWindow.NO_AP           		= "no ap";
-  SettingsWindow.AP              		= "ap";
-  SettingsWindow.CREATING_AP     		= "creating ap";
+	// network access point mode states
+	SettingsWindow.NO_AP           		= "no ap";
+	SettingsWindow.AP              		= "ap";
+	SettingsWindow.CREATING_AP     		= "creating ap";
 
-  SettingsWindow.API_CONNECTING_FAILED  = -1
-  SettingsWindow.API_NOT_CONNECTED 			= 0
-  SettingsWindow.API_CONNECTING 				= 1
-  SettingsWindow.API_CONNECTED 					= 2
-  SettingsWindow.API_CREATING 					= 3
-  SettingsWindow.API_CREATED 						= 4
+	SettingsWindow.API_CONNECTING_FAILED  = -1
+	SettingsWindow.API_NOT_CONNECTED 			= 0
+	SettingsWindow.API_CONNECTING 				= 1
+	SettingsWindow.API_CONNECTED 					= 2
+	SettingsWindow.API_CREATING 					= 3
+	SettingsWindow.API_CREATED 						= 4
 
-  // network mode
-  SettingsWindow.NETWORK_MODE_NEITHER  			= "neither";
-  SettingsWindow.NETWORK_MODE_CLIENT  			= "clientMode";
-  SettingsWindow.NETWORK_MODE_ACCESS_POINT  = "accessPointMode";
+	// network mode
+	SettingsWindow.NETWORK_MODE_NEITHER  			= "neither";
+	SettingsWindow.NETWORK_MODE_CLIENT  			= "clientMode";
+	SettingsWindow.NETWORK_MODE_ACCESS_POINT  = "accessPointMode";
 
-  this.networkMode = SettingsWindow.NETWORK_MODE_NEITHER;
+	this.networkMode = SettingsWindow.NETWORK_MODE_NEITHER;
 
-  this.updatePanel = new UpdatePanel();
+	this.updatePanel = new UpdatePanel();
+	this.printerPanel = new PrinterPanel();
 
 	var self = this;
 
@@ -100,43 +76,61 @@ function SettingsWindow() {
 		this.window = $("#settings");
 		this.btnOK = this.window.find(".btnOK");
 		enableButton(this.btnOK,this.submitwindow);
-	  
-		this.window.find(".settingsContainer").load("settings.html", function() {
-      console.log("Settings:finished loading settings.html, now loading settings...");
 
-      self.form = self.window.find("form");
+		this.window.find(".settingsContainer").load("settings.html", function() {
+			console.log("Settings:finished loading settings.html, now loading settings...");
+
+			self.form = self.window.find("form");
 			self.form.submit(function (e) { self.submitwindow(e) });
 
-      self.loadSettings();
-      	
-      self.printerSelector 	= self.form.find("#printerType");
-      var btnAP 						= self.form.find("label[for='ap']");
-		  var btnClient 				= self.form.find("label[for='client']");
-		  var btnRefresh 				= self.form.find("#refreshNetworks");
-		  var btnConnect 				= self.form.find("#connectToNetwork");
-		  var btnCreate 				= self.form.find("#createAP");
-		  var networkSelector 	= self.form.find("#network");
-		  self.apFieldSet 			= self.form.find("#apSettings");
-		  self.clientFieldSet 	= self.form.find("#clientSettings");
-		  self.gcodeSettings		= self.form.find("#gcodeSettings");
-		  self.x3gSettings			= self.form.find("#x3gSettings");
-		  self.btnRestoreSettings = self.form.find("#restoreSettings");
-		  
-		  btnAP.on('touchstart mousedown',self.showAPSettings);
-		  btnClient.on('touchstart mousedown',self.showClientSettings);
-		  btnRefresh.on('touchstart mousedown',self.refreshNetworks);
-		  btnConnect.on('touchstart mousedown',self.connectToNetwork);
-			btnCreate.on('touchstart mousedown',self.createAP);
-			self.printerSelector.change(self.printerSelectorChanged);
-		  networkSelector.change(self.networkSelectorChanged);
-		  self.btnRestoreSettings.on('touchstart mousedown',self.resetSettings);
-		  
-		  	
-		  // update panel
-		  var $updatePanelElement = self.form.find("#updatePanel");
-		  self.updatePanel.init(wifiboxURL,$updatePanelElement);
-	  });
-	}
+			$.ajax({
+				url: self.wifiboxURL + "/printer/listall",
+				dataType: 'json',
+				timeout: self.timeoutTime,
+				success: function(response) {
+					console.log("Settings:printer/listall response: ",response.data.printers);
+
+					$.each(response.data.printers, function(key, value) {
+			             // console.log(key,value);
+			             $('#printerType').append($('<option>').text(value).attr('value', key));
+			        });
+
+					self.loadSettings();
+
+					var btnAP 						= self.form.find("label[for='ap']");
+					var btnClient 				= self.form.find("label[for='client']");
+					var btnRefresh 				= self.form.find("#refreshNetworks");
+					var btnConnect 				= self.form.find("#connectToNetwork");
+					var btnCreate 				= self.form.find("#createAP");
+					var networkSelector 	= self.form.find("#network");
+					self.apFieldSet 			= self.form.find("#apSettings");
+					self.clientFieldSet 	= self.form.find("#clientSettings");
+					self.btnRestoreSettings = self.form.find("#restoreSettings");
+
+					btnAP.on('touchstart mousedown',self.showAPSettings);
+					btnClient.on('touchstart mousedown',self.showClientSettings);
+					btnRefresh.on('touchstart mousedown',self.refreshNetworks);
+					btnConnect.on('touchstart mousedown',self.connectToNetwork);
+					btnCreate.on('touchstart mousedown',self.createAP);
+					networkSelector.change(self.networkSelectorChanged);
+					self.btnRestoreSettings.on('touchstart mousedown',self.resetSettings);
+
+					// update panel
+					var $updatePanelElement = self.form.find("#updatePanel");
+					self.updatePanel.init(wifiboxURL,$updatePanelElement);
+
+					// printer panel
+					var $printerPanelElement = self.form.find("#printerPanel");
+					self.printerPanel.init(wifiboxURL,$printerPanelElement);
+					self.printerPanel.fillForm = self.fillForm;
+				}
+			}).fail(function() {
+				console.log("FATAL ERROR: Settings:printer/listall failed");
+			});
+		}); //this.window.find
+
+	} //this.init
+	
 	this.submitwindow = function(e) {
 		disableButton(self.btnOK,self.submitwindow);
 		e.preventDefault();
@@ -156,14 +150,16 @@ function SettingsWindow() {
 	}
 
 	this.showSettings = function() {
+		keyboardShortcutsEnabled = false;
 	  this.loadSettings(function() { // reload settings
-	  	$("#contentOverlay").fadeIn(375, function() {
+	  	$("#contentOverlay").fadeIn(175, function() {
 				document.body.removeEventListener('touchmove',prevent,false);
 			});
 	  });
 	}
 	this.hideSettings = function(complete) {
-		$("#contentOverlay").fadeOut(375, function() {
+		keyboardShortcutsEnabled = true;
+		$("#contentOverlay").fadeOut(175, function() {
       document.body.addEventListener('touchmove',prevent,false);
 //      self.window.css("display","none");
       complete();
@@ -185,7 +181,7 @@ function SettingsWindow() {
 		  	console.log("Settings:loadSettings response: ",response);
         settings = response.data;
 		  	console.log("  settings: ",settings);
-		  	self.fillForm();
+		  	self.fillForm(settings);
 		  	$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 		  	if(complete) complete();
 			}
@@ -198,16 +194,16 @@ function SettingsWindow() {
     this.refreshNetworks();
     this.retrieveNetworkStatus(false);
 	}
-	this.fillForm = function() {
-		console.log("SettingsWindow:fillForm");
-
+	this.fillForm = function(settings,form) { 
+		if(!form) form = this.form; // if no form specified, fill whole form
+		
 		//fill form with loaded settings
-		var selects = this.form.find("select");
+		var selects = form.find("select");
 		selects.each( function(index,element) {
 			var element = $(element);
 			element.val(settings[element.attr('name')]);
 		});
-		var inputs = this.form.find("input");
+		var inputs = form.find("input");
 		inputs.each( function(index,element) {
 			var element = $(element);
 			//console.log("printer setting input: ",index,element.attr("type"),element.attr('name')); //,element);
@@ -221,13 +217,12 @@ function SettingsWindow() {
 					break;
 			}
 		});
-		var textareas = this.form.find("textarea");
+		var textareas = form.find("textarea");
 		textareas.each( function(index,element) {
 			var element = $(element);
 			var value = settings[element.attr('name')];
 			element.val(value);
 		});
-		self.printerSelectorChanged();
 	}
 
 	this.saveSettings = function(newSettings,complete) {
@@ -288,7 +283,7 @@ function SettingsWindow() {
 			  	} else {
 			  		settings = response.data;
 						console.log("  settings: ",settings);
-						self.fillForm();
+						self.fillForm(settings);
 						$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 						
 						self.btnRestoreSettings.removeAttr("disabled");
@@ -345,30 +340,6 @@ function SettingsWindow() {
 		//console.log(settings);
 		return settings;
 	}
-	
-	this.printerSelectorChanged = function(e) {
-		var selectedOption = self.printerSelector.find("option:selected");
-		if(self.isMarlinPrinter(selectedOption.val())) {
-			self.x3gSettings.hide();
-			self.gcodeSettings.show();
-		} else {
-			self.gcodeSettings.hide();
-			self.x3gSettings.show();
-		}
-	}
-	
-	this.isMarlinPrinter = function(printer) {
-		switch(printer) {
-			case "makerbot_generic":
-			case "makerbot_replicator2":
-			case "makerbot_thingomatic":
-				return false;
-				break;
-			default:
-				return true;
-				break;
-		}
-	}
 
 	this.signin = function() {
 		$.ajax({
@@ -386,6 +357,22 @@ function SettingsWindow() {
 	
 	this.downloadlogs = function() {
 		window.location.href = self.wifiboxURL + "/info/logfiles"
+	}
+
+	this.downloadGcode = function() {
+		var gcode = generate_gcode();
+		if (gcode!=undefined) {
+			var blob = new Blob([gcode.join("\n")], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, "doodle3d.gcode");
+		}
+	}
+
+	this.downloadSvg = function() {
+		var svg = saveToSvg();
+		if (svg!=undefined) {
+			var blob = new Blob([svg], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, "doodle3d.svg");
+		}
 	}
 	
 	/*

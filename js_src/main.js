@@ -25,17 +25,17 @@ var clientInfo = {};
 $(function() {
   console.log("ready");
 
-  //TODO give this a more logical place in code
-
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
-  
+
 	if (wifiboxIsRemote) {
-		wifiboxURL = "http://192.168.5.1/d3dapi";
-		wifiboxCGIBinURL = "http://192.168.5.1/cgi-bin/d3dapi";
+    // var hostname = "http://10.0.0.45";
+    var hostname = "http://192.168.5.1";
+		wifiboxURL = hostname+"/d3dapi";
+		wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
 	} else {
 		wifiboxURL = "http://" + window.location.host + "/d3dapi";
 		wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
@@ -59,6 +59,7 @@ $(function() {
   initLayouting();
   initSidebars();
   initButtonBehavior();
+  initKeyboard();
   initVerticalShapes();
   if (!clientInfo.isSmartphone) initHelp();
 
@@ -66,7 +67,7 @@ $(function() {
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
   message.init($("#message"));
-  
+
   printer.init();
 	$(document).on(Printer.UPDATE,update);
 
@@ -77,8 +78,8 @@ $(function() {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
-    $("#preview_tmp").css("display", "block");
-    
+    //$("#preview_tmp").css("display", "block");
+
     $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
@@ -115,14 +116,14 @@ $(function() {
 function enableButton(elem, handler) {
 	//var elem = $('#'+domId);
 	elem.removeClass("disabled");
- 	elem.unbind('touchstart mousedown');
- 	elem.bind('touchstart mousedown', handler);
+ 	elem.unbind('click');
+ 	elem.bind('click', handler);
 }
 
 function disableButton(elem) {
 	//var elem = $('#'+domId);
 	elem.addClass("disabled");
- 	elem.unbind('touchstart mousedown');
+ 	elem.unbind('click');
 }
 
 function showOrHideThermo() {

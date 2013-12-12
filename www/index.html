@@ -33,8 +33,8 @@
     <div class='sidebutton shadowright'></div>
     <img class="btnNew btn" src="img/buttons/btnNew.png" /><br/>
     <div class="btnsPrevNext" style="text-align:center">
-      <img class="btnPrevious btn" src="img/buttons/btnLeft.png">
-      <img class="btnNext btn" src="img/buttons/btnRight.png">
+      <img class="btnPrevious btn disabled" src="img/buttons/btnLeft.png">
+      <img class="btnNext btn disabled" src="img/buttons/btnRight.png">
       <!-- <div id="txtSketch"></div> -->
     </div>
     <img class="btnSave btn" src="img/buttons/btnSave.png" /><br/>
@@ -63,7 +63,7 @@
     </div>
 
   </div>
-  
+
   <div id="message"></div>
 
   <!-- center panel -->
@@ -102,7 +102,8 @@
     </div>
   </div>
   <div id="debug_textArea">
-    <textarea rows="5" cols="60" id="textdump"></textarea>
+    <!-- <textarea rows="5" cols="60" id="textdump"></textarea> -->
+    <button onclick="settingsWindow.downloadGcode()">Download gcode</button>
   </div>
   <div id="debug_display">
   </div>
@@ -117,7 +118,7 @@
         <div class="settingsContainer"></div>
         <div class="right">
           <div class="btnContainer">
-            <img src="img/buttons/btnOk_settings.png" class="btn btnOK" alt="save"/>
+            <img src="img/buttons/btnOk.png" class="btn btnOK" alt="save"/>
           </div>
         </div>
       </div>
@@ -134,6 +135,8 @@
 <!--<script src="js/libs/imagesloaded-pkgd.min.js"></script>-->
 <!--<script src="../js_src/libs/jquery-joyride-2-1.js"></script>-->
 <script src="js/libs/jquery-joyride-2-1.min.js"></script>
+<script src="js/libs/jquery-coolfieldset.min.js"></script>
+<script src="js/libs/FileSaver.min.js"></script>
 <!--<script src="js/doodle3d-client.js"></script>-->
 <script src="js/doodle3d-client.min.js"></script>
 
@@ -152,6 +155,8 @@
 <script src="../js_src/Progressbar.js"></script>
 <script src="../js_src/Thermometer.js"></script>
 <script src="../js_src/utils.js"></script>
+<script src="../js_src/sketches.js"></script>
+<script src="../js_src/Help.js"></script>
 <script src="../js_src/sidebar.js"></script>
 <script src="../js_src/Message.js"></script>
 <script src="../js_src/main.js"></script>

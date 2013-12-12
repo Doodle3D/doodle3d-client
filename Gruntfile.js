@@ -16,8 +16,12 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
+          'js_src/Shape.js',
+          'js_src/Svg.js',
+          'js_src/Keyboard.js',
           'js_src/SettingsWindow.js',
           'js_src/UpdatePanel.js',
+          'js_src/PrinterPanel.js',
           'js_src/Help.js',
           'js_src/d3dServerInterfacing.js',
           'js_src/verticalShapes.js',

@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := doodle3d-client
-PKG_VERSION := 0.9.0
+PKG_VERSION := 0.9.2
 PKG_RELEASE := 1
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
@@ -22,6 +22,16 @@ define Package/doodle3d-client/description
 	This package provides the Doodle3D web client, which interacts with the wifibox package using a REST API.
 endef
 
+define Package/doodle3d-client/config
+	config DOODLE3D_CLIENT_MINIFY_JS
+		depends on PACKAGE_doodle3d-client
+		bool "Minify javascript"
+		default y
+		help
+			All javascript files are concatenated into one file; this file enables minification
+			of that file. Disable this to make on-the-fly modifications easier.
+endef
+
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) less $(PKG_BUILD_DIR)/
@@ -35,7 +45,11 @@ endef
 
 define Build/Compile
 	npm install
-	grunt less autoprefixer cssmin concat uglify
+ifeq ($(CONFIG_DOODLE3D_CLIENT_MINIFY_JS),y)
+		grunt less autoprefixer cssmin concat uglify
+else
+		grunt less autoprefixer cssmin concat
+endif
 endef
 
 define Package/doodle3d-client/install
@@ -56,7 +70,16 @@ define Package/doodle3d-client/install
 	
 	$(CP) $(PKG_BUILD_DIR)/www/img/* $(1)/www/img/
 	
-	$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-client.min.js $(1)/www/js/
+ifeq ($(CONFIG_DOODLE3D_CLIENT_MINIFY_JS),y)
+		$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-client.min.js $(1)/www/js/
+else
+		#NOTE: if using a symlink here installation with openwrt make fails
+		#  when trying to build with minification after package has been built
+		#  without minification (dangling symlink breaks openwrt's final copy command)
+		$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-client.js $(1)/www/js/doodle3d-client.min.js
+		#$(LN) -s /www/js/doodle3d-client.js $(1)/www/js/doodle3d-client.min.js
+endif
+
 	$(CP) $(PKG_BUILD_DIR)/www/js/libs/* $(1)/www/js/libs/
 	
 	$(CP) $(PKG_BUILD_DIR)/www/library $(1)/www/
