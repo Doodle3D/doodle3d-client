@@ -219,11 +219,13 @@ function UpdatePanel() {
 		this.statusDisplay.html(text);
 	}
 	this.updateInfoDisplay = function() {
-		var text = "Current version: "+self.currentVersion+". ";
+		var html = 'Current version: ' + self.currentVersion +
+			' (<a target="d3d-curr-relnotes" href="ReleaseNotes.html">release notes</a>). ';
 		if(self.canUpdate) {
-			text += "Latest version: "+self.newestVersion+".";
+			html += 'Latest version: ' + self.newestVersion +
+				' (<a target="d3d-new-relnotes" href="http://doodle3d.com/updates/images/ReleaseNotes.md">release notes</a>).';
 		}
-		self.infoDisplay.text(text);
+		self.infoDisplay.html(html);
 	}
 	this.setNetworkMode = function(networkMode) {
 		self.networkMode = networkMode;
