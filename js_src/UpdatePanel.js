@@ -4,7 +4,7 @@ function UpdatePanel() {
 	
 	this.statusCheckInterval 	= 1000; 
 	this.statusCheckDelayer; 						// setTimout instance
-	this.installedDelay 			= 60*1000; 			// Since we can't retrieve status during installation we show the installed text after a fixed delay	
+	this.installedDelay 			= 90*1000; 			// Since we can't retrieve status during installation we show the installed text after a fixed delay	
 	this.installedDelayer; 							// setTimout instance
 	this.retryDelay 					= 1000; 
 	this.retryDelayer; 									// setTimout instance
