@@ -52,14 +52,14 @@
         <option value="marlin_generic">Generic Marlin Printer</option>
         <option value="makerbot_generic">Generic Makerbot Printer</option>
       </select> --><br/>
-
+      
       <label for="printerDimensionsX">Dimensions:</label>
       x:<input id="printerDimensionsX" type="number" class="small" name="printer.dimensions.x" placeholder="x">mm<br>
       <label for="printerDimensionsY"></label>
       y:<input id="printerDimensionsY" type="number" class="small" name="printer.dimensions.y" placeholder="y">mm<br>
       <label for="printerDimensionsZ"></label>
       z:<input id="printerDimensionsZ" type="number" class="small" name="printer.dimensions.z" placeholder="z">mm<br>
-
+      <label for="heatedBed">Heated bed:</label><input id="heatedBed" type="checkbox" name="printer.heatedbed" value="heatedbed"><br>
       <fieldset id="gcodePanel">
  		<legend>GCODE settings</legend>
  		<div>
@@ -79,6 +79,8 @@
       				<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
       				<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
       				<dt>{printerType}</dt><dd>Printer type</dd>
+      				<dt>{if heatedBed}</dt><dd>Enable line if printer has heated bed</dd>
+      				
       			</dl>
       		</small>
       	</div>
