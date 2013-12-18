@@ -19,6 +19,7 @@ function Printer() {
 	Printer.BUFFERING_STATE 						= "buffering";			// printer is buffering (recieving) data, but not yet printing
 	Printer.PRINTING_STATE 							= "printing";
 	Printer.STOPPING_STATE 							= "stopping";				// when you stop (abort) a print it prints the endcode
+	Printer.TOUR_STATE 									= "tour";						// when in joyride mode
 
 	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being send to the printer, leaving will result in a incomplete 3D print";
 

@@ -56,12 +56,14 @@ function GrandTour(_name) {
         $(this).joyride('set_li', false);
       }
     }
-
+    
+    // Overrule printer to tour mode, pausing status updates
+    printer.overruleState(Printer.TOUR_STATE);
+    
     // bring up thermometer and progressbar to explain them
     thermometer.show();
     progressbar.show();
     message.hide();
-
   };
   this.preStepCallback = function(index, tip) {
 //    console.log("GrandTour >> f:preStepCallback() >> index: " + index);
@@ -361,8 +363,6 @@ function HelpTours() {
     self.currActiveTour = undefined;
     self.tourActive = false;
 
-    thermometer.hide();
-    progressbar.hide();
     message.hide();
     printer.checkStatus();
   }
