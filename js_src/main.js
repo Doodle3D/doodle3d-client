@@ -61,7 +61,6 @@ $(function() {
   initButtonBehavior();
   initKeyboard();
   initVerticalShapes();
-  if (!clientInfo.isSmartphone) initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
@@ -142,12 +141,18 @@ function showOrHideThermo() {
 function settingsLoaded() {
 	console.log("settingsLoaded");
 	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);
-	if(settings["printer.heatup.enabled"]) {
-		if(firstTimeSettingsLoaded) {
+	if(firstTimeSettingsLoaded) {
+		if(settings["printer.heatup.enabled"]) {
 			printer.preheat();
-			firstTimeSettingsLoaded = false;
 		}
+		console.log("doodle3d.tour.enabled: ",settings["doodle3d.tour.enabled"]);
+		if(settings["doodle3d.tour.enabled"] && !clientInfo.isSmartphone) {
+			console.log("show tour");
+			initHelp();
+		}
+		firstTimeSettingsLoaded = false;
 	}
+	
 }
 
 function setDebugText(text) {
