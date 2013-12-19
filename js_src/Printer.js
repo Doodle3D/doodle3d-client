@@ -144,6 +144,10 @@ function Printer() {
 	this.sendPrintPart = function(sendIndex,sendLength) {
 		console.log("Printer:sendPrintPart sendIndex: " + sendIndex + "/" + this.gcode.length + ", sendLength: " + sendLength);
 
+		
+		var sendPercentage = Math.round(sendIndex/this.gcode.length*100);
+		message.set("Sending doodle to printer: "+sendPercentage+"%",Message.NOTICE,false,true);
+		
     var firstOne = (sendIndex == 0)? true : false;
     var start = firstOne; // start printing right away
 

@@ -14,29 +14,29 @@ function Message() {
 	var autohideTimeout;
 	
 	this.init = function($element) {
-    console.log("Message:init");
-    
     this.$element = $element;
-    console.log("$element: ",$element);
  	}
-	
-	this.set = function(text,mode,autoHide) {
-		console.log("Message:set: ",text,mode,autoHide);
-		self.hide(function() {
-			self.show();
-			self.clear();
-			
-			self.$element.text(text);
-			self.$element.addClass(mode);
-			self.show();
-			
-			self.mode = mode;
-			
-			clearTimeout(autohideTimeout);
-			if(autoHide) {
-				autohideTimeout = setTimeout(function(){ self.hide()},autoHideDelay);
-			}
-		});
+	this.set = function(text,mode,autoHide,disableEffect) {
+		console.log("Message:set: ",text,mode,autoHide,disableEffect);
+		if(disableEffect) {
+			self.fill(text,mode,autoHide)
+		} else{
+			self.hide(function() {
+				self.show();
+				self.fill(text,mode,autoHide)
+			});
+		}
+	}
+	this.fill = function(text,mode,autoHide) {
+		//console.log("Message:fill: ",text,mode,autoHide);
+		self.clear();
+		self.$element.text(text);
+		self.$element.addClass(mode);
+		self.mode = mode;
+		clearTimeout(autohideTimeout);
+		if(autoHide) {
+			autohideTimeout = setTimeout(function(){ self.hide()},autoHideDelay);
+		}
 	}
 	this.clear = function($element) {
 		this.$element.text("");
