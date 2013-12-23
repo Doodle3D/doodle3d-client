@@ -95,7 +95,7 @@ function Printer() {
 			  timeout: this.timeoutTime,
 			  success: function(data){
 			  	console.log("Printer:preheat response: ",data);
-			  	if(data.status == "error") {
+			  	if(data.status != "success") {
 			  		clearTimeout(self.retryPreheatDelay);
 						self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
 			  	}
