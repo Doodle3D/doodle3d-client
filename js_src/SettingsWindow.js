@@ -21,6 +21,7 @@ function SettingsWindow() {
 	this.btnOK;
 	this.form;
 	this.timeoutTime = 3000;
+	this.saveSettingsTimeoutTime = 8000;
 	this.retryDelay = 2000; 					// retry setTimout delay
 	this.retryRetrieveNetworkStatusDelayTime = 1000;// retry setTimout delay
 
@@ -237,11 +238,11 @@ function SettingsWindow() {
 		settings = newSettings; // store new settings in global settings
 		if (communicateWithWifibox) {
 		  $.ajax({
-			  url: this.wifiboxURL + "/config",
+			  url: self.wifiboxCGIBinURL + "/config",
 			  type: "POST",
 			  data: newSettings,
 			  dataType: 'json',
-			  timeout: this.timeoutTime,
+			  timeout: self.saveSettingsTimeoutTime,
 			  success: function(response){
 			  	console.log("Settings:saveSettings response: ",response);
 			  	if(response.status == "error") {
