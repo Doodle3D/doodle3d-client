@@ -321,7 +321,8 @@ function SettingsWindow() {
 		var selects = self.form.find("select");
 		selects.each( function(index,element) {
 			var element = $(element);
-			if(element.attr('name') != "network.client.network") {
+			var fieldName = element.attr('name');
+			if(element.attr('name') != "") {
 				settings[element.attr('name')] = element.val();
 			}
 		});
@@ -329,14 +330,16 @@ function SettingsWindow() {
 		var inputs = self.form.find("input");
 		inputs.each( function(index,element) {
 			var element = $(element);
-			switch(element.attr("type")) {
-				case "text":
-				case "number":
-					settings[element.attr('name')] = element.val();
-					break;
-				case "checkbox":
-					settings[element.attr('name')] = element.prop('checked')
-					break;
+			if(element.attr('name') != "") {
+				switch(element.attr("type")) {
+					case "text":
+					case "number":
+						settings[element.attr('name')] = element.val();
+						break;
+					case "checkbox":
+						settings[element.attr('name')] = element.prop('checked')
+						break;
+				}
 			}
 		});
 
