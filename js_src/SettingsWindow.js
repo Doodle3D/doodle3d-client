@@ -280,7 +280,7 @@ function SettingsWindow() {
 		
 		if (communicateWithWifibox) {
 		  $.ajax({
-			  url: self.wifiboxURL + "/config/resetall",
+			  url: self.wifiboxCGIBinURL + "/config/resetall",
 			  type: "POST",
 			  dataType: 'json',
 			  timeout: this.timeoutTime,
