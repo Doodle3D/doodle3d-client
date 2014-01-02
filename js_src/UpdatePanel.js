@@ -45,18 +45,18 @@ function UpdatePanel() {
 		this.wifiboxURL = wifiboxURL;
 		
 		this.element = updatePanelElement;
-		this.noRetainCheckbox = this.element.find("#noRetain");
+		this.retainCheckbox = this.element.find("#retainConfiguration");
 		this.btnUpdate = this.element.find("#update");
 		this.statusDisplay = this.element.find("#updateState");
 		this.infoDisplay = this.element.find("#updateInfo");
 		
-		this.noRetainCheckbox.change(this.noRetainChanged);
+		this.retainCheckbox.change(this.retainChanged);
 		this.btnUpdate.click(this.update);
 		
 		this.checkStatus(false);
 	}
-	this.noRetainChanged = function(e) {
-		console.log("UpdatePanel:noRetainChanged");
+	this.retainChanged = function(e) {
+		console.log("UpdatePanel:retainChanged");
 		
 		self.setState(self.state,true);
 	}
@@ -82,10 +82,12 @@ function UpdatePanel() {
 	this.installUpdate = function() {
 		console.log("UpdatePanel:installUpdate");
 		
-		var noRetain = self.noRetainCheckbox.prop('checked');
+		// should personal sketches and settings be retained over update?
+		var retain = self.retainCheckbox.prop('checked');
+		console.log("  retain: ",retain);
 		
 		self.stopCheckingStatus();
-		postData = {no_retain:noRetain}
+		postData = {no_retain:!retain}
 		$.ajax({
 			url: self.wifiboxURL + "/update/install",
 			type: "POST",
@@ -175,8 +177,9 @@ function UpdatePanel() {
 		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (networkMode: ",self.networkMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
 		this.state = newState;
 		
-		var noRetain = self.noRetainCheckbox.prop('checked');
-		console.log("  noRetain", noRetain);
+		// should personal sketches and settings be retained over update?
+		var retain = self.retainCheckbox.prop('checked');
+		console.log("  retain", retain);
 		
 		// download button
 		// if there isn't newestVersion data something went wrong, 
@@ -189,7 +192,7 @@ function UpdatePanel() {
 				case UpdatePanel.DOWNLOAD_FAILED:
 				case UpdatePanel.INSTALL_FAILED:
 					console.log("  self.canUpdate: ",self.canUpdate);
-					if(self.canUpdate || noRetain) {
+					if(self.canUpdate || !retain) {
 						self.btnUpdate.removeAttr("disabled");
 					} else {
 						self.btnUpdate.attr("disabled", true);

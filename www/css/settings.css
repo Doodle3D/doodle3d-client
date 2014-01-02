@@ -137,3 +137,7 @@ form dl dt {
 	font-style: italic;
 	width: 10em;
 }
+#updatePanel #retainConfigurationLabel {
+	display: inline;
+	float: none;
+}
