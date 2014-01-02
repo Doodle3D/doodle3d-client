@@ -32,6 +32,7 @@ function SettingsWindow() {
 
 	this.apFieldSet;
 	this.clientFieldSet;
+	this.restoreStateField;
 	this.networks;
 	this.currentNetwork;               // the ssid of the network the box is on
 	this.selectedNetwork;              // the ssid of the selected network in the client mode settings
@@ -45,6 +46,9 @@ function SettingsWindow() {
 	this.retrieveNetworkStatusDelay;   // setTimout delay
 	this.retrieveNetworkStatusDelayTime = 1000;
 
+	this.restoredStateHideDelayTime = 3000;
+	this.restoredStateHideDelay 			// setTimout instance
+	
 	// Events
 	SettingsWindow.SETTINGS_LOADED 		= "settingsLoaded";
 
@@ -115,7 +119,8 @@ function SettingsWindow() {
 					self.apFieldSet 			= self.form.find("#apSettings");
 					self.clientFieldSet 	= self.form.find("#clientSettings");
 					self.btnRestoreSettings = self.form.find("#restoreSettings");
-
+					self.restoreStateField = self.form.find("#restoreState");
+					
 					btnAP.on('touchstart mousedown',self.showAPSettings);
 					btnClient.on('touchstart mousedown',self.showClientSettings);
 					btnRefresh.on('touchstart mousedown',self.refreshNetworks);
@@ -276,6 +281,10 @@ function SettingsWindow() {
 		//$("#restoreSettings").addClass("disabled");
 		self.btnRestoreSettings.attr("disabled", true);
 		
+		clearTimeout(self.restoredStateHideDelay);
+		
+		self.setRestoreState("Restoring...");
+		
 		//console.log("  self.wifiboxURL: ",self.wifiboxURL);
 		
 		if (communicateWithWifibox) {
@@ -296,6 +305,10 @@ function SettingsWindow() {
 						$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 						
 						self.btnRestoreSettings.removeAttr("disabled");
+						self.setRestoreState("Settings restored");
+						// auto hide status
+						clearTimeout(self.restoredStateHideDelay);
+						self.restoredStateHideDelay = setTimeout(function() { self.setRestoreState("");	},self.restoredStateHideDelayTime);
 			  	}
 				}
 			}).fail(function() {
@@ -304,6 +317,9 @@ function SettingsWindow() {
 				self.retryResetSettingsDelay = setTimeout(function() { self.resetSettings() },self.retryDelay); // retry after delay
 			});
 	  }
+	}
+	this.setRestoreState = function(text) {
+		self.restoreStateField.html(text);
 	}
 	this.displayValidationError = function(key,msg) {
 		var formElement = self.form.find("[name|='"+key+"']");
