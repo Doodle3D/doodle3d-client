@@ -1,10 +1,18 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 function UpdatePanel() {
 	this.wifiboxURL;
 	this.element;
 	
 	this.statusCheckInterval 	= 1000; 
 	this.statusCheckDelayer; 						// setTimout instance
-	this.installedDelay 			= 60*1000; 			// Since we can't retrieve status during installation we show the installed text after a fixed delay	
+	this.installedDelay 			= 90*1000; 			// Since we can't retrieve status during installation we show the installed text after a fixed delay	
 	this.installedDelayer; 							// setTimout instance
 	this.retryDelay 					= 1000; 
 	this.retryDelayer; 									// setTimout instance
@@ -37,15 +45,21 @@ function UpdatePanel() {
 		this.wifiboxURL = wifiboxURL;
 		
 		this.element = updatePanelElement;
+		this.noRetainCheckbox = this.element.find("#noRetain");
 		this.btnUpdate = this.element.find("#update");
 		this.statusDisplay = this.element.find("#updateState");
 		this.infoDisplay = this.element.find("#updateInfo");
 		
+		this.noRetainCheckbox.change(this.noRetainChanged);
 		this.btnUpdate.click(this.update);
 		
 		this.checkStatus(false);
 	}
-	
+	this.noRetainChanged = function(e) {
+		console.log("UpdatePanel:noRetainChanged");
+		
+		self.setState(self.state,true);
+	}
 	this.update = function() {
 		console.log("UpdatePanel:update");
 		self.downloadUpdate();
@@ -67,10 +81,15 @@ function UpdatePanel() {
 	}
 	this.installUpdate = function() {
 		console.log("UpdatePanel:installUpdate");
+		
+		var noRetain = self.noRetainCheckbox.prop('checked');
+		
 		self.stopCheckingStatus();
+		postData = {no_retain:noRetain}
 		$.ajax({
 			url: self.wifiboxURL + "/update/install",
 			type: "POST",
+			data: postData,
 			dataType: 'json',
 			success: function(response){
 				console.log("UpdatePanel:installUpdate response: ",response);
@@ -150,20 +169,27 @@ function UpdatePanel() {
 				break;
 		}
 	}
-	this.setState = function(newState) {
-		if(this.state == newState) return;
-		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (networkMode: ",self.networkMode,") (newestVersion: ",self.newestVersion,")");
+	this.setState = function(newState,refresh) {
+		console.log("UpdatePanel:setState");
+		if(!refresh && this.state == newState) return;
+		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (networkMode: ",self.networkMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
 		this.state = newState;
+		
+		var noRetain = self.noRetainCheckbox.prop('checked');
+		console.log("  noRetain", noRetain);
 		
 		// download button
 		// if there isn't newestVersion data something went wrong, 
-		//   probably accessing the internet  
+		//   probably accessing the internet
+		console.log("  self.newestVersion: ",self.newestVersion);
 		if(self.newestVersion != undefined) {
+			console.log("  this.state: ",this.state);
 			switch(this.state){
 				case UpdatePanel.NONE: 
 				case UpdatePanel.DOWNLOAD_FAILED:
 				case UpdatePanel.INSTALL_FAILED:
-					if(self.canUpdate) {
+					console.log("  self.canUpdate: ",self.canUpdate);
+					if(self.canUpdate || noRetain) {
 						self.btnUpdate.removeAttr("disabled");
 					} else {
 						self.btnUpdate.attr("disabled", true);
@@ -219,11 +245,13 @@ function UpdatePanel() {
 		this.statusDisplay.html(text);
 	}
 	this.updateInfoDisplay = function() {
-		var text = "Current version: "+self.currentVersion+". ";
+		var html = 'Current version: ' + self.currentVersion +
+			' (<a target="d3d-curr-relnotes" href="ReleaseNotes.html">release notes</a>). ';
 		if(self.canUpdate) {
-			text += "Latest version: "+self.newestVersion+".";
+			html += 'Latest version: ' + self.newestVersion +
+				' (<a target="d3d-new-relnotes" href="http://doodle3d.com/updates/images/ReleaseNotes.md">release notes</a>).';
 		}
-		self.infoDisplay.text(text);
+		self.infoDisplay.html(html);
 	}
 	this.setNetworkMode = function(networkMode) {
 		self.networkMode = networkMode;

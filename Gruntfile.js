@@ -49,7 +49,7 @@ module.exports = function(grunt) {
         beautify: false,
         compress: {},
 //        report: 'min',
-        preserveComments: 'false'
+        preserveComments: 'some'
       },
       js: {
         files: {

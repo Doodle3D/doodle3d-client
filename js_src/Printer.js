@@ -1,3 +1,11 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 /* not using this now
 var $printProgressContainer = $("#printProgressContainer");
 var $progressbar = $("#progressbar");
@@ -19,6 +27,7 @@ function Printer() {
 	Printer.BUFFERING_STATE 						= "buffering";			// printer is buffering (recieving) data, but not yet printing
 	Printer.PRINTING_STATE 							= "printing";
 	Printer.STOPPING_STATE 							= "stopping";				// when you stop (abort) a print it prints the endcode
+	Printer.TOUR_STATE 									= "tour";						// when in joyride mode
 
 	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being send to the printer, leaving will result in a incomplete 3D print";
 
@@ -86,7 +95,7 @@ function Printer() {
 			  timeout: this.timeoutTime,
 			  success: function(data){
 			  	console.log("Printer:preheat response: ",data);
-			  	if(data.status == "error") {
+			  	if(data.status != "success") {
 			  		clearTimeout(self.retryPreheatDelay);
 						self.retryPreheatDelay = setTimeout(function() { self.preheat() },self.retryDelay); // retry after delay
 			  	}
@@ -143,6 +152,10 @@ function Printer() {
 	this.sendPrintPart = function(sendIndex,sendLength) {
 		console.log("Printer:sendPrintPart sendIndex: " + sendIndex + "/" + this.gcode.length + ", sendLength: " + sendLength);
 
+		
+		var sendPercentage = Math.round(sendIndex/this.gcode.length*100);
+		message.set("Sending doodle to printer: "+sendPercentage+"%",Message.NOTICE,false,true);
+		
     var firstOne = (sendIndex == 0)? true : false;
     var start = firstOne; // start printing right away
 

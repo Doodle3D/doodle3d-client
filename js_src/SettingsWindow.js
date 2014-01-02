@@ -1,3 +1,11 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 //these settings are defined in the firmware (conf_defaults.lua) and will be initialized in loadSettings()
 var settings = { }
 
@@ -13,6 +21,7 @@ function SettingsWindow() {
 	this.btnOK;
 	this.form;
 	this.timeoutTime = 3000;
+	this.saveSettingsTimeoutTime = 8000;
 	this.retryDelay = 2000; 					// retry setTimout delay
 	this.retryRetrieveNetworkStatusDelayTime = 1000;// retry setTimout delay
 
@@ -229,11 +238,11 @@ function SettingsWindow() {
 		settings = newSettings; // store new settings in global settings
 		if (communicateWithWifibox) {
 		  $.ajax({
-			  url: this.wifiboxURL + "/config",
+			  url: self.wifiboxCGIBinURL + "/config",
 			  type: "POST",
 			  data: newSettings,
 			  dataType: 'json',
-			  timeout: this.timeoutTime,
+			  timeout: self.saveSettingsTimeoutTime,
 			  success: function(response){
 			  	console.log("Settings:saveSettings response: ",response);
 			  	if(response.status == "error") {
@@ -271,7 +280,7 @@ function SettingsWindow() {
 		
 		if (communicateWithWifibox) {
 		  $.ajax({
-			  url: self.wifiboxURL + "/config/resetall",
+			  url: self.wifiboxCGIBinURL + "/config/resetall",
 			  type: "POST",
 			  dataType: 'json',
 			  timeout: this.timeoutTime,
@@ -313,7 +322,8 @@ function SettingsWindow() {
 		var selects = self.form.find("select");
 		selects.each( function(index,element) {
 			var element = $(element);
-			if(element.attr('name') != "network.client.network") {
+			var fieldName = element.attr('name');
+			if(element.attr('name') != "") {
 				settings[element.attr('name')] = element.val();
 			}
 		});
@@ -321,14 +331,16 @@ function SettingsWindow() {
 		var inputs = self.form.find("input");
 		inputs.each( function(index,element) {
 			var element = $(element);
-			switch(element.attr("type")) {
-				case "text":
-				case "number":
-					settings[element.attr('name')] = element.val();
-					break;
-				case "checkbox":
-					settings[element.attr('name')] = element.prop('checked')
-					break;
+			if(element.attr('name') != "") {
+				switch(element.attr("type")) {
+					case "text":
+					case "number":
+						settings[element.attr('name')] = element.val();
+						break;
+					case "checkbox":
+						settings[element.attr('name')] = element.prop('checked')
+						break;
+				}
 			}
 		});
 

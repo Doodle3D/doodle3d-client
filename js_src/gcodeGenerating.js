@@ -1,3 +1,10 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
 
 var MAX_POINTS_TO_PRINT = 200000
 var gcode = [];
@@ -200,6 +207,7 @@ function subsituteVariables(gcode) {
 	var preheatTemperature      = settings["printer.heatup.temperature"];
 	var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
   var printerType             = settings["printer.type"];
+  var heatedbed             	= settings["printer.heatedbed"];
 
   switch (printerType) {
     case "makerbot_replicator2": printerType = "r2"; break; 
@@ -207,13 +215,15 @@ function subsituteVariables(gcode) {
     case "makerbot_thingomatic": printerType = "t6"; break;
     case "makerbot_generic": printerType = "r2"; break;
   }
+  var heatedBedReplacement = (heatedbed)? "" : ";";
 
 	gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
 	gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);
 	gcode = gcode.replace(/{preheatTemp}/gi			,preheatTemperature);
 	gcode = gcode.replace(/{preheatBedTemp}/gi 	,preheatBedTemperature);
   gcode = gcode.replace(/{printerType}/gi     ,printerType);
-
+  gcode = gcode.replace(/{if heatedBed}/gi    ,heatedBedReplacement);
+    
 	return gcode;
 }
 

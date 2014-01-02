@@ -1,3 +1,11 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 //*
 var $preview;
 var preview;
@@ -83,7 +91,10 @@ var debug_redrawSimplification = 6;
 function redrawPreview(redrawLess) {
   if (redrawLess == undefined) redrawLess = false;
 
-  if (_points.length < 2) return;
+  if (_points.length < 2) {
+	  previewCtx.clearRect(0, 0, preview.width, preview.height);
+	  return;
+  }
 
   if (!redrawLess) {
     //debug_redrawSimplification = Math.round(_points.length / 65);

@@ -52,14 +52,14 @@
         <option value="marlin_generic">Generic Marlin Printer</option>
         <option value="makerbot_generic">Generic Makerbot Printer</option>
       </select> --><br/>
-
+      
       <label for="printerDimensionsX">Dimensions:</label>
       x:<input id="printerDimensionsX" type="number" class="small" name="printer.dimensions.x" placeholder="x">mm<br>
       <label for="printerDimensionsY"></label>
       y:<input id="printerDimensionsY" type="number" class="small" name="printer.dimensions.y" placeholder="y">mm<br>
       <label for="printerDimensionsZ"></label>
       z:<input id="printerDimensionsZ" type="number" class="small" name="printer.dimensions.z" placeholder="z">mm<br>
-
+      <label for="heatedBed">Heated bed:</label><input id="heatedBed" type="checkbox" name="printer.heatedbed" value="heatedbed"><br>
       <fieldset id="gcodePanel">
  		<legend>GCODE settings</legend>
  		<div>
@@ -79,6 +79,8 @@
       				<dt>{preheatTemp}</dt><dd>Preheat temperature</dd>
       				<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
       				<dt>{printerType}</dt><dd>Printer type</dd>
+      				<dt>{if heatedBed}</dt><dd>Enable line if printer has heated bed</dd>
+      				
       			</dl>
       		</small>
       	</div>
@@ -115,6 +117,7 @@
 		<label for="simplifyMinDistance">Minimal line distance:</label><input id="simplifyMinDistance" type="number" class="small" name="doodle3d.simplify.minDistance">px<br>
 		<!-- <label for="maxObjectHeight">Max object height:</label><input id="maxObjectHeight" type="number" class="small" name="printer.maxObjectHeight">mm<br> -->
 		<label for="screenToMillimeterScale">Pixels to mm scale:</label><input id="screenToMillimeterScale" type="number" step="0.1" class="small" name="printer.screenToMillimeterScale"><br>
+		<label for="tourEnabled">Enable tour:</label><input id="tourEnabled" type="checkbox" name="doodle3d.tour.enabled" value="tourEnabled"><br>
 	</fieldset>
 
 	<fieldset>
@@ -147,7 +150,7 @@
         	The text <em>%%MAC_ADDR_TAIL%%</em> will be replaced by the last 6 digits of your Doodle3D Wi-Fi box's MAC address.</small>
 	      	<br>
 	      	<label for="network">Network:</label>
-	      	<select id="network" name="network.client.network"></select>
+	      	<select id="network" name=""></select>
 	      	<input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br>
 	      	<label for="password" id="passwordLabel">Password:</label><input type="password" name="network.client.password" id="password"><br>
 	      	<input type="button" name="connect" value="Connect" class="button" id="connectToNetwork"/>
@@ -159,6 +162,8 @@
 
 	<fieldset id="updatePanel">
  		<legend>Update</legend>
+ 		<label for="noRetain">Remove personal data:</label><input id="noRetain" type="checkbox" name="" value="noRetain">
+ 		<br/><br/>
  		<input type="button" name="update" value="Update" class="button" id="update"/>
         <span id="updateState"></span><br/>
         <small id="updateInfo"></small>

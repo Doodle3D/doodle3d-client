@@ -1,3 +1,11 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 var debugMode = false;              // debug mode
 var sendPrintCommands = true;       // if Doodle3d should send print commands to the 3d printer
 var communicateWithWifibox = true;  // if Doodle3d should try interfacing with the wifibox (in case one is not connected)
@@ -61,7 +69,6 @@ $(function() {
   initButtonBehavior();
   initKeyboard();
   initVerticalShapes();
-  if (!clientInfo.isSmartphone) initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
@@ -142,12 +149,18 @@ function showOrHideThermo() {
 function settingsLoaded() {
 	console.log("settingsLoaded");
 	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);
-	if(settings["printer.heatup.enabled"]) {
-		if(firstTimeSettingsLoaded) {
+	if(firstTimeSettingsLoaded) {
+		if(settings["printer.heatup.enabled"]) {
 			printer.preheat();
-			firstTimeSettingsLoaded = false;
 		}
+		console.log("doodle3d.tour.enabled: ",settings["doodle3d.tour.enabled"]);
+		if(settings["doodle3d.tour.enabled"] && !clientInfo.isSmartphone) {
+			console.log("show tour");
+			initHelp();
+		}
+		firstTimeSettingsLoaded = false;
 	}
+	
 }
 
 function setDebugText(text) {

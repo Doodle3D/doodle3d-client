@@ -1,0 +1,9 @@
+Doodle3D uses the following external projects:
+
+Garden font - Copyright (c) 2012 So-ghislaine - "Garden is a free font for commercial and personal use."
+jQuery - Copyright (c) 2005, 2012 jQuery Foundation, Inc. and other contributors - MIT License
+jQuery-cookie - Copyright (c) 2011, Klaus Hartl - MIT or GPLv2
+jQuery-coolfieldset - Copyright (c) 2010 Lucky <bogeyman2007@gmail.com> - GPL
+jQuery-joyride - Copyright (c) 2013, ZURB - MIT
+FileSaver - Copyright (c) 2013 Ely Grey - X11/MIT
+

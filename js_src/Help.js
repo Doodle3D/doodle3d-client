@@ -1,3 +1,10 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
 
 var grandTour;
 function GrandTour(_name) {
@@ -56,12 +63,14 @@ function GrandTour(_name) {
         $(this).joyride('set_li', false);
       }
     }
-
+    
+    // Overrule printer to tour mode, pausing status updates
+    printer.overruleState(Printer.TOUR_STATE);
+    
     // bring up thermometer and progressbar to explain them
     thermometer.show();
     progressbar.show();
     message.hide();
-
   };
   this.preStepCallback = function(index, tip) {
 //    console.log("GrandTour >> f:preStepCallback() >> index: " + index);
@@ -361,8 +370,6 @@ function HelpTours() {
     self.currActiveTour = undefined;
     self.tourActive = false;
 
-    thermometer.hide();
-    progressbar.hide();
     message.hide();
     printer.checkStatus();
   }

@@ -1,3 +1,11 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 var currentSketchId = 0;
 var numSavedSketches = 0;
 
@@ -54,7 +62,7 @@ function setCurrentSketchId(sId) {
 }
 
 function updatePrevNextButtonStateOnClear() {
-	enableButton(btnPrevious, prevDoodle);
+	if (numSavedSketches > 0) enableButton(btnPrevious, prevDoodle);
 	disableButton(btnNext);
 	currentSketchId = numSavedSketches+1; //after the end of the list
 	disableButton(btnSave);
