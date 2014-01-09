@@ -2,57 +2,129 @@
 .centerpanel {
   position: absolute;
   left: 50%;
-  margin-left: -33%;
-  width: 66%;
+  margin-left: -@center-panel-width/2;
+  width: @center-panel-width;
   height: 100%;
-//  z-index: 5;
+  padding-top: 1%;
 }
 
+.logopanel {
+  height: 15%;
+  text-align: center;
+  width: 40%;
+  margin-left: 30%;
+  cursor: pointer;
 
-// top panel
-@import "base_centerpanel_logo.less";
+  img.pencil {
+    margin-top: 2%;
+    max-width: 50%;
+    max-height: 50%;
+  }
 
-// draw area stuff (plus up/down/left/right buttons)
-@import "base_centerpanel_drawarea.less";
+  img.logo {
+    max-width: 90%;
+    margin-bottom: 2%;
+    max-height: 45%;
+  }
+}
+
+//  DRAW AREA
+.drawareacontainer {
+  position: relative;
+  width: 100%;
+  height: 79%;
+  background-color: #fff;
+  border: 3px solid black;
+  border-radius: 15px;
+  box-sizing: border-box;
+  margin-top: 1%;
+}
+
+#canvasContainers {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#mycanvasContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78%;
+  height: 100%;
+}
+
+#mycanvas {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border-right: 2px solid #333;
+}
+
+#previewContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22%;
+  height: 100%;
+}
+
+#preview {
+  min-width: 50px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#preview_tmp {
+  display: none;
+}
 
 
 /*
 	HEIGHT-related RESPONSIVE STUFF
 */
 @media screen and (max-height: 700px) {
-  .logopanel {
-    height: 22%;
-  }
-  .doodlecontainer {
-    height: 68%;
-  }
-  .d3dlogo {
-    top: 25%;
-    max-width: 399px;
-    height: 74px;
-    background-image: url('../img/logo/logo_small.png');
-  }
+
+
 }
+
 @media screen and (max-height: 655px) {
-  .bgMiddle { opacity: 0; }
+
+  .logopanel {
+    height: 10%;
+
+    img.logo {
+      margin-top: 1%;
+      max-height: 90%;
+    }
+
+    img.pencil {
+      display: none;
+    }
+  }
+
+  .drawareacontainer {
+    height: 83%;
+  }
+
 }
 
 @media screen and (max-height: 525px) {
-  .d3dlogo {
-    top: 20%;
-    height: 57px;
-    max-width: 307px;
-    background-image: url('../img/logo/logo_smaller.png');
-//    max-width: 399px;
-//    background-image: url('../img/logo/logo_smaller_wide.png');
-  }
+  
+
+
 }
+
 @media screen and (max-height: 375px) {
-  .d3dlogo {
-    height: 40px;
-    max-width: 216px;
-    background-image: url('../img/logo/logo_smallest.png');
-//    max-width: 399px;
-//    background-image: url('../img/logo/logo_smallest_wide.png');
-  }
+
 }
+
+

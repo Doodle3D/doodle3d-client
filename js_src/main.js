@@ -57,10 +57,15 @@ $(function() {
   initDoodleDrawing();
   initPreviewRendering();
   initLayouting();
-  initSidebars();
+  // initSidebars();
   initButtonBehavior();
   initKeyboard();
-  initVerticalShapes();
+  // initVerticalShapes();
+  initWordArt();
+  initShapeDialog();
+
+  disableDragging();
+  
   if (!clientInfo.isSmartphone) initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
@@ -112,6 +117,13 @@ $(function() {
     //*/
   }
 });
+
+function disableDragging() {
+  $(document).bind("dragstart", function(event) {
+    console.log("dragstart");
+    event.preventDefault();
+  });
+}
 
 function enableButton(elem, handler) {
 	//var elem = $('#'+domId);

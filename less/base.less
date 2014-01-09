@@ -1,8 +1,7 @@
 /*
-
   GLOBAL CONTAINER
-
 */
+@import "config.less";
 
 
 body {
@@ -10,20 +9,12 @@ body {
   user-select: none; /* disable cut copy paste */
   overflow:hidden; /* This chops off any overhanging divs */
 }
-img {
-  z-index: 5;
-  /*pointer-events:none;*/
-  /*-webkit-touch-callout: none;               *//*disable callout, image save panel */
-  /*-webkit-tap-highlight-color: transparent; *//* "turn off" link highlight */
-}
-/*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
-.btn {
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
+
+@import "buttons.less";
+@import "popup.less";
+
 #landscape {
   position:absolute;
-//  background-color: #fff;
   width: 100%;
   max-width: 1024px;
   max-height: 768px;
@@ -31,24 +22,18 @@ img {
   bottom: 0;
   left: 0;
   right: 0;
-//  z-index: 5;
   overflow: hidden;
   margin:  0 auto;
-
-//  box-sizing: border-box;
-//  border: 2px solid #5e8c71;
-//  -moz-box-sizing:border-box;
-//  -webkit-box-sizing:border-box;//  border-width: 0 2px 2px 2px;
 
   // solution from: http://stackoverflow.com/questions/14085822/css-firefox-box-shadow-and-outline
   box-shadow: 0 0 0 2px #5e8c71,
   0 0 8px 4px rgba(8, 8, 8, 0.25);
-
-//  outline: 2px solid #5e8c71;
 }
+
 #portrait {
 	display: none;
 }
+
 .bgContainer {
   position: absolute;
   width:  100%;
@@ -62,68 +47,29 @@ img {
   left: 0px;
   z-index: -5;
 }
+
 .bgTop {
   top: 0px;
 }
+
 .bgMiddle {
   top: 30%;
 }
+
 .bgBottom {
   bottom: 0px;
 }
-//.rightpanel, .leftpanel {
-//  img {
-//    cursor: pointer;
-//  }
-//}
 
-/*
-
-  CENTER PANEL
-
-*/
 @import "base_centerpanel.less";
-
-/*
-
-  LEFT PANEL
-
-*/
 @import "base_leftpanel.less";
-
-/*
-
-  RIGHT PANEL
-
-*/
 @import "base_rightpanel.less";
 
 
-/*
-  under all the above styles w.r.t. the cascading effect
-*/
-.disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-
-#btnStop.disabled {
-  display: none;
-}
-
-
-// http://blogs.msdn.com/b/askie/archive/2013/01/06/how-to-implement-the-ms-touch-action-none-property-to-disable-double-tap-zoom-on-touch-devices.aspx
-//a, input, button {
-//  -ms-touch-action: none !important;
-//}
-
-
-
+// import vertical shapes additions
+@import "verticalshapes.less";
 
 /*
-
   REST
-
 */
 /* CLEARFIX */
 /* http://nicolasgallagher.com/micro-clearfix-hack/ */

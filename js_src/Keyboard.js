@@ -13,12 +13,9 @@ function initKeyboard() {
 			case 'n': clearDoodle(); break;
 			case 'p': print(); break;
 			case 'u': oopsUndo(); break;
-			case 'e': settingsWindow.downloadGcode(); break;
+			case 'g': settingsWindow.downloadGcode(); break;
 			case 'q': stopPrint(); break;
 			case ',': openSettingsWindow(); break;
-			case 'C': drawCircle(250,180,80,64); break; //x,y,r,res 
-			case 'T': drawCircle(250,180,80,3); break; //triangle
-			case 'X': drawCircle(250,180,80,6); break; //hexagon
 			case 'h': previewUp(true); break;
 			case 'H': previewDown(true); break;
 			case 's': saveSketch(); break;
@@ -26,9 +23,20 @@ function initKeyboard() {
 			case 'l': prevDoodle(); break;
 			case '[': previewTwistLeft(); break;
 			case ']': previewTwistRight(); break;
-			case '\'': resetTwist(); break;
+			case '|': resetTwist(); break;
+			case 't': showWordArtDialog(); break;
+			case 'i': showShapeDialog(); break;
+			
+			case ';': moveShape(-5,0); break;
+			case '\'': moveShape(5,0); break;
+			case '-': zoomShape(.95); break;
+			case '+': zoomShape(1.05); break;
+			case 'r': rotateShape(.1); break;
+			case 'R': rotateShape(-.1); break;
+			
 			default: console.log("Key: '" + ch + "' (" + event.which + ")");
 		}
+		event.preventDefault(); //prevents the character to end up in a focussed textfield
 	})
 
 }

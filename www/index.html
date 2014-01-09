@@ -2,21 +2,16 @@
 <html>
 <head>
   <title>Doodle3D</title>
-
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="icon" type="image/ico" href="./favicon_alt.ico"/>
   <link rel="apple-touch-icon-precomposed" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png"/>
   <link rel="apple-touch-icon-precomposed" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png" sizes="144x144" />
-
   <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-
-  <!--link href="css/styles.css" rel="stylesheet" media="screen"-->
-  <!--link href="css/debug.css" rel="stylesheet" media="screen"-->
   <link href="css/styles.min.css" rel="stylesheet" media="screen">
   <link href="css/debug.min.css" rel="stylesheet" media="screen">
-
+  <!-- <link href="http://jquerytools.org/media/css/rangeinput/skin1.css" rel="stylesheet" media="screen"> -->
 </head>
 <body>
 <div id="landscape" class="clearfix">
@@ -30,20 +25,25 @@
 
   <!-- left panel -->
   <div class="leftpanel shadowright">
-    <div class='sidebutton shadowright'></div>
+    <!-- <div class='sidebutton shadowright'></div> -->
     <img class="btnNew btn" src="img/buttons/btnNew.png" /><br/>
     <div class="btnsPrevNext" style="text-align:center">
       <img class="btnPrevious btn disabled" src="img/buttons/btnLeft.png">
       <img class="btnNext btn disabled" src="img/buttons/btnRight.png">
-      <!-- <div id="txtSketch"></div> -->
     </div>
     <img class="btnSave btn" src="img/buttons/btnSave.png" /><br/>
     <img class="btnOops btn" src="img/buttons/btnOops.png" /><br/>
+    <img class="btnAdd btn" src="img/buttons/btnAdd.png" /><br/>
+
+    <div class="buttonGroup buttonGroupAdd">
+      <img class="btnWordArt btn" src="img/buttons/btnWordArt.png" />
+      <img class="btnShape btn" src="img/buttons/btnShape.png" />    
+    </div>
+
   </div>
 
   <!-- right panel -->
   <div class="rightpanel shadowleft">
-    <!--<div class='sidebutton shadowleft'></div>-->
     <img class="btnPrint btn clearfix" src="img/buttons/btnPrint.png" />
     <img class="btnStop btn clearfix disabled" src="img/buttons/btnStop.png" />
 
@@ -57,10 +57,23 @@
         <canvas id="thermometerCanvas" width="90" height="120"></canvas>
       </div>
     </div>
+
+    <div id="verticalShapes">
+      <img class="btn btnVertical btnStraight" src="img/buttons/btnStraight.png"/>
+      <img class="btn btnVertical btnDiv" src="img/buttons/btnDiv.png"/>
+      <img class="btn btnVertical btnConv" src="img/buttons/btnConv.png"/>
+      <img class="btn btnVertical btnSine" src="img/buttons/btnSine.png"/>
+      <!-- <div><img class="verticalshape straight" src="img/vertical_shape_icons/straight.png" /></div>
+      <div><img class="verticalshape diverging" src="img/vertical_shape_icons/diverging.png" /></div>
+      <div><img class="verticalshape converging" src="img/vertical_shape_icons/converging.png" /></div>
+      <div><img class="verticalshape sinus" src="img/vertical_shape_icons/sinus.png" /></div> -->
+    </div>
+
     <div class="btnsSettingsInfo">
       <img class="btnSettings btn" src="img/buttons/btnSettings.png">
       <img class="btnInfo btn" src="img/buttons/btnInfo.png">
     </div>
+
 
   </div>
 
@@ -68,45 +81,62 @@
 
   <!-- center panel -->
   <div class="centerpanel">
-    <div class="logopanel">
-      <div class="d3dlogo" onclick="location.reload()"></div>
+    
+    <div class="logopanel" onclick="location.reload()">
+      <img class="pencil" src="img/logo/pencil.png"/>
+      <img class="logo" src="img/logo/doodle3d.png"/>
     </div>
+
     <div class="drawareacontainer">
+      
       <div id="canvasContainers">
         <div id="mycanvasContainer">
           <canvas id="mycanvas"></canvas>
         </div>
+
         <div id="previewContainer">
           <canvas id="preview"></canvas>
         </div>
+      
       </div>
       <canvas id="preview_tmp"></canvas>
-      <div id="verticalShapes">
-        <div><img class="verticalshape straight" src="img/vertical_shape_icons/straight.png" /></div>
-        <div><img class="verticalshape diverging" src="img/vertical_shape_icons/diverging.png" /></div>
-        <div><img class="verticalshape converging" src="img/vertical_shape_icons/converging.png" /></div>
-        <div><img class="verticalshape sinus" src="img/vertical_shape_icons/sinus.png" /></div>
-      </div>
-    </div>
-    <div class="bottompanel">
-      <div class="manipulationBtns clearfix">
-        <div id="btnsUpDown">
-          <img class="manipulationBtn" id="btnMoveUp" src="img/buttons/btnUp.png" />
-          <img class="manipulationBtn" id="btnMoveDown" src="img/buttons/btnDown.png" />
-        </div>
-        <div id="btnsTurnLeftRight">
-          <img class="manipulationBtn" id="btnTwistLeft" src="img/buttons/btnTurnLeft.png" />
-          <img class="manipulationBtn" id="btnTwistRight"  src="img/buttons/btnTurnRight.png" />
-        </div>
-      </div>
-    </div>
+
+      <img class="btnEditClosed btn" src="img/buttons/btnEditClosed.png" />
+      <img class="btnEditOpen btn" src="img/buttons/btnEditOpen.png" />
+
+    </div>  
   </div>
+
   <div id="debug_textArea">
-    <!-- <textarea rows="5" cols="60" id="textdump"></textarea> -->
     <button onclick="settingsWindow.downloadGcode()">Download gcode</button>
   </div>
-  <div id="debug_display">
+
+  <div id="debug_display"></div>
+
+  <div class="popupMask"></div>
+
+  <div class="popup popupWordArt">
+    <div class="content">
+      <h1>Add WordArt</h1>
+      Please enter your text:<br>
+      <input class="txtWordArt" type="text"/>
+      <img class="btn btnWordArtOk" src="img/buttons/btnOk.png">
+    </div>
   </div>
+
+  <div class="popup popupShape">
+    <div class="content">
+      <h1>Add a new shape</h1>
+      <div class="columnRight">
+        <img class="btn btnShapeMin" src="img/buttons/btnMin.png" />
+        <img class="btn btnShapePlus" src="img/buttons/btnPlus.png" />
+        <img class="btn btnShapeOk" src="img/buttons/btnOk.png">
+      </div>
+      <canvas class="shapePreview" width="150" height="150"></canvas><br/>
+      <div class="lblShapeResolution"></div>
+    </div>
+  </div>
+
   <div id="contentOverlay">
     <div id="settings">
       <div class="toppanel">
@@ -125,42 +155,20 @@
     </div>
   </div>
 </div>
+
 <div id="portrait">
   <img class="vertImage" src="img/bg_vertical.png"/>
 </div>
 <div id="helpContainer"></div>
+
 <script src="js/libs/jquery-1-9-1.min.js"></script>
+<!-- <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script> -->
 <script src="js/libs/jquery-cookie.min.js"></script>
-<!--<script src="js/jquery.scrollTo-min.js"></script>-->
-<!--<script src="js/libs/imagesloaded-pkgd.min.js"></script>-->
-<!--<script src="../js_src/libs/jquery-joyride-2-1.js"></script>-->
 <script src="js/libs/jquery-joyride-2-1.min.js"></script>
 <script src="js/libs/jquery-coolfieldset.min.js"></script>
 <script src="js/libs/FileSaver.min.js"></script>
-<!--<script src="js/doodle3d-client.js"></script>-->
+<script src="js/libs/jquery-fastclick.min.js"></script>
 <script src="js/doodle3d-client.min.js"></script>
-
-<!-- DEBUG -->
-<!--
-<script src="../js_src/SettingsWindow.js"></script>
-<script src="../js_src/UpdatePanel.js"></script>
-<script src="../js_src/d3dServerInterfacing.js"></script>
-<script src="../js_src/verticalShapes.js"></script>
-<script src="../js_src/buttonbehaviors.js"></script>
-<script src="../js_src/canvasDrawing.js"></script>
-<script src="../js_src/previewRendering.js"></script>
-<script src="../js_src/gcodeGenerating.js"></script>
-<script src="../js_src/init_layout.js"></script>
-<script src="../js_src/Printer.js"></script>
-<script src="../js_src/Progressbar.js"></script>
-<script src="../js_src/Thermometer.js"></script>
-<script src="../js_src/utils.js"></script>
-<script src="../js_src/sketches.js"></script>
-<script src="../js_src/Help.js"></script>
-<script src="../js_src/sidebar.js"></script>
-<script src="../js_src/Message.js"></script>
-<script src="../js_src/main.js"></script>
--->
 
 </body>
 </html>

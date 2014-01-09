@@ -16,6 +16,12 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
+          'js_src/Events.js',
+          'js_src/Class.js',
+          'js_src/Button.js',
+          'js_src/Popup.js',
+          'js_src/btnMove.js',
+          'js_src/WordArt.js',
           'js_src/Shape.js',
           'js_src/Svg.js',
           'js_src/Keyboard.js',

@@ -1,17 +1,8 @@
-var btnMoveUpInterval;
-var btnMoveDownInterval;
-
-var btnTwistLeftInterval;
-var btnTwistRightInterval;
 var twistIncrement = Math.PI/1800;
 
-var btnOopsInterval;
-
-var btnNew, btnPrevious, btnNext;
-var btnOops, btnStop, btnClear;
-var btnMoveUp, btnMoveDown, btnTwistLeft, btnTwistRight;
-var btnInfo, btnSettings;
-//var btnDebug; // debug
+var btnNew, btnPrevious, btnNext, btnOops, btnStop, btnInfo, btnRotate;
+var btnSettings, btnWordArt, btnZoom, btnMove, btnUpDown, btnTwist, btnShape, btnEditClosed, btnEditOpen;
+var btnDiv,btnConv,btnStraight,btnSine, buttonGroupAdd, popupWordArt;
 
 var state;
 var prevState;
@@ -23,159 +14,179 @@ var gcodeGenerateDelay = 50;
 function initButtonBehavior() {
   console.log("f:initButtonBehavior");
 
-//  btnClear= $(".btnClear");
+  $(".btn").Button(); //initalizes all buttons
+
   btnOops = $(".btnOops");
-  btnMoveUp = $("#btnMoveUp");
-  btnMoveDown = $("#btnMoveDown");
-  btnTwistLeft = $("#btnTwistLeft");
-  btnTwistRight = $("#btnTwistRight");
   btnInfo = $(".btnInfo");
   btnSettings = $(".btnSettings");
   btnNew = $(".btnNew");
   btnPrint= $(".btnPrint");
   btnStop = $(".btnStop");
-
   btnPrevious = $(".btnPrevious");
   btnNext = $(".btnNext");
   btnSave = $(".btnSave");
+  btnWordArt = $(".btnWordArt");
+  btnZoom = $(".btnZoom");
+  btnUpDown = $(".btnUpDown");
+  btnMove = $(".btnMove");
+  btnTwist = $(".btnTwist");
+  btnShape = $(".btnShape");
+  btnRotate = $(".btnRotate");
+  btnEditClosed = $(".btnEditClosed");
+  btnEditOpen = $(".btnEditOpen");
+  btnStraight = $(".btnStraight");
+  btnDiv = $(".btnDiv");
+  btnConv = $(".btnConv");
+  btnSine = $(".btnSine");
+  btnAdd = $(".btnAdd");
+  buttonGroupAdd = $(".buttonGroupAdd");
+  popupWordArt = $(".popupWordArt");
+  popupShape = $(".popupShape");
 
-  //debug
-  //btnDebug = $(".debugBtn");
-
-	btnNew.on('touchstart mousedown', clearDoodle);
-	btnPrint.on('touchstart mousedown', print);
+  btnNew.on("onButtonClick", onBtnNew);
+  btnWordArt.on("onButtonClick", onBtnWordArt);
+  btnPrint.on("onButtonClick", onBtnPrint);
+  btnZoom.on("onButtonHold", onBtnZoom);
+  btnOops.on("onButtonHold", onBtnOops);
+  btnUpDown.on("onButtonHold", onBtnUpDown);
+  btnMove.on("onButtonHold", onBtnMove);
+  btnTwist.on("onButtonHold", onBtnTwist);
+  btnShape.on("onButtonClick", onBtnShape);
+  btnRotate.on("onButtonHold", onBtnRotate);
+  btnEditClosed.on("onButtonClick", onBtnEditClosed);
+  btnEditOpen.on("onButtonHold", onBtnEditOpen);
+  btnEditOpen.on("onButtonClick", onBtnEditOpen);
+  btnStraight.on("onButtonClick", onBtnStraight);
+  btnDiv.on("onButtonClick", onBtnDiv);
+  btnConv.on("onButtonClick", onBtnConv);
+  btnSine.on("onButtonClick", onBtnSine);
+  btnAdd.on("onButtonClick", onBtnAdd);
 
   getSavedSketchStatus();
   setSketchModified(false);
-  //updatePrevNextButtonStateOnClear();
 
-//  btnClear.click(function(e) {
-//    e.preventDefault();
-//    //      console.log("clear");
-//
-//    clearDoodle();
-//  });
 
-  function startOops(e) {
-    console.log("f:startOops()");
-    e.preventDefault();
-    btnOopsInterval = setInterval( function() {
-      oopsUndo();
-    }, 1000/40);
+
+  function onBtnAdd() {
+    buttonGroupAdd.toggle();
   }
-  function stopOops(e) {
-    console.log("f:stopOops()");
-    e.preventDefault();
-    clearInterval(btnOopsInterval);
-    redrawDoodle(true);
-    renderToImageDataPreview();
-//    redrawPreview();
-  }
-  btnOops.on('touchstart', function(e) { startOops(e); });
-  btnOops.on('touchend', function(e) { stopOops(e); });
-  btnOops.mousedown(function(e) { startOops(e); });
-  btnOops.mouseup(function(e) { stopOops(e); });
 
-  function startMoveUp(e) {
-    e.preventDefault();
-    //      console.log("btnMoveUp mouse down");
-    if (_points.length > 1) {
-      previewUp(true);
-      clearInterval(btnMoveUpInterval);
-      btnMoveUpInterval = setInterval( function() {
-        previewUp(true);
-      }, 1000/30);
+  function onBtnStraight() {
+    setVerticalShape(verticalShapes.NONE);
+  }
+
+  function onBtnDiv() {
+    setVerticalShape(verticalShapes.DIVERGING);
+  }
+
+  function onBtnConv() {
+    setVerticalShape(verticalShapes.CONVERGING);
+  }
+
+  function onBtnSine() {
+    setVerticalShape(verticalShapes.SINUS);
+  }
+
+  function onBtnEditClosed(e,cursor) {
+    btnEditClosed.hide();
+    btnEditOpen.show();
+  }
+
+  function hitTest(cursor,button,radius) {
+    return distance(cursor.x,cursor.y,button.x,button.y)<radius;
+  }
+
+  function onBtnEditOpen(e,cursor) {
+    // image is shown as 75% of its size (for retina screens)
+    cursor.x /= .75;
+    cursor.y /= .75;
+
+    if (cursor.x < 27 && cursor.y < 27) {
+      btnEditOpen.hide();
+      btnEditClosed.show();
+    } else {
+      var btnUp = { x:59, y:38 };
+      var btnDown = { x:59, y:89 };
+      var btnLeft = { x:35, y:63 };
+      var btnRight = { x:86, y:64 };
+      var btnZoomIn = { x:33, y:133 };
+      var btnZoomOut = { x:33, y:165 };
+      var btnRotateCCW = { x:85, y:136 };
+      var btnRotateCW = { x:86, y:167 };
+      var step = 5;
+      var radius = 20;
+
+      if (hitTest(cursor,btnLeft,radius)) moveShape(-step,0);
+      else if (hitTest(cursor,btnRight,radius)) moveShape(step,0);
+      else if (hitTest(cursor,btnUp,radius)) moveShape(0,-step);
+      else if (hitTest(cursor,btnDown,radius)) moveShape(0,step);
+      else if (hitTest(cursor,btnZoomIn,radius)) zoomShape(1.05);
+      else if (hitTest(cursor,btnZoomOut,radius)) zoomShape(.95);
+      else if (hitTest(cursor,btnRotateCCW,radius)) rotateShape(-.1);
+      else if (hitTest(cursor,btnRotateCW,radius)) rotateShape(.1);
+
+      // console.log(cursor);
     }
   }
-  function stopMoveUp(e) {
-    e.preventDefault();
-//    console.log("btnMoveUp mouse up");
-    clearInterval(btnMoveUpInterval);
-    if (_points.length > 1) previewUp();
-  }
-  btnMoveUp.mousedown(function(e) { startMoveUp(e) });
-  btnMoveUp.mouseup(function(e) { stopMoveUp(e) });
-  btnMoveUp.on('touchstart', function(e) { startMoveUp(e) });
-  btnMoveUp.on('touchend', function(e) { stopMoveUp(e) });
 
-  function startMoveDown(e) {
-    e.preventDefault();
-    //      console.log("btnMoveDown mouse down");
-    if (_points.length > 1) {
-      previewDown(true);
-      clearInterval(btnMoveDownInterval);
-      btnMoveDownInterval = setInterval( function() {
-        previewDown(true);
-      }, 1000/30);
-    }
-  }
-  function stopMoveDown(e) {
-    e.preventDefault();
-//    console.log("btnMoveDown mouse up");
-    clearInterval(btnMoveDownInterval);
-    if (_points.length > 1) previewDown();
-  }
-  btnMoveDown.mousedown(function(e) { startMoveDown(e) });
-  btnMoveDown.mouseup(function(e) { stopMoveDown(e) });
-  btnMoveDown.on('touchstart', function(e) { startMoveDown(e) });
-  btnMoveDown.on('touchend', function(e) { stopMoveDown(e) });
+  function onBtnMove(e,cursor) {
+    var btnUp = { x:40, y:19 };
+    var btnDown = { x:40, y:54 };
+    var btnLeft = { x:20, y:41 };
+    var btnRight = { x:62, y:41 };
+    var step = 5;
+    var radius = 20;
 
-  function startTwistLeft(e) {
-    e.preventDefault();
-    //      console.log("btnTwistLeft mouse down");
-    if (_points.length > 1) {
-      previewTwistLeft(true);
-      clearInterval(btnTwistLeftInterval);
-      btnTwistLeftInterval = setInterval( function() {
-        previewTwistLeft(true);
-      }, 1000/30);
-    }
+    if (distance(cursor.x,cursor.y,btnLeft.x,btnLeft.y)<radius) moveShape(-step,0);
+    else if (distance(cursor.x,cursor.y,btnRight.x,btnRight.y)<radius) moveShape(step,0);
+    else if (distance(cursor.x,cursor.y,btnUp.x,btnUp.y)<radius) moveShape(0,-step);
+    else if (distance(cursor.x,cursor.y,btnDown.x,btnDown.y)<radius) moveShape(0,step);
+    
   }
-  function stopTwistLeft(e) {
-    e.preventDefault();
-    //      console.log("btnTwistLeft mouse up");
-    clearInterval(btnTwistLeftInterval);
-    if (_points.length > 1) previewTwistLeft();
-  }
-  btnTwistLeft.mousedown(function(e) { startTwistLeft(e) });
-  btnTwistLeft.mouseup(function(e) { stopTwistLeft(e) });
-  btnTwistLeft.on('touchstart', function(e) { startTwistLeft(e) });
-  btnTwistLeft.on('touchend', function(e) { stopTwistLeft(e) });
 
-  function startTwistRight(e) {
-    e.preventDefault();
-    //      console.log("btnTwistRight mouse down");
-    if (_points.length > 1) {
-      previewTwistRight(true);
-      clearInterval(btnTwistRightInterval);
-      btnTwistRightInterval = setInterval( function() {
-        previewTwistRight(true);
-      }, 1000/30);
-    }
+  function onBtnUpDown(e,cursor) {
+    if (cursor.y<25) previewUp(true);
+    else if (cursor.y>55) previewDown(true);
   }
-  function stopTwistRight(e) {
-    e.preventDefault();
-    //      console.log("btnTwistRight mouse up");
-    clearInterval(btnTwistRightInterval);
-    if (_points.length > 1) previewTwistRight();
-  }
-  btnTwistRight.mousedown(function(e) { startTwistRight(e) });
-  btnTwistRight.mouseup(function(e) { stopTwistRight(e) });
-  btnTwistRight.on('touchstart', function(e) { startTwistRight(e) });
-  btnTwistRight.on('touchend', function(e) { stopTwistRight(e) });
 
-  /*function openSettings() {
-    console.log("f:openSettings()");
-    $("#contentOverlay").fadeIn(1000, function() {
-      loadSettings();
-    });
-  }*/
+  function onBtnTwist(e,cursor) {
+    if (cursor.y<25) previewTwistRight(true);
+    else if (cursor.y>55) previewTwistLeft(true);
+  }
+
+  function onBtnOops(e) {
+    oopsUndo();
+  }
+
+  function onBtnNew(e) {
+    clearDoodle();
+  }
+
+  function onBtnZoom(e,cursor) {
+    if (cursor.y<25) zoomShape(1.05);
+    else if (cursor.y>55) zoomShape(.95);
+  }
+
+  function onBtnRotate(e,cursor) {
+    if (cursor.y<25) rotateShape(.1);
+    else if (cursor.y>55) rotateShape(-.1); 
+  }
+
+  function onBtnPrint(e) {
+    print();
+  }
+
+  function onBtnWordArt(e) {
+    showWordArtDialog();
+  }
+
+  function onBtnShape(e) {
+    showShapeDialog();
+    buttonGroupAdd.hide();
+  }
+
   enableButton(btnSettings, openSettingsWindow);
 
-//  btnSettings.on('touchend', function(e) {
-//    e.preventDefault();
-//    console.log("btnSettings touchend");
-//  });
 
   // 29-okt-2013 - we're not doing help for smartphones at the moment
   if (clientInfo.isSmartphone) {
@@ -188,18 +199,8 @@ function initButtonBehavior() {
     });
   }
 
-  // DEBUG
-  /*
-  //  $(".agentInfo").css("display", "none");
-  btnDebug.click(function(e) {
-    console.log("debugClick");
-    $(".agentInfo").toggleClass("agentInfoToggle");
-    e.preventDefault();
-  })
-  //*/
-
-  //btnStop.on('touchstart mousedown',stopPrint);
 }
+
 function stopPrint() {
   console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
   //if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
@@ -208,14 +209,6 @@ function stopPrint() {
   printer.overruleState(Printer.STOPPING_STATE);
 }
 
-
-// function prevDoodle(e) {
-//   console.log("f:prevDoodle()");
-//   console.log("f:prevDoodle()");
-// }
-// function nextDoodle(e) {
-//   console.log("f:nextDoodle()");
-// }
 
 function print(e) {
 	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
@@ -301,6 +294,7 @@ function oopsUndo() {
   }
   redrawPreview();
 }
+
 function previewUp(redrawLess) {
   //    console.log("f:previewUp()");
   if (numLayers < maxNumLayers) {
