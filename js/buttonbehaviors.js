@@ -27,9 +27,11 @@ function initButtonBehavior() {
   btnSave = $(".btnSave");
   btnWordArt = $(".btnWordArt");
   btnZoom = $(".btnZoom");
-  btnUpDown = $(".btnUpDown");
+  btnUp = $(".btnUp");
+  btnDown = $(".btnDown");
   btnMove = $(".btnMove");
-  btnTwist = $(".btnTwist");
+  btnTwistLeft = $(".btnTwistLeft");
+  btnTwistRight = $(".btnTwistRight");
   btnShape = $(".btnShape");
   btnRotate = $(".btnRotate");
   btnEditClosed = $(".btnEditClosed");
@@ -39,7 +41,9 @@ function initButtonBehavior() {
   btnConv = $(".btnConv");
   btnSine = $(".btnSine");
   btnAdd = $(".btnAdd");
+  btnToggleVertical = $(".btnToggleVertical");
   buttonGroupAdd = $(".buttonGroupAdd");
+  buttonGroupVertical = $(".buttonGroupVertical");
   popupWordArt = $(".popupWordArt");
   popupShape = $(".popupShape");
 
@@ -48,9 +52,11 @@ function initButtonBehavior() {
   btnPrint.on("onButtonClick", onBtnPrint);
   btnZoom.on("onButtonHold", onBtnZoom);
   btnOops.on("onButtonHold", onBtnOops);
-  btnUpDown.on("onButtonHold", onBtnUpDown);
-  btnMove.on("onButtonHold", onBtnMove);
-  btnTwist.on("onButtonHold", onBtnTwist);
+  btnUp.on("onButtonHold", onBtnUp);
+  btnDown.on("onButtonHold", onBtnDown);
+  // btnMove.on("onButtonHold", onBtnMove);
+  btnTwistLeft.on("onButtonHold", onBtnTwistLeft);
+  btnTwistRight.on("onButtonHold", onBtnTwistRight);
   btnShape.on("onButtonClick", onBtnShape);
   btnRotate.on("onButtonHold", onBtnRotate);
   btnEditClosed.on("onButtonClick", onBtnEditClosed);
@@ -61,11 +67,15 @@ function initButtonBehavior() {
   btnConv.on("onButtonClick", onBtnConv);
   btnSine.on("onButtonClick", onBtnSine);
   btnAdd.on("onButtonClick", onBtnAdd);
+  btnToggleVertical.on("onButtonClick", onBtnToggleVertical);
+  
 
   getSavedSketchStatus();
   setSketchModified(false);
 
-
+  function onBtnToggleVertical() {
+      buttonGroupVertical.toggle();
+  }
 
   function onBtnAdd() {
     buttonGroupAdd.toggle();
@@ -129,29 +139,35 @@ function initButtonBehavior() {
     }
   }
 
-  function onBtnMove(e,cursor) {
-    var btnUp = { x:40, y:19 };
-    var btnDown = { x:40, y:54 };
-    var btnLeft = { x:20, y:41 };
-    var btnRight = { x:62, y:41 };
-    var step = 5;
-    var radius = 20;
+  // function onBtnMove(e,cursor) {
+  //   var btnUp = { x:40, y:19 };
+  //   var btnDown = { x:40, y:54 };
+  //   var btnLeft = { x:20, y:41 };
+  //   var btnRight = { x:62, y:41 };
+  //   var step = 5;
+  //   var radius = 20;
 
-    if (distance(cursor.x,cursor.y,btnLeft.x,btnLeft.y)<radius) moveShape(-step,0);
-    else if (distance(cursor.x,cursor.y,btnRight.x,btnRight.y)<radius) moveShape(step,0);
-    else if (distance(cursor.x,cursor.y,btnUp.x,btnUp.y)<radius) moveShape(0,-step);
-    else if (distance(cursor.x,cursor.y,btnDown.x,btnDown.y)<radius) moveShape(0,step);
+  //   if (distance(cursor.x,cursor.y,btnLeft.x,btnLeft.y)<radius) moveShape(-step,0);
+  //   else if (distance(cursor.x,cursor.y,btnRight.x,btnRight.y)<radius) moveShape(step,0);
+  //   else if (distance(cursor.x,cursor.y,btnUp.x,btnUp.y)<radius) moveShape(0,-step);
+  //   else if (distance(cursor.x,cursor.y,btnDown.x,btnDown.y)<radius) moveShape(0,step);
     
+  // }
+
+  function onBtnUp(e) {
+    previewUp(true);
   }
 
-  function onBtnUpDown(e,cursor) {
-    if (cursor.y<25) previewUp(true);
-    else if (cursor.y>55) previewDown(true);
+  function onBtnDown(e) {
+    previewDown(true);
   }
 
-  function onBtnTwist(e,cursor) {
-    if (cursor.y<25) previewTwistRight(true);
-    else if (cursor.y>55) previewTwistLeft(true);
+  function onBtnTwistLeft(e) {
+    previewTwistLeft(true);
+  }
+
+  function onBtnTwistRight(e) {
+    previewTwistRight(true);
   }
 
   function onBtnOops(e) {

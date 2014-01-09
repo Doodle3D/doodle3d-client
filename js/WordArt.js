@@ -80,22 +80,6 @@ function getPathFromChar(ch) {
   return $("#svgfont path")[index].attributes["d"].nodeValue;
 }
 
-// function translatePoints(points,x,y) {
-//   for (var i=0; i<points.length; i++) {
-//     points[i].x += x;
-//     points[i].y += y;
-//   }
-// }
-
-// function scalePoints(points,x,y) {
-//   if (y==undefined) y = x;
-
-//   for (var i=0; i<points.length; i++) {
-//     points[i].x *= x;
-//     points[i].y *= y;
-//   }
-// }
-
 function getPointsFromPath(path) {
   var points = [];
   var cmds = path.split(' ');
@@ -114,19 +98,6 @@ function getPointsFromPath(path) {
   }
   return points;
 }
-
-// function getBounds(points) {    
-//   var xMin=9999,xMax=-9999,yMin=9999,yMax=-9999;
-//   for (var i=0; i<points.length; i++) {
-//     var p = points[i];
-//     xMin = Math.min(xMin,p.x);
-//     xMax = Math.max(xMax,p.x);
-//     yMin = Math.min(yMin,p.y);
-//     yMax = Math.max(yMax,p.y);
-//   }
-//   return {x:xMin,y:yMin,width:xMax-xMin,height:yMax-yMin};
-// }
-
 
 function canvasDrawPoints(canvas,points) {
   beginShape();

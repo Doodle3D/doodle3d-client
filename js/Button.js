@@ -12,7 +12,7 @@
 		var _timer = undefined;
 		var _x,_y;
 		var isDown = false;
-		var hoi = "fijn";
+		// var hoi = "fijn";
 
 		var updateCursor = function(e) {
 			// console.log(e.offsetX);
