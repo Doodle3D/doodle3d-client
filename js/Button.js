@@ -15,9 +15,15 @@
 		// var hoi = "fijn";
 
 		var updateCursor = function(e) {
-			// console.log(e.offsetX);
-			if (e.offsetX!=undefined) _x = e.offsetX;
-			if (e.offsetY!=undefined) _y = e.offsetY;
+			// retrieve cursor position relative to element
+			if (e.offsetX != undefined) {
+				_x = e.offsetX;
+				_y = e.offsetY;
+			} else {
+				var offset = $(element).offset();
+				_x = e.pageX - offset.left;
+				_y = e.pageY - offset.top;
+			} 
 		}
 
 		var startDownTimer = function() {
@@ -39,8 +45,7 @@
 			if (_x!=undefined && _y!=undefined) {
 				$(element).trigger("onButtonHold",{x:_x,y:_y});
 			} else {
-				console.log("_x")
-				//warning... _x or _y not set...
+				console.log("Button: warning... _x or _y not set...");
 			}
 		}
 		 
