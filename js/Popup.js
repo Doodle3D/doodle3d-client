@@ -1,11 +1,11 @@
 function showPopup(popup) {
-  $(".popupMask").show();
-  popup.show();
+  $("#popupMask").fadeIn(POPUP_SHOW_DURATION);
+  popup.fadeIn(POPUP_SHOW_DURATION);
   keyboardShortcutsEnabled=false;
 }
 
 function hidePopup(popup) {
-	$(".popupMask").hide();
-  popup.hide();
+	$("#popupMask").fadeOut(POPUP_SHOW_DURATION);
+  popup.fadeOut(POPUP_SHOW_DURATION);
   keyboardShortcutsEnabled=true;	
 }

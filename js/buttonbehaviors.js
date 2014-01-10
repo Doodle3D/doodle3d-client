@@ -42,7 +42,7 @@ function initButtonBehavior() {
   btnSine = $(".btnSine");
   btnAdd = $(".btnAdd");
   btnToggleVertical = $(".btnToggleVertical");
-  buttonGroupAdd = $(".buttonGroupAdd");
+  buttonGroupAdd = $("#buttonGroupAdd");
   buttonGroupVertical = $(".buttonGroupVertical");
   popupWordArt = $(".popupWordArt");
   popupShape = $(".popupShape");
