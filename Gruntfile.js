@@ -23,6 +23,7 @@ module.exports = function(grunt) {
           'js/btnMove.js',
           'js/WordArt.js',
           'js/Shape.js',
+          'js/AddShapeDialog.js',
           'js/Svg.js',
           'js/Keyboard.js',
           'js/SettingsWindow.js',
