@@ -20,6 +20,7 @@
 				_x = e.offsetX;
 				_y = e.offsetY;
 			} else {
+				// http://www.quirksmode.org/mobile/tableViewport_desktop.html#t11
 				var offset = $(element).offset();
 				_x = e.pageX - offset.left;
 				_y = e.pageY - offset.top;
