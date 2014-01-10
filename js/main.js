@@ -22,6 +22,8 @@ var showOrHide = false;
 
 var clientInfo = {};
 
+var POPUP_SHOW_DURATION = 175;
+
 $(function() {
   console.log("ready");
 

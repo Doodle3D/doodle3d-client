@@ -78,7 +78,7 @@ function initButtonBehavior() {
   }
 
   function onBtnAdd() {
-    buttonGroupAdd.toggle();
+    buttonGroupAdd.fadeToggle(POPUP_SHOW_DURATION);
   }
 
   function onBtnStraight() {
