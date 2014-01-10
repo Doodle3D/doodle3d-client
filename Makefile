@@ -38,7 +38,6 @@ define Build/Prepare
 	$(CP) www $(PKG_BUILD_DIR)/
 	$(CP) Gruntfile.js $(PKG_BUILD_DIR)/
 	$(CP) README.md $(PKG_BUILD_DIR)/
-	$(CP) ___settings.html $(PKG_BUILD_DIR)/
 	$(CP) lesstocss.sh $(PKG_BUILD_DIR)/
 	$(CP) package.json $(PKG_BUILD_DIR)/
 endef
