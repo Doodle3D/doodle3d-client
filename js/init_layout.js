@@ -27,7 +27,7 @@ function doOnResize() {
 function initLayouting() {
   console.log("f:initLayouting()");
 
-  $drawAreaContainer = $(".drawareacontainer");
+  $drawAreaContainer = $("#drawareacontainer");
 
   canvas.width = $canvas.width();
   canvas.height = $canvas.height(); // canvas.clientHeight;

@@ -77,7 +77,7 @@ function SettingsWindow() {
 		this.btnOK = this.window.find(".btnOK");
 		enableButton(this.btnOK,this.submitwindow);
 
-		this.window.find(".settingsContainer").load("settings.html", function() {
+		this.window.find("#settingsContainer").load("settings.html", function() {
 			console.log("Settings:finished loading settings.html, now loading settings...");
 
 			self.form = self.window.find("form");

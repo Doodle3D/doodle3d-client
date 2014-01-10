@@ -9,7 +9,7 @@
   cursor: default;
 }
 
-.btnPrint {
+#btnPrint {
   margin: 1% 5% 5% 0%;
   width: 90%;
   max-width: 163px;
@@ -17,7 +17,7 @@
   float: right;
 }
 
-.btnStop {
+#btnStop {
   margin: 5% 5% 1% 5%;
   float: right;
   width: 80%;
@@ -25,7 +25,7 @@
   height: auto;
 }
 
-.btnsSettingsInfo {
+#btnsSettingsInfo {
   position: absolute;
   bottom: 4%; //25px;
   right: 5px;
@@ -34,58 +34,59 @@
   max-width:  160px;
 }
 
-.btnInfo {
+#btnInfo {
 	width: 40%;
 	max-width: 53px;
 	height: auto;
 }
 
-.btnSettings {
+#btnSettings {
 	width: 40%;
 	max-width: 53px;
 	height: auto;
 	float: right;
 }
 
-.btnNew {
+#btnNew {
   margin: 5% 0% 1% 5%;
   width: 90%;
   max-width: 130px;
   height: auto;
 }
 
-.btnsPrevNext {
+#btnsPrevNext {
   margin: 1% 7%;
   max-width: 100px;
+  text-align:center;
 }
 
-.btnPrevious {
+#btnPrevious {
   width: 40%;
   max-width: 56px;
   height: auto;
 }
 
-.btnNext {
+#btnNext {
   width: 40%;
   max-width: 56px;
   height: auto;
   float: right;
 }
-.btnSave {
+#btnSave {
   margin: 4% 5% 1% 5%;
   width: 90%;
   max-width: 100px;
   height: auto;
 }
 
-.btnOops {
+#btnOops {
   margin: 5% 5% 1% 5%;
   width: 90%;
   max-width: 100px;
   height: auto;
 }
 
-.btnAdd {
+#btnAdd {
   width: 90%;
   max-width: 100px;
   margin: 5% 5% 1% 5%;
@@ -117,14 +118,14 @@
   display: none;
 }
 
-.btnEditClosed {
+#btnEditClosed {
   top: 5px;
   left: 5px;
   width: .75*31px;
   position: absolute;
 }
 
-.btnEditOpen {
+#btnEditOpen {
   position: absolute;
   top: 5px;
   left: 5px;
@@ -132,14 +133,14 @@
   display: none;
 }
 
-.btnAddOpen {
+/*#btnAddOpen {
   position: absolute;
   top: 370px;
   left: 60px;
   z-index: 1000;
   width: 200%;
   display: none;
-}
+}*/
 
 .buttonGroup {
   background-color: white;
@@ -157,13 +158,13 @@
   left: 60px;
   width: 140px;    /*fixme: can this grow based on it's content?*/ 
 
-  .btnWordArt, .btnShape {
+  #btnWordArt, #btnShape {
     width: 60px; /* scaled down >50% */
     float: left;
   }
 }
 
-.buttonGroupVertical {
+#buttonGroupVerticalShapes {
   top: 10px;
   left: 10px;
   padding-top: 20px;
@@ -174,7 +175,7 @@
   }
 }
 
-.btnToggleVertical {
+#btnToggleVertical {
   position: absolute;
   top: 0;
   left: 10px;

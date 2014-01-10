@@ -5,13 +5,13 @@ function initSidebars() {
   console.log("f:initSidebars()");
 
   sidebarLeft = new SideBar();
-  sidebarLeft.init(".leftpanel", "hideleft", function() {
-    $(".leftpanel").show();
+  sidebarLeft.init("#leftpanel", "hideleft", function() {
+    $("#leftpanel").show();
   });
 
   sidebarRight = new SideBar();
-  sidebarRight.init(".rightpanel", "hideright", function() {
-    $(".rightpanel").show();
+  sidebarRight.init("#rightpanel", "hideright", function() {
+    $("#rightpanel").show();
   });
 }
 

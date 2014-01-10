@@ -16,36 +16,36 @@ function initButtonBehavior() {
 
   $(".btn").Button(); //initalizes all buttons
 
-  btnOops = $(".btnOops");
-  btnInfo = $(".btnInfo");
-  btnSettings = $(".btnSettings");
-  btnNew = $(".btnNew");
-  btnPrint= $(".btnPrint");
-  btnStop = $(".btnStop");
-  btnPrevious = $(".btnPrevious");
-  btnNext = $(".btnNext");
-  btnSave = $(".btnSave");
-  btnWordArt = $(".btnWordArt");
-  btnZoom = $(".btnZoom");
-  btnUp = $(".btnUp");
-  btnDown = $(".btnDown");
-  btnMove = $(".btnMove");
-  btnTwistLeft = $(".btnTwistLeft");
-  btnTwistRight = $(".btnTwistRight");
-  btnShape = $(".btnShape");
-  btnRotate = $(".btnRotate");
-  btnEditClosed = $(".btnEditClosed");
-  btnEditOpen = $(".btnEditOpen");
-  btnStraight = $(".btnStraight");
-  btnDiv = $(".btnDiv");
-  btnConv = $(".btnConv");
-  btnSine = $(".btnSine");
-  btnAdd = $(".btnAdd");
-  btnToggleVertical = $(".btnToggleVertical");
+  btnOops = $("#btnOops");
+  btnInfo = $("#btnInfo");
+  btnSettings = $("#btnSettings");
+  btnNew = $("#btnNew");
+  btnPrint= $("#btnPrint");
+  btnStop = $("#btnStop");
+  btnPrevious = $("#btnPrevious");
+  btnNext = $("#btnNext");
+  btnSave = $("#btnSave");
+  btnWordArt = $("#btnWordArt");
+  btnZoom = $("#btnZoom");
+  btnUp = $("#btnUp");
+  btnDown = $("#btnDown");
+  btnMove = $("#btnMove");
+  btnTwistLeft = $("#btnTwistLeft");
+  btnTwistRight = $("#btnTwistRight");
+  btnShape = $("#btnShape");
+  btnRotate = $("#btnRotate");
+  btnEditClosed = $("#btnEditClosed");
+  btnEditOpen = $("#btnEditOpen");
+  btnStraight = $("#btnStraight");
+  btnDiv = $("#btnDiv");
+  btnConv = $("#btnConv");
+  btnSine = $("#btnSine");
+  btnAdd = $("#btnAdd");
+  btnToggleVertical = $("#btnToggleVertical");
   buttonGroupAdd = $("#buttonGroupAdd");
-  buttonGroupVertical = $(".buttonGroupVertical");
-  popupWordArt = $(".popupWordArt");
-  popupShape = $(".popupShape");
+  buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
+  popupWordArt = $("#popupWordArt");
+  popupShape = $("#popupShape");
 
   btnNew.on("onButtonClick", onBtnNew);
   btnWordArt.on("onButtonClick", onBtnWordArt);
@@ -74,7 +74,7 @@ function initButtonBehavior() {
   setSketchModified(false);
 
   function onBtnToggleVertical() {
-      buttonGroupVertical.toggle();
+  	buttonGroupVerticalShapes.toggle();
   }
 
   function onBtnAdd() {
@@ -198,7 +198,7 @@ function initButtonBehavior() {
 
   function onBtnShape(e) {
     showShapeDialog();
-    buttonGroupAdd.hide();
+    buttonGroupAdd.fadeOut();
   }
 
   enableButton(btnSettings, openSettingsWindow);

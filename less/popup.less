@@ -34,39 +34,39 @@
 	display: none;
 }
 
-.popup.popupWordArt {
+#popupWordArt {
   width: 50%;
 	margin-left: -50%/2;
+	
+	input[type="text"] {
+		width: 100%;
+	}
+	#btnWordArtOk {
+		float: right;
+		margin: 15px 0 18px 0;
+	}
 }
 
-.popup.popupShape {
-  width: 30%;
+#popupShape {
+	width: 30%;
 	margin-left: -30%/2;
-}
-
-.popupWordArt input[type="text"] {
-	width: 100%;
-}
-
-.popupShape {
-	// border: 2px solid black;
-}
-
-#shapePreview {
-	// width: 150px;
-	// height: 150px;
-	border: 1px solid black;
-	border-radius: 5px;
-}
-
-.lblShapeResolution {
-	display: inline-block;
-}
-
-#btnShapeOk {
-	position: absolute;
-	bottom: 5%;
-	right: 3%;
+	
+	#shapePreview {
+		// width: 150px;
+		// height: 150px;
+		border: 1px solid black;
+		border-radius: 5px;
+	}
+	
+	.lblShapeResolution {
+		display: inline-block;
+	}
+	
+	#btnShapeOk {
+		position: absolute;
+		bottom: 5%;
+		right: 3%;
+	}
 }
 
 .columnRight {

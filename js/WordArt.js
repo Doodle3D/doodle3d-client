@@ -1,15 +1,15 @@
 function initWordArt() {
 	$("body").append('<div id="svgfont" style="display:none"></div>');
 	$("#svgfont").load("img/font.svg?");
-  $(".btnWordArtOk").on("onButtonClick",onWordArtOk);
-  $(".btnWordArtCancel").on("onButtonClick",onWordArtCancel);
+  $("#btnWordArtOk").on("onButtonClick",onWordArtOk);
+  $("#btnWordArtCancel").on("onButtonClick",onWordArtCancel);
 }
 
 function showWordArtDialog() {
   buttonGroupAdd.hide();
   showPopup(popupWordArt);
-  $(".txtWordArt").focus();
-  $(".txtWordArt").val(""); //clear textbox
+  $("#txtWordArt").focus();
+  $("#txtWordArt").val(""); //clear textbox
 }
 
 function onWordArtCancel() {
@@ -19,7 +19,7 @@ function onWordArtCancel() {
 function onWordArtOk() {
   hidePopup(popupWordArt);
 
-  var s = $(".txtWordArt").val();
+  var s = $("#txtWordArt").val();
 
   if (s!=undefined) {
     var points = getStringAsPoints(s);

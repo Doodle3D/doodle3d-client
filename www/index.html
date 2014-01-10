@@ -18,41 +18,40 @@
 
   <!-- background images -->
   <div class="bgContainer">
-    <img class="bgTop"    src="img/bg_top.png" />
-    <img class="bgMiddle" src="img/bg_middle.png" />
-    <img class="bgBottom" src="img/bg_bottom.png" />
+    <img id="bgTop"    src="img/bg_top.png" />
+    <img id="bgMiddle" src="img/bg_middle.png" />
+    <img id="bgBottom" src="img/bg_bottom.png" />
   </div>
 
   <!-- left panel -->
-  <div class="leftpanel">
-    <!-- <div class='sidebutton shadowright'></div> -->
-    <img class="btnNew btn" src="img/buttons/btnNew.png" /><br/>
-    <div class="btnsPrevNext" style="text-align:center">
-      <img class="btnPrevious btn disabled" src="img/buttons/btnLeft.png">
-      <img class="btnNext btn disabled" src="img/buttons/btnRight.png">
+  <div id="leftpanel">
+    <img id="btnNew" class="btn" src="img/buttons/btnNew.png" /><br/>
+    <div id="btnsPrevNext">
+      <img id="btnPrevious" class="btn disabled" src="img/buttons/btnLeft.png">
+      <img id="btnNext" class="btn disabled" src="img/buttons/btnRight.png">
     </div>
-    <img class="btnSave btn" src="img/buttons/btnSave.png" /><br/>
-    <img class="btnOops btn" src="img/buttons/btnOops.png" /><br/>
-    <img class="btnAdd btn" src="img/buttons/btnAdd.png" /><br/>
+    <img id="btnSave" class="btn" src="img/buttons/btnSave.png" /><br/>
+    <img id="btnOops" class="btn" src="img/buttons/btnOops.png" /><br/>
+    <img id="btnAdd" class="btn" src="img/buttons/btnAdd.png" /><br/>
 
-    <div class="buttonGroup" id="buttonGroupAdd">
-      <img class="btnWordArt btn" src="img/buttons/btnWordArt.png" />
-      <img class="btnShape btn" src="img/buttons/btnShape.png" />    
+    <div id="buttonGroupAdd" class="buttonGroup">
+      <img id="btnWordArt" class="btn" src="img/buttons/btnWordArt.png" />
+      <img id="btnShape" class="btn" src="img/buttons/btnShape.png" />    
     </div>
 
   </div>
 
   <!-- right panel -->
-  <div class="rightpanel">
-    <img class="btnPrint btn clearfix" src="img/buttons/btnPrint.png" />
-    <img class="btnStop btn clearfix disabled" src="img/buttons/btnStop.png" />
+  <div id="rightpanel">
+    <img id="btnPrint" class="btn clearfix" src="img/buttons/btnPrint.png" />
+    <img id="btnStop" class="btn clearfix disabled" src="img/buttons/btnStop.png" />
 
-    <div class="progressbarCanvasContainerParent">
+    <div id="progressbarCanvasContainerParent">
       <div id="progressbarCanvasContainer">
         <canvas id="progressbarCanvas" width="93" height="82"></canvas>
       </div>
     </div>
-    <div class="thermometerContainerParent">
+    <div id="thermometerContainerParent">
       <div id="thermometerContainer">
         <canvas id="thermometerCanvas" width="90" height="120"></canvas>
       </div>
@@ -69,25 +68,24 @@
       <div><img class="verticalshape sinus" src="img/vertical_shape_icons/sinus.png" /></div>
     </div> -->
 
-    <div class="btnsSettingsInfo">
-      <img class="btnSettings btn" src="img/buttons/btnSettings.png">
-      <img class="btnInfo btn" src="img/buttons/btnInfo.png">
+    <div id="btnsSettingsInfo">
+      <img id="btnSettings" class="btn" src="img/buttons/btnSettings.png">
+      <img id="btnInfo" class="btn" src="img/buttons/btnInfo.png">
     </div>
-
 
   </div>
 
   <div id="message"></div>
 
   <!-- center panel -->
-  <div class="centerpanel">
+  <div id="centerpanel">
     
-    <div class="logopanel" onclick="location.reload()">
-      <img class="pencil" src="img/logo/pencil.png"/>
-      <img class="logo" src="img/logo/doodle3d.png"/>
+    <div id="logopanel" onclick="location.reload()">
+      <img id="pencil" src="img/logo/pencil.png"/>
+      <img id="logo" src="img/logo/doodle3d.png"/>
     </div>
 
-    <div class="drawareacontainer">
+    <div id="drawareacontainer">
       
       <div id="canvasContainers">
         <div id="mycanvasContainer">
@@ -96,25 +94,25 @@
 
         <div id="previewContainer">
           <canvas id="preview"></canvas>
-          <div class="buttonGroup buttonGroupVertical">
-            <img class="btn btnTwistLeft" src="img/buttons/btnTwistLeft.png" />
-            <img class="btn btnTwistRight" src="img/buttons/btnTwistRight.png" />
-            <img class="btn btnUp" src="img/buttons/btnUp.png" />
-            <img class="btn btnDown" src="img/buttons/btnDown.png" />
+          <div id="buttonGroupVerticalShapes" class="buttonGroup">
+            <img id="btnTwistLeft" class="btn" src="img/buttons/btnTwistLeft.png" />
+            <img id="btnTwistRight" class="btn" src="img/buttons/btnTwistRight.png" />
+            <img id="btnUp" class="btn" src="img/buttons/btnUp.png" />
+            <img id="btnDown" class="btn" src="img/buttons/btnDown.png" />
             <hr>
-            <img class="btn btnConv" src="img/buttons/btnConv.png" />
-            <img class="btn btnDiv" src="img/buttons/btnDiv.png" />
-            <img class="btn btnSine" src="img/buttons/btnSine.png" />
-            <img class="btn btnStraight" src="img/buttons/btnStraight.png" />
+            <img id="btnConv" class="btn" src="img/buttons/btnConv.png" />
+            <img id="btnDiv" class="btn" src="img/buttons/btnDiv.png" />
+            <img id="btnSine" class="btn" src="img/buttons/btnSine.png" />
+            <img id="btnStraight" class="btn" src="img/buttons/btnStraight.png" />
           </div>
-          <img class="btn btnToggleVertical" src="img/buttons/btnArrowOpen.png" />      
+          <img id="btnToggleVertical" class="btn" src="img/buttons/btnArrowOpen.png" />      
         </div>
       
       </div>
       <canvas id="preview_tmp"></canvas>
 
-      <img class="btnEditClosed btn" src="img/buttons/btnEditClosed.png" />
-      <img class="btnEditOpen btn" src="img/buttons/btnEditOpen.png" />
+      <img id="btnEditClosed" class="btn" src="img/buttons/btnEditClosed.png" />
+      <img id="btnEditOpen" class="btn" src="img/buttons/btnEditOpen.png" />
 
     </div>  
   </div>
@@ -127,16 +125,16 @@
 
   <div id="popupMask"></div>
 
-  <div class="popup popupWordArt">
+  <div class="popup" id="popupWordArt">
     <div class="content">
       <h1>Add WordArt</h1>
       Please enter your text:<br>
-      <input class="txtWordArt" type="text"/>
-      <img class="btn btnWordArtOk" src="img/buttons/btnOk.png">
+      <input id="txtWordArt" type="text"/>
+      <img id="btnWordArtOk" class="btn" src="img/buttons/btnOk.png">
     </div>
   </div>
 
-  <div class="popup popupShape">
+  <div class="popup" id="popupShape">
     <div class="content">
       <h1>Add a new shape</h1>
       <div class="columnRight">
@@ -152,12 +150,12 @@
   <div id="contentOverlay">
     <div id="settings">
       <div class="toppanel">
-        <div class="settingsLabelContainer">
-          <img class="settingsLabelImg" src="img/settings_lable.png" alt="settings" />
+        <div id="settingsLabelContainer">
+          <img id="settingsLabelImg" src="img/settings_lable.png" alt="settings" />
         </div>
       </div>
       <div class="bottompanel">
-        <div class="settingsContainer"></div>
+        <div id="settingsContainer"></div>
         <div class="right">
           <div class="btnContainer">
             <img src="img/buttons/btnOk.png" class="btn btnOK" alt="save"/>
@@ -169,7 +167,7 @@
 </div>
 
 <div id="portrait">
-  <img class="vertImage" src="img/bg_vertical.png"/>
+  <img id="vertImage" src="img/bg_vertical.png"/>
 </div>
 <div id="helpContainer"></div>
 
