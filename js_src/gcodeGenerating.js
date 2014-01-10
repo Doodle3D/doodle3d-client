@@ -15,9 +15,11 @@ function generate_gcode() {
   gcode = [];
 
   console.log("settings: ",settings);
-  var speed 						      = settings["printer.speed"]
+  var speed 						      = settings["printer.speed"];
   var normalSpeed 			      = speed;
-  var bottomSpeed 			      = speed*0.5;
+  var bottomSpeed 			      = settings["printer.bottomLayerSpeed"];
+  var firstLayerSlow			  = settings["printer.firstLayerSlow"];
+  var bottomFlowRate			  = settings["printer.bottomFlowRate"];
   var travelSpeed 			      = settings["printer.travelSpeed"]
   var filamentThickness       = settings["printer.filamentThickness"];
   var wallThickness 		      = settings["printer.wallThickness"];
@@ -157,12 +159,14 @@ function generate_gcode() {
         var isTraveling = !isLoop && i==0;
         var doRetract = retractionEnabled && prev.distance(to) > retractionminDistance;
 
-        if (enableTraveling && isTraveling) {
-          if (doRetract) gcode.push("G0 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
+        var firstPointEver = (layer == 0 && i == 0 && j == 0);
+        if (firstPointEver || layer > 2 && enableTraveling && isTraveling) { //always travel to first point, then disable traveling for first two layers and use settings for remainder of print
+          if (!firstPointEver && doRetract) gcode.push("G0 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
           gcode.push("G0 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
-          if (doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal
+          if (!firstPointEver && doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal
         } else {
-          extruder += prev.distance(to) * wallThickness * layerHeight / (Math.pow((filamentThickness/2), 2) * Math.PI);
+          var f = (layer < 2) ? bottomFlowRate : 1;
+          extruder += prev.distance(to) * wallThickness * layerHeight / (Math.pow((filamentThickness/2), 2) * Math.PI) * f;
           gcode.push("G1 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (speed * 60).toFixed(3) + " E" + extruder.toFixed(3));
         }
 
