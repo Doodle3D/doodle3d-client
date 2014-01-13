@@ -1,8 +1,10 @@
 var twistIncrement = Math.PI/1800;
 
-var btnNew, btnPrevious, btnNext, btnOops, btnStop, btnInfo, btnRotate;
-var btnSettings, btnWordArt, btnZoom, btnMove, btnUpDown, btnTwist, btnShape, btnEditClosed, btnEditOpen; btnToggleVerticalShapes;
-var btnDiv,btnConv,btnStraight,btnSine, buttonGroupAdd, popupWordArt;
+var btnNew, btnPrevious, btnNext, btnOops, btnStop, btnInfo;
+var btnSettings, btnWordArt;
+var btnToggleEdit, buttonGroupEdit, btnZoom, btnMove, btnRotate;
+var btnToggleVerticalShapes, btnUpDown, btnTwist, btnShape, btnConv, btnStraight, btnSine, btnDiv;
+var buttonGroupAdd, popupWordArt;
 
 var state;
 var prevState;
@@ -34,8 +36,8 @@ function initButtonBehavior() {
   btnTwistRight = $("#btnTwistRight");
   btnShape = $("#btnShape");
   btnRotate = $("#btnRotate");
-  btnEditClosed = $("#btnEditClosed");
-  btnEditOpen = $("#btnEditOpen");
+  btnToggleEdit = $("#btnToggleEdit");
+  buttonGroupEdit = $("#buttonGroupEdit");
   btnStraight = $("#btnStraight");
   btnDiv = $("#btnDiv");
   btnConv = $("#btnConv");
@@ -59,9 +61,7 @@ function initButtonBehavior() {
   btnTwistRight.on("onButtonHold", onBtnTwistRight);
   btnShape.on("onButtonClick", onBtnShape);
   btnRotate.on("onButtonHold", onBtnRotate);
-  btnEditClosed.on("onButtonClick", onBtnEditClosed);
-  btnEditOpen.on("onButtonHold", onBtnEditOpen);
-  btnEditOpen.on("onButtonClick", onBtnEditOpen);
+  btnToggleEdit.on("onButtonClick", onBtnToggleEdit);
   btnStraight.on("onButtonClick", onBtnStraight);
   btnDiv.on("onButtonClick", onBtnDiv);
   btnConv.on("onButtonClick", onBtnConv);
@@ -74,8 +74,6 @@ function initButtonBehavior() {
   setSketchModified(false);
 
   function onBtnToggleVerticalShapes() {
-  	console.log("onBtnToggleVerticalShapes");
-  	
   	var btnImg;
   	if(buttonGroupVerticalShapes.is(":hidden")) {
   		btnImg = "img/buttons/btnArrowClose.png";
@@ -85,7 +83,6 @@ function initButtonBehavior() {
   	btnToggleVerticalShapes.attr("src",btnImg);
   	
   	buttonGroupVerticalShapes.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
-  	
   }
 
   function onBtnAdd() {
@@ -95,29 +92,32 @@ function initButtonBehavior() {
   function onBtnStraight() {
     setVerticalShape(verticalShapes.NONE);
   }
-
   function onBtnDiv() {
     setVerticalShape(verticalShapes.DIVERGING);
   }
-
   function onBtnConv() {
     setVerticalShape(verticalShapes.CONVERGING);
   }
-
   function onBtnSine() {
     setVerticalShape(verticalShapes.SINUS);
-  }
-
-  function onBtnEditClosed(e,cursor) {
-    btnEditClosed.hide();
-    btnEditOpen.show();
   }
 
   function hitTest(cursor,button,radius) {
     return distance(cursor.x,cursor.y,button.x,button.y)<radius;
   }
 
-  function onBtnEditOpen(e,cursor) {
+  function onBtnToggleEdit() {
+  	var btnImg;
+		if(buttonGroupEdit.is(":hidden")) {
+			btnImg = "img/buttons/btnArrowClose.png";
+		} else {
+			btnImg = "img/buttons/btnArrowOpen.png";
+		}
+		btnToggleEdit.attr("src",btnImg);
+		
+		buttonGroupEdit.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
+  }
+  function onBtnEditSomething(e,cursor) {
     // image is shown as 75% of its size (for retina screens)
     cursor.x /= .75;
     cursor.y /= .75;
