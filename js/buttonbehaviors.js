@@ -1,7 +1,7 @@
 var twistIncrement = Math.PI/1800;
 
 var btnNew, btnPrevious, btnNext, btnOops, btnStop, btnInfo, btnRotate;
-var btnSettings, btnWordArt, btnZoom, btnMove, btnUpDown, btnTwist, btnShape, btnEditClosed, btnEditOpen;
+var btnSettings, btnWordArt, btnZoom, btnMove, btnUpDown, btnTwist, btnShape, btnEditClosed, btnEditOpen; btnToggleVerticalShapes;
 var btnDiv,btnConv,btnStraight,btnSine, buttonGroupAdd, popupWordArt;
 
 var state;
@@ -41,7 +41,7 @@ function initButtonBehavior() {
   btnConv = $("#btnConv");
   btnSine = $("#btnSine");
   btnAdd = $("#btnAdd");
-  btnToggleVertical = $("#btnToggleVertical");
+  btnToggleVerticalShapes = $("#btnToggleVerticalShapes");
   buttonGroupAdd = $("#buttonGroupAdd");
   buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
   popupWordArt = $("#popupWordArt");
@@ -67,18 +67,29 @@ function initButtonBehavior() {
   btnConv.on("onButtonClick", onBtnConv);
   btnSine.on("onButtonClick", onBtnSine);
   btnAdd.on("onButtonClick", onBtnAdd);
-  btnToggleVertical.on("onButtonClick", onBtnToggleVertical);
+  btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
   
 
   getSavedSketchStatus();
   setSketchModified(false);
 
-  function onBtnToggleVertical() {
-  	buttonGroupVerticalShapes.toggle();
+  function onBtnToggleVerticalShapes() {
+  	console.log("onBtnToggleVerticalShapes");
+  	
+  	var btnImg;
+  	if(buttonGroupVerticalShapes.is(":hidden")) {
+  		btnImg = "img/buttons/btnArrowClose.png";
+  	} else {
+  		btnImg = "img/buttons/btnArrowOpen.png";
+  	}
+  	btnToggleVerticalShapes.attr("src",btnImg);
+  	
+  	buttonGroupVerticalShapes.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
+  	
   }
 
   function onBtnAdd() {
-    buttonGroupAdd.fadeToggle(POPUP_SHOW_DURATION);
+    buttonGroupAdd.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
   }
 
   function onBtnStraight() {

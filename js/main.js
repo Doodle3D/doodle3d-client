@@ -23,6 +23,7 @@ var showOrHide = false;
 var clientInfo = {};
 
 var POPUP_SHOW_DURATION = 175;
+var BUTTON_GROUP_SHOW_DURATION = 80;
 
 $(function() {
   console.log("ready");
