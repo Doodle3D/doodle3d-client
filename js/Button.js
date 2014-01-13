@@ -12,18 +12,22 @@
 		var _timer = undefined;
 		var _x,_y;
 		var isDown = false;
-		// var hoi = "fijn";
 
 		var updateCursor = function(e) {
 			// retrieve cursor position relative to element
 			if (e.offsetX != undefined) {
 				_x = e.offsetX;
 				_y = e.offsetY;
-			} else {
+			} else if(e.pageX != undefined) {
 				// http://www.quirksmode.org/mobile/tableViewport_desktop.html#t11
 				var offset = $(element).offset();
 				_x = e.pageX - offset.left;
 				_y = e.pageY - offset.top;
+			} else if(e.originalEvent != undefined && e.originalEvent.pageX != undefined) {
+				//http://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
+				var offset = $(element).offset();
+				_x = e.originalEvent.pageX - offset.left;
+				_y = e.originalEvent.pageY - offset.top;
 			} 
 		}
 
@@ -95,7 +99,6 @@
 		}
 
 		var onStartDrag = function(e) {
-			console.log("onStartDrag");
 		}
 
 		var onContextMenu = function(e) {

@@ -50,26 +50,27 @@ function initButtonBehavior() {
   popupShape = $("#popupShape");
 
   btnNew.on("onButtonClick", onBtnNew);
+  btnAdd.on("onButtonClick", onBtnAdd);
   btnWordArt.on("onButtonClick", onBtnWordArt);
+  btnShape.on("onButtonClick", onBtnShape);
   btnPrint.on("onButtonClick", onBtnPrint);
-  btnZoom.on("onButtonHold", onBtnZoom);
   btnOops.on("onButtonHold", onBtnOops);
+  // vertical shape buttons
+  btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
   btnUp.on("onButtonHold", onBtnUp);
   btnDown.on("onButtonHold", onBtnDown);
-  // btnMove.on("onButtonHold", onBtnMove);
   btnTwistLeft.on("onButtonHold", onBtnTwistLeft);
   btnTwistRight.on("onButtonHold", onBtnTwistRight);
-  btnShape.on("onButtonClick", onBtnShape);
-  btnRotate.on("onButtonHold", onBtnRotate);
-  btnToggleEdit.on("onButtonClick", onBtnToggleEdit);
   btnStraight.on("onButtonClick", onBtnStraight);
-  btnDiv.on("onButtonClick", onBtnDiv);
-  btnConv.on("onButtonClick", onBtnConv);
-  btnSine.on("onButtonClick", onBtnSine);
-  btnAdd.on("onButtonClick", onBtnAdd);
-  btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
+	btnDiv.on("onButtonClick", onBtnDiv);
+	btnConv.on("onButtonClick", onBtnConv);
+	btnSine.on("onButtonClick", onBtnSine);
   
-
+  btnToggleEdit.on("onButtonClick", onBtnToggleEdit);
+  btnMove.on("onButtonHold", onBtnMove);
+  btnZoom.on("onButtonHold", onBtnZoom);
+  btnRotate.on("onButtonHold", onBtnRotate);
+  
   getSavedSketchStatus();
   setSketchModified(false);
 
@@ -105,7 +106,8 @@ function initButtonBehavior() {
   function hitTest(cursor,button,radius) {
     return distance(cursor.x,cursor.y,button.x,button.y)<radius;
   }
-
+  
+  
   function onBtnToggleEdit() {
   	var btnImg;
 		if(buttonGroupEdit.is(":hidden")) {
@@ -117,53 +119,26 @@ function initButtonBehavior() {
 		
 		buttonGroupEdit.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
   }
-  function onBtnEditSomething(e,cursor) {
-    // image is shown as 75% of its size (for retina screens)
-    cursor.x /= .75;
-    cursor.y /= .75;
-
-    if (cursor.x < 27 && cursor.y < 27) {
-      btnEditOpen.hide();
-      btnEditClosed.show();
-    } else {
-      var btnUp = { x:59, y:38 };
-      var btnDown = { x:59, y:89 };
-      var btnLeft = { x:35, y:63 };
-      var btnRight = { x:86, y:64 };
-      var btnZoomIn = { x:33, y:133 };
-      var btnZoomOut = { x:33, y:165 };
-      var btnRotateCCW = { x:85, y:136 };
-      var btnRotateCW = { x:86, y:167 };
-      var step = 5;
-      var radius = 20;
-
-      if (hitTest(cursor,btnLeft,radius)) moveShape(-step,0);
-      else if (hitTest(cursor,btnRight,radius)) moveShape(step,0);
-      else if (hitTest(cursor,btnUp,radius)) moveShape(0,-step);
-      else if (hitTest(cursor,btnDown,radius)) moveShape(0,step);
-      else if (hitTest(cursor,btnZoomIn,radius)) zoomShape(1.05);
-      else if (hitTest(cursor,btnZoomOut,radius)) zoomShape(.95);
-      else if (hitTest(cursor,btnRotateCCW,radius)) rotateShape(-.1);
-      else if (hitTest(cursor,btnRotateCW,radius)) rotateShape(.1);
-
-      // console.log(cursor);
-    }
-  }
-
-  // function onBtnMove(e,cursor) {
-  //   var btnUp = { x:40, y:19 };
-  //   var btnDown = { x:40, y:54 };
-  //   var btnLeft = { x:20, y:41 };
-  //   var btnRight = { x:62, y:41 };
-  //   var step = 5;
-  //   var radius = 20;
-
-  //   if (distance(cursor.x,cursor.y,btnLeft.x,btnLeft.y)<radius) moveShape(-step,0);
-  //   else if (distance(cursor.x,cursor.y,btnRight.x,btnRight.y)<radius) moveShape(step,0);
-  //   else if (distance(cursor.x,cursor.y,btnUp.x,btnUp.y)<radius) moveShape(0,-step);
-  //   else if (distance(cursor.x,cursor.y,btnDown.x,btnDown.y)<radius) moveShape(0,step);
-    
-  // }
+	function onBtnMove(e,cursor) {
+		var w = btnMove.width();
+		var h = btnMove.height();
+		var speedX = (cursor.x-w/2)*0.3;
+		var speedY = (cursor.y-h/2)*0.3;
+		console.log("move speed: ",speedX,speedY);
+		moveShape(speedX,speedY);
+	}
+	function onBtnZoom(e,cursor) {
+		var h = btnZoom.height();
+		var multiplier = (h/2-cursor.y)*0.003	+ 1;
+		zoomShape(multiplier);
+	}
+	function onBtnRotate(e,cursor) {
+		var h = btnZoom.height();
+		var multiplier = (h/2-cursor.y)*0.003;
+		rotateShape(multiplier);
+		//if (cursor.y<25) rotateShape(.1);
+		//else if (cursor.y>55) rotateShape(-.1); 
+	}
 
   function onBtnUp(e) {
     previewUp(true);
@@ -188,17 +163,7 @@ function initButtonBehavior() {
   function onBtnNew(e) {
     clearDoodle();
   }
-
-  function onBtnZoom(e,cursor) {
-    if (cursor.y<25) zoomShape(1.05);
-    else if (cursor.y>55) zoomShape(.95);
-  }
-
-  function onBtnRotate(e,cursor) {
-    if (cursor.y<25) rotateShape(.1);
-    else if (cursor.y>55) rotateShape(-.1); 
-  }
-
+  
   function onBtnPrint(e) {
     print();
   }
