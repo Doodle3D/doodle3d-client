@@ -17,7 +17,7 @@ function getSavedSketchStatus() {
 			}
 		}
 	}).fail(function() {
-		console.log("getSavedSketchStatus failed: ", response);
+		console.log("getSavedSketchStatus failed");
 	});
 }
 

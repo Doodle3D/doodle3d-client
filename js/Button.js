@@ -28,7 +28,13 @@
 				var offset = $(element).offset();
 				_x = e.originalEvent.pageX - offset.left;
 				_y = e.originalEvent.pageY - offset.top;
-			} 
+			}
+			
+			//android+chrome-specific hack
+			if (e.originalEvent.changedTouches != undefined) {
+				_x = e.originalEvent.changedTouches[0].pageX - offset.left;
+				_y = e.originalEvent.changedTouches[0].pageY - offset.top;
+			}
 		}
 
 		var startDownTimer = function() {

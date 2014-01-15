@@ -408,7 +408,7 @@ function onCanvasTouchMove(e) {
 //  var x = e.touches[0].layerX;
 //  var y = e.touches[0].layerY;
 
-  console.log("f:onCanvasTouchMove >> x,y = "+x+","+y+" , e: " , e);
+  //console.log("f:onCanvasTouchMove >> x,y = "+x+","+y+" , e: " , e);
 
   if (prevPoint.x != -1 || prevPoint.y != -1) {
     var dist = Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2));
