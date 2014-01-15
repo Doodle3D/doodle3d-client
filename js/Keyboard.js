@@ -5,6 +5,7 @@ function initKeyboard() {
 	$(document).keypress(function(event) {
 
 		if (!keyboardShortcutsEnabled) return;
+		if (event.altKey || event.ctrlKey || event.metaKey) return; //ignore key presses with modifier keys except shift
 
 		var ch = String.fromCharCode(event.which);
 

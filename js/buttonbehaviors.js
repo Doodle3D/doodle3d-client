@@ -135,7 +135,7 @@ function initButtonBehavior() {
 	function onBtnRotate(e,cursor) {
 		var h = btnZoom.height();
 		var multiplier = (h/2-cursor.y)*0.003;
-		rotateShape(multiplier);
+		rotateShape(-multiplier);
 		//if (cursor.y<25) rotateShape(.1);
 		//else if (cursor.y>55) rotateShape(-.1); 
 	}
