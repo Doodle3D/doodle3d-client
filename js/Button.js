@@ -63,6 +63,8 @@
 		var onTouchStart = function(e) {
 			updateCursor(e);
 			startDownTimer();
+			$(element).trigger("onButtonClick",{x:_x,y:_y});
+			e.preventDefault();
 		}
 
 		var onTouchEnd = function(e) {
