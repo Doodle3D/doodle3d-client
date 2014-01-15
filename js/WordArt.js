@@ -22,24 +22,27 @@ function onWordArtOk() {
   hidePopup(popupWordArt);
 
   var s = $("#txtWordArt").val();
+  drawTextOnCanvas(s);
+}
 
-  if (s!=undefined) {
-    var points = getStringAsPoints(s);
-    
-    var bounds = getBounds(points);
-    var scaleX = (canvasWidth-50) / bounds.width;
-    var scaleY = (canvasHeight-50) / bounds.height;
+function drawTextOnCanvas(text) {
+	if (typeof(text) == 'string') {
+		var points = getStringAsPoints(text);
 
-    var scale = Math.min(scaleX,scaleY);
+		var bounds = getBounds(points);
+		var scaleX = (canvasWidth-50) / bounds.width;
+		var scaleY = (canvasHeight-50) / bounds.height;
 
-    scalePoints(points,scale);
-    var bounds = getBounds(points);
-    translatePoints(points,-bounds.x,-bounds.y); //left top of text is (0,0)
-    translatePoints(points,-bounds.width/2,-bounds.height/2); //anchor point center
-    translatePoints(points,canvasWidth/2,canvasHeight/2); //center in canvas
+		var scale = Math.min(scaleX,scaleY);
 
-    canvasDrawPoints(canvas,points);
-  }
+		scalePoints(points,scale);
+		var bounds = getBounds(points);
+		translatePoints(points,-bounds.x,-bounds.y); //left top of text is (0,0)
+		translatePoints(points,-bounds.width/2,-bounds.height/2); //anchor point center
+		translatePoints(points,canvasWidth/2,canvasHeight/2); //center in canvas
+
+		canvasDrawPoints(canvas,points);
+	}
 }
 
 function getStringAsPoints(text) {

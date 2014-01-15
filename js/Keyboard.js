@@ -1,10 +1,21 @@
 var keyboardShortcutsEnabled = true;
+var wordBuffer = "";
+
+var wordFuncs = {
+		"idbeholdl": function() {
+			alert("Light!");
+		},
+		"idspispopd": function() {
+			drawTextOnCanvas("Im in ur kanvas drawin' ur stuffz.");
+		}
+};
 
 function initKeyboard() {
 
 	$(document).keypress(function(event) {
 
 		if (!keyboardShortcutsEnabled) return;
+		if (event.ctrlKey && event.altKey && ! event.metaKey) processWords(event);
 		if (event.altKey || event.ctrlKey || event.metaKey) return; //ignore key presses with modifier keys except shift
 
 		var ch = String.fromCharCode(event.which);
@@ -40,4 +51,24 @@ function initKeyboard() {
 		event.preventDefault(); //prevents the character to end up in a focussed textfield
 	})
 
+}
+
+function processWords(e) {
+	wordBuffer += String.fromCharCode(e.which);
+	
+	var match = false;
+	for (var k in wordFuncs) {
+		if (k.indexOf(wordBuffer) == 0) {
+			if (k.length == wordBuffer.length) match = wordFuncs[k];
+			else match = true;
+			break;
+		}
+	}
+	
+	if (typeof(match) == 'function') {
+		match();
+		wordBuffer = "";
+	} else if (!match) {
+		wordBuffer = "";
+	}
 }
