@@ -85,16 +85,30 @@ function getPointsFromPath(path) {
   var cmds = path.split(' ');
   var cursor = { x:0.0, y:0.0 };
   var move = false;
+  var prevCmd = "";
   for (var i=0; i<cmds.length; i++) {
-    var cmd = cmds[i];
-    var xy = cmds[i].split(",");
-    if (cmd=='m') move = true;
-    if (xy.length==2) {
-      cursor.x += parseFloat(xy[0]);
-      cursor.y += parseFloat(xy[1]);
-      points.push([cursor.x,cursor.y,move]); //{x:cursor.x,y:cursor.y,move:move})
-      move = false;
-    }
+    var cmd = cmds[i];   
+    var xy = cmd.split(",");
+		if (cmd=='m') move = true;
+		if (xy.length==2) { // if there are two parts (a comma) we asume it's a l command. (So L is not supported)
+			cursor.x += parseFloat(xy[0]);
+			cursor.y += parseFloat(xy[1]);
+			points.push([cursor.x,cursor.y,move]);
+			move = false;
+		} else if (prevCmd == "h"){
+			cursor.x += parseFloat(cmd);
+			points.push([cursor.x,cursor.y,move]);
+		} else if (prevCmd == "v"){
+			cursor.y += parseFloat(cmd);
+			points.push([cursor.x,cursor.y,move]);
+		} else if (prevCmd == "H"){
+			cursor.x = parseFloat(cmd);
+			points.push([cursor.x,cursor.y,move]);
+		} else if (prevCmd == "V"){
+			cursor.y = parseFloat(cmd);
+			points.push([cursor.x,cursor.y,move]);
+		} 
+		prevCmd = cmd;
   }
   return points;
 }
