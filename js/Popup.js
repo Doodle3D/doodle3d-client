@@ -25,8 +25,8 @@ function Popup(element, mask) {
 		
 		document.body.addEventListener('touchmove', prevent, false);
 		mask.unbind("onButtonClick");
-		if (escapeKeyHandler) $(document).unbind("onEscapeKey");
-		if (enterKeyHandler) $(document).unbind("onEnterKey");
+		if (escapeKeyHandler) $(document).unbind("onEscapeKey", escapeKeyHandler);
+		if (enterKeyHandler) $(document).unbind("onEnterKey", enterKeyHandler);
 	}
 	
 	this.setEscapeKeyHandler = function(hnd) { escapeKeyHandler = hnd; }
