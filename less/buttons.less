@@ -196,6 +196,16 @@
   left: 6px;
 }
 
+@media  only screen and (max-height: 480px),
+        only screen and (max-width: 600px) and (min-device-pixel-ratio : 1.5),
+        only screen and (max-width: 600px) and (-webkit-min-device-pixel-ratio : 1.5) {
+  #buttonGroupVerticalShapes {
+		#btnConv, #btnDiv, #btnSine, #btnStraight {
+			display: none;
+		}
+	}
+}
+
 
 
 
