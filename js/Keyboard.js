@@ -48,7 +48,9 @@ function initKeyboard() {
 			
 			default: console.log("Key: '" + ch + "' (" + event.which + ")");
 		}
-		event.preventDefault(); //prevents the character to end up in a focussed textfield
+		if(event.which != 13) { // don't prevent enter usage, it's used in tour
+			event.preventDefault(); //prevents the character to end up in a focussed textfield
+		}
 	})
 
 }
