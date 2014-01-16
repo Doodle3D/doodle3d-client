@@ -1,11 +1,14 @@
 var wordArtPopup;
 
 function initWordArt() {
-	$("body").append('<div id="svgfont" style="display:none"></div>');
-	$("#svgfont").load("img/font.svg?");
+  $("body").append('<div id="svgfont" style="display:none"></div>');
+  $("#svgfont").load("img/font.svg?");
   $("#btnWordArtOk").on("onButtonClick",onWordArtOk);
   $("#btnWordArtCancel").on("onButtonClick",onWordArtCancel);
+  
   wordArtPopup = new Popup($("#popupWordArt"),$("#popupMask"));
+  wordArtPopup.setEscapeKeyHandler(onWordArtCancel);
+  wordArtPopup.setEnterKeyHandler(onWordArtOk);
 }
 
 function showWordArtDialog() {

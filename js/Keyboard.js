@@ -1,4 +1,5 @@
 var keyboardShortcutsEnabled = true;
+var keyboardEscapeEnterEnabled = false;
 var wordBuffer = "";
 
 var wordFuncs = {
@@ -13,6 +14,17 @@ var wordFuncs = {
 function initKeyboard() {
 
 	$(document).keypress(function(event) {
+
+		if (keyboardEscapeEnterEnabled) {
+			switch (event.keyCode) {
+			case 13:
+				$(document).trigger("onEnterKey");
+				break;
+			case 27:
+				$(document).trigger("onEscapeKey");
+				break;
+			}
+		}
 
 		if (!keyboardShortcutsEnabled) return;
 		if (event.ctrlKey && event.altKey && ! event.metaKey) processWords(event);

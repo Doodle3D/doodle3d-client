@@ -7,7 +7,10 @@ function initShapeDialog() {
   $("#btnShapePlus").on("onButtonHold",onShapePlus);
   $("#btnShapeMin").on("onButtonHold",onShapeMin);
   updateShapePreview();
+  
   shapePopup = new Popup($("#popupShape"), $("#popupMask"));
+  shapePopup.setEscapeKeyHandler(onShapeCancel);
+  shapePopup.setEnterKeyHandler(onShapeOk);
 }
 
 function showShapeDialog() {
