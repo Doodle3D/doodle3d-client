@@ -2,8 +2,6 @@
 
 #popupMask {
   background-color: rgba(255, 255, 255, 0.65);
-  // z-index: 20;
-  // border: 10px solid red;
   position: absolute;
   top: 0;
   left: 0;
@@ -16,18 +14,18 @@
 }
 
 .popup {
-	background-color: white;
-	border: 2px solid black;
+	background-color: #fff;
+	border: 2px solid #222;
 	border-radius: 15px;
-	top: 30%;	
+	box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
 	position: absolute;
 	left: 50%;
-  // margin-left: -@popup-width/2;
-  // width: @popup-width;
+	top:50%;
 }
 
 .popup .content {
-	margin: 5%;
+	/*margin: 5%;*/
+	margin: 15px;
 }
 
 .popup {
@@ -35,21 +33,26 @@
 }
 
 #popupWordArt {
-  width: 50%;
-	margin-left: -50%/2;
+  width: 330px;
+	height:210px;
+	margin-left: -165px;
+	margin-top: -105px;
 	
 	input[type="text"] {
-		width: 100%;
+		width: 98%;
 	}
 	#btnWordArtOk {
 		float: right;
-		margin: 15px 0 18px 0;
+		margin: 15px 0 0 0;
 	}
 }
 
 #popupShape {
-	width: 30%;
-	margin-left: -30%/2;
+	width: 310px;
+	margin-left: -155px;
+	height: 230px;
+	margin-top: -115px;
+	top: 50%;
 	
 	#shapePreview {
 		// width: 150px;
