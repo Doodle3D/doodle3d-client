@@ -1,5 +1,6 @@
 (function($) {
 
+	var clickEnabled = true;
 
 	$.fn.Button = function() {
 		return $(this).each(function(){
@@ -32,6 +33,7 @@
 			
 			//android+chrome-specific hack
 			if (e.originalEvent.changedTouches != undefined) {
+				var offset = $(element).offset();
 				_x = e.originalEvent.changedTouches[0].pageX - offset.left;
 				_y = e.originalEvent.changedTouches[0].pageY - offset.top;
 			}
@@ -61,6 +63,7 @@
 		}
 		 
 		var onTouchStart = function(e) {
+			clickEnabled = false;
 			updateCursor(e);
 			startDownTimer();
 			$(element).trigger("onButtonClick",{x:_x,y:_y});
@@ -101,6 +104,7 @@
 		}
 
 		var onClick = function(e) {
+			if(!clickEnabled) return;
 			updateCursor(e);
 			stopDownTimer();
 			$(element).trigger("onButtonClick",{x:_x,y:_y});
