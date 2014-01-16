@@ -49,8 +49,9 @@ function initButtonBehavior() {
   popupWordArt = $("#popupWordArt");
   popupShape = $("#popupShape");
   popupMask = $("#popupMask");
-
-  popupMask.Button();
+  logoPanel = $("#logopanel");
+  
+  logoPanel.on("onButtonClick", onLogo);
   btnNew.on("onButtonClick", onBtnNew);
   btnAdd.on("onButtonClick", onBtnAdd);
   btnWordArt.on("onButtonClick", onBtnWordArt);
@@ -88,6 +89,9 @@ function initButtonBehavior() {
   	buttonGroupVerticalShapes.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
   }
 
+  function onLogo() {
+  	location.reload();
+	}
   function onBtnAdd() {
     buttonGroupAdd.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
   }
