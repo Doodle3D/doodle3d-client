@@ -8,13 +8,13 @@ function initWordArt() {
 function showWordArtDialog() {
   buttonGroupAdd.hide();
   showPopup(popupWordArt);
-  $("#popupMask").bind("click", onWordArtCancel);
+  popupMask.bind("onButtonClick", onWordArtCancel);
   $("#txtWordArt").focus();
   $("#txtWordArt").val(""); //clear textbox
 }
 
 function onWordArtCancel() {
-  $("#popupMask").unbind("click");
+	popupMask.unbind("onButtonClick");
   hidePopup(popupWordArt);
 }
 

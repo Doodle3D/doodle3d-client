@@ -48,7 +48,9 @@ function initButtonBehavior() {
   buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
   popupWordArt = $("#popupWordArt");
   popupShape = $("#popupShape");
+  popupMask = $("#popupMask");
 
+  popupMask.Button();
   btnNew.on("onButtonClick", onBtnNew);
   btnAdd.on("onButtonClick", onBtnAdd);
   btnWordArt.on("onButtonClick", onBtnWordArt);
