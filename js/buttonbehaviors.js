@@ -3,7 +3,7 @@ var twistIncrement = Math.PI/1800;
 var btnNew, btnPrevious, btnNext, btnOops, btnStop, btnInfo;
 var btnSettings, btnWordArt;
 var btnToggleEdit, buttonGroupEdit, btnZoom, btnMove, btnRotate;
-var btnToggleVerticalShapes, btnUpDown, btnTwist, btnShape, btnConv, btnStraight, btnSine, btnDiv;
+var btnToggleVerticalShapes, btnHeight, btnTwist, btnShape, btnConv, btnStraight, btnSine, btnDiv;
 var buttonGroupAdd, popupWordArt;
 
 var state;
@@ -27,29 +27,27 @@ function initButtonBehavior() {
   btnPrevious = $("#btnPrevious");
   btnNext = $("#btnNext");
   btnSave = $("#btnSave");
-  btnWordArt = $("#btnWordArt");
-  btnZoom = $("#btnZoom");
-  btnUp = $("#btnUp");
-  btnDown = $("#btnDown");
-  btnMove = $("#btnMove");
-  btnTwistLeft = $("#btnTwistLeft");
-  btnTwistRight = $("#btnTwistRight");
-  btnShape = $("#btnShape");
-  btnRotate = $("#btnRotate");
+  buttonGroupAdd = $("#buttonGroupAdd");
+	btnShape = $("#btnShape");
+	btnWordArt = $("#btnWordArt");
+	popupWordArt = $("#popupWordArt");
+	popupShape = $("#popupShape");
+	popupMask = $("#popupMask");
+	logoPanel = $("#logopanel");
   btnToggleEdit = $("#btnToggleEdit");
   buttonGroupEdit = $("#buttonGroupEdit");
+  btnZoom = $("#btnZoom");
+  btnMove = $("#btnMove");
+  btnRotate = $("#btnRotate");
+  btnToggleVerticalShapes = $("#btnToggleVerticalShapes");
+  buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
+  btnHeight = $("#btnHeight");
+  btnTwist = $("#btnTwist");
   btnStraight = $("#btnStraight");
   btnDiv = $("#btnDiv");
   btnConv = $("#btnConv");
   btnSine = $("#btnSine");
   btnAdd = $("#btnAdd");
-  btnToggleVerticalShapes = $("#btnToggleVerticalShapes");
-  buttonGroupAdd = $("#buttonGroupAdd");
-  buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
-  popupWordArt = $("#popupWordArt");
-  popupShape = $("#popupShape");
-  popupMask = $("#popupMask");
-  logoPanel = $("#logopanel");
   
   logoPanel.on("onButtonClick", onLogo);
   btnNew.on("onButtonClick", onBtnNew);
@@ -60,10 +58,8 @@ function initButtonBehavior() {
   btnOops.on("onButtonHold", onBtnOops);
   // vertical shape buttons
   btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
-  btnUp.on("onButtonHold", onBtnUp);
-  btnDown.on("onButtonHold", onBtnDown);
-  btnTwistLeft.on("onButtonHold", onBtnTwistLeft);
-  btnTwistRight.on("onButtonHold", onBtnTwistRight);
+  btnHeight.on("onButtonHold", onBtnHeight);
+  btnTwist.on("onButtonHold", onBtnTwist);
   btnStraight.on("onButtonClick", onBtnStraight);
 	btnDiv.on("onButtonClick", onBtnDiv);
 	btnConv.on("onButtonClick", onBtnConv);
@@ -141,25 +137,21 @@ function initButtonBehavior() {
 	function onBtnRotate(e,cursor) {
 		var h = btnZoom.height();
 		var multiplier = (h/2-cursor.y)*0.003;
-		rotateShape(-multiplier);
-		//if (cursor.y<25) rotateShape(.1);
-		//else if (cursor.y>55) rotateShape(-.1); 
+		rotateShape(-multiplier); 
 	}
-
-  function onBtnUp(e) {
-    previewUp(true);
+	
+  function onBtnHeight(e,cursor) {
+  	var h = btnHeight.height();
+  	if(cursor.y < h/2) {
+  		previewUp(true);
+  	} else {
+  		previewDown(true);
+  	}
   }
-
-  function onBtnDown(e) {
-    previewDown(true);
-  }
-
-  function onBtnTwistLeft(e) {
-    previewTwistLeft(true);
-  }
-
-  function onBtnTwistRight(e) {
-    previewTwistRight(true);
+  function onBtnTwist(e,cursor) {
+  	var h = btnTwist.height();
+		var multiplier = (cursor.y-h/2)*0.0005;
+		previewTwist(multiplier,true);
   }
 
   function onBtnOops(e) {
@@ -313,17 +305,19 @@ function previewDown(redrawLess) {
   redrawRenderedPreview(redrawLess);
 }
 function previewTwistLeft(redrawLess) {
-  if (redrawLess == undefined) redrawLess = false;
-  //    console.log("f:previewTwistLeft()");
-  if (rStep > -previewRotationLimit) rStep -= twistIncrement;
-  //  redrawPreview(redrawLess);
-  redrawRenderedPreview(redrawLess);
-  setSketchModified(true);
+	previewTwist(-twistIncrement,true)
 }
 function previewTwistRight(redrawLess) {
-  //    console.log("f:previewTwistRight()");
-  if (rStep < previewRotationLimit) rStep += twistIncrement;
-  //  redrawPreview(redrawLess);
+	previewTwist(twistIncrement,true)
+}
+function previewTwist(increment,redrawLess) {
+	console.log("previewTwist: ",increment);
+  if (redrawLess == undefined) redrawLess = false;
+  
+  rStep += increment;
+  if(rStep < -previewRotationLimit) rStep = -previewRotationLimit;
+  else if(rStep > previewRotationLimit) rStep = previewRotationLimit;
+  
   redrawRenderedPreview(redrawLess);
   setSketchModified(true);
 }
