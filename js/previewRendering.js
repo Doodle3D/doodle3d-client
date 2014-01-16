@@ -160,8 +160,6 @@ function redrawPreview(redrawLess) {
 }
 
 function renderToImageDataPreview() {
-  console.log("f:renderToImageDataPreview()");
-
   if (_points.length < 2) return;
 
   //*

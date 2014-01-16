@@ -8,6 +8,15 @@ var wordFuncs = {
 		},
 		"idspispopd": function() {
 			drawTextOnCanvas("Im in ur kanvas drawin' ur stuffz.");
+		},
+		"dia": function() {
+			var cx = canvasWidth / 2;
+			var cy = canvasHeight /2;
+			drawCircle(cx, cy, 50, 4);
+			shapeMoveTo(cx - 20, cy);
+			shapeLineTo(cx + 20, cy);
+			shapeMoveTo(cx, cy - 20);
+			shapeLineTo(cx, cy + 20);
 		}
 };
 
@@ -58,7 +67,7 @@ function initKeyboard() {
 			case 'r': rotateShape(.1); break;
 			case 'R': rotateShape(-.1); break;
 			
-			default: console.log("Key: '" + ch + "' (" + event.which + ")");
+			//default: console.log("Key: '" + ch + "' (" + event.which + ")");
 		}
 		if(event.which != 13) { // don't prevent enter usage, it's used in tour
 			event.preventDefault(); //prevents the character to end up in a focussed textfield

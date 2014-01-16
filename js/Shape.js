@@ -23,17 +23,16 @@ function beginShape(x,y) {
 
 function shapeMoveTo(x,y) {
   _points.push([x, y, true]);
-  adjustBounds(x, y)
+  adjustBounds(x, y);
   adjustPreviewTransformation();
   draw(x, y, .5);
 }
 
 function shapeLineTo(x,y) {
   _points.push([x, y, false]);
-  adjustBounds(x, y)
+  adjustBounds(x, y);
   adjustPreviewTransformation();
   draw(x, y);
-  // console.log(x,y);
 }
 
 function endShape() {
