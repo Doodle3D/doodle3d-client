@@ -1,26 +1,26 @@
+var wordArtPopup;
+
 function initWordArt() {
 	$("body").append('<div id="svgfont" style="display:none"></div>');
 	$("#svgfont").load("img/font.svg?");
   $("#btnWordArtOk").on("onButtonClick",onWordArtOk);
   $("#btnWordArtCancel").on("onButtonClick",onWordArtCancel);
+  wordArtPopup = new Popup($("#popupWordArt"),$("#popupMask"));
 }
 
 function showWordArtDialog() {
   buttonGroupAdd.hide();
-  showPopup(popupWordArt);
-  popupMask.bind("onButtonClick", onWordArtCancel);
+  wordArtPopup.open();
   $("#txtWordArt").focus();
   $("#txtWordArt").val(""); //clear textbox
 }
 
 function onWordArtCancel() {
-	popupMask.unbind("onButtonClick");
-  hidePopup(popupWordArt);
+	wordArtPopup.close();
 }
 
 function onWordArtOk() {
-  hidePopup(popupWordArt);
-
+	wordArtPopup.close();
   var s = $("#txtWordArt").val();
   drawTextOnCanvas(s);
 }

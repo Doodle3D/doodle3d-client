@@ -1,9 +1,11 @@
 //these settings are defined in the firmware (conf_defaults.lua) and will be initialized in loadSettings()
 var settings = { }
-
+var settingsPopup;
 //wrapper to prevent scoping issues in showSettings()
 function openSettingsWindow() {
-	settingsWindow.showSettings();
+	settingsWindow.loadSettings(function() { // reload settings
+		settingsPopup.open();
+	});
 }
 
 function SettingsWindow() {
@@ -73,9 +75,11 @@ function SettingsWindow() {
 		this.wifiboxURL = wifiboxURL;
 		this.wifiboxCGIBinURL = wifiboxCGIBinURL;
 
-		this.window = $("#settings");
+		this.window = $("#popupSettings");
 		this.btnOK = this.window.find(".btnOK");
 		enableButton(this.btnOK,this.submitwindow);
+		
+		settingsPopup = new Popup($("#popupSettings"), $("#popupMask"));
 
 		this.window.find("#settingsContainer").load("settings.html", function() {
 			console.log("Settings:finished loading settings.html, now loading settings...");
@@ -130,6 +134,14 @@ function SettingsWindow() {
 		}); //this.window.find
 
 	} //this.init
+	this.openSettings = function() {
+		self.loadSettings(function() { // reload settings
+			settingsPopup.open();
+		});
+	}
+	this.closeSettings = function(complete) {
+		settingsPopup.close(complete);
+	}
 	
 	this.submitwindow = function(e) {
 		disableButton(self.btnOK,self.submitwindow);
@@ -137,7 +149,7 @@ function SettingsWindow() {
 	  e.stopPropagation();
 	  self.saveSettings(self.readForm(),function(success){
 	  	if(success) {
-				self.hideSettings(function() {
+				self.closeSettings(function() {
 					enableButton(self.btnOK,self.submitwindow);
 				});
 				self.signin();
@@ -147,23 +159,6 @@ function SettingsWindow() {
 	  });
 
 	  clearTimeout(self.retryRetrieveNetworkStatusDelay);
-	}
-
-	this.showSettings = function() {
-		keyboardShortcutsEnabled = false;
-	  this.loadSettings(function() { // reload settings
-	  	$("#contentOverlay").fadeIn(175, function() {
-				document.body.removeEventListener('touchmove',prevent,false);
-			});
-	  });
-	}
-	this.hideSettings = function(complete) {
-		keyboardShortcutsEnabled = true;
-		$("#contentOverlay").fadeOut(175, function() {
-      document.body.addEventListener('touchmove',prevent,false);
-//      self.window.css("display","none");
-      complete();
-    });
 	}
 
 	this.loadSettings = function(complete) {

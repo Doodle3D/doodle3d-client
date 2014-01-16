@@ -81,7 +81,7 @@ $(function() {
 
 	settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
-
+	
   if(debugMode) {
     console.log("debug mode is true");
     $("body").css("overflow", "auto");

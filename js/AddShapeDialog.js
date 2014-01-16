@@ -1,4 +1,5 @@
 var shapeResolution=3;
+var shapePopup;
 
 function initShapeDialog() {
   $("#btnShapeOk").on("onButtonClick",onShapeOk);
@@ -6,18 +7,19 @@ function initShapeDialog() {
   $("#btnShapePlus").on("onButtonHold",onShapePlus);
   $("#btnShapeMin").on("onButtonHold",onShapeMin);
   updateShapePreview();
+  shapePopup = new Popup($("#popupShape"), $("#popupMask"));
 }
 
 function showShapeDialog() {
-  showPopup(popupShape);
+	shapePopup.open();
 }
 
 function onShapeCancel() {
-  hidePopup(popupShape);
+  shapePopup.close();
 }
 
 function onShapeOk() {
-  hidePopup(popupShape);
+	shapePopup.close();
 
   var res = shapeResolution;
 
