@@ -56,12 +56,13 @@ function GrandTour(_name) {
         $(this).joyride('set_li', false);
       }
     }
-
+    
+    
     // bring up thermometer and progressbar to explain them
     thermometer.show();
     progressbar.show();
     message.hide();
-
+    
   };
   this.preStepCallback = function(index, tip) {
 //    console.log("GrandTour >> f:preStepCallback() >> index: " + index);
@@ -71,51 +72,17 @@ function GrandTour(_name) {
 
     var dataset = $(this)[0].$li[0].dataset;
     if (dataset.action != undefined) {
-      console.log("    THERE'S AN ACTION!");
       switch (dataset.action) {
-        case "sayHello":
-          console.log("    action: sayHello");
-          break;
         case "showMessage":
           console.log("    action: showMessage");
           message.set("This is a status message...", Message.NOTICE);
-//          message.show();
-          break;
-        case "showProgressBar":
-          console.log("    action: showProgressBar");
-          progressbar.show();
-          break;
-        case "showThermometer":
-          console.log("    action: showThermometer");
-          thermometer.show();
           break;
       }
     }
   };
   this.postStepCallback = function(index, tip) {
-    console.log("GrandTour >> f:postStepCallback() >> index: " + index);
-
-    var dataset = $(this)[0].$li[0].dataset;
-    if (dataset.action != undefined) {
-      console.log("    THERE *WAS* AN ACTION!");
-      switch (dataset.action) {
-        case "sayHello":
-//          console.log("    action: sayHello");
-          break;
-        case "showMessage":
-//          console.log("    action: showMessage");
-//          message.hide();
-          break;
-        case "showProgressBar":
-//          console.log("    action: showProgressBar");
-//          progressbar.hide();
-          break;
-        case "showThermometer":
-//          console.log("    action: showThermometer");
-//          thermometer.hide();
-          break;
-      }
-    }
+    //console.log("GrandTour >> f:postStepCallback() >> index: " + index);
+   // var dataset = $(this)[0].$li[0].dataset;
   };
   this.postRideCallback = function(index, tip) {
 //    console.log("GrandTour >> f:postRideCallback() >> index: " + index + ", self.active: " + self.active);
