@@ -177,18 +177,16 @@ function initButtonBehavior() {
 
   enableButton(btnSettings, openSettingsWindow);
 
-
+  
   // 29-okt-2013 - we're not doing help for smartphones at the moment
   if (clientInfo.isSmartphone) {
     btnInfo.addClass("disabled");
   } else {
-    btnInfo.mouseup(function(e) {
-      e.preventDefault();
-      console.log("btnInfo mouse up");
-      helpTours.startTour(helpTours.WELCOMETOUR);
-    });
+  	function onBtnInfo(e) {
+  		helpTours.startTour(helpTours.WELCOMETOUR);
+    }
+    enableButton(btnInfo, onBtnInfo);
   }
-
 }
 
 function stopPrint() {
