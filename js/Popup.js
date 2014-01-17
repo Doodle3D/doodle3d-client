@@ -1,7 +1,5 @@
 function Popup(element, mask) {
 	var self = this;
-	var escapeKeyHandler = null;
-	var enterKeyHandler = null;
 	
 	this.open = function(complete, disableMaskClick) {
 		mask.fadeIn(POPUP_SHOW_DURATION);
@@ -11,9 +9,9 @@ function Popup(element, mask) {
 		keyboardEscapeEnterEnabled = true;
 		
 		document.body.removeEventListener('touchmove', prevent, false);
-		mask.bind("onButtonClick", function() { self.close() });
-		if (escapeKeyHandler) $(document).bind("onEscapeKey", escapeKeyHandler);
-		if (enterKeyHandler) $(document).bind("onEnterKey", enterKeyHandler);
+		mask.bind("onButtonClick", self.cancel);
+		$(document).bind("onEscapeKey", self.cancel);
+		$(document).bind("onEnterKey", self.commit);
 	}
 	
 	this.close = function(complete) {
@@ -24,11 +22,18 @@ function Popup(element, mask) {
 		keyboardEscapeEnterEnabled = false;
 		
 		document.body.addEventListener('touchmove', prevent, false);
-		mask.unbind("onButtonClick");
-		if (escapeKeyHandler) $(document).unbind("onEscapeKey", escapeKeyHandler);
-		if (enterKeyHandler) $(document).unbind("onEnterKey", enterKeyHandler);
+		mask.unbind("onButtonClick", self.cancel);
+		$(document).unbind("onEscapeKey", self.cancel);
+		$(document).unbind("onEnterKey", self.commit);
 	}
 	
-	this.setEscapeKeyHandler = function(hnd) { escapeKeyHandler = hnd; }
-	this.setEnterKeyHandler = function(hnd) { enterKeyHandler = hnd; }
+	this.cancel = function() {
+		self.close();
+		$(element).trigger('onPopupCancel');
+	}
+	
+	this.commit = function() {
+		self.close();
+		$(element).trigger('onPopupCommit');
+	}
 }

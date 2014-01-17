@@ -3,12 +3,12 @@ var wordArtPopup;
 function initWordArt() {
   $("body").append('<div id="svgfont" style="display:none"></div>');
   $("#svgfont").load("img/font.svg?");
-  $("#btnWordArtOk").on("onButtonClick",onWordArtOk);
-  $("#btnWordArtCancel").on("onButtonClick",onWordArtCancel);
   
   wordArtPopup = new Popup($("#popupWordArt"),$("#popupMask"));
-  wordArtPopup.setEscapeKeyHandler(onWordArtCancel);
-  wordArtPopup.setEnterKeyHandler(onWordArtOk);
+  $("#btnWordArtOk").on("onButtonClick",wordArtPopup.commit);
+  $("#btnWordArtCancel").on("onButtonClick",wordArtPopup.cancel);
+  $("#popupWordArt").bind("onPopupCancel", onWordArtCancel);
+  $("#popupWordArt").bind("onPopupCommit", onWordArtOk);
 }
 
 function showWordArtDialog() {
@@ -19,13 +19,13 @@ function showWordArtDialog() {
 }
 
 function onWordArtCancel() {
-	wordArtPopup.close();
+	$("#txtWordArt").blur();
 }
 
 function onWordArtOk() {
-	wordArtPopup.close();
-  var s = $("#txtWordArt").val();
-  drawTextOnCanvas(s);
+	$("#txtWordArt").blur();
+	var s = $("#txtWordArt").val();
+	drawTextOnCanvas(s);
 }
 
 function drawTextOnCanvas(text) {

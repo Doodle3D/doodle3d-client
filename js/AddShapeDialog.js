@@ -2,15 +2,15 @@ var shapeResolution=3;
 var shapePopup;
 
 function initShapeDialog() {
-  $("#btnShapeOk").on("onButtonClick",onShapeOk);
-  $("#btnShapeCancel").on("onButtonClick",onShapeCancel);
+  shapePopup = new Popup($("#popupShape"), $("#popupMask"));
+  $("#btnShapeOk").on("onButtonClick", shapePopup.commit);
+  $("#btnShapeCancel").on("onButtonClick", shapePopup.cancel);
+  $("#popupShape").bind("onPopupCancel", onShapeCancel);
+  $("#popupShape").bind("onPopupCommit", onShapeOk);
+  
   $("#btnShapePlus").on("onButtonHold",onShapePlus);
   $("#btnShapeMin").on("onButtonHold",onShapeMin);
   updateShapePreview();
-  
-  shapePopup = new Popup($("#popupShape"), $("#popupMask"));
-  shapePopup.setEscapeKeyHandler(onShapeCancel);
-  shapePopup.setEnterKeyHandler(onShapeOk);
 }
 
 function showShapeDialog() {
@@ -18,12 +18,9 @@ function showShapeDialog() {
 }
 
 function onShapeCancel() {
-  shapePopup.close();
 }
 
 function onShapeOk() {
-	shapePopup.close();
-
   var res = shapeResolution;
 
   if (res!=undefined) {
