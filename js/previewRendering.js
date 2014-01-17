@@ -26,7 +26,7 @@ var prevRedrawTime = new Date().getTime();
 var redrawInterval = 1000 / 30; // ms
 
 function initPreviewRendering() {
-  console.log("f:initPreviewRendering()");
+  //console.log("f:initPreviewRendering()");
 
   $preview = $("#preview");
   preview = $preview[0];
@@ -89,6 +89,7 @@ var highlight		= true; //highlight bottom, middle and top layers
 var linesRaw = "";
 var debug_redrawSimplification = 6;
 function redrawPreview(redrawLess) {
+	//console.log("PreviewRendering:redrawPreview");
   if (redrawLess == undefined) redrawLess = false;
 
   if (_points.length < 2) {
@@ -168,6 +169,7 @@ function redrawPreview(redrawLess) {
 }
 
 function renderToImageDataPreview() {
+	//console.log("PreviewRendering:renderToImageDataPreview");
   if (_points.length < 2) return;
 
   //*
@@ -236,9 +238,10 @@ function renderToImageDataPreview() {
   previewCtx.globalAlpha = globalAlpha;
 }
 
-// called by the move up/down or twist left/right buttons
+// called by the move up/down, twist left/right or new buttons
 // it is assumed that the preview has been rendered to an Image object, which will be used to draw the preview with (much better performance)
 function redrawRenderedPreview(redrawLess) {
+	//console.log("PreviewRendering:redrawRenderedPreview");
   if (redrawLess == undefined) redrawLess = false;
 //  console.log("f:redrawRenderedPreview()");
 
@@ -248,7 +251,10 @@ function redrawRenderedPreview(redrawLess) {
 
   var y = 0;
   var r = 0;
-
+  
+  // check if there is preview image data that we can use for the layers
+  if(!doodleImageCapture.src || doodleImageCapture.src == "") return;
+  
   for(var i = 0; i < numLayers; i++) {
 
     var verticalScaleFactor = scaleFunction(i / maxNumLayers);
@@ -271,7 +277,7 @@ function redrawRenderedPreview(redrawLess) {
     previewCtx.scale(verticalScaleFactor, scaleY * verticalScaleFactor);
     previewCtx.rotate(r);
     previewCtx.translate(-layerCX,-layerCY);
-
+    
     previewCtx.drawImage(doodleImageCapture, 0, 0);
 
     y -= yStep;
@@ -297,6 +303,7 @@ function centeredAndScaledDoodlePoint(p) {
 var updatePrevX = -1;
 var updatePrevY = -1;
 function updatePreview(_x, _y, redrawLess) {
+	//console.log("PreviewRendering:updatePreview");
   if (redrawLess == undefined) redrawLess = false;
   redrawLess = false;
 

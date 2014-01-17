@@ -124,7 +124,7 @@ function rotateShape(radians) {
 
 function updateView() {
   setSketchModified(true);
-  redrawDoodle();
+  redrawDoodle(true);
   adjustPreviewTransformation();
   renderToImageDataPreview();
   

@@ -45,7 +45,7 @@ var isModified = false;
  *
  * * * * * * * * * */
 function initDoodleDrawing() {
-  console.log("f:initDoodleDrawing()");
+  //console.log("f:initDoodleDrawing()");
 
   $canvas = $("#mycanvas");
   canvas = $canvas[0];
@@ -79,7 +79,7 @@ function initDoodleDrawing() {
 //  drawCanvas = $(".drawareacontainer");
   drawCanvas = $("#mycanvasContainer"); // $("#drawAreaContainer")
 
-  console.log("drawCanvasTopLeftCoords: " + drawCanvasTopLeftCoords);
+  //console.log("drawCanvasTopLeftCoords: " + drawCanvasTopLeftCoords);
 //  drawCanvasTopLeftCoords[0] = drawCanvas.css("left").match(/[0-9]/g).join("");
 //  drawCanvasTopLeftCoords[1] = drawCanvas.css("top").match(/[0-9]/g).join("");
   drawCanvasTopLeftCoords[0] = drawCanvas.offset().left;
@@ -87,8 +87,8 @@ function initDoodleDrawing() {
 //  drawCanvasTopLeftCoords[0] = drawCanvas[0].offsetParent.offsetLeft;
 //  drawCanvasTopLeftCoords[1] = drawCanvas[0].offsetParent.offsetTop;
 
-  console.log("f:initDoodleDrawing() >> canvasWidth: " + canvasWidth);
-  console.log("f:initDoodleDrawing() >> canvasHeight: " + canvasHeight);
+  //console.log("f:initDoodleDrawing() >> canvasWidth: " + canvasWidth);
+  //console.log("f:initDoodleDrawing() >> canvasHeight: " + canvasHeight);
 
 }
 
@@ -98,6 +98,7 @@ function initDoodleDrawing() {
  *
  * * * * * * * * * */
 function draw(_x, _y, _width) {
+	//console.log("canvasDrawing:draw");
   //    console.log("f:draw() >> _width: " + _width);
 
   if (prevX == 0 && prevY ==0) {
@@ -154,7 +155,7 @@ function draw(_x, _y, _width) {
  *
  * * * * * * * * * */
 function clearDoodle() {
-  console.log("f:clearDoodle");
+  //console.log("f:clearDoodle");
 
   updatePrevNextButtonStateOnClear();
 
@@ -179,6 +180,7 @@ function clearDoodle() {
 }
 
 function redrawDoodle(recalcBoundsAndTransforms) {
+	//console.log("canvasDrawing:redrawDoodle");
   if (recalcBoundsAndTransforms == undefined) recalcBoundsAndTransforms = false;
 //  console.log("f:redrawDoodle() >> recalcBoundsAndTransforms = " + recalcBoundsAndTransforms);
 
@@ -205,8 +207,9 @@ function redrawDoodle(recalcBoundsAndTransforms) {
     }
   }
 }
-
+// checks if x,y is outside doodleBounds, if so update 
  function adjustBounds(x, y) {
+	 //console.log("canvasDrawing:adjustBounds");
   var newPointsOutsideOfCurrentBounds = false;
 //      console.log("f:adjustBounds("+x+","+y+")");
 
@@ -242,7 +245,7 @@ function redrawDoodle(recalcBoundsAndTransforms) {
 
 // does what exactly?
 function adjustPreviewTransformation() {
-  //    console.log("f:adjustPreviewTransformation()");
+	//console.log("canvasDrawing:adjustPreviewTransformation");
 
   doodleTransform[0] = doodleBounds[0];
   doodleTransform[1] = doodleBounds[1];
@@ -272,6 +275,7 @@ function adjustPreviewTransformation() {
  *
  * * * * * * * * * */
 function onCanvasMouseDown(e) {
+	//console.log("canvasDrawing:onCanvasMouseDown");
     setSketchModified(true);
 
 //  console.log("f:onCanvasMouseDown()");
@@ -301,7 +305,7 @@ function onCanvasMouseDown(e) {
 
 var prevPoint = {x:-1, y:-1};
 function onCanvasMouseMove(e) {
-
+	//console.log("canvasDrawing:onCanvasMouseMove");
 //  console.log("f:onCanvasMouseMove()");
   if (!dragging) return;
 
@@ -363,11 +367,11 @@ function onCanvasMouseUp(e) {
 //  console.log("f:onCanvasMouseUp()");
   //    console.log("onmouseup");
   dragging = false;
-  console.log("doodleBounds: " + doodleBounds);
-  console.log("doodleTransform: " + doodleTransform);
+  //console.log("doodleBounds: " + doodleBounds);
+  //console.log("doodleTransform: " + doodleTransform);
   //    ctx.stroke();
 
-  console.log("_points.length :" + _points.length);
+  //console.log("_points.length :" + _points.length);
 //  console.log(_points);
 
   // DEBUG
@@ -383,7 +387,7 @@ function onCanvasTouchDown(e) {
   setSketchModified(true);
 
   e.preventDefault();
-  console.log("f:onCanvasTouchDown >> e: " , e);
+  //console.log("f:onCanvasTouchDown >> e: " , e);
 //  var x = e.touches[0].pageX - e.touches[0].target.offsetLeft;
 //  var y = e.touches[0].pageY - e.touches[0].target.offsetTop;
   var x = e.touches[0].pageX - drawCanvasTopLeftCoords[0];
@@ -404,6 +408,7 @@ function onCanvasTouchDown(e) {
 }
 
 function onCanvasTouchMove(e) {
+	//console.log("canvasDrawing:onCanvasTouchMove");
   setSketchModified(true);
 
   e.preventDefault();
@@ -469,12 +474,12 @@ function onCanvasTouchMove(e) {
 }
 
 function onCanvasTouchEnd(e) {
-  console.log("f:onCanvasTouchEnd()");
-  console.log("doodleBounds: " + doodleBounds);
-  console.log("doodleTransform: " + doodleTransform);
+  //console.log("f:onCanvasTouchEnd()");
+  //console.log("doodleBounds: " + doodleBounds);
+  //console.log("doodleTransform: " + doodleTransform);
   //    ctx.stroke();
 
-  console.log("_points.length :" + _points.length);
+  //console.log("_points.length :" + _points.length);
 
   //  redrawPreview();
   renderToImageDataPreview();
