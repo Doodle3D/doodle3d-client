@@ -16,28 +16,35 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
-          'js_src/Shape.js',
-          'js_src/Svg.js',
-          'js_src/Keyboard.js',
-          'js_src/SettingsWindow.js',
-          'js_src/UpdatePanel.js',
-          'js_src/PrinterPanel.js',
-          'js_src/Help.js',
-          'js_src/d3dServerInterfacing.js',
-          'js_src/verticalShapes.js',
-          'js_src/buttonbehaviors.js',
-          'js_src/canvasDrawing.js',
-          'js_src/previewRendering.js',
-          'js_src/gcodeGenerating.js',
-          'js_src/init_layout.js',
-          'js_src/Printer.js',
-          'js_src/Progressbar.js',
-          'js_src/Thermometer.js',
-          'js_src/utils.js',
-          'js_src/sidebar.js',
-          'js_src/Message.js',
-          'js_src/main.js',
-          'js_src/sketches.js'
+          'js/Events.js',
+          'js/Class.js',
+          'js/Button.js',
+          'js/Popup.js',
+          'js/btnMove.js',
+          'js/WordArt.js',
+          'js/Shape.js',
+          'js/AddShapeDialog.js',
+          'js/Svg.js',
+          'js/Keyboard.js',
+          'js/SettingsWindow.js',
+          'js/UpdatePanel.js',
+          'js/PrinterPanel.js',
+          'js/Help.js',
+          'js/d3dServerInterfacing.js',
+          'js/verticalShapes.js',
+          'js/buttonbehaviors.js',
+          'js/canvasDrawing.js',
+          'js/previewRendering.js',
+          'js/gcodeGenerating.js',
+          'js/init_layout.js',
+          'js/Printer.js',
+          'js/Progressbar.js',
+          'js/Thermometer.js',
+          'js/utils.js',
+          'js/sidebar.js',
+          'js/Message.js',
+          'js/main.js',
+          'js/sketches.js'
         ],
         dest: 'www/js/<%= pkg.name %>.js'
       }
@@ -57,8 +64,8 @@ module.exports = function(grunt) {
         }
       },
       jslibs: {
-        cwd: "js_src/libs/",
-//        src: ['js_src/libs/*.js', '!js_src/libs/*.min.js'],  // source files mask
+        cwd: "js/libs/",
+//        src: ['js/libs/*.js', '!js/libs/*.min.js'],  // source files mask
         src: ['*.js', '!*.min.js'],  // source files mask
         dest: 'www/js/libs/',    // destination folder
         expand: true,    // allow dynamic building
@@ -106,12 +113,12 @@ module.exports = function(grunt) {
     },
     watch: {
       javascript: {
-        files: ["js_src/*", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
+        files: ["js/*", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
         tasks: ["concat:js", "uglify:js"]
 //        tasks: ["jshint", "concat", "uglify"]
       },
       javascriptLibs: {
-        files: ["js_src/libs/*"],
+        files: ["js/libs/*"],
         tasks: ["uglify:jslibs"]
 //        tasks: ["jshint", "concat", "uglify"]
       },

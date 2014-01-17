@@ -1,0 +1,202 @@
+/*  http://stackoverflow.com/questions/5348092/prevent-default-press-but-not-default-drag-in-ios-mobilesafari  */
+.btn {
+  background-repeat: no-repeat;
+  cursor: pointer;
+  
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  
+  -khtml-user-drag: none;
+  -webkit-user-drag: none;
+  
+  -webkit-touch-callout: none;              /* disable callout, image save panel */
+	
+	-webkit-tap-highlight-color: transparent; /* "turn off" link highlight */
+}
+
+.btn.disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+#btnPrint {
+  margin: 1% 5% 5% 0%;
+  width: 90%;
+  max-width: 163px;
+  height: auto;
+  float: right;
+}
+
+#btnStop {
+  margin: 5% 5% 1% 5%;
+  float: right;
+  width: 80%;
+  max-width: 98px;
+  height: auto;
+}
+
+#btnsSettingsInfo {
+  position: absolute;
+  bottom: 4%; //25px;
+  right: 5px;
+  width: 80%;
+  margin: 1% 5%;
+  max-width:  160px;
+  .btn {
+    width: 46%;
+    max-width: 53px;
+		height: auto;
+  }
+  #btnSettings {
+    float: right;
+  }
+}
+
+#btnNew {
+  margin: 5% 0% 1% 5%;
+  width: 90%;
+  max-width: 130px;
+  height: auto;
+}
+
+#btnsPrevNext {
+  margin: 1% 7%;
+  max-width: 100px;
+  /*text-align:center;*/
+}
+
+#btnPrevious {
+  width: 40%;
+  max-width: 56px;
+  height: auto;
+}
+
+#btnNext {
+  width: 40%;
+  max-width: 56px;
+  height: auto;
+  float: right;
+}
+#btnSave {
+  margin: 4% 5% 1% 5%;
+  width: 90%;
+  max-width: 100px;
+  height: auto;
+}
+
+#btnOops {
+  margin: 5% 5% 1% 5%;
+  width: 90%;
+  max-width: 100px;
+  height: auto;
+}
+
+#btnAdd {
+  width: 90%;
+  max-width: 100px;
+  margin: 5% 5% 1% 5%;
+}
+
+
+/*
+  DOODLE UP/DOWN/LEFT/RIGHT buttons
+*/
+.manipulationBtns {
+  margin: 2px 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  max-width: 340px;
+  max-height: 70px;
+  width: 45%;
+}
+
+.manipulationBtn {
+  width: 45%;
+  height: auto;
+  cursor: pointer;
+}
+
+
+.btnVertical {
+  width: 35%;
+  display: none;
+}
+
+#btnToggleEdit {
+  top: 4px;
+  left: 4px;
+  position: absolute;
+}
+#buttonGroupEdit {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  padding: 5px 7px 9px 8px;
+  display: none;
+  
+  .btn {
+  	float: left;
+  }
+  #btnZoom {
+  	clear: left;
+  	margin: 0 2px 0 0;
+  }
+}
+
+.buttonGroup {
+  /*background-color: white;*/
+  background-color: #fff;
+  position: absolute;
+  border: 3px solid black;
+  border-radius: 40px;
+  box-sizing: border-box;
+  padding: 5% 5% 5% 5%;
+}
+
+#buttonGroupAdd {
+  display: none;
+  z-index: 1000;
+  position: relative;
+  margin-top: -60%;
+  margin-left: 70%;
+  width: 200%;
+  max-width: 140px;    /*fixme: can this grow based on it's content?*/ 
+  padding: 5% 0 5% 5%;
+  #btnWordArt, #btnShape {
+    width: 45%;
+  }
+}
+
+#buttonGroupVerticalShapes {
+  top: 7px;
+  left: 8px;
+  padding: 12px 7px 7px 9px;
+  width: 65px;
+
+  .btn {
+    width: 40px;
+  }
+}
+
+#btnToggleVerticalShapes {
+  position: absolute;
+	top: 3px;
+  left: 6px;
+}
+
+@media  only screen and (max-height: 480px),
+        only screen and (max-width: 600px) and (min-device-pixel-ratio : 1.5),
+        only screen and (max-width: 600px) and (-webkit-min-device-pixel-ratio : 1.5) {
+  #buttonGroupVerticalShapes {
+		#btnConv, #btnDiv, #btnSine, #btnStraight {
+			display: none;
+		}
+	}
+}
+
+
+
+

@@ -1,0 +1,80 @@
+// @popup-width: 60%;
+
+#popupMask {
+  background-color: rgba(255, 255, 255, 0.65);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display:none;
+  user-select: text;
+}
+
+.popup {
+	background-color: #fff;
+	border: 2px solid #222;
+	border-radius: 15px;
+	box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+	position: absolute;
+	left: 50%;
+	top:50%;
+}
+
+.popup .content {
+	/*margin: 5%;*/
+	margin: 15px;
+}
+
+.popup {
+	display: none;
+}
+
+#popupWordArt {
+  width: 330px;
+	height:210px;
+	margin-left: -165px;
+	margin-top: -105px;
+	
+	input[type="text"] {
+		width: 98%;
+	}
+	#btnWordArtOk {
+		float: right;
+		margin: 15px 0 0 0;
+	}
+}
+
+#popupShape {
+	width: 310px;
+	margin-left: -155px;
+	height: 230px;
+	margin-top: -115px;
+	top: 50%;
+	
+	#shapePreview {
+		// width: 150px;
+		// height: 150px;
+		border: 1px solid black;
+		border-radius: 5px;
+	}
+	
+	.lblShapeResolution {
+		display: inline-block;
+	}
+	#iconShapeLessPoints, #iconShapeMorePoints {
+		margin: 0 0 7px 0;
+	}
+	
+	#btnShapeOk {
+		position: absolute;
+		bottom: 5%;
+		right: 3%;
+	}
+}
+
+.columnRight {
+	float: right;
+}
