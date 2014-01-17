@@ -90,9 +90,13 @@ function SettingsWindow() {
 
 		this.window = $("#popupSettings");
 		this.btnOK = this.window.find(".btnOK");
-		enableButton(this.btnOK,this.submitwindow);
-
 		settingsPopup = new Popup($("#popupSettings"), $("#popupMask"));
+		settingsPopup.setEnterEnabled(false);
+		settingsPopup.setAutoCloseEnabled(false);
+		
+		enableButton(this.btnOK,settingsPopup.commit);
+		$("#popupSettings").bind("onPopupCancel", function() { settingsPopup.close(); } );
+		$("#popupSettings").bind("onPopupCommit", self.submitwindow);
 
 		this.window.find("#settingsContainer").load("settings.html", function() {
 			console.log("Settings:finished loading settings.html, now loading settings...");
@@ -155,23 +159,20 @@ function SettingsWindow() {
 		});
 	};
 	
-	this.closeSettings = function(complete) {
-		settingsPopup.close(complete);
-	};
+//	this.closeSettings = function(complete) {
+//		settingsPopup.close(complete);
+//	};
 
 	this.submitwindow = function(e) {
-		disableButton(self.btnOK,self.submitwindow);
+		disableButton(self.btnOK,settingsPopup.commit);
 		e.preventDefault();
 		e.stopPropagation();
 		self.saveSettings(self.readForm(),function(success){
 			if(success) {
-				self.closeSettings(function() {
-					enableButton(self.btnOK,self.submitwindow);
-				});
+				settingsPopup.close();
 				self.signin();
-			} else {
-				enableButton(self.btnOK,self.submitwindow);
 			}
+			enableButton(self.btnOK,settingsPopup.commit);
 		});
 
 		clearTimeout(self.retryRetrieveNetworkStatusDelay);

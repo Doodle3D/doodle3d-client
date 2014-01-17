@@ -1,4 +1,6 @@
 function Popup(element, mask) {
+	var autoCloseEnabled = true;
+	var enterEnabled = true;
 	var self = this;
 	
 	this.open = function(complete, disableMaskClick) {
@@ -11,7 +13,7 @@ function Popup(element, mask) {
 		document.body.removeEventListener('touchmove', prevent, false);
 		mask.bind("onButtonClick", self.cancel);
 		$(document).bind("onEscapeKey", self.cancel);
-		$(document).bind("onEnterKey", self.commit);
+		if (enterEnabled) $(document).bind("onEnterKey", self.commit);
 	}
 	
 	this.close = function(complete) {
@@ -24,16 +26,20 @@ function Popup(element, mask) {
 		document.body.addEventListener('touchmove', prevent, false);
 		mask.unbind("onButtonClick", self.cancel);
 		$(document).unbind("onEscapeKey", self.cancel);
-		$(document).unbind("onEnterKey", self.commit);
+		if (enterEnabled) $(document).unbind("onEnterKey", self.commit);
 	}
 	
+	this.setEnterEnabled = function(enabled) { enterEnabled = enabled; }
+	
+	this.setAutoCloseEnabled = function(enabled) { autoCloseEnabled = enabled; }
+	
 	this.cancel = function() {
-		self.close();
 		$(element).trigger('onPopupCancel');
+		if (autoCloseEnabled) self.close();
 	}
 	
 	this.commit = function() {
-		self.close();
 		$(element).trigger('onPopupCommit');
+		if (autoCloseEnabled) self.close();
 	}
 }
