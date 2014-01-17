@@ -131,14 +131,14 @@ function disableDragging() {
 function enableButton(elem, handler) {
 	//var elem = $('#'+domId);
 	elem.removeClass("disabled");
- 	elem.unbind('click');
- 	elem.bind('click', handler);
+ 	elem.unbind('onButtonClick');
+ 	elem.bind('onButtonClick', handler);
 }
 
 function disableButton(elem) {
 	//var elem = $('#'+domId);
 	elem.addClass("disabled");
- 	elem.unbind('click');
+ 	elem.unbind('onButtonClick');
 }
 
 function showOrHideThermo() {
