@@ -134,7 +134,7 @@ function initButtonBehavior() {
 		var h = btnMove.height();
 		var speedX = (cursor.x-w/2)*0.3;
 		var speedY = (cursor.y-h/2)*0.3;
-		console.log("move speed: ",speedX,speedY);
+		//console.log("move speed: ",speedX,speedY);
 		moveShape(speedX,speedY);
 	}
 	function onBtnZoom(e,cursor) {

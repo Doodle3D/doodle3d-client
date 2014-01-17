@@ -159,11 +159,11 @@ function reduceTransformToFit(x, y, zf, bounds) {
 	
 		var zxMax = Math.min(zf, canvasWidth / newBounds.width);
 		var zyMax = Math.min(zf, canvasHeight / newBounds.height);
-		var oldZF = zf;
+//		var oldZF = zf;
 //		var dir = zf >= 1.0 ? 1 : 0;
 		zf = Math.min(zxMax, zyMax);
 //		if (dir == 1 && zf < 1.0) zf = 1;
-		console.log("orgZF, zxMax, zyMax, finZF: " + oldZF + ", " + zxMax + ", " + zyMax + ", " + zf);
+//		console.log("orgZF, zxMax, zyMax, finZF: " + oldZF + ", " + zxMax + ", " + zyMax + ", " + zf);
 		
 		return { x: delta.x, y: delta.y, zf: zf };
 	}
