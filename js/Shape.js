@@ -85,7 +85,7 @@ function rotatePoints(points, radians, cx, cy) {
 
 function moveShape(x,y) {
 	var bounds = getBounds(_points);
-	var delta = clipDeltaToCanvas(x, y, bounds);
+	var delta = reduceTransformToFit(x, y, 1.0, bounds);
 	
 	if (delta.x != 0 || delta.y != 0) {
 		translatePoints(_points, delta.x, delta.y);
@@ -93,42 +93,18 @@ function moveShape(x,y) {
 	}
 }
 
-//TODO: bounds should be cached and marked dirty on modification of points array
 //TODO: reduction of zoomValue is still not completely correct (but acceptable?)
+//TODO: bounds should be cached and marked dirty on modification of points array; translations could be combined in several places
 function zoomShape(zoomValue) {
 	var bounds = getBounds(_points);
-	var zw = bounds.width * zoomValue; zh = bounds.height * zoomValue;
-	var newBounds = { x: bounds.x - (zw - bounds.width) / 2, y: bounds.y - (zh - bounds.height) / 2, width: zw, height: zh };
-
-//	console.log("bounds: " + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height);
-//	console.log("newBounds: " + newBounds.x + ", " + newBounds.y + ", " + newBounds.width + ", " + newBounds.height);
+	var transform = reduceTransformToFit(0, 0, zoomValue, bounds);
 	
-	var ldx = Math.max(0, -newBounds.x);
-	var rdx = Math.min(0, canvasWidth - (newBounds.x + newBounds.width));
-	var tdy = Math.max(0, -newBounds.y);
-	var bdy = Math.min(0, canvasHeight - (newBounds.y + newBounds.height));
-	
-	var delta = { x: ldx + rdx, y: tdy + bdy };
-	if (ldx != 0 && rdx != 0) delta.x /= 2;
-	if (tdy != 0 && bdy != 0) delta.y /= 2;
-	
-	delta.x /= zoomValue;
-	delta.y /= zoomValue;
-
-	var zxMax = Math.min(zoomValue, canvasWidth / newBounds.width);
-	var zyMax = Math.min(zoomValue, canvasHeight / newBounds.height);
-	var oldZV = zoomValue;
-	var dir = zoomValue >= 1.0 ? 1 : 0;
-	zoomValue = Math.min(zxMax, zyMax);
-	if (dir == 1 && zoomValue < 1.0) zoomValue = 1;
-	console.log("orgZV, zxMax, zyMax, finZV: " + oldZV + ", " + zxMax + ", " + zyMax + ", " + zoomValue);
-
-	translatePoints(_points, delta.x, delta.y); //move points towards center as far as necessary to avoid clipping
-	translatePoints(_points,-bounds.x,-bounds.y);
-	translatePoints(_points,-bounds.width/2,-bounds.height/2);
-	scalePoints(_points,zoomValue,zoomValue);
-	translatePoints(_points,bounds.width/2,bounds.height/2);
-	translatePoints(_points,bounds.x,bounds.y);
+	translatePoints(_points, transform.x, transform.y); //move points towards center as far as necessary to avoid clipping
+	translatePoints(_points, -bounds.x, -bounds.y);
+	translatePoints(_points, -bounds.width / 2, -bounds.height / 2);
+	scalePoints(_points, transform.zf, transform.zf);
+	translatePoints(_points, bounds.width / 2, bounds.height / 2);
+	translatePoints(_points, bounds.x, bounds.y);
 	updateView();
 }
 
@@ -137,6 +113,12 @@ function rotateShape(radians) {
   var cx = bounds.x + bounds.width/2;
   var cy = bounds.y + bounds.height/2;
   rotatePoints(_points, radians, cx, cy);
+  
+  var bounds = getBounds(_points);
+  var transform = reduceTransformToFit(0, 0, 1.0, bounds);
+  translatePoints(_points, transform.x, transform.y);
+  scalePoints(_points, transform.zf, transform.zf);
+
   updateView();
 }
 
@@ -152,15 +134,42 @@ function updateView() {
   }
 }
 
-//returns (dx,dy) updated such that it moving bounds by that amount still fits inside canvas
-//if dx,dy == 0,0, it is assumed that bounds do not fit to begin with, so a delta is returned to minimize clipping on all sides (for zooming)
-function clipDeltaToCanvas(dx, dy, bounds) {
-	dx = Math.max(dx, -bounds.x);
-	dx = Math.min(dx, canvasWidth - (bounds.x + bounds.width));
-	dy = Math.max(dy, -bounds.y);
-	dy = Math.min(dy, canvasHeight - (bounds.y + bounds.height));
-	return { x: dx, y: dy };
+//when x,y!=0,0: reduces them such that transformed bounds will still fit on canvas (given that they fit prior to the transform)
+//otherwise: calculate translation + zoom reduce such that given bounds will fit on canvas after transformation
+function reduceTransformToFit(x, y, zf, bounds) {
+	var zw = bounds.width * zf; zh = bounds.height * zf;
+	var newBounds = { x: bounds.x - (zw - bounds.width) / 2, y: bounds.y - (zh - bounds.height) / 2, width: zw, height: zh };
+//	console.log("bounds: " + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height);
+//	console.log("newBounds: " + newBounds.x + ", " + newBounds.y + ", " + newBounds.width + ", " + newBounds.height);
+	
+	var ldx = Math.max(x, -newBounds.x);
+	var rdx = Math.min(x, canvasWidth - (newBounds.x + newBounds.width));
+	var tdy = Math.max(y, -newBounds.y);
+	var bdy = Math.min(y, canvasHeight - (newBounds.y + newBounds.height));
+	
+	if (x != 0 || y != 0) { //movement was requested
+		return { x: nearestZero(ldx, rdx), y: nearestZero(tdy, bdy) };
+	} else { //no movement requested
+		var delta = { x: ldx + rdx, y: tdy + bdy };
+		if (ldx != 0 && rdx != 0) delta.x /= 2;
+		if (tdy != 0 && bdy != 0) delta.y /= 2;
+		
+		delta.x /= zf;
+		delta.y /= zf;
+	
+		var zxMax = Math.min(zf, canvasWidth / newBounds.width);
+		var zyMax = Math.min(zf, canvasHeight / newBounds.height);
+		var oldZF = zf;
+//		var dir = zf >= 1.0 ? 1 : 0;
+		zf = Math.min(zxMax, zyMax);
+//		if (dir == 1 && zf < 1.0) zf = 1;
+		console.log("orgZF, zxMax, zyMax, finZF: " + oldZF + ", " + zxMax + ", " + zyMax + ", " + zf);
+		
+		return { x: delta.x, y: delta.y, zf: zf };
+	}
 }
+
+function nearestZero(v1, v2) { return Math.abs(v1) < Math.abs(v2) ? v1 : v2; }
 
 //*draws* a circle (i.e. it is not added as points to shape)
 function drawCircleTemp(x, y, r, color) {
