@@ -158,9 +158,7 @@ function Printer() {
 		
     var firstOne = (sendIndex == 0)? true : false;
     var start = firstOne; // start printing right away
-
-		message.set("Sending doodle to printer..."+sendIndex,Message.NOTICE);
-
+    
     var completed = false;
     if (this.gcode.length < (sendIndex + sendLength)) {
       console.log("  sending less than max sendLength (and last)");
