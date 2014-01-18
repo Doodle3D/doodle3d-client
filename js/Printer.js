@@ -191,9 +191,9 @@ function Printer() {
 		        } else {
 		        	// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
 
-		        	console.log("Printer:sendPrintPart:gcode part received (state: ",self.state,")");
+		        	//console.log("Printer:sendPrintPart:gcode part received (state: ",self.state,")");
 		        	if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
-		        		console.log("Printer:sendPrintPart:sending next part");
+		        		//console.log("Printer:sendPrintPart:sending next part");
 		        		self.sendPrintPart(sendIndex + sendLength, sendLength);
 		        	}
 		        }
