@@ -67,7 +67,7 @@ function loadFromSvg(svgData) {
 		while (true) {
 			skipSpace();
 			var c = svgData.charAt(p);
-			if (c == 'M' || c == 'm' || c == 'l') { //new command letter
+			if (c == 'M' || c == 'm' || c == 'L' || c == 'l') { //new command letter
 				mode = c;
 			} else if (c == '"') { //end of command chain
 				return true;
@@ -76,13 +76,13 @@ function loadFromSvg(svgData) {
 				numberEnd = svgData.indexOf(',', p);
 				if (numberEnd == -1) { console.log("could not find comma in coordinate pair"); return false; }
 				len = numberEnd - p;
-				tx = parseInt(svgData.substr(p, len));
+				tx = parseFloat(svgData.substr(p, len));
 				p += len + 1;
 				skipSpace();
 				numberEnd = svgData.indexOf(' ', p);
 				if (numberEnd == -1) { console.log("could not find space after coordinate pair"); return false; }
 				len = numberEnd - p;
-				ty = parseInt(svgData.substr(p, len));
+				ty = parseFloat(svgData.substr(p, len));
 				p += len;
 
 				if (mode == 'M' || mode == 'L') {

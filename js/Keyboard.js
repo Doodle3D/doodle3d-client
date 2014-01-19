@@ -17,6 +17,13 @@ var wordFuncs = {
 			shapeLineTo(cx + 20, cy);
 			shapeMoveTo(cx, cy - 20);
 			shapeLineTo(cx, cy + 20);
+		},
+		"stats": function() {
+			var text = "Shape statistics:\nNumber of points: " + _points.length;
+			alert(text);
+		},
+		"pdump": function() {
+			console.log("points array: " + _points);
 		}
 };
 
