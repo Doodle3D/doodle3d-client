@@ -271,7 +271,7 @@ function Printer() {
 		clearTimeout(self.retryCheckStatusDelay);
 	}
 	this.checkStatus = function() {
-		console.log("Printer:checkStatus");
+		//console.log("Printer:checkStatus");
 		this.stateOverruled = false;
 		//console.log("  stateOverruled: ",this.stateOverruled);
     var self = this;
@@ -302,7 +302,7 @@ function Printer() {
     }
 	}
 	this.handleStatusUpdate = function(response) {
-		console.log("Printer:handleStatusUpdate response: ",response);
+		//console.log("Printer:handleStatusUpdate response: ",response);
 		var data = response.data;
 		if(response.status != "success") {
 			self.state = Printer.UNKNOWN_STATE;
