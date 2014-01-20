@@ -62,7 +62,7 @@ function initButtonBehavior() {
   btnAdd.on("onButtonClick", onBtnAdd);
   btnWordArt.on("onButtonClick", onBtnWordArt);
   btnShape.on("onButtonClick", onBtnShape);
-  btnPrint.on("onButtonClick", onBtnPrint);
+  btnPrint.on("onButtonClick", print);
   btnOops.on("onButtonHold", onBtnOops);
   // vertical shape buttons
   btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
@@ -170,10 +170,6 @@ function initButtonBehavior() {
     clearDoodle();
   }
   
-  function onBtnPrint(e) {
-    print();
-  }
-
   function onBtnWordArt(e) {
     showWordArtDialog();
   }
@@ -352,23 +348,17 @@ function setState(newState,newHasControl) {
 	// print button
 	var printEnabled = (newState == Printer.IDLE_STATE && newHasControl);
 	if(printEnabled) {
-			btnPrint.removeClass("disabled"); // enable print button
-			btnPrint.unbind('touchstart mousedown');
-			btnPrint.bind('touchstart mousedown',print);
+		enableButton(btnPrint,print);
 	} else {
-			btnPrint.addClass("disabled"); // disable print button
-			btnPrint.unbind('touchstart mousedown');
+		disableButton(btnPrint);
 	}
 
 	// stop button
 	var stopEnabled = ((newState == Printer.PRINTING_STATE || newState == Printer.BUFFERING_STATE) && newHasControl);
 	if(stopEnabled) {
-		btnStop.removeClass("disabled");
-		btnStop.unbind('touchstart mousedown');
-		btnStop.bind('touchstart mousedown',stopPrint);
+		enableButton(btnStop,stopPrint);
 	} else {
-		btnStop.addClass("disabled");
-		btnStop.unbind('touchstart mousedown');
+		disableButton(btnStop);
 	}
 
 	// thermometer
