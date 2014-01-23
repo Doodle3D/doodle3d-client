@@ -3,90 +3,77 @@
   SETTINGS POPUP
 
 */
-#contentOverlay {
-  background-color: rgba(255, 255, 255, 0.65);
-  z-index: 20;
-  position: absolute;
+#popupSettings {
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
-  display:none;
-  user-select: text;
+  //z-index: 15;
+  max-width: 775px;
+  max-height: 540px;
+  //width: 80%;
+  //height: 75%;
+  margin: 7% 8%;
+  padding: 2%;
 
-  #settings {
-    background-color: #fff;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 15;
-    max-width: 775px;
-    max-height: 540px;
-    width: 80%;
-    height: 75%;
-    margin: 7% 8%;
-    box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
-    border: 2px solid #222;
-    border-radius: 15px;
-    padding: 2%;
+  .toppanel {
+    height: 10%;
 
-    .toppanel {
-      height: 10%;
-
-      .settingsLabelContainer {
-        width: 100%;
-        height: auto;
-        margin-bottom: 1%;
-
-        .settingsLabelImg {
-          width: 45%;
-          max-width: 373px;
-          height: auto;
-        }
-      }
-    }
-    .bottompanel {
+    /*#settingsLabelContainer {
       width: 100%;
-      height: 90%;
+      height: auto;
+      margin-bottom: 1%;
 
-      > .settingsContainer {
-        float:left;
-        width: 83%;
-        height: 98%;
-        margin: .5%;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-        border: 1px solid rgb(187, 187, 187);
-        border-radius: 5px;
+      #settingsLabelImg {
+        width: 45%;
+        max-width: 373px;
+        height: auto;
       }
-      > .right {
-        width: 15%;
-        height: 100%;
-        float:right;
-        position:relative;
-        right: 0;
+    }*/
+    .title {
+    	height: 100%;
+    	max-height: 44px;
+    	width: auto;
+    	margin: 0 0 1% 0;
+    }
+  }
+  .bottompanel {
+    width: 100%;
+    height: 90%;
 
-				> .btnContainer {
-					position: absolute;
-					bottom: 3%;
-					right: 7%;
-					width: 100%;
+    > #settingsContainer {
+      float:left;
+      width: 83%;
+      height: 98%;
+      margin: .5%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid rgb(187, 187, 187);
+      border-radius: 5px;
+    }
+    > .right {
+      width: 15%;
+      height: 100%;
+      float:right;
+      position:relative;
+      right: 0;
 
-		      > .btn {
-		        max-width: 85px;
-		        min-width: 42px;
-		        width: 88%;
-		        height: auto;
-		        margin: 8% 2% 2% 0;
-		        cursor: pointer;
-		        float:right;
-		      }
-        }
+			> .btnContainer {
+				position: absolute;
+				bottom: 3%;
+				right: 7%;
+				width: 100%;
+
+	      > .btn {
+	        max-width: 85px;
+	        min-width: 42px;
+	        width: 88%;
+	        height: auto;
+	        margin: 8% 2% 2% 0;
+	        cursor: pointer;
+	        float:right;
+	      }
       }
     }
   }

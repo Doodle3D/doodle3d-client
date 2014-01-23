@@ -2,18 +2,13 @@
 <html>
 <head>
   <title>Doodle3D</title>
-
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="icon" type="image/ico" href="./favicon_alt.ico"/>
   <link rel="apple-touch-icon-precomposed" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png"/>
   <link rel="apple-touch-icon-precomposed" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png" sizes="144x144" />
-
   <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-
-  <!--link href="css/styles.css" rel="stylesheet" media="screen"-->
-  <!--link href="css/debug.css" rel="stylesheet" media="screen"-->
   <link href="css/styles.min.css" rel="stylesheet" media="screen">
   <link href="css/debug.min.css" rel="stylesheet" media="screen">
 
@@ -23,43 +18,47 @@
 
   <!-- background images -->
   <div class="bgContainer">
-    <img class="bgTop"    src="img/bg_top.png" />
-    <img class="bgMiddle" src="img/bg_middle.png" />
-    <img class="bgBottom" src="img/bg_bottom.png" />
+    <img id="bgTop"    src="img/bg_top.png" />
+    <img id="bgMiddle" src="img/bg_middle.png" />
+    <img id="bgBottom" src="img/bg_bottom.png" />
   </div>
 
   <!-- left panel -->
-  <div class="leftpanel shadowright">
-    <div class='sidebutton shadowright'></div>
-    <img class="btnNew btn" src="img/buttons/btnNew.png" /><br/>
-    <div class="btnsPrevNext" style="text-align:center">
-      <img class="btnPrevious btn disabled" src="img/buttons/btnLeft.png">
-      <img class="btnNext btn disabled" src="img/buttons/btnRight.png">
-      <!-- <div id="txtSketch"></div> -->
+  <div id="leftpanel">
+    <img id="btnNew" class="btn" src="img/buttons/btnNew.png" /><br/>
+    <div id="btnsPrevNext">
+      <img id="btnPrevious" class="btn disabled" src="img/buttons/btnLeft.png">
+      <img id="btnNext" class="btn disabled" src="img/buttons/btnRight.png">
     </div>
-    <img class="btnSave btn" src="img/buttons/btnSave.png" /><br/>
-    <img class="btnOops btn" src="img/buttons/btnOops.png" /><br/>
+    <img id="btnSave" class="btn" src="img/buttons/btnSave.png" /><br/>
+    <img id="btnOops" class="btn" src="img/buttons/btnOops.png" /><br/>
+    <img id="btnAdd" class="btn" src="img/buttons/btnAdd.png" /><br/>
+
+    <div id="buttonGroupAdd" class="buttonGroup">
+      <img id="btnWordArt" class="btn" src="img/buttons/btnWordArt.png" />
+      <img id="btnShape" class="btn" src="img/buttons/btnShape.png" />    
+    </div>
+
   </div>
 
   <!-- right panel -->
-  <div class="rightpanel shadowleft">
-    <!--<div class='sidebutton shadowleft'></div>-->
-    <img class="btnPrint btn clearfix" src="img/buttons/btnPrint.png" />
-    <img class="btnStop btn clearfix disabled" src="img/buttons/btnStop.png" />
+  <div id="rightpanel">
+    <img id="btnPrint" class="btn clearfix" src="img/buttons/btnPrint.png" />
+    <img id="btnStop" class="btn clearfix disabled" src="img/buttons/btnStop.png" />
 
-    <div class="progressbarCanvasContainerParent">
+    <div id="progressbarCanvasContainerParent">
       <div id="progressbarCanvasContainer">
         <canvas id="progressbarCanvas" width="93" height="82"></canvas>
       </div>
     </div>
-    <div class="thermometerContainerParent">
+    <div id="thermometerContainerParent">
       <div id="thermometerContainer">
         <canvas id="thermometerCanvas" width="90" height="120"></canvas>
       </div>
     </div>
-    <div class="btnsSettingsInfo">
-      <img class="btnSettings btn" src="img/buttons/btnSettings.png">
-      <img class="btnInfo btn" src="img/buttons/btnInfo.png">
+    <div id="btnsSettingsInfo">
+      <img id="btnSettings" class="btn" src="img/buttons/btnSettings.png">
+      <img id="btnInfo" class="btn" src="img/buttons/btnInfo.png">
     </div>
 
   </div>
@@ -67,100 +66,108 @@
   <div id="message"></div>
 
   <!-- center panel -->
-  <div class="centerpanel">
-    <div class="logopanel">
-      <div class="d3dlogo" onclick="location.reload()"></div>
+  <div id="centerpanel">
+    
+    <div id="logopanel" class="btn">
+      <img id="pencil" src="img/logo/pencil.png"/>
+      <img id="logo" src="img/logo/doodle3d.png"/>
     </div>
-    <div class="drawareacontainer">
+
+    <div id="drawareacontainer">
+      
       <div id="canvasContainers">
         <div id="mycanvasContainer">
           <canvas id="mycanvas"></canvas>
         </div>
+
         <div id="previewContainer">
           <canvas id="preview"></canvas>
+          <div id="buttonGroupVerticalShapes" class="buttonGroup">
+            <img id="btnTwist" class="btn" src="img/buttons/btnTwist.png" />
+            <img id="btnHeight" class="btn" src="img/buttons/btnHeight.png" />
+            <div id="verticalShapes">
+              <img id="btnConv" class="btn" src="img/buttons/btnConv.png" />
+              <img id="btnDiv" class="btn" src="img/buttons/btnDiv.png" />
+              <img id="btnSine" class="btn" src="img/buttons/btnSine.png" />
+              <img id="btnStraight" class="btn" src="img/buttons/btnStraight.png" />
+            </div>
+          </div>
+          <img id="btnToggleVerticalShapes" class="btn" src="img/buttons/btnArrowClose.png" />      
         </div>
+      
       </div>
       <canvas id="preview_tmp"></canvas>
-      <div id="verticalShapes">
-        <div><img class="verticalshape straight" src="img/vertical_shape_icons/straight.png" /></div>
-        <div><img class="verticalshape diverging" src="img/vertical_shape_icons/diverging.png" /></div>
-        <div><img class="verticalshape converging" src="img/vertical_shape_icons/converging.png" /></div>
-        <div><img class="verticalshape sinus" src="img/vertical_shape_icons/sinus.png" /></div>
+      
+      <div id="buttonGroupEdit" class="buttonGroup">
+        <img id="btnMove" class="btn" src="img/buttons/btnMove.png" />
+        <img id="btnZoom" class="btn" src="img/buttons/btnZoom.png" />
+        <img id="btnRotate" class="btn" src="img/buttons/btnRotate.png" />
       </div>
-    </div>
-    <div class="bottompanel">
-      <div class="manipulationBtns clearfix">
-        <div id="btnsUpDown">
-          <img class="manipulationBtn" id="btnMoveUp" src="img/buttons/btnUp.png" />
-          <img class="manipulationBtn" id="btnMoveDown" src="img/buttons/btnDown.png" />
-        </div>
-        <div id="btnsTurnLeftRight">
-          <img class="manipulationBtn" id="btnTwistLeft" src="img/buttons/btnTurnLeft.png" />
-          <img class="manipulationBtn" id="btnTwistRight"  src="img/buttons/btnTurnRight.png" />
-        </div>
-      </div>
-    </div>
+      <img id="btnToggleEdit" class="btn" src="img/buttons/btnArrowOpen.png" />
+	  
+    </div>  
   </div>
+
   <div id="debug_textArea">
-    <!-- <textarea rows="5" cols="60" id="textdump"></textarea> -->
     <button onclick="settingsWindow.downloadGcode()">Download gcode</button>
   </div>
-  <div id="debug_display">
+
+  <div id="debug_display"></div>
+
+  <div id="popupMask" class="btn"></div>
+
+  <div class="popup" id="popupWordArt">
+    <div class="content">
+      <h1>Add WordArt</h1>
+      Please enter your text:<br>
+      <input id="txtWordArt" type="text"/>
+      <img id="btnWordArtOk" class="btn" src="img/buttons/btnOk.png">
+    </div>
   </div>
-  <div id="contentOverlay">
-    <div id="settings">
-      <div class="toppanel">
-        <div class="settingsLabelContainer">
-          <img class="settingsLabelImg" src="img/settings_lable.png" alt="settings" />
-        </div>
+
+  <div class="popup" id="popupShape">
+    <div class="content">
+      <h1>Add a new shape</h1>
+      <div class="columnRight">
+      	<img id="iconShapeLessPoints" src="img/shapeLessPoints.gif" />
+        <img class="btn" id="btnShapeMin" src="img/buttons/btnMin.png" />
+        <img class="btn" id="btnShapePlus" src="img/buttons/btnPlus.png" />
+        <img id="iconShapeMorePoints" class="icon" src="img/shapeMorePoints.gif" />
+        <img class="btn" id="btnShapeOk" src="img/buttons/btnOk.png">
       </div>
-      <div class="bottompanel">
-        <div class="settingsContainer"></div>
-        <div class="right">
-          <div class="btnContainer">
-            <img src="img/buttons/btnOk.png" class="btn btnOK" alt="save"/>
-          </div>
+      <canvas id="shapePreview" width="150" height="150"></canvas><br/>
+      <div id="lblShapeResolution"></div>
+    </div>
+  </div>
+
+  <div id="popupSettings" class="popup">
+    <div class="toppanel">
+      <img class="title" src="img/settings_title.png" alt="settings" />
+    </div>
+    <div class="bottompanel">
+      <div id="settingsContainer"></div>
+      <div class="right">
+        <div class="btnContainer">
+          <img src="img/buttons/btnOk.png" class="btn btnOK" alt="save"/>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <div id="portrait">
-  <img class="vertImage" src="img/bg_vertical.png"/>
+  <img id="vertImage" src="img/bg_vertical.png"/>
 </div>
 <div id="helpContainer"></div>
+
 <script src="js/libs/jquery-1-9-1.min.js"></script>
+<!-- <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script> -->
 <script src="js/libs/jquery-cookie.min.js"></script>
-<!--<script src="js/jquery.scrollTo-min.js"></script>-->
-<!--<script src="js/libs/imagesloaded-pkgd.min.js"></script>-->
-<!--<script src="../js_src/libs/jquery-joyride-2-1.js"></script>-->
 <script src="js/libs/jquery-joyride-2-1.min.js"></script>
 <script src="js/libs/jquery-coolfieldset.min.js"></script>
 <script src="js/libs/FileSaver.min.js"></script>
-<!--<script src="js/doodle3d-client.js"></script>-->
+<script src="js/libs/jquery-fastclick.min.js"></script>
 <script src="js/doodle3d-client.min.js"></script>
-
-<!-- DEBUG -->
-<!--
-<script src="../js_src/SettingsWindow.js"></script>
-<script src="../js_src/UpdatePanel.js"></script>
-<script src="../js_src/d3dServerInterfacing.js"></script>
-<script src="../js_src/verticalShapes.js"></script>
-<script src="../js_src/buttonbehaviors.js"></script>
-<script src="../js_src/canvasDrawing.js"></script>
-<script src="../js_src/previewRendering.js"></script>
-<script src="../js_src/gcodeGenerating.js"></script>
-<script src="../js_src/init_layout.js"></script>
-<script src="../js_src/Printer.js"></script>
-<script src="../js_src/Progressbar.js"></script>
-<script src="../js_src/Thermometer.js"></script>
-<script src="../js_src/utils.js"></script>
-<script src="../js_src/sketches.js"></script>
-<script src="../js_src/Help.js"></script>
-<script src="../js_src/sidebar.js"></script>
-<script src="../js_src/Message.js"></script>
-<script src="../js_src/main.js"></script>
--->
 
 </body>
 </html>
