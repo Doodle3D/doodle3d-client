@@ -331,6 +331,8 @@ function resetTwist() {
 }
 
 function update() {
+	
+	
 	setState(printer.state,printer.hasControl);
 
 	thermometer.update(printer.temperature, printer.targetTemperature);
@@ -422,6 +424,10 @@ function setState(newState,newHasControl) {
 	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
 						prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE) {
 		message.set("Printer connected",Message.INFO,true);
+		console.log("  preheat: ",settings["printer.heatup.enabled"]);
+		if(settings["printer.heatup.enabled"]) {
+			printer.preheat();
+		}
 	}	else if(prevState == Printer.PRINTING_STATE && newState == Printer.STOPPING_STATE) {
 		console.log("stopmsg show");
 		message.set("Printer stopping",Message.INFO,false);

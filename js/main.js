@@ -164,9 +164,11 @@ function showOrHideThermo() {
 
 function settingsLoaded() {
 	console.log("settingsLoaded");
-	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);
+	
 	if(firstTimeSettingsLoaded) {
-		if(settings["printer.heatup.enabled"]) {
+		console.log("  preheat: ",settings["printer.heatup.enabled"]);
+		console.log("  state: ",state);
+		if(state == Printer.IDLE_STATE && settings["printer.heatup.enabled"]) {
 			printer.preheat();
 		}
 		console.log("doodle3d.tour.enabled: ",settings["doodle3d.tour.enabled"]);
