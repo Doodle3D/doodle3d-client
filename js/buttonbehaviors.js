@@ -24,38 +24,38 @@ var gcodeGenerateDelay = 50;
 function initButtonBehavior() {
   console.log("f:initButtonBehavior");
 
-  $(".btn").Button(); //initalizes all buttons
-
-  btnOops = $("#btnOops");
-  btnInfo = $("#btnInfo");
-  btnSettings = $("#btnSettings");
-  btnNew = $("#btnNew");
-  btnPrint= $("#btnPrint");
-  btnStop = $("#btnStop");
-  btnPrevious = $("#btnPrevious");
-  btnNext = $("#btnNext");
-  btnSave = $("#btnSave");
+  btnOops = new Button("#btnOops");
+  btnInfo = new Button("#btnInfo");
+  btnSettings = new Button("#btnSettings");
+  btnNew = new Button("#btnNew");
+  btnPrint= new Button("#btnPrint");
+  btnStop = new Button("#btnStop");
+  btnPrevious = new Button("#btnPrevious");
+  btnNext = new Button("#btnNext");
+  btnSave = new Button("#btnSave");
   buttonGroupAdd = $("#buttonGroupAdd");
-	btnShape = $("#btnShape");
-	btnWordArt = $("#btnWordArt");
+	btnShape = new Button("#btnShape");
+	btnWordArt = new Button("#btnWordArt");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
 	popupMask = $("#popupMask");
 	logoPanel = $("#logopanel");
-  btnToggleEdit = $("#btnToggleEdit");
+  btnToggleEdit = new Button("#btnToggleEdit");
   buttonGroupEdit = $("#buttonGroupEdit");
-  btnZoom = $("#btnZoom");
-  btnMove = $("#btnMove");
-  btnRotate = $("#btnRotate");
-  btnToggleVerticalShapes = $("#btnToggleVerticalShapes");
+  btnZoom = new Button("#btnZoom");
+  btnMove = new Button("#btnMove");
+  btnRotate = new Button("#btnRotate");
+  btnToggleVerticalShapes = new Button("#btnToggleVerticalShapes");
   buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
-  btnHeight = $("#btnHeight");
-  btnTwist = $("#btnTwist");
-  btnStraight = $("#btnStraight");
-  btnDiv = $("#btnDiv");
-  btnConv = $("#btnConv");
-  btnSine = $("#btnSine");
-  btnAdd = $("#btnAdd");
+  btnHeight = new Button("#btnHeight");
+  btnTwist = new Button("#btnTwist");
+  btnStraight = new Button("#btnStraight");
+  btnDiv = new Button("#btnDiv");
+  btnConv = new Button("#btnConv");
+  btnSine = new Button("#btnSine");
+  btnAdd = new Button("#btnAdd");
+  
+  $(".btn").Button(); //initalize other buttons
   
   logoPanel.on("onButtonClick", onLogo);
   btnNew.on("onButtonClick", onBtnNew);

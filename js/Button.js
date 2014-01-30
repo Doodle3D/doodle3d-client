@@ -1,139 +1,131 @@
-(function($) {
-
-	var clickEnabled = true;
-
-	$.fn.Button = function() {
-		return $(this).each(function(){
-			$.Button($(this)[0]);
-		});
-	};
-
-	$.Button = function(element) {
-		var downTimerFPS = 20;
-		var _timer = undefined;
-		var _x,_y;
-		var isDown = false;
-
-		var updateCursor = function(e) {
-			// retrieve cursor position relative to element
-			if (e.offsetX != undefined) {
-				_x = e.offsetX;
-				_y = e.offsetY;
-			} else if(e.pageX != undefined) {
-				// http://www.quirksmode.org/mobile/tableViewport_desktop.html#t11
-				var offset = $(element).offset();
-				_x = e.pageX - offset.left;
-				_y = e.pageY - offset.top;
-			} else if(e.originalEvent != undefined && e.originalEvent.pageX != undefined) {
-				//http://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
-				var offset = $(element).offset();
-				_x = e.originalEvent.pageX - offset.left;
-				_y = e.originalEvent.pageY - offset.top;
-			}
-			
-			//android+chrome-specific hack
-			if (e.originalEvent.changedTouches != undefined) {
-				var offset = $(element).offset();
-				_x = e.originalEvent.changedTouches[0].pageX - offset.left;
-				_y = e.originalEvent.changedTouches[0].pageY - offset.top;
-			}
-		}
-
-		var startDownTimer = function() {
-			if (_timer==undefined) {
-				_timer = setInterval(onDownTimerInterval, 1000/downTimerFPS);
-				isDown = true;
-			}
-		}
-
-		var stopDownTimer = function() {
-			clearInterval(_timer);
-			_timer = undefined;
-			isDown = false;
-			// _x = undefined;
-			// _y = undefined;
-		}
-
-		var onDownTimerInterval = function() {
-			if (_x!=undefined && _y!=undefined) {
-				$(element).trigger("onButtonHold",{x:_x,y:_y});
-			} else {
-				console.log("Button: warning... _x or _y not set...");
-			}
-		}
-		 
-		var onTouchStart = function(e) {
-			clickEnabled = false;
-			updateCursor(e);
-			startDownTimer();
-			$(element).trigger("onButtonClick",{x:_x,y:_y});
-			e.preventDefault();
-		}
-
-		var onTouchEnd = function(e) {
-			updateCursor(e);
-			stopDownTimer();
-		}
-
-		var onTouchMove = function(e) {
-			updateCursor(e);
-			startDownTimer();
-		}
-
-		var onMouseDown = function(e) {
-			updateCursor(e);
-			startDownTimer();
-		}
-
-		var onMouseUp = function(e) {
-			updateCursor(e);
-			stopDownTimer();
-		}
-
-		var onMouseMove = function(e) {
-			updateCursor(e);
-			if (isDown) onMouseDrag(e);
-		}
-
-		var onMouseDrag = function(e) {
-			updateCursor(e);
-		}
-
-		var onDocumentMouseUp = function(e) {
-			stopDownTimer();
-		}
-
-		var onClick = function(e) {
-			if(!clickEnabled) return;
-			updateCursor(e);
-			stopDownTimer();
-			$(element).trigger("onButtonClick",{x:_x,y:_y});
-		}
-
-		var onStartDrag = function(e) {
-		}
-
-		var onContextMenu = function(e) {
-			e.preventDefault();
-		}
-
-		//this needs to be done after the function declarations
-
-		$(element).bind({
-			touchstart: onTouchStart,
-			touchend: onTouchEnd,
-			touchmove: onTouchMove,
-			mousedown: onMouseDown,
-			mouseup: onMouseUp,
-			mousemove: onMouseMove,
-			contextmenu: onContextMenu,
-			click: onClick
-		});
-
-		$(document).on("mouseup", onDocumentMouseUp);
-		$(element).css("-webkit-user-select","none");
-		$(element).css("-webkit-touch-callout","none");
-
+// prototype inheritance 
+// http://robertnyman.com/2008/10/06/javascript-inheritance-how-and-why/
+Button.prototype = new jQuery;
+function Button() {
+	
+	this.enabled = true;
+		
+	var _clickEnabled = true;
+	var _downTimerFPS = 20;
+	var _timer = undefined;
+	var _x,_y;
+	var _isDown = false;
+	
+	var _self = this;
+		
+	// call jQuery constuctor 
+	// http://blog.santoshrajan.com/2008/10/what-john-resig-did-not-tell-you.html
+	this.constructor.prototype.init.apply(this, arguments);
+	
+	// prevent multiple event handlers etc
+	//	make sure you do a more general conversion last
+	if(this.data("isButton")) return;
+	else this.data("isButton",true);
+	
+	this.enable = function() {
+		if(_self.enabled) return;
+		_self.removeClass("disabled");
+		_self.enabled = true;
+	}
+	this.disable = function() {
+		if(!_self.enabled) return;
+		_self.addClass("disabled");
+		_self.enabled = false;
 	}
 	
-}(jQuery));
+	function updateCursor(e) {
+		// retrieve cursor position relative to element
+		if (e.offsetX != undefined) {
+			_x = e.offsetX;
+			_y = e.offsetY;
+		} else if(e.pageX != undefined) {
+			// http://www.quirksmode.org/mobile/tableViewport_desktop.html#t11
+			var offset = _self.offset();
+			_x = e.pageX - offset.left;
+			_y = e.pageY - offset.top;
+		} else if(e.originalEvent != undefined && e.originalEvent.pageX != undefined) {
+			//http://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
+			var offset = _self.offset();
+			_x = e.originalEvent.pageX - offset.left;
+			_y = e.originalEvent.pageY - offset.top;
+		}
+		
+		//android+chrome-specific hack
+		if (e.originalEvent.changedTouches != undefined) {
+			var offset = _self.offset();
+			_x = e.originalEvent.changedTouches[0].pageX - offset.left;
+			_y = e.originalEvent.changedTouches[0].pageY - offset.top;
+		}
+	}
+	function startDownTimer() {
+		if (_timer==undefined) {
+			_timer = setInterval(onDownTimerInterval, 1000/_downTimerFPS);
+			_isDown = true;
+		}
+	}
+	function stopDownTimer() {
+		clearInterval(_timer);
+		_timer = undefined;
+		_isDown = false;
+		// _x = undefined;
+		// _y = undefined;
+	}
+	function onDownTimerInterval() {
+		if (_x!=undefined && _y!=undefined) {
+			_self.trigger("onButtonHold",{x:_x,y:_y});
+		} else {
+			console.log("Button: warning... _x or _y not set...");
+		}
+	}
+	
+	// Event handlers
+	$(document).mouseup(function(e) {
+		stopDownTimer();
+	});
+	this.on("touchstart", function(e) {
+		_clickEnabled = false;
+		updateCursor(e);
+		startDownTimer();
+		_self.trigger("onButtonClick",{x:_x,y:_y});
+		e.preventDefault();
+	});
+	this.on("touchend", function(e) {
+		updateCursor(e);
+		stopDownTimer();
+	});
+	this.on("touchmove", function(e) {
+		updateCursor(e);
+		startDownTimer();
+	});
+	this.mousedown(function(e) {
+		updateCursor(e);
+		startDownTimer();
+	});
+	this.mouseup(function(e) {
+		updateCursor(e);
+		stopDownTimer();
+	});
+	this.mousemove(function(e) {
+		updateCursor(e);
+		//if (_isDown) mousedrag(e);
+	});
+	//this.mousedrag(function(e) {
+	//	updateCursor(e);
+	//});
+	this.contextmenu(function(e) {
+		e.preventDefault();
+	});
+	this.click(function(e) {
+		if(!_clickEnabled) return;
+		updateCursor(e);
+		stopDownTimer();
+		_self.trigger("onButtonClick",{x:_x,y:_y});
+	});
+}
+
+// to work with multiple objects we need a jQuery plugin
+$.fn.Button = function() {
+	return $(this).each(function(){
+		new Button(this);
+	});
+};
