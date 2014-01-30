@@ -136,19 +136,6 @@ function disableDragging() {
   });
 }
 
-function enableButton(elem, handler) {
-	//var elem = $('#'+domId);
-	elem.removeClass("disabled");
- 	elem.unbind('onButtonClick');
- 	elem.bind('onButtonClick', handler);
-}
-
-function disableButton(elem) {
-	//var elem = $('#'+domId);
-	elem.addClass("disabled");
- 	elem.unbind('onButtonClick');
-}
-
 function showOrHideThermo() {
   console.log("f:showOrHideThermo()");
   if (showOrHide) {

@@ -1,3 +1,11 @@
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
 // prototype inheritance 
 // http://robertnyman.com/2008/10/06/javascript-inheritance-how-and-why/
 Button.prototype = new jQuery;
@@ -71,6 +79,7 @@ function Button() {
 		// _y = undefined;
 	}
 	function onDownTimerInterval() {
+		if(!_self.enabled) return;
 		if (_x!=undefined && _y!=undefined) {
 			_self.trigger("onButtonHold",{x:_x,y:_y});
 		} else {
@@ -83,6 +92,7 @@ function Button() {
 		stopDownTimer();
 	});
 	this.on("touchstart", function(e) {
+		if(!_self.enabled) return;
 		_clickEnabled = false;
 		updateCursor(e);
 		startDownTimer();
@@ -94,10 +104,12 @@ function Button() {
 		stopDownTimer();
 	});
 	this.on("touchmove", function(e) {
+		if(!_self.enabled) return;
 		updateCursor(e);
 		startDownTimer();
 	});
 	this.mousedown(function(e) {
+		if(!_self.enabled) return;
 		updateCursor(e);
 		startDownTimer();
 	});
@@ -106,6 +118,7 @@ function Button() {
 		stopDownTimer();
 	});
 	this.mousemove(function(e) {
+		if(!_self.enabled) return;
 		updateCursor(e);
 		//if (_isDown) mousedrag(e);
 	});
@@ -116,7 +129,7 @@ function Button() {
 		e.preventDefault();
 	});
 	this.click(function(e) {
-		if(!_clickEnabled) return;
+		if(!_self.enabled || !_clickEnabled) return;
 		updateCursor(e);
 		stopDownTimer();
 		_self.trigger("onButtonClick",{x:_x,y:_y});

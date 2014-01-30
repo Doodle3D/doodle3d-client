@@ -63,6 +63,10 @@ function initButtonBehavior() {
   btnWordArt.on("onButtonClick", onBtnWordArt);
   btnShape.on("onButtonClick", onBtnShape);
   btnPrint.on("onButtonClick", print);
+  btnStop.on("onButtonClick", stopPrint);
+  btnSave.on("onButtonClick", saveSketch);
+  btnPrevious.on("onButtonClick", prevDoodle);
+  btnNext.on("onButtonClick", nextDoodle);
   btnOops.on("onButtonHold", onBtnOops);
   // vertical shape buttons
   btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
@@ -179,17 +183,15 @@ function initButtonBehavior() {
     buttonGroupAdd.fadeOut();
   }
 
-  enableButton(btnSettings, openSettingsWindow);
-
+  btnSettings.on("onButtonClick", openSettingsWindow);
   
   // 29-okt-2013 - we're not doing help for smartphones at the moment
   if (clientInfo.isSmartphone) {
-    btnInfo.addClass("disabled");
+    btnInfo.disable();
   } else {
-  	function onBtnInfo(e) {
+    btnInfo.on("onButtonClick", function(e) {
   		helpTours.startTour(helpTours.WELCOMETOUR);
-    }
-    enableButton(btnInfo, onBtnInfo);
+    });
   }
 }
 
@@ -350,17 +352,17 @@ function setState(newState,newHasControl) {
 	// print button
 	var printEnabled = (newState == Printer.IDLE_STATE && newHasControl);
 	if(printEnabled) {
-		enableButton(btnPrint,print);
+		btnPrint.enable();
 	} else {
-		disableButton(btnPrint);
+		btnPrint.disable();
 	}
 
 	// stop button
 	var stopEnabled = ((newState == Printer.PRINTING_STATE || newState == Printer.BUFFERING_STATE) && newHasControl);
 	if(stopEnabled) {
-		enableButton(btnStop,stopPrint);
+		btnStop.enable();
 	} else {
-		disableButton(btnStop);
+		btnStop.disable();
 	}
 
 	// thermometer
@@ -389,29 +391,29 @@ function setState(newState,newHasControl) {
 	/* settings button */
 	switch(newState) {
     case Printer.IDLE_STATE:
-      enableButton(btnSettings, openSettingsWindow);
+    	btnSettings.enable();
       break;
     case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
     case Printer.BUFFERING_STATE: /* fall-through */
     case Printer.PRINTING_STATE: /* fall-through */
     case Printer.STOPPING_STATE:
-      disableButton(btnSettings);
+    	btnSettings.disable();
       break;
     default:
-      enableButton(btnSettings, openSettingsWindow);
+    	btnSettings.enable();
       break;
   }
 	
 	/* save, next and prev buttons */
 	switch(newState) {
 		case Printer.WIFIBOX_DISCONNECTED_STATE:
-			disableButton(btnPrevious);
-			disableButton(btnNext);
-			disableButton(btnSave);
+			btnPrevious.disable();
+			btnNext.disable()
+			btnSave.disable();
 			break;
 		default:
 			updatePrevNextButtonState();
-			if (isModified) enableButton(btnSave, saveSketch);
+			if (isModified) btnSave.enable();
 			break;
 	}
 

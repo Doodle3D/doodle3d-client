@@ -94,7 +94,7 @@ function SettingsWindow() {
 		settingsPopup.setEnterEnabled(false);
 		settingsPopup.setAutoCloseEnabled(false);
 		
-		enableButton(this.btnOK,settingsPopup.commit);
+		this.btnOK.on('touchstart mousedown',settingsPopup.commit);
 		$("#popupSettings").bind("onPopupCancel", function() { settingsPopup.close(); } );
 		$("#popupSettings").bind("onPopupCommit", self.submitwindow);
 
@@ -164,7 +164,7 @@ function SettingsWindow() {
 //	};
 
 	this.submitwindow = function(e) {
-		disableButton(self.btnOK,settingsPopup.commit);
+		self.btnOK.attr("disabled",true);
 		e.preventDefault();
 		e.stopPropagation();
 		self.saveSettings(self.readForm(),function(success){
@@ -172,7 +172,7 @@ function SettingsWindow() {
 				settingsPopup.close();
 				self.signin();
 			}
-			enableButton(self.btnOK,settingsPopup.commit);
+			self.btnOK.removeAttr("disabled");
 		});
 
 		clearTimeout(self.retryRetrieveNetworkStatusDelay);
@@ -278,7 +278,6 @@ function SettingsWindow() {
 	
 	this.resetSettings = function() {
 		console.log("resetSettings");
-		//$("#restoreSettings").addClass("disabled");
 		self.btnRestoreSettings.attr("disabled", true);
 
 		clearTimeout(self.restoredStateHideDelay);
