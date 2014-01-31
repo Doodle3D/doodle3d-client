@@ -11,8 +11,8 @@
 Button.prototype = new jQuery();
 function Button() {
 	
-	this.enabled = true;
-		
+	this.enabled;
+	
 	var _clickEnabled = true;
 	var _downTimerFPS = 20;
 	var _timer;
@@ -34,12 +34,12 @@ function Button() {
 	}
 	
 	this.enable = function() {
-		if(_self.enabled) { return; }
+		if(_self.enabled === true) { return; } 
 		_self.removeClass("disabled");
 		_self.enabled = true;
 	};
 	this.disable = function() {
-		if(!_self.enabled) { return; }
+		if(_self.enabled === false) { return; }
 		_self.addClass("disabled");
 		_self.enabled = false;
 	};
