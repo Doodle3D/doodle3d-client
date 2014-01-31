@@ -1,15 +1,16 @@
 var keyboardShortcutsEnabled = true;
 var keyboardEscapeEnterEnabled = false;
 var wordBuffer = "";
+var charOffset = -1;
 
 var wordFuncs = {
-		"idbeholdl": function() {
+		"idbeholdl": function() { //a flashlight for when times get dark...
 			alert("Light!");
 		},
-		"idspispopd": function() {
+		"idspispopd": function() { //I live!
 			drawTextOnCanvas("Im in ur kanvas drawin' ur stuffz.");
 		},
-		"dia": function() {
+		"dia": function() { //draw a diamond with a cross onto the sketch shape for calibration purposes
 			var cx = canvasWidth / 2;
 			var cy = canvasHeight /2;
 			drawCircle(cx, cy, 50, 4);
@@ -18,11 +19,22 @@ var wordFuncs = {
 			shapeMoveTo(cx, cy - 20);
 			shapeLineTo(cx, cy + 20);
 		},
-		"stats": function() {
+		"btest": function() { //brim test (in conjunction with)
+			var cx = canvasWidth / 2;
+			var cy = canvasHeight /2;
+			//for (var i = 45; i <= 51; i += 3) { drawCircle(cx, cy, i, 4); }
+			var base = 75;
+			drawCircle(cx, cy, base, 6);
+			drawCircle(cx, cy, base -3, 6);
+			drawCircle(cx, cy, base + 3, 6);
+//			drawCircle(cx, cy, base + 9, 6);
+//			drawCircle(cx, cy, base + 12, 6);
+		},
+		"stats": function() { //show statistics?
 			var text = "Shape statistics:\nNumber of points: " + _points.length;
 			alert(text);
 		},
-		"pdump": function() {
+		"pdump": function() { //dump points array
 			console.log("points array: " + _points);
 		}
 };
@@ -84,7 +96,9 @@ function initKeyboard() {
 }
 
 function processWords(e) {
-	wordBuffer += String.fromCharCode(e.which);
+	//chrome fills e.which with an alphabetical index somehow, so we add a lowercase 'a'
+	if (charOffset < 0) charOffset = window.chrome ? 96 : 0;
+	wordBuffer += String.fromCharCode(charOffset + e.which);
 	
 	var match = false;
 	for (var k in wordFuncs) {

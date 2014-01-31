@@ -140,8 +140,10 @@ function generate_gcode() {
       }
     }
 
+    console.log("num paths: " + j);
     // loop over the subpaths (the separately drawn lines)
     for (var j = 0; j < paths.length; j++) { // TODO paths > subpaths
+    	//if (layer > 2 && j > 0) continue; //used as rudimentary brim test in conjunction with the 'btest' keyword (see Keyboard.js)
       var commands = paths[j];
 
       // loop over the coordinates of the subpath
