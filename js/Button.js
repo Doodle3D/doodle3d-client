@@ -8,14 +8,14 @@
 
 // prototype inheritance 
 // http://robertnyman.com/2008/10/06/javascript-inheritance-how-and-why/
-Button.prototype = new jQuery;
+Button.prototype = new jQuery();
 function Button() {
 	
 	this.enabled = true;
 		
 	var _clickEnabled = true;
 	var _downTimerFPS = 20;
-	var _timer = undefined;
+	var _timer;
 	var _x,_y;
 	var _isDown = false;
 	
@@ -27,46 +27,49 @@ function Button() {
 	
 	// prevent multiple event handlers etc
 	//	make sure you do a more general conversion last
-	if(this.data("isButton")) return;
-	else this.data("isButton",true);
+	if(this.data("isButton")) {
+		return;
+	} else {
+		this.data("isButton",true);
+	}
 	
 	this.enable = function() {
-		if(_self.enabled) return;
+		if(_self.enabled) { return; }
 		_self.removeClass("disabled");
 		_self.enabled = true;
-	}
+	};
 	this.disable = function() {
-		if(!_self.enabled) return;
+		if(!_self.enabled) { return; }
 		_self.addClass("disabled");
 		_self.enabled = false;
-	}
+	};
 	
 	function updateCursor(e) {
 		// retrieve cursor position relative to element
-		if (e.offsetX != undefined) {
+		if (e.offsetX !== undefined) {
 			_x = e.offsetX;
 			_y = e.offsetY;
-		} else if(e.pageX != undefined) {
-			// http://www.quirksmode.org/mobile/tableViewport_desktop.html#t11
+		} else {
 			var offset = _self.offset();
-			_x = e.pageX - offset.left;
-			_y = e.pageY - offset.top;
-		} else if(e.originalEvent != undefined && e.originalEvent.pageX != undefined) {
-			//http://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
-			var offset = _self.offset();
-			_x = e.originalEvent.pageX - offset.left;
-			_y = e.originalEvent.pageY - offset.top;
-		}
+			if(e.pageX !== undefined) {
+				// http://www.quirksmode.org/mobile/tableViewport_desktop.html#t11
+				_x = e.pageX - offset.left;
+				_y = e.pageY - offset.top;
+			} else if(e.originalEvent !== undefined && e.originalEvent.pageX !== undefined) {
+				//http://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
+				_x = e.originalEvent.pageX - offset.left;
+				_y = e.originalEvent.pageY - offset.top;
+			}
 		
-		//android+chrome-specific hack
-		if (e.originalEvent.changedTouches != undefined) {
-			var offset = _self.offset();
-			_x = e.originalEvent.changedTouches[0].pageX - offset.left;
-			_y = e.originalEvent.changedTouches[0].pageY - offset.top;
+			//android+chrome-specific hack	
+			if (e.originalEvent.changedTouches !== undefined) {
+				_x = e.originalEvent.changedTouches[0].pageX - offset.left;
+				_y = e.originalEvent.changedTouches[0].pageY - offset.top;
+			}
 		}
 	}
 	function startDownTimer() {
-		if (_timer==undefined) {
+		if (_timer === undefined) {
 			_timer = setInterval(onDownTimerInterval, 1000/_downTimerFPS);
 			_isDown = true;
 		}
@@ -79,8 +82,8 @@ function Button() {
 		// _y = undefined;
 	}
 	function onDownTimerInterval() {
-		if(!_self.enabled) return;
-		if (_x!=undefined && _y!=undefined) {
+		if(!_self.enabled) { return; }
+		if (_x !== undefined && _y !== undefined) {
 			_self.trigger("onButtonHold",{x:_x,y:_y});
 		} else {
 			console.log("Button: warning... _x or _y not set...");
@@ -92,7 +95,7 @@ function Button() {
 		stopDownTimer();
 	});
 	this.on("touchstart", function(e) {
-		if(!_self.enabled) return;
+		if(!_self.enabled) { return; }
 		_clickEnabled = false;
 		updateCursor(e);
 		startDownTimer();
@@ -104,12 +107,12 @@ function Button() {
 		stopDownTimer();
 	});
 	this.on("touchmove", function(e) {
-		if(!_self.enabled) return;
+		if(!_self.enabled) { return; }
 		updateCursor(e);
 		startDownTimer();
 	});
 	this.mousedown(function(e) {
-		if(!_self.enabled) return;
+		if(!_self.enabled) { return; }
 		updateCursor(e);
 		startDownTimer();
 	});
@@ -118,7 +121,7 @@ function Button() {
 		stopDownTimer();
 	});
 	this.mousemove(function(e) {
-		if(!_self.enabled) return;
+		if(!_self.enabled) { return; }
 		updateCursor(e);
 		//if (_isDown) mousedrag(e);
 	});
@@ -129,7 +132,7 @@ function Button() {
 		e.preventDefault();
 	});
 	this.click(function(e) {
-		if(!_self.enabled || !_clickEnabled) return;
+		if(!_self.enabled || !_clickEnabled) { return; }
 		updateCursor(e);
 		stopDownTimer();
 		_self.trigger("onButtonClick",{x:_x,y:_y});
