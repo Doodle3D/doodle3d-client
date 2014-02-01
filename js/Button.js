@@ -11,14 +11,14 @@
 Button.prototype = new jQuery();
 function Button() {
 	
-	this.enabled;
+	this.enabled = true;
 	
 	var _clickEnabled = true;
 	var _downTimerFPS = 20;
 	var _timer;
 	var _x,_y;
 	var _isDown = false;
-	
+	var _firstEnable = true;
 	var _self = this;
 		
 	// call jQuery constuctor 
@@ -34,9 +34,10 @@ function Button() {
 	}
 	
 	this.enable = function() {
-		if(_self.enabled === true) { return; } 
+		if(!_firstEnable && _self.enabled === true) { return; } 
 		_self.removeClass("disabled");
 		_self.enabled = true;
+		_firstEnable = false;
 	};
 	this.disable = function() {
 		if(_self.enabled === false) { return; }
