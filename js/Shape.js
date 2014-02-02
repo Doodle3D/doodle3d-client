@@ -40,7 +40,7 @@ function endShape() {
 }
 
 function getBounds(points) {    
-  var xMin=9999,xMax=-9999,yMin=9999,yMax=-9999;
+  var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
   for (var i=0; i<points.length; i++) {
     var p = points[i];
     xMin = Math.min(xMin,p[0]);
