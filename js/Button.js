@@ -18,7 +18,6 @@ function Button() {
 	var _timer;
 	var _x,_y;
 	var _isDown = false;
-	var _firstEnable = true;
 	var _self = this;
 		
 	// call jQuery constuctor 
@@ -34,16 +33,19 @@ function Button() {
 	}
 	
 	this.enable = function() {
-		if(!_firstEnable && _self.enabled === true) { return; } 
+		if(_self.enabled === true) { return; } 
 		_self.removeClass("disabled");
 		_self.enabled = true;
-		_firstEnable = false;
 	};
 	this.disable = function() {
 		if(_self.enabled === false) { return; }
 		_self.addClass("disabled");
 		_self.enabled = false;
 	};
+	// if the element starts with a disable class, we properly disable it
+	if(this.hasClass("disabled")) {
+		this.disable();
+	}
 	
 	function updateCursor(e) {
 		// retrieve cursor position relative to element
