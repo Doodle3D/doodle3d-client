@@ -144,42 +144,44 @@ function NetworkPanel() {
 			}
 			console.log("NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
 			
-			// Determine which network settings to show
-			switch(data.status) {
-				case NetworkAPI.STATUS.NOT_CONNECTED:
-					setNetworkMode(NETWORK_MODE.NEITHER);
-					break;
-				case NetworkAPI.STATUS.CONNECTING_FAILED:
-				case NetworkAPI.STATUS.CONNECTING:
-				case NetworkAPI.STATUS.CONNECTED:
-					setNetworkMode(NETWORK_MODE.CLIENT);
-					
-					if(data.status == NetworkAPI.STATUS.CONNECTED) {
-						_networkSelector.val(data.ssid);
-	
+			// if status changed
+			if(data.status != _currentNetworkStatus) {
+				// Determine which network mode ui to show
+				switch(data.status) {
+					case NetworkAPI.STATUS.NOT_CONNECTED:
+						setNetworkMode(NETWORK_MODE.NEITHER);
+						break;
+					case NetworkAPI.STATUS.CONNECTING_FAILED:
+					case NetworkAPI.STATUS.CONNECTING:
+					case NetworkAPI.STATUS.CONNECTED:
+						setNetworkMode(NETWORK_MODE.CLIENT);
+						break;
+					case NetworkAPI.STATUS.CREATING:
+					case NetworkAPI.STATUS.CREATED:
+						setNetworkMode(NETWORK_MODE.ACCESS_POINT);
+						break;
+				}
+				// update info
+				switch(data.status) {
+					case NetworkAPI.STATUS.CONNECTED:
 						_currentNetwork = data.ssid;
 						_currentLocalIP = data.localip;
 						_self.selectNetwork(data.ssid);
-					} else {
+						break;
+					case NetworkAPI.STATUS.CONNECTING_FAILED:
+					case NetworkAPI.STATUS.CONNECTING:
 						_currentLocalIP = "";
-					}
-					break;
-				case NetworkAPI.STATUS.CREATING:
-				case NetworkAPI.STATUS.CREATED:
-					setNetworkMode(NETWORK_MODE.ACCESS_POINT);
-					
-					_currentNetwork = undefined;
-					_self.selectNetwork(NOT_CONNECTED);
-					_networkSelector.val(NOT_CONNECTED);
-	
-					if(data.ssid && data.status == NetworkAPI.STATUS.CREATED) {
-						_currentAP = data.ssid;
-					}
-					break;
-			}
-			
-			// update ui if status changed
-			if(data.status != _currentNetworkStatus) {
+						break;
+					case NetworkAPI.STATUS.CREATING:
+					case NetworkAPI.STATUS.CREATED:					
+						_currentNetwork = undefined;
+						_self.selectNetwork(NOT_CONNECTED);
+						if(data.ssid && data.status == NetworkAPI.STATUS.CREATED) {
+							_currentAP = data.ssid;
+						}
+						break;
+				}
+				// update ui 
 				updateClientModeUI(data.status,data.statusMessage);
 				updateAPModeUI(data.status,"");
 			}
@@ -250,15 +252,16 @@ function NetworkPanel() {
 			case NetworkAPI.STATUS.CREATED:
 				_btnConnect.removeAttr("disabled");
 				msg = "Not connected";
+				_networkSelector.val(NOT_CONNECTED);
 				break;
 			case NetworkAPI.STATUS.CONNECTED:
 				_btnConnect.removeAttr("disabled");
-				
 				msg = "Connected to: <b>"+_currentNetwork+"</b>.";
 				if(_currentLocalIP != undefined && _currentLocalIP != "") {
 					var a = "<a href='http://"+_currentLocalIP+"' target='_black'>"+_currentLocalIP+"</a>";
 					msg += " (IP: "+a+")";
 				}
+				_networkSelector.val(_currentNetwork);
 				break;
 			case NetworkAPI.STATUS.CONNECTING:
 				_btnConnect.attr("disabled", true);
