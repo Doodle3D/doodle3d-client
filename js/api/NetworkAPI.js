@@ -78,7 +78,7 @@ function NetworkAPI() {
 				recreate:recreate
 		};
 		$.ajax({
-			url: _wifiboxURL + "/network/associate",
+			url: _wifiboxCGIBinURL + "/network/associate",
 			type: "POST",
 			data: postData,
 			dataType: 'json',
