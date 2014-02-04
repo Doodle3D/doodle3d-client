@@ -265,10 +265,11 @@ function NetworkPanel() {
 		console.log("NetworkPanel:selectNetwork: ",ssid);
 		if(ssid == "") return;
 		_selectedNetwork = ssid;
-		if(_networks == undefined || ssid == CLIENT_MODE_STATE.NOT_CONNECTED) {
+		if(ssid == CLIENT_MODE_STATE.NOT_CONNECTED) {
 			hideWiFiPassword();
 		} else {
 			var network = _networks[ssid];
+			if(network === undefined) return;
 			if(network.encryption == "none") {
 				hideWiFiPassword();
 			} else {
