@@ -35,7 +35,7 @@ var BUTTON_GROUP_SHOW_DURATION = 80;
 
 $(function() {
   console.log("ready");
-
+  
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
