@@ -45,11 +45,6 @@ function SettingsWindow() {
 
 	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
 		
-		console.log("EARLY initialize network panel");
-		//var _networkPanel = new NetworkPanel();
-		_networkPanel.init(wifiboxURL,wifiboxCGIBinURL);
-		
-		
 		this.wifiboxURL = wifiboxURL;
 		this.wifiboxCGIBinURL = wifiboxCGIBinURL;
 
@@ -63,7 +58,7 @@ function SettingsWindow() {
 		$("#popupSettings").bind("onPopupCancel", function() { settingsPopup.close(); } );
 		$("#popupSettings").bind("onPopupCommit", self.submitwindow);
 		
-		//this.window.find("#settingsContainer").load("settings.html", function() {
+		this.window.find("#settingsContainer").load("settings.html", function() {
 			console.log("Settings:finished loading settings.html, now loading settings...");
 
 			self.form = self.window.find("form");
@@ -75,7 +70,7 @@ function SettingsWindow() {
 				timeout: self.timeoutTime,
 				success: function(response) {
 					console.log("Settings:printer/listall response: ",response.data.printers);
-					console.log("  this: ",this);
+					//console.log("  this: ",this);
 					// network panel
 					console.log("initialize network panel");
 					var $networkPanelElement = self.form.find("#networkPanel");
@@ -106,7 +101,7 @@ function SettingsWindow() {
 			}).fail(function() {
 				console.log("FATAL ERROR: Settings:printer/listall failed");
 			});
-		//}); //this.window.find
+		}); //this.window.find
 
 	}; //this.init
 	
@@ -360,6 +355,7 @@ function SettingsWindow() {
  *  FROM DOODLE3D.INI
  *
  */
+
 //TODO: find all references to these variables, replace them and finally remove these.
 var objectHeight = 20;
 var layerHeight = .2;

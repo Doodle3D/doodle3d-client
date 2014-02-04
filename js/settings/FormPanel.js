@@ -22,20 +22,13 @@ function FormPanel() {
 		// needed to have the subclass instance access the same counter 
 		_self = this; 
 		_element = panelElement;
-		//_configAPI.init(wifiboxURL,wifiboxCGIBinURL);
-		
-		console.log("  calling _self.readForm from FormPanel:init");
-		_self.readForm();
-		//console.log("  calling this.readForm from FormPanel:init");
-		//this.readForm();
-		//console.log("  calling _self2.readForm from FormPanel:init");
-		//_self2.readForm();
+		_configAPI.init(wifiboxURL,wifiboxCGIBinURL);
 	};
 	
 	//this.readForm = function(form) {
 	FormPanel.prototype.readForm = function(form) {
 		console.log("FormPanel:readForm");
-		/*if(!form) form = _element; // if no form specified, read whole panel form
+		if(!form) form = _element; // if no form specified, read whole panel form
 		//console.log("FormPanel");
 		var settings = {};
 		// Read all selects
@@ -70,10 +63,10 @@ function FormPanel() {
 			settings[elem.attr('name')] = elem.val();
 		});
 		console.log("  settings: ",settings);
-		return settings;*/
+		return settings;
 	};
 	
-	/*this.fillForm = function(settings,form) { 
+	this.fillForm = function(settings,form) { 
 		console.log("FormPanel:fillForm");
 		if(!form) form = _element; // if no form specified, fill whole panel form
 		console.log("  settings: ",settings);
@@ -109,7 +102,6 @@ function FormPanel() {
 	this.saveSettings = function(newSettings,complete) {
 		console.log("FormPanel:saveSettings");
 		console.log("  newSettings: ",newSettings);
-		console.log("  form: ",form);
 		_configAPI.save(newSettings,function(data) {
 			var validation = data.validation;
 			console.log("  validation: ",validation);
@@ -139,5 +131,5 @@ function FormPanel() {
 	function clearValidationErrors() {
 		_element.find(".errorMsg").remove();
 		_element.find(".error").removeClass("error");
-	};*/
+	};
 }

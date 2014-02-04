@@ -12,7 +12,7 @@ NetworkPanel.prototype = new FormPanel();
 function NetworkPanel() {
 	
 	// network client mode states
-	/*var CLIENT_MODE_STATE = {
+	var CLIENT_MODE_STATE = {
 		NOT_CONNECTED: "not connected", // also used as first item in networks list
 		CONNECTED: "connected",
 		CONNECTING: "connecting",
@@ -63,7 +63,7 @@ function NetworkPanel() {
 	var _passwordField;
 	var _passwordLabel;
 	var _clientStateDisplay;
-	var _apModeStateDisplay;*/
+	var _apModeStateDisplay;
 	
 	var _self = this;
 	
@@ -72,10 +72,7 @@ function NetworkPanel() {
 		// super call:
 		_self.constructor.prototype.init.call(_self,wifiboxURL,wifiboxCGIBinURL,panelElement);
 		
-		console.log("  calling readForm from NetworkPanel:init");
-		_self.readForm();
-		
-		/*_api.init(wifiboxURL,wifiboxCGIBinURL);
+		_api.init(wifiboxURL,wifiboxCGIBinURL);
 		
 		_element = panelElement;
 		_apRadioButton			= _element.find("#ap");
@@ -96,12 +93,12 @@ function NetworkPanel() {
 		_btnRefresh.on('touchstart mousedown',onRefreshClick);
 		_btnConnect.on('touchstart mousedown',_self.connectToNetwork);
 		_btnCreate.on('touchstart mousedown',_self.createAP);
-		_networkSelector.change(networkSelectorChanged);*/
+		_networkSelector.change(networkSelectorChanged);
 	}
 	/*
 	 * Handlers
 	 */
-	/*
+	
 	function showAPSettings() {
 		_apFieldSet.show();
 		_clientFieldSet.hide();
@@ -124,7 +121,7 @@ function NetworkPanel() {
 	this.update = function() {
 		console.log("NetworkPanel:update");
 		_self.refreshNetworks();
-		_self.retrieveStatus(false);
+		_self.retrieveNetworkStatus(false);
 	}
 	this.refreshNetworks = function(completeHandler) {
 		console.log("NetworkPanel:refreshNetworks");
@@ -154,8 +151,8 @@ function NetworkPanel() {
 		});
 	};
 	
-	this.retrieveStatus = function(connecting) {
-		//console.log("NetworkPanel:retrieveStatus");
+	this.retrieveNetworkStatus = function(connecting) {
+		//console.log("NetworkPanel:retrieveNetworkStatus");
 		_api.status(function(data) {
 			if(typeof data.status === 'string') {
 				data.status = parseInt(data.status);
@@ -172,7 +169,7 @@ function NetworkPanel() {
 				case NetworkAPI.STATUS.CONNECTED:
 					setNetworkMode(NETWORK_MODE.CLIENT);
 					
-					if(data.status == SettingsWindow.API_CONNECTED) {
+					if(data.status == NetworkAPI.STATUS.CONNECTED) {
 						_networkSelector.val(data.ssid);
 	
 						_currentNetwork = data.ssid;
@@ -190,7 +187,7 @@ function NetworkPanel() {
 					_self.selectNetwork(CLIENT_MODE_STATE.NOT_CONNECTED);
 					_networkSelector.val(CLIENT_MODE_STATE.NOT_CONNECTED);
 	
-					if(data.ssid && data.status == SettingsWindow.API_CREATED) {
+					if(data.ssid && data.status == NetworkAPI.STATUS.CREATED) {
 						_currentAP = data.ssid;
 					}
 					break;
@@ -230,18 +227,18 @@ function NetworkPanel() {
 				case NetworkAPI.STATUS.CONNECTING:
 				case NetworkAPI.STATUS.CREATING:
 					clearTimeout(_retryRetrieveStatusDelay);
-				  _retryRetrieveStatusDelay = setTimeout(function() { _self.retrieveStatus(connecting); },_retryRetrieveStatusDelayTime); // retry after delay
+				  _retryRetrieveStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(connecting); },_retryRetrieveStatusDelayTime); // retry after delay
 					break;
 				}
 			}
 		}, function() {
 			console.log("NetworkPanel:retrieveStatus failed");
 			clearTimeout(_retryRetrieveStatusDelay);
-			_retryRetrieveStatusDelay = setTimeout(function() { _self.retrieveStatus(connecting); }, _retryRetrieveStatusDelayTime); // retry after delay
+			_retryRetrieveStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(connecting); }, _retryRetrieveStatusDelayTime); // retry after delay
 		});
 	};
 	function setNetworkMode(mode) {
-		//console.log("NetworkPanel:setNetworkMode: ",mode);
+		console.log("NetworkPanel:setNetworkMode: ",_networkMode,">",mode);
 		if(mode == _networkMode) return;
 		switch(mode) {
 			case NETWORK_MODE.NEITHER:
@@ -265,9 +262,8 @@ function NetworkPanel() {
 	}
 	
 	this.selectNetwork = function(ssid) {
-		console.log("select network: ",ssid);
+		console.log("NetworkPanel:selectNetwork: ",ssid);
 		if(ssid == "") return;
-		//console.log("  checked");
 		_selectedNetwork = ssid;
 		if(_networks == undefined || ssid == CLIENT_MODE_STATE.NOT_CONNECTED) {
 			hideWiFiPassword();
@@ -291,49 +287,58 @@ function NetworkPanel() {
 	};
 
 	function setClientModeState(state,statusMessage) {
+		console.log("NetworkPanel:setClientModeState ",state,statusMessage);
+		//console.log("  CLIENT_MODE_STATE.CONNECTING: ",CLIENT_MODE_STATE.CONNECTING);
 		var msg = "";
 		switch(state) {
-		case SettingsWindow.NOT_CONNECTED:
-			_btnConnect.removeAttr("disabled");
-			msg = "Not connected";
-			break;
-		case SettingsWindow.CONNECTED:
-			_btnConnect.removeAttr("disabled");
-			
-			msg = "Connected to: <b>"+_currentNetwork+"</b>.";
-			if(_currentLocalIP != undefined && _currentLocalIP != "") {
-				var a = "<a href='http://"+_currentLocalIP+"' target='_black'>"+_currentLocalIP+"</a>";
-				msg += " (IP: "+a+")";
-			}
-			break;
-		case SettingsWindow.CONNECTING:
-			_btnConnect.attr("disabled", true);
-			msg = "Connecting... Reconnect by connecting your device to <b>"+_selectedNetwork+"</b> and going to <a href='http://connect.doodle3d.com'>connect.doodle3d.com</a>";
-			break;
-		case SettingsWindow.CONNECTING_FAILED:
-			_btnConnect.removeAttr("disabled");
-			msg = statusMessage;
-			break;
+			case CLIENT_MODE_STATE.NOT_CONNECTED:
+				//console.log("CLIENT_MODE_STATE.NOT_CONNECTED");
+				_btnConnect.removeAttr("disabled");
+				msg = "Not connected";
+				break;
+			case CLIENT_MODE_STATE.CONNECTED:
+				//console.log("CLIENT_MODE_STATE.CONNECTED");
+				_btnConnect.removeAttr("disabled");
+				
+				msg = "Connected to: <b>"+_currentNetwork+"</b>.";
+				if(_currentLocalIP != undefined && _currentLocalIP != "") {
+					var a = "<a href='http://"+_currentLocalIP+"' target='_black'>"+_currentLocalIP+"</a>";
+					msg += " (IP: "+a+")";
+				}
+				break;
+			case CLIENT_MODE_STATE.CONNECTING:
+				//console.log("CLIENT_MODE_STATE.CONNECTING");
+				_btnConnect.attr("disabled", true);
+				msg = "Connecting... Reconnect by connecting your device to <b>"+_selectedNetwork+"</b> and going to <a href='http://connect.doodle3d.com'>connect.doodle3d.com</a>";
+				break;
+			case CLIENT_MODE_STATE.CONNECTING_FAILED:
+				//console.log("CLIENT_MODE_STATE.CONNECTING_FAILED");
+				_btnConnect.removeAttr("disabled");
+				msg = statusMessage;
+				break;
 		}
+		console.log("  msg: ",msg);
 		_clientStateDisplay.html(msg);
 		_clientModeState = state;
 	};
 	function setAPModeState(state,statusMessage) {
+		//console.log("NetworkPanel:setAPModeState ",state,statusMessage);
 		var msg = "";
 		switch(state) {
-		case SettingsWindow.NO_AP:
+		case AP_MODE_STATE.NO_AP:
 			_btnCreate.removeAttr("disabled");
 			msg = "Not currently a access point";
 			break;
-		case SettingsWindow.AP:
+		case AP_MODE_STATE.AP:
 			_btnCreate.removeAttr("disabled");
 			msg = "Is access point: <b>"+_currentAP+"</b>";
 			break;
-		case SettingsWindow.CREATING_AP:
+		case AP_MODE_STATE.CREATING_AP:
 			_btnCreate.attr("disabled", true);
 			msg = "Creating access point... Reconnect by connecting your device to <b>"+settings.substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>";
 			break;
 		}
+		//console.log("  msg: ",msg);
 		_apModeStateDisplay.html(msg);
 		_apModeState = state;
 	};
@@ -341,7 +346,6 @@ function NetworkPanel() {
 	this.connectToNetwork = function() {
 		console.log("NetworkPanel:connectToNetwork");
 		if(_selectedNetwork == undefined) return;
-		
 		// save network related settings and on complete, connect to network
 		_self.saveSettings(_self.readForm(),function(validated) {
 			if(!validated) return;
