@@ -95,11 +95,11 @@ function FormPanel() {
 	};
 	
 	this.saveSettings = function(newSettings,complete) {
-		console.log("FormPanel:saveSettings");
-		console.log("  newSettings: ",newSettings);
+		//console.log("FormPanel:saveSettings");
+		//console.log("  newSettings: ",newSettings);
 		_configAPI.save(newSettings,function(data) {
 			var validation = data.validation;
-			console.log("  validation: ",validation);
+			//console.log("  validation: ",validation);
 			clearValidationErrors();
 			var validated = true;
 			$.each(validation, function(key, val) {
@@ -112,7 +112,7 @@ function FormPanel() {
 			settings.substituted_ssid = data.substituted_ssid;
 			if(complete) complete(validated);
 		}, function() {
-			console.log("Settings:saveSettings: failed");
+			//console.log("Settings:saveSettings: failed");
 			clearTimeout(_retrySaveSettingsDelay);
 			_retrySaveSettingsDelay = setTimeout(function() { _self.saveSettings(newSettings,complete); },_retryDelay); // retry after delay
 		});

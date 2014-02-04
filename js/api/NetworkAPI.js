@@ -31,7 +31,7 @@ function NetworkAPI() {
 		_wifiboxCGIBinURL = wifiboxCGIBinURL;
 	}
 	this.scan = function(completeHandler) {
-		console.log("NetworkAPI:scan");
+		//console.log("NetworkAPI:scan");
 		//console.log("  _wifiboxURL: ",_wifiboxURL);
 		$.ajax({
 			url: _wifiboxURL + "/network/scan",
@@ -84,10 +84,10 @@ function NetworkAPI() {
 			dataType: 'json',
 			timeout: _timeoutTime,
 			success: function(response){
-				console.log("NetworkAPI:associate response: ",response);
+				//console.log("NetworkAPI:associate response: ",response);
 			}
 		}).fail(function() {
-			console.log("NetworkAPI:associate: timeout (normal behavior)");
+			//console.log("NetworkAPI:associate: timeout (normal behavior)");
 		});
 	};
 	
@@ -99,10 +99,10 @@ function NetworkAPI() {
 			dataType: 'json',
 			timeout: _timeoutTime,
 			success: function(response){
-				console.log("NetworkAPI:openAP response: ",response);
+				//console.log("NetworkAPI:openAP response: ",response);
 			}
 		}).fail(function() {
-			console.log("NetworkAPI:openAP: timeout (normal behavior)");
+			//console.log("NetworkAPI:openAP: timeout (normal behavior)");
 		});
 	};
 	

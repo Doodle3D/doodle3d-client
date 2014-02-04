@@ -54,7 +54,7 @@ function NetworkPanel() {
 	var _self = this;
 	
 	this.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
-		console.log("NetworkPanel:init");
+		//console.log("NetworkPanel:init");
 		// super call:
 		_self.constructor.prototype.init.call(_self,wifiboxURL,wifiboxCGIBinURL,panelElement);
 		
@@ -109,7 +109,7 @@ function NetworkPanel() {
 		_self.retrieveNetworkStatus(false);
 	}
 	this.refreshNetworks = function(completeHandler) {
-		console.log("NetworkPanel:refreshNetworks");
+		//console.log("NetworkPanel:refreshNetworks");
 		_api.scan(function(data) {
 			//console.log("NetworkPanel:scanned");
 			_networks = {};
@@ -204,7 +204,7 @@ function NetworkPanel() {
 		});
 	};
 	function setNetworkMode(mode) {
-		console.log("NetworkPanel:setNetworkMode: ",_networkMode,">",mode);
+		//console.log("NetworkPanel:setNetworkMode: ",_networkMode,">",mode);
 		if(mode == _networkMode) return;
 		switch(mode) {
 			case NETWORK_MODE.NEITHER:
@@ -228,7 +228,7 @@ function NetworkPanel() {
 	}
 	
 	this.selectNetwork = function(ssid) {
-		console.log("NetworkPanel:selectNetwork: ",ssid);
+		//console.log("NetworkPanel:selectNetwork: ",ssid);
 		if(ssid == "") return;
 		_selectedNetwork = ssid;
 
@@ -272,7 +272,7 @@ function NetworkPanel() {
 				msg = statusMessage;
 				break;
 		}
-		console.log("  client display msg: ",msg);
+		//console.log("  client display msg: ",msg);
 		_clientStateDisplay.html(msg);
 	};
 	function updateAPModeUI(state,statusMessage) {
@@ -294,12 +294,12 @@ function NetworkPanel() {
 				msg = "Creating access point... Reconnect by connecting your device to <b>"+settings.substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>";
 				break;
 		}
-		console.log("  ap display msg: ",msg);
+		//console.log("  ap display msg: ",msg);
 		_apModeStateDisplay.html(msg);
 	};
 
 	this.connectToNetwork = function() {
-		console.log("NetworkPanel:connectToNetwork");
+		//console.log("NetworkPanel:connectToNetwork");
 		if(_selectedNetwork == undefined) return;
 		// save network related settings and on complete, connect to network
 		_self.saveSettings(_self.readForm(),function(validated) {
@@ -315,7 +315,7 @@ function NetworkPanel() {
 	};
 
 	this.createAP = function() {
-		console.log("createAP");
+		//console.log("createAP");
 		// save network related settings and on complete, create access point
 		_self.saveSettings(_self.readForm(),function(success) {
 			if(!success) return;

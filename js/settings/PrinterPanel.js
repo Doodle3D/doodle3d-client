@@ -21,9 +21,7 @@ function PrinterPanel() {
 	var _self = this;
 
 	this.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
-		console.log("PrinterPanel:init");
-		console.log("  panelElement: ",panelElement);
-		console.log("  _self: ",_self);
+		
 		// super call:
 		_self.constructor.prototype.init.call(_self,wifiboxURL,wifiboxCGIBinURL,panelElement);
 		
@@ -35,15 +33,12 @@ function PrinterPanel() {
 		// we use readForm to get all the settings we need to 
 		// reload after changing printer type 
 		_printerSettings = _self.readForm();
-		console.log("  _printerSettings: ",_printerSettings);
 		
 		var gcodePanel = _element.find("#gcodePanel");
 		gcodePanel.coolfieldset({collapsed:true});
 	}
 	this.printerSelectorChanged = function(e) {
-		//console.log("PrinterPanel:printerSelectorChanged");
 		_self.printerType = _printerSelector.find("option:selected").val();
-		//_self.savePrinterType(self.loadPrinterSettings);
 		var settings = {}; 
 		settings[_printerSelector.attr("name")] = _self.printerType;
 		

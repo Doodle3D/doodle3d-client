@@ -17,13 +17,13 @@ function ConfigAPI() {
 	var _self = this;
 
 	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
-		console.log("ConfigAPI:init");
+		//console.log("ConfigAPI:init");
 		
 		_wifiboxURL = wifiboxURL;
 		_wifiboxCGIBinURL = wifiboxCGIBinURL;
 	}
 	this.loadAll = function(completeHandler,failedHandler) {
-		console.log("ConfigAPI:loadAll");
+		//console.log("ConfigAPI:loadAll");
 		$.ajax({
 			url: _wifiboxURL + "/config/all",
 			type: "GET",
@@ -41,26 +41,26 @@ function ConfigAPI() {
 		});
 	};
 	this.load = function(targetSettings,completeHandler,failedHandler) {
-			console.log("ConfigAPI:load");
-			$.ajax({
-				url: _wifiboxURL + "/config/",
-				type: "GET",
-				dataType: 'json',
-				data: targetSettings,
-				timeout: _timeoutTime,
-				success: function(response){
-					if(response.status == "error" || response.status == "fail") {
-						failedHandler();
-					} else {
-						completeHandler(response.data);
-					}
+		//console.log("ConfigAPI:load");
+		$.ajax({
+			url: _wifiboxURL + "/config/",
+			type: "GET",
+			dataType: 'json',
+			data: targetSettings,
+			timeout: _timeoutTime,
+			success: function(response){
+				if(response.status == "error" || response.status == "fail") {
+					failedHandler();
+				} else {
+					completeHandler(response.data);
 				}
-			}).fail(function() {
-				failedHandler();
-			});
-		};
+			}
+		}).fail(function() {
+			failedHandler();
+		});
+	};
 	this.save = function(newSettings,completeHandler,failedHandler) {
-		console.log("ConfigAPI:save");
+		//console.log("ConfigAPI:save");
 		$.ajax({
 			url: _wifiboxURL + "/config",
 			type: "POST",
@@ -80,7 +80,7 @@ function ConfigAPI() {
 		});
 	};
 	this.resetAll = function(completeHandler,failedHandler) {
-		console.log("ConfigAPI:resetAll");
+		//console.log("ConfigAPI:resetAll");
 		$.ajax({
 			url: _wifiboxCGIBinURL + "/config/resetall",
 			type: "POST",
