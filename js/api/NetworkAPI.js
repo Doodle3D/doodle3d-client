@@ -91,6 +91,21 @@ function NetworkAPI() {
 		});
 	};
 	
+	this.openAP = function() {
+		console.log("NetworkAPI:openAP");
+		$.ajax({
+			url: _wifiboxCGIBinURL + "/network/openap",
+			type: "POST",
+			dataType: 'json',
+			timeout: _timeoutTime,
+			success: function(response){
+				console.log("NetworkAPI:openAP response: ",response);
+			}
+		}).fail(function() {
+			console.log("NetworkAPI:openAP: timeout (normal behavior)");
+		});
+	};
+	
 	this.signin = function() {
 		$.ajax({
 			url: self.wifiboxCGIBinURL + "/network/signin",

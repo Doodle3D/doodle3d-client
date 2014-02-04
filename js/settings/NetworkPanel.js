@@ -361,33 +361,16 @@ function NetworkPanel() {
 
 	this.createAP = function() {
 		console.log("createAP");
-		if (communicateWithWifibox) {
+		// save network related settings and on complete, create access point
+		_self.saveSettings(_self.readForm(),function(success) {
+			if(!success) return;
+			setAPModeState(AP_MODE_STATE.CREATING_AP,""); 
+			_api.openAP();
 
-			// save network related settings and on complete, create access point
-			_self.saveSettings(_self.readForm(),function(success) {
-				if(!success) return;
-				setAPModeState(AP_MODE_STATE.CREATING_AP); // get latest substituted ssid
-				$.ajax({
-					url: _wifiboxCGIBinURL + "/network/openap",
-					type: "POST",
-					dataType: 'json',
-					timeout: _timeoutTime,
-					success: function(response){
-						console.log("Settings:createAP response: ",response);
-					}
-				}).fail(function() {
-					console.log("Settings:createAP: timeout (normal behavior)");
-					//clearTimeout(self.retrySaveSettingsDelay);
-					//self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings() },self.retryDelay); // retry after delay
-				});
-
-				setAPModeState(AP_MODE_STATE.CREATING_AP,"");
-
-				// after switching wifi network or creating a access point we delay the status retrieval
-				// because the webserver needs time to switch
-				clearTimeout(_retrieveNetworkStatusDelay);
-				_retrieveNetworkStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(true); }, _retrieveNetworkStatusDelayTime);
-			});
-		}
-	};*/
+			// after switching wifi network or creating a access point we delay the status retrieval
+			// because the webserver needs time to switch it's status
+			clearTimeout(_retrieveNetworkStatusDelay);
+			_retrieveNetworkStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(true); }, _retrieveNetworkStatusDelayTime);
+		});
+	};
 }
