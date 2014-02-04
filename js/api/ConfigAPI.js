@@ -40,6 +40,25 @@ function ConfigAPI() {
 			failedHandler();
 		});
 	};
+	this.load = function(targetSettings,completeHandler,failedHandler) {
+			console.log("ConfigAPI:load");
+			$.ajax({
+				url: _wifiboxURL + "/config/",
+				type: "GET",
+				dataType: 'json',
+				data: targetSettings,
+				timeout: _timeoutTime,
+				success: function(response){
+					if(response.status == "error" || response.status == "fail") {
+						failedHandler();
+					} else {
+						completeHandler(response.data);
+					}
+				}
+			}).fail(function() {
+				failedHandler();
+			});
+		};
 	this.save = function(newSettings,completeHandler,failedHandler) {
 		console.log("ConfigAPI:save");
 		$.ajax({

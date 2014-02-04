@@ -6,79 +6,52 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
+// prototype inheritance 
+// http://robertnyman.com/2008/10/06/javascript-inheritance-how-and-why/
+PrinterPanel.prototype = new FormPanel();
 function PrinterPanel() {
-	this.wifiboxURL;
-	this.element;
-	
-	this.retryDelay 					= 1000; 
-	this.retryDelayer; 									// setTimout instance
-	//this.timeoutTime 					= 3000;
 	
 	this.printerType;
-	this.printerSettingsNames;
 	
-	var self = this;
+	// ui elements
+	var _element;
+	var _printerSelector;
+	var _printerSettings;
+	
+	var _self = this;
 
-	this.init = function(wifiboxURL,element) {
-		self.wifiboxURL = wifiboxURL;
-		self.element = element;
+	this.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
+		console.log("PrinterPanel:init");
+		console.log("  panelElement: ",panelElement);
+		console.log("  _self: ",_self);
+		// super call:
+		_self.constructor.prototype.init.call(_self,wifiboxURL,wifiboxCGIBinURL,panelElement);
 		
-		self.printerSelector 	= element.find("#printerType");
-		self.printerSelector.change(self.printerSelectorChanged);
+		_element = panelElement;
 		
-		var formElements = element.find("[name]");
-		self.printerSettingsNames = [];
-		formElements.each( function(index,element) {
-			self.printerSettingsNames.push(element.name);
-		});
+		_printerSelector 	= _element.find("#printerType");
+		_printerSelector.change(_self.printerSelectorChanged);
 		
-		var gcodePanel = element.find("#gcodePanel");
+		// we use readForm to get all the settings we need to 
+		// reload after changing printer type 
+		_printerSettings = _self.readForm();
+		console.log("  _printerSettings: ",_printerSettings);
+		
+		var gcodePanel = _element.find("#gcodePanel");
 		gcodePanel.coolfieldset({collapsed:true});
 	}
 	this.printerSelectorChanged = function(e) {
-		console.log("PrinterPanel:printerSelectorChanged");
-		console.log("self: ", self);
-		self.printerType = self.printerSelector.find("option:selected").val();
-		self.savePrinterType(self.loadPrinterSettings);
-	}
-	
-	this.savePrinterType = function(complete) {
-		console.log("PrinterPanel:savePrinterType");
-		var postData = {}; 
-		postData[self.printerSelector.attr("name")] = self.printerType;
-		console.log("postData: ",postData);
-		$.ajax({
-			url: self.wifiboxURL + "/config/",
-			type: "POST",
-			dataType: 'json',
-			data: postData,
-			success: function(response){
-				console.log("PrinterPanel:savePrinterType response: ",response);
-				if(complete) complete();
-			}
-		}).fail(function() {
-			console.log("PrinterPanel:savePrinterType: failed");
-		});
-	}
-	this.loadPrinterSettings = function() {
-		console.log("PrinterPanel:loadPrinterSettings");
-		console.log("  self.printerSettingsNames: ",self.printerSettingsNames);
-		var getData = {}; 
-		$.each(self.printerSettingsNames, function(key, val) {
-			getData[val] = "";
-		});
-		console.log("getData: ",getData);
-		$.ajax({
-			url: self.wifiboxURL + "/config/",
-			dataType: 'json',
-			data: getData,
-			success: function(response){
-				console.log("PrinterPanel:loadPrinterSettings response: ",response);
-				
-				self.fillForm(response.data,self.element);
-			}
-		}).fail(function() {
-			console.log("PrinterPanel:loadPrinterSettings: failed");
+		//console.log("PrinterPanel:printerSelectorChanged");
+		_self.printerType = _printerSelector.find("option:selected").val();
+		//_self.savePrinterType(self.loadPrinterSettings);
+		var settings = {}; 
+		settings[_printerSelector.attr("name")] = _self.printerType;
+		
+		_self.saveSettings(settings,function(validated) {
+			if(!validated) return;
+			_self.loadSettings(_printerSettings,function(settings) {
+				_self.fill(settings);
+			});
 		});
 	}
 }

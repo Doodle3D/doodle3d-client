@@ -17,7 +17,6 @@ function FormPanel() {
 	var _self;
 	
 	FormPanel.prototype.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
-		console.log("FormPanel:init");
 		// make _self the scope of which init was called?
 		// needed to have the subclass instance access the same counter 
 		_self = this; 
@@ -27,7 +26,6 @@ function FormPanel() {
 	
 	//this.readForm = function(form) {
 	FormPanel.prototype.readForm = function(form) {
-		console.log("FormPanel:readForm");
 		if(!form) form = _element; // if no form specified, read whole panel form
 		//console.log("FormPanel");
 		var settings = {};
@@ -62,15 +60,12 @@ function FormPanel() {
 			var elem = $(element);
 			settings[elem.attr('name')] = elem.val();
 		});
-		console.log("  settings: ",settings);
 		return settings;
 	};
 	
-	this.fillForm = function(settings,form) { 
-		console.log("FormPanel:fillForm");
+	FormPanel.prototype.fill = function(settings,form) { 
 		if(!form) form = _element; // if no form specified, fill whole panel form
-		console.log("  settings: ",settings);
-		console.log("  form: ",form);
+		
 		//fill form with loaded settings
 		var selects = form.find("select");
 		selects.each( function(index,element) {
@@ -131,5 +126,9 @@ function FormPanel() {
 	function clearValidationErrors() {
 		_element.find(".errorMsg").remove();
 		_element.find(".error").removeClass("error");
+	};
+	
+	this.loadSettings = function(targetSettings,complete) {
+		_configAPI.load(targetSettings,complete);
 	};
 }

@@ -93,7 +93,7 @@ function SettingsWindow() {
 
 					// printer panel
 					var $printerPanelElement = self.form.find("#printerPanel");
-					self.printerPanel.init(wifiboxURL,$printerPanelElement);
+					self.printerPanel.init(wifiboxURL,wifiboxCGIBinURL,$printerPanelElement);
 					self.printerPanel.fillForm = self.fillForm;
 					
 					
