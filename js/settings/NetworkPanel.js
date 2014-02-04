@@ -350,14 +350,14 @@ function NetworkPanel() {
 		// save network related settings and on complete, connect to network
 		_self.saveSettings(_self.readForm(),function(validated) {
 			if(!validated) return;
+			setClientModeState(CLIENT_MODE_STATE.CONNECTING,"");
 			_api.associate(_selectedNetwork,_passwordField.val(),true);
+			
+			// after switching wifi network or creating a access point we delay the status retrieval
+			// because the webserver needs time to switch it's status
+			clearTimeout(_retrieveNetworkStatusDelay);
+			_retrieveNetworkStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(true); }, _retrieveNetworkStatusDelayTime);
 		});
-		setClientModeState(CLIENT_MODE_STATE.CONNECTING,"");
-
-		// after switching wifi network or creating a access point we delay the status retrieval
-		// because the webserver needs time to switch
-		clearTimeout(_retrieveNetworkStatusDelay);
-		_retrieveNetworkStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(true); }, _retrieveNetworkStatusDelayTime);
 	};
 
 	this.createAP = function() {
