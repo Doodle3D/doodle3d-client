@@ -108,15 +108,15 @@ function NetworkAPI() {
 	
 	this.signin = function() {
 		$.ajax({
-			url: self.wifiboxCGIBinURL + "/network/signin",
+			url: _wifiboxCGIBinURL + "/network/signin",
 			type: "GET",
 			dataType: 'json',
-			timeout: self.timeoutTime,
+			timeout: _timeoutTime,
 			success: function(response){
-				console.log("Settings:signin response: ",response);
+				console.log("NetworkAPI:signin response: ",response);
 			}
 		}).fail(function() {
-			console.log("Settings:signin: failed");
+			console.log("NetworkAPI:signin: failed");
 		});
 	};
 }

@@ -40,6 +40,7 @@ function SettingsWindow() {
 	this.updatePanel = new UpdatePanel();
 	this.printerPanel = new PrinterPanel();
 	var _networkPanel = new NetworkPanel();
+	var _networkAPI = new NetworkAPI();
 	
 	var self = this;
 
@@ -96,7 +97,7 @@ function SettingsWindow() {
 					self.printerPanel.init(wifiboxURL,wifiboxCGIBinURL,$printerPanelElement);
 					self.printerPanel.fillForm = self.fillForm;
 					
-					
+					_networkAPI.init(wifiboxURL,wifiboxCGIBinURL);
 				}
 			}).fail(function() {
 				console.log("FATAL ERROR: Settings:printer/listall failed");
@@ -323,9 +324,7 @@ function SettingsWindow() {
 	};
 
 	this.signin = function() {
-		
-		// TODO use api.network 
-		
+		_networkAPI.signin();
 	};
 
 	this.downloadlogs = function() {
