@@ -17,6 +17,7 @@ module.exports = function(grunt) {
       js: {
         src: [
           'js/api/*.js',
+          'js/settings/FormPanel.js',
           'js/settings/*.js',
           'js/*.js',
           // make sure we put main.js last

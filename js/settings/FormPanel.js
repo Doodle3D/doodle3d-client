@@ -20,12 +20,14 @@ function FormPanel() {
 		// make _self the scope of which init was called?
 		// needed to have the subclass instance access the same counter 
 		_self = this; 
+		//console.log("FormPanel:init");
 		_element = panelElement;
 		_configAPI.init(wifiboxURL,wifiboxCGIBinURL);
 	};
 	
 	//this.readForm = function(form) {
 	FormPanel.prototype.readForm = function(form) {
+		//console.log("FormPanel:readForm");
 		if(!form) form = _element; // if no form specified, read whole panel form
 		//console.log("FormPanel");
 		var settings = {};
@@ -94,8 +96,7 @@ function FormPanel() {
 		});
 	};
 	
-	this.saveSettings = function(newSettings,complete) {
-		//console.log("FormPanel:saveSettings");
+	FormPanel.prototype.saveSettings = function(newSettings,complete) {
 		//console.log("  newSettings: ",newSettings);
 		_configAPI.save(newSettings,function(data) {
 			var validation = data.validation;
@@ -112,7 +113,7 @@ function FormPanel() {
 			settings.substituted_ssid = data.substituted_ssid;
 			if(complete) complete(validated);
 		}, function() {
-			//console.log("Settings:saveSettings: failed");
+			console.log("Settings:saveSettings: failed");
 			clearTimeout(_retrySaveSettingsDelay);
 			_retrySaveSettingsDelay = setTimeout(function() { _self.saveSettings(newSettings,complete); },_retryDelay); // retry after delay
 		});
@@ -128,7 +129,7 @@ function FormPanel() {
 		_element.find(".error").removeClass("error");
 	};
 	
-	this.loadSettings = function(targetSettings,complete) {
+	FormPanel.prototype.loadSettings = function(targetSettings,complete) {
 		_configAPI.load(targetSettings,complete);
 	};
 }
