@@ -62,7 +62,7 @@ function ConfigAPI() {
 	this.save = function(newSettings,completeHandler,failedHandler) {
 		//console.log("ConfigAPI:save");
 		$.ajax({
-			url: _wifiboxURL + "/config",
+			url: _wifiboxCGIBinURL + "/config",
 			type: "POST",
 			data: newSettings,
 			dataType: 'json',
