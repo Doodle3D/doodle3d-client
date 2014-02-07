@@ -14,12 +14,13 @@ function NetworkPanel() {
 	var NOT_CONNECTED = "not connected"; // used as first item in networks list
 	
 	// network mode
-	var NETWORK_MODE = {
+	NetworkPanel.NETWORK_MODE = {
 		NEITHER: "neither",
 		CLIENT: "clientMode",
 		ACCESS_POINT: "accessPointMode"
 	};
-	var _networkMode = NETWORK_MODE.NETWORK_MODE_NEITHER;
+	var _networkMode = NetworkPanel.NETWORK_MODE.NEITHER;
+	var _networkModeChangedHandler;
 	
 	var _api = new NetworkAPI();
 	var _networks = {};
@@ -149,16 +150,16 @@ function NetworkPanel() {
 				// Determine which network mode ui to show
 				switch(data.status) {
 					case NetworkAPI.STATUS.NOT_CONNECTED:
-						setNetworkMode(NETWORK_MODE.NEITHER);
+						setNetworkMode(NetworkPanel.NETWORK_MODE.NEITHER);
 						break;
 					case NetworkAPI.STATUS.CONNECTING_FAILED:
 					case NetworkAPI.STATUS.CONNECTING:
 					case NetworkAPI.STATUS.CONNECTED:
-						setNetworkMode(NETWORK_MODE.CLIENT);
+						setNetworkMode(NetworkPanel.NETWORK_MODE.CLIENT);
 						break;
 					case NetworkAPI.STATUS.CREATING:
 					case NetworkAPI.STATUS.CREATED:
-						setNetworkMode(NETWORK_MODE.ACCESS_POINT);
+						setNetworkMode(NetworkPanel.NETWORK_MODE.ACCESS_POINT);
 						break;
 				}
 				// update info
@@ -207,24 +208,23 @@ function NetworkPanel() {
 		//console.log("NetworkPanel:setNetworkMode: ",_networkMode,">",mode);
 		if(mode == _networkMode) return;
 		switch(mode) {
-			case NETWORK_MODE.NEITHER:
+			case NetworkPanel.NETWORK_MODE.NEITHER:
 				_apFieldSet.show();
 				_clientFieldSet.show();
 				break;
-			case NETWORK_MODE.CLIENT:
+			case NetworkPanel.NETWORK_MODE.CLIENT:
 				_clientRadioButton.prop('checked',true);
 				_apFieldSet.hide();
 				_clientFieldSet.show();
 				break;
-			case NETWORK_MODE.ACCESS_POINT:
+			case NetworkPanel.NETWORK_MODE.ACCESS_POINT:
 				_apRadioButton.prop('checked',true);
 				_apFieldSet.show();
 				_clientFieldSet.hide();
 				break;
 		}
-		// TODO
-		//self.updatePanel.setNetworkMode(mode);
 		_networkMode = mode;
+		if(_networkModeChangedHandler) _networkModeChangedHandler(_networkMode);
 	}
 	
 	this.selectNetwork = function(ssid) {
@@ -328,4 +328,8 @@ function NetworkPanel() {
 			_retrieveNetworkStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(true); }, _retrieveNetworkStatusDelayTime);
 		});
 	};
+	
+	this.setNetworkModeChangedHandler = function(handler) {
+		_networkModeChangedHandler = handler;
+	}
 }

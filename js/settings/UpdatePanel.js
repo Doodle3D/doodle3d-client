@@ -23,6 +23,7 @@ function UpdatePanel() {
 	this.newestVersion;	
 	this.progress;
 	this.imageSize;
+	var _inAccessPointMode;
 	
 	// states from api, see Doodle3D firmware src/script/d3d-updater.lua
 	UpdatePanel.NONE 								= 1; // default state 
@@ -35,8 +36,6 @@ function UpdatePanel() {
   
   this.state; // update state from api
   this.stateText = ""; // update state text from api
-  
-  this.networkMode; // network modes from SettingsWindow
   
 	var self = this;
 
@@ -174,7 +173,7 @@ function UpdatePanel() {
 	this.setState = function(newState,refresh) {
 		console.log("UpdatePanel:setState");
 		if(!refresh && this.state == newState) return;
-		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (networkMode: ",self.networkMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
+		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (in Access Point Mode: ",_inAccessPointMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
 		this.state = newState;
 		
 		// should personal sketches and settings be retained over update?
@@ -239,7 +238,7 @@ function UpdatePanel() {
 					break;
 			}
 		} else {
-			if(self.networkMode == SettingsWindow.NETWORK_MODE_ACCESS_POINT) {
+			if(_inAccessPointMode) {
 				text = "Can't access internet in access point mode.";
 			} else {
 				text = "Can't access internet.";
@@ -256,7 +255,9 @@ function UpdatePanel() {
 		}
 		self.infoDisplay.html(html);
 	}
-	this.setNetworkMode = function(networkMode) {
-		self.networkMode = networkMode;
+
+	this.setInAccessPointMode = function(inAccessPointMode) {
+		_inAccessPointMode = inAccessPointMode;
+		self.updateStatusDisplay();
 	}
 }

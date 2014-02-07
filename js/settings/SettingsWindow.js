@@ -91,7 +91,10 @@ function SettingsWindow() {
 					// update panel
 					var $updatePanelElement = self.form.find("#updatePanel");
 					self.updatePanel.init(wifiboxURL,$updatePanelElement);
-
+					_networkPanel.setNetworkModeChangedHandler(function(networkMode) {
+						var inAccessPointMode = (networkMode == NetworkPanel.NETWORK_MODE.ACCESS_POINT);
+						self.updatePanel.setInAccessPointMode(inAccessPointMode);
+					});
 					// printer panel
 					var $printerPanelElement = self.form.find("#printerPanel");
 					self.printerPanel.init(wifiboxURL,wifiboxCGIBinURL,$printerPanelElement);
