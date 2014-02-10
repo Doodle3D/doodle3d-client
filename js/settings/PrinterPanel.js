@@ -9,6 +9,7 @@
 function PrinterPanel() {
 	
 	this.printerType;
+	var _api = new PrinterAPI();
 	var _form = new FormPanel();
 	
 	// ui elements
@@ -21,8 +22,8 @@ function PrinterPanel() {
 	this.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
 		
 		_form.init(wifiboxURL,wifiboxCGIBinURL,panelElement)
+		_api.init(wifiboxURL,wifiboxCGIBinURL);
 		_element = panelElement;
-		
 		_printerSelector 	= _element.find("#printerType");
 		_printerSelector.change(_self.printerSelectorChanged);
 		
@@ -32,6 +33,16 @@ function PrinterPanel() {
 		
 		var gcodePanel = _element.find("#gcodePanel");
 		gcodePanel.coolfieldset({collapsed:true});
+	}
+	this.load = function(completeHandler) {
+		
+		_api.listAll(function(data) {
+			$.each(data.printers, function(key, value) {
+				// console.log(key,value);
+				$('#printerType').append($('<option>').text(value).attr('value', key));
+			});
+			completeHandler();
+		});
 	}
 	this.printerSelectorChanged = function(e) {
 		_self.printerType = _printerSelector.find("option:selected").val();
