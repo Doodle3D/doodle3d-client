@@ -135,7 +135,23 @@ function FormPanel() {
 		_element.find(".error").removeClass("error");
 	};
 	
-	FormPanel.prototype.loadSettings = function(targetSettings,complete) {
-		_configAPI.load(targetSettings,complete);
+	this.loadAllSettings = function(complete) {
+		_configAPI.loadAll(complete,function() {
+			clearTimeout(_retryLoadAllSettingsDelay);
+			_retryLoadAllSettingsDelay = setTimeout(function() { _self.loadAllSettings(complete); },_retryDelay); // retry after delay
+		});
+	};
+	this.loadSettings = function(targetSettings,complete) {
+		_configAPI.load(targetSettings,complete,function() {
+			clearTimeout(_retryLoadSettingsDelay);
+			_retryLoadSettingsDelay = setTimeout(function() { _self.loadSettings(targetSettings,complete); },_retryDelay); // retry after delay
+		});
+	};
+	
+	this.resetAllSettings = function(complete) {
+		_configAPI.resetAll(complete,function() { 
+			clearTimeout(_retryResetSettingsDelay);
+			_retryResetSettingsDelay = setTimeout(function() { _self.resetAllSettings(complete); },_retryDelay); // retry after delay
+		});
 	};
 }
