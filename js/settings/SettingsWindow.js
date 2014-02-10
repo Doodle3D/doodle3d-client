@@ -88,10 +88,6 @@ function SettingsWindow() {
 					_updatePanel.setInAccessPointMode(inAccessPointMode);
 				});
 				
-				_form.check();
-				_printerPanel.check();
-				_networkPanel.check();
-				
 				self.loadSettings();
 				
 			});
