@@ -12,7 +12,6 @@ function ConfigAPI() {
 	var _wifiboxCGIBinURL;
 	var _timeoutTime 							= 3000;
 	var _saveSettingsTimeoutTime 	= 8000;
-	var _retryDelay 							= 2000; // retry setTimout delay
 	
 	var _self = this;
 
@@ -31,13 +30,13 @@ function ConfigAPI() {
 			timeout: _timeoutTime,
 			success: function(response){
 				if(response.status == "error" || response.status == "fail") {
-					failedHandler();
+					if(failedHandler) failedHandler(response);
 				} else {
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			failedHandler();
+			if(failedHandler) failedHandler();
 		});
 	};
 	this.load = function(targetSettings,completeHandler,failedHandler) {
@@ -50,13 +49,13 @@ function ConfigAPI() {
 			timeout: _timeoutTime,
 			success: function(response){
 				if(response.status == "error" || response.status == "fail") {
-					failedHandler();
+					if(failedHandler) failedHandler(response);
 				} else {
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			failedHandler();
+			if(failedHandler) failedHandler();
 		});
 	};
 	this.save = function(newSettings,completeHandler,failedHandler) {
@@ -70,13 +69,13 @@ function ConfigAPI() {
 			success: function(response){
 				//console.log("ConfigAPI:save response: ",response);
 				if(response.status == "error" || response.status == "fail") {
-					failedHandler();
+					if(failedHandler) failedHandler(response);
 				} else {
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			failedHandler();
+			if(failedHandler) failedHandler();
 		});
 	};
 	this.resetAll = function(completeHandler,failedHandler) {
@@ -88,13 +87,13 @@ function ConfigAPI() {
 			timeout: _timeoutTime,
 			success: function(response){
 				if(response.status == "error" || response.status == "fail") {
-					failedHandler();
+					if(failedHandler) failedHandler(response);
 				} else {
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			failedHandler();
+			if(failedHandler) failedHandler();
 		});
 	};
 }

@@ -11,6 +11,10 @@ function FormPanel() {
 	var _configAPI = new ConfigAPI();
 	var _retryDelay = 2000;
 	var _retrySaveSettingsDelay;
+	var _retryLoadAllSettingsDelay;
+	var _retryLoadSettingsDelay;
+	var _retryResetSettingsDelay;
+	
 	// ui elements
 	var _element;
 	

@@ -19,7 +19,6 @@ function NetworkAPI() {
 	var _wifiboxURL;
 	var _wifiboxCGIBinURL;
 	var _timeoutTime = 3000;
-	var _retryDelay = 2000; 					// retry setTimout delay
 	
 	var _self = this;
 
@@ -31,6 +30,7 @@ function NetworkAPI() {
 		_wifiboxCGIBinURL = wifiboxCGIBinURL;
 	}
 	this.scan = function(completeHandler) {
+	this.scan = function(completeHandler,failedHandler) {
 		//console.log("NetworkAPI:scan");
 		//console.log("  _wifiboxURL: ",_wifiboxURL);
 		$.ajax({
@@ -41,13 +41,15 @@ function NetworkAPI() {
 			success: function(response){
 				//console.log("NetworkAPI:scan response: ",response);
 				if(response.status == "error" || response.status == "fail") {
-					console.log("NetworkAPI:scan failed: ",response);
+					//console.log("NetworkAPI:scan failed: ",response);
+					if(failedHandler) failedHandler(response);
 				} else {
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			console.log("NetworkAPI:scan failed");
+			//console.log("NetworkAPI:scan failed");
+			if(failedHandler) failedHandler();
 		});
 	};
 	this.status = function(completeHandler,failedHandler) {
@@ -60,13 +62,13 @@ function NetworkAPI() {
 			success: function(response){
 				//console.log("NetworkAPI:status response: ",response);
 				if(response.status == "error" || response.status == "fail") {
-					failedHandler();
+					if(failedHandler) failedHandler(response);
 				} else {
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			failedHandler();
+			if(failedHandler) failedHandler();
 		});
 	};
 	
