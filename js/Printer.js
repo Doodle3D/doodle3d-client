@@ -65,12 +65,12 @@ function Printer() {
 	var self = this;
 
 	this.init = function() {
-    console.log("Printer:init");
+    //console.log("Printer:init");
 		//this.wifiboxURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
 		//this.wifiboxURL = "http://192.168.5.1/cgi-bin/d3dapi";
 		this.wifiboxURL = wifiboxURL;
 		//this.wifiboxURL = "proxy5.php";
-    console.log("  wifiboxURL: ",this.wifiboxURL);
+    //console.log("  wifiboxURL: ",this.wifiboxURL);
 
     if(autoUpdate) {
     	this.startStatusCheckInterval();

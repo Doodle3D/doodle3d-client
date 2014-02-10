@@ -33,7 +33,7 @@ function doOnResize() {
 }
 
 function initLayouting() {
-  console.log("f:initLayouting()");
+  //console.log("f:initLayouting()");
 
   $drawAreaContainer = $("#drawareacontainer");
 
@@ -49,10 +49,10 @@ function initLayouting() {
   $drawAreaContainer.show();
 
   // window.innerHeight
-  console.log("window.innerHeight: " + window.innerHeight);
-  console.log("window.innerWidth: " + window.innerWidth);
-  console.log("$drawAreaContainer.innerHeight(): " + $drawAreaContainer.innerHeight());
-  console.log("$drawAreaContainer.offset().top: " + $drawAreaContainer.offset().top);
+  //console.log("window.innerHeight: " + window.innerHeight);
+  //console.log("window.innerWidth: " + window.innerWidth);
+  //console.log("$drawAreaContainer.innerHeight(): " + $drawAreaContainer.innerHeight());
+  //console.log("$drawAreaContainer.offset().top: " + $drawAreaContainer.offset().top);
 
   // timeout because it SEEMS to be beneficial for initting the layout
   // 2013-09-18 seems beneficial since when?

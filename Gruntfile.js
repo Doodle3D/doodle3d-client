@@ -16,36 +16,13 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
-          'js/Events.js',
-          'js/Class.js',
-          'js/Button.js',
-          'js/Popup.js',
-          'js/btnMove.js',
-          'js/WordArt.js',
-          'js/Shape.js',
-          'js/AddShapeDialog.js',
-          'js/Svg.js',
-          'js/Keyboard.js',
-          'js/SettingsWindow.js',
-          'js/UpdatePanel.js',
-          'js/PrinterPanel.js',
-          'js/Help.js',
-          'js/d3dServerInterfacing.js',
-          'js/verticalShapes.js',
-          'js/buttonbehaviors.js',
-          'js/canvasDrawing.js',
-          'js/previewRendering.js',
-          'js/gcodeGenerating.js',
-          'js/init_layout.js',
-          'js/Printer.js',
-          'js/Progressbar.js',
-          'js/Thermometer.js',
-          'js/utils.js',
-          'js/sidebar.js',
-          'js/Message.js',
-          'js/main.js',
-          'js/sketches.js'
-        ],
+          'js/api/*.js',
+          'js/settings/FormPanel.js',
+          'js/settings/*.js',
+          'js/*.js',
+          // make sure we put main.js last
+          '!js/main.js',
+          'js/main.js',         ],
         dest: 'www/js/<%= pkg.name %>.js'
       }
     },
@@ -113,7 +90,7 @@ module.exports = function(grunt) {
     },
     watch: {
       javascript: {
-        files: ["js/*", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
+        files: ["js/**", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
         tasks: ["concat:js", "uglify:js"]
 //        tasks: ["jshint", "concat", "uglify"]
       },

@@ -45,7 +45,7 @@ function Progressbar() {
 
     var self = this;
     this.progressbarBGImg.onload = function() {
-      console.log("progressbarBGImg img loaded");
+      //console.log("progressbarBGImg img loaded");
       //        self.isInitted = true;
       //        self.update(self.currentTemperature, self.targetTemperature);
 

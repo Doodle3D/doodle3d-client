@@ -37,7 +37,7 @@ function Thermometer() {
   ];
 
   this.init = function(targCanvas, targCanvasContainer) {
-    console.log("Thermometer.init()");
+    //console.log("Thermometer.init()");
 
     this.$container = targCanvasContainer;
 
@@ -48,7 +48,7 @@ function Thermometer() {
 
     var self = this;
     this.thermoOverlayImg.onload = function() {
-      console.log("canvasThermoOverlay img loaded");
+      //console.log("canvasThermoOverlay img loaded");
       self.isInitted = true;
       self.update(self.currentTemperature, self.targetTemperature);
     };
