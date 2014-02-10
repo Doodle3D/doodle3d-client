@@ -17,96 +17,85 @@ function openSettingsWindow() {
 }
 
 function SettingsWindow() {
-	this.wifiboxURL;
-	this.wifiboxCGIBinURL;
-	this.window;
-	this.btnOK;
-	this.form;
-	this.timeoutTime = 3000;
-	this.saveSettingsTimeoutTime = 8000;
-	this.retryDelay = 2000; 					// retry setTimout delay
-
-	this.retryLoadSettingsDelay; 			// retry setTimout instance
-	this.retrySaveSettingsDelay; 			// retry setTimout instance
-	this.retryResetSettingsDelay; 			// retry setTimout instance
 	
-	this.restoreStateField
-	this.restoredStateHideDelayTime = 3000;
-	this.restoredStateHideDelay; // setTimout instance
+	var _window;
+	var _btnOK;
+	
+	var _wifiboxURL;
+	var _restoredStateHideDelayTime = 3000;
+	var _restoredStateHideDelay; // setTimout instance
 
 	// Events
 	SettingsWindow.SETTINGS_LOADED 		= "settingsLoaded";
 	
-	this.updatePanel = new UpdatePanel();
-	this.printerPanel = new PrinterPanel();
+	var _form = new FormPanel();
+	var _updatePanel = new UpdatePanel();
+	var _printerPanel = new PrinterPanel();
 	var _networkPanel = new NetworkPanel();
 	var _networkAPI = new NetworkAPI();
+	
+	var _restoreStateField
 	
 	var self = this;
 
 	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
 		
-		this.wifiboxURL = wifiboxURL;
-		this.wifiboxCGIBinURL = wifiboxCGIBinURL;
+		_wifiboxURL = wifiboxURL;
 
-		this.window = $("#popupSettings");
-		this.btnOK = this.window.find(".btnOK");
+		_window = $("#popupSettings");
+		_btnOK = _window.find(".btnOK");
 		settingsPopup = new Popup($("#popupSettings"), $("#popupMask"));
 		settingsPopup.setEnterEnabled(false);
 		settingsPopup.setAutoCloseEnabled(false);
 		
-		this.btnOK.on('touchstart mousedown',settingsPopup.commit);
+		_btnOK.on('touchstart mousedown',settingsPopup.commit);
 		$("#popupSettings").bind("onPopupCancel", function() { settingsPopup.close(); } );
 		$("#popupSettings").bind("onPopupCommit", self.submitwindow);
 		
-		this.window.find("#settingsContainer").load("settings.html", function() {
-			console.log("Settings:finished loading settings.html, now loading settings...");
+		_networkAPI.init(wifiboxURL,wifiboxCGIBinURL);
+		
+		// Load external settings.html into SettingsWindow
+		_window.find("#settingsContainer").load("settings.html", function() {
+			console.log("Settings:finished loading settings.html");
 
-			self.form = self.window.find("form");
-			self.form.submit(function (e) { self.submitwindow(e); });
+			var formElement = _window.find("form");
+			formElement.submit(function (e) { self.submitwindow(e); });
 			
-			$.ajax({
-				url: self.wifiboxURL + "/printer/listall",
-				dataType: 'json',
-				timeout: self.timeoutTime,
-				success: function(response) {
-					console.log("Settings:printer/listall response: ",response.data.printers);
-					//console.log("  this: ",this);
-					// network panel
-					console.log("initialize network panel");
-					var $networkPanelElement = self.form.find("#networkPanel");
-					_networkPanel.init(wifiboxURL,wifiboxCGIBinURL,$networkPanelElement);
-										
-					$.each(response.data.printers, function(key, value) {
-						// console.log(key,value);
-						$('#printerType').append($('<option>').text(value).attr('value', key));
-					});
+			_form.init(wifiboxURL,wifiboxCGIBinURL,formElement);
+			
+			// printer panel
+			var printerPanelElement = formElement.find("#printerPanel");
+			_printerPanel.init(wifiboxURL,wifiboxCGIBinURL,printerPanelElement);
+			
+			// Load printer types list 
+			// First, because after the settings are loaded the printer type need to be selected 
+			_printerPanel.load(function() {
+				
+				_restoreStateField	= formElement.find("#restoreState");
+				self.btnRestoreSettings	= formElement.find("#restoreSettings");
+				self.btnRestoreSettings.on('touchstart mousedown',self.resetSettings);
 
-					self.loadSettings();
-
-					self.restoreStateField	= self.form.find("#restoreState");
-					self.btnRestoreSettings	= self.form.find("#restoreSettings");
-					self.btnRestoreSettings.on('touchstart mousedown',self.resetSettings);
-
-					// update panel
-					var $updatePanelElement = self.form.find("#updatePanel");
-					self.updatePanel.init(wifiboxURL,$updatePanelElement);
-					_networkPanel.setNetworkModeChangedHandler(function(networkMode) {
-						var inAccessPointMode = (networkMode == NetworkPanel.NETWORK_MODE.ACCESS_POINT);
-						self.updatePanel.setInAccessPointMode(inAccessPointMode);
-					});
-					// printer panel
-					var $printerPanelElement = self.form.find("#printerPanel");
-					self.printerPanel.init(wifiboxURL,wifiboxCGIBinURL,$printerPanelElement);
-					self.printerPanel.fillForm = self.fillForm;
-					
-					_networkAPI.init(wifiboxURL,wifiboxCGIBinURL);
-				}
-			}).fail(function() {
-				console.log("FATAL ERROR: Settings:printer/listall failed");
+				// network panel
+				var $networkPanelElement = formElement.find("#networkPanel");
+				_networkPanel.init(wifiboxURL,wifiboxCGIBinURL,$networkPanelElement);
+				
+				
+				// update panel
+				var updatePanelElement = formElement.find("#updatePanel");
+				_updatePanel.init(wifiboxURL,updatePanelElement);
+				_networkPanel.setNetworkModeChangedHandler(function(networkMode) {
+					var inAccessPointMode = (networkMode == NetworkPanel.NETWORK_MODE.ACCESS_POINT);
+					_updatePanel.setInAccessPointMode(inAccessPointMode);
+				});
+				
+				_form.check();
+				_printerPanel.check();
+				_networkPanel.check();
+				
+				self.loadSettings();
+				
 			});
 		}); //this.window.find
-
 	}; //this.init
 	
 	this.openSettings = function() {
@@ -120,210 +109,58 @@ function SettingsWindow() {
 //	};
 
 	this.submitwindow = function(e) {
-		self.btnOK.attr("disabled",true);
+		_btnOK.attr("disabled",true);
 		e.preventDefault();
 		e.stopPropagation();
-		self.saveSettings(self.readForm(),function(success){
+		_form.saveSettings(_form.readForm(),function(success){
 			if(success) {
 				settingsPopup.close();
 				self.signin();
 			}
-			self.btnOK.removeAttr("disabled");
+			_btnOK.removeAttr("disabled");
 		});
-
-		clearTimeout(self.retryRetrieveNetworkStatusDelay);
 	};
-
+	
 	this.loadSettings = function(complete) {
-		if (!communicateWithWifibox) {
-			console.log("     communicateWithWifibox is false: settings aren't being loaded from wifibox...");
-			return;
-		}
-		console.log("Settings:loadSettings() >> getting new data...");
-
-		$.ajax({
-			url: this.wifiboxURL + "/config/all",
-			dataType: 'json',
-			timeout: this.timeoutTime,
-			success: function(response){
-				console.log("Settings:loadSettings response: ",response);
-				settings = response.data;
-				console.log("  settings: ",settings);
-				self.fillForm(settings);
-				$(document).trigger(SettingsWindow.SETTINGS_LOADED);
-				if(complete) complete();
-			}
-		}).fail(function() {
-			console.log("Settings:loadSettings: failed");
-			clearTimeout(self.retryLoadSettingsDelay);
-			self.retryLoadSettingsDelay = setTimeout(function() { self.loadSettings(); },self.retryDelay); // retry after delay
+		_form.loadAllSettings(function(loadedSettings){
+			console.log("Settings:loaded settings: ",loadedSettings);
+			settings = loadedSettings;
+			_form.fillForm(settings);
+			$(document).trigger(SettingsWindow.SETTINGS_LOADED);
+			if(complete) complete();
 		});
-		
 		_networkPanel.update();
 	};
 	
-	this.fillForm = function(settings,form) { 
-		if(!form) form = this.form; // if no form specified, fill whole form
-
-		//fill form with loaded settings
-		var selects = form.find("select");
-		selects.each( function(index,element) {
-			var elem = $(element);
-			elem.val(settings[elem.attr('name')]);
-		});
-		var inputs = form.find("input");
-		inputs.each( function(index,element) {
-			var elem = $(element);
-			//console.log("printer setting input: ",index,element.attr("type"),element.attr('name')); //,element);
-			switch(elem.attr("type")) {
-			case "text":
-			case "number":
-				elem.val(settings[elem.attr('name')]);
-				break;
-			case "checkbox":
-				elem.prop('checked', settings[elem.attr('name')]);
-				break;
-			}
-		});
-		var textareas = form.find("textarea");
-		textareas.each( function(index,element) {
-			var elem = $(element);
-			var value = settings[elem.attr('name')];
-			elem.val(value);
-		});
-	};
-
 	this.saveSettings = function(newSettings,complete) {
 		settings = newSettings; // store new settings in global settings
-		if (communicateWithWifibox) {
-			$.ajax({
-				url: self.wifiboxCGIBinURL + "/config",
-				type: "POST",
-				data: newSettings,
-				dataType: 'json',
-				timeout: self.saveSettingsTimeoutTime,
-				success: function(response){
-					console.log("Settings:saveSettings response: ",response);
-					if(response.status == "error") {
-						clearTimeout(self.retrySaveSettingsDelay);
-						self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings,complete); },self.retryDelay); // retry after delay
-					} else {
-						var data = response.data;
-						var validation = data.validation;
-						self.clearValidationErrors();
-						var validated = true;
-						$.each(validation, function(key, val) {
-							if (val != "ok") {
-								console.log("ERROR: setting '" + key + "' not successfully set. Message: " + val);
-								self.displayValidationError(key,val);
-								validated = false;
-							}
-						});
-						settings.substituted_ssid = data.substituted_ssid;
-						if(complete) complete(validated);
-					}
-				}
-			}).fail(function() {
-				console.log("Settings:saveSettings: failed");
-				clearTimeout(self.retrySaveSettingsDelay);
-				self.retrySaveSettingsDelay = setTimeout(function() { self.saveSettings(settings,complete); },self.retryDelay); // retry after delay
-			});
-		}
+		_form.saveSettings(newSettings,function(validated) {
+			//TODO: settings.substituted_ssid = data.substituted_ssid;
+			if(complete) complete(validated);
+		});
 	};
 	
 	this.resetSettings = function() {
 		console.log("resetSettings");
 		self.btnRestoreSettings.attr("disabled", true);
-
-		clearTimeout(self.restoredStateHideDelay);
-
+		clearTimeout(_restoredStateHideDelay);
 		self.setRestoreState("Restoring...");
+		_form.resetAllSettings(function(restoredSettings) { 
+			//console.log("  settings: ",restoredSettings);
+			settings = restoredSettings;
+			_form.fillForm(restoredSettings);
+			$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 
-		//console.log("  self.wifiboxURL: ",self.wifiboxURL);
-
-		if (communicateWithWifibox) {
-			$.ajax({
-				url: self.wifiboxCGIBinURL + "/config/resetall",
-				type: "POST",
-				dataType: 'json',
-				timeout: this.timeoutTime,
-				success: function(response){
-					console.log("Settings:resetSettings response: ",response);
-					if(response.status == "error") {
-						clearTimeout(self.retryResetSettingsDelay);
-						self.retryResetSettingsDelay = setTimeout(function() { self.resetSettings(); },self.retryDelay); // retry after delay
-					} else {
-						settings = response.data;
-						console.log("  settings: ",settings);
-						self.fillForm(settings);
-						$(document).trigger(SettingsWindow.SETTINGS_LOADED);
-
-						self.btnRestoreSettings.removeAttr("disabled");
-						self.setRestoreState("Settings restored");
-						// auto hide status
-						clearTimeout(self.restoredStateHideDelay);
-						self.restoredStateHideDelay = setTimeout(function() { self.setRestoreState("");	},self.restoredStateHideDelayTime);
-					}
-				}
-			}).fail(function() {
-				console.log("Settings:resetSettings: failed");
-				clearTimeout(self.retryResetSettingsDelay);
-				self.retryResetSettingsDelay = setTimeout(function() { self.resetSettings(); },self.retryDelay); // retry after delay
-			});
-		}
+			self.btnRestoreSettings.removeAttr("disabled");
+			self.setRestoreState("Settings restored");
+			// auto hide status
+			clearTimeout(_restoredStateHideDelay);
+			_restoredStateHideDelay = setTimeout(function() { self.setRestoreState("");	},_restoredStateHideDelayTime);
+		});
 	};
 	
 	this.setRestoreState = function(text) {
-		self.restoreStateField.html(text);
-	};
-	
-	this.displayValidationError = function(key,msg) {
-		var formElement = self.form.find("[name|='"+key+"']");
-		formElement.addClass("error");
-		var errorMsg = "<p class='errorMsg'>"+msg+"</p>";
-		formElement.after(errorMsg);
-	};
-	
-	this.clearValidationErrors = function() {
-		self.form.find(".errorMsg").remove();
-		self.form.find(".error").removeClass("error");
-	};
-
-	this.readForm = function() {
-		//console.log("SettingsWindow:readForm");
-		var settings = {};
-		var selects = self.form.find("select");
-		selects.each( function(index,element) {
-			var elem = $(element);
-			//var fieldName = elem.attr('name');
-			if(elem.attr('name') != "") {
-				settings[elem.attr('name')] = elem.val();
-			}
-		});
-
-		var inputs = self.form.find("input");
-		inputs.each( function(index,element) {
-			var elem = $(element);
-			if(elem.attr('name') != "") {
-				switch(elem.attr("type")) {
-				case "text":
-				case "number":
-					settings[elem.attr('name')] = elem.val();
-					break;
-				case "checkbox":
-					settings[elem.attr('name')] = elem.prop('checked');
-					break;
-				}
-			}
-		});
-
-		var textareas = self.form.find("textarea");
-		textareas.each( function(index,element) {
-			var elem = $(element);
-			settings[elem.attr('name')] = elem.val();
-		});
-		//console.log(settings);
-		return settings;
+		_restoreStateField.html(text);
 	};
 
 	this.signin = function() {
@@ -331,7 +168,7 @@ function SettingsWindow() {
 	};
 
 	this.downloadlogs = function() {
-		window.location.href = self.wifiboxURL + "/info/logfiles";
+		window.location.href = _wifiboxURL + "/info/logfiles";
 	};
 
 	this.downloadGcode = function() {
