@@ -18,19 +18,21 @@ function FormPanel() {
 	// ui elements
 	var _element;
 	
-	var _self;
+	var _self = this;
 	
-	FormPanel.prototype.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
+	this.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
+		
 		// make _self the scope of which init was called?
 		// needed to have the subclass instance access the same counter 
-		_self = this; 
-		//console.log("FormPanel:init");
+		//_self = this; 
+		//console.log("  _element: ",_element);
 		_element = panelElement;
+		//console.log("  >_element: ",_element);
 		_configAPI.init(wifiboxURL,wifiboxCGIBinURL);
 	};
 	
 	//this.readForm = function(form) {
-	FormPanel.prototype.readForm = function(form) {
+	this.readForm = function(form) {
 		//console.log("FormPanel:readForm");
 		if(!form) form = _element; // if no form specified, read whole panel form
 		//console.log("FormPanel");
@@ -69,10 +71,12 @@ function FormPanel() {
 		return settings;
 	};
 	
-	FormPanel.prototype.fill = function(settings,form) { 
+	this.fillForm = function(settings,form) { 
 		//console.log("FormPanel:fillForm");
 		if(!form) form = _element; // if no form specified, fill whole panel form
 		//console.log("  form: ",form);
+		
+		clearValidationErrors();
 		
 		//fill form with loaded settings
 		var selects = form.find("select");
@@ -102,7 +106,7 @@ function FormPanel() {
 		});
 	};
 	
-	FormPanel.prototype.saveSettings = function(newSettings,complete) {
+	this.saveSettings = function(newSettings,complete) {
 		//console.log("  newSettings: ",newSettings);
 		_configAPI.save(newSettings,function(data) {
 			var validation = data.validation;

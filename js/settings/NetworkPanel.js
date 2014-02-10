@@ -6,9 +6,6 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
-// prototype inheritance 
-// http://robertnyman.com/2008/10/06/javascript-inheritance-how-and-why/
-NetworkPanel.prototype = new FormPanel();
 function NetworkPanel() {
 	
 	var NOT_CONNECTED = "not connected"; // used as first item in networks list
@@ -22,6 +19,7 @@ function NetworkPanel() {
 	var _networkMode = NetworkPanel.NETWORK_MODE.NEITHER;
 	var _networkModeChangedHandler;
 	
+	var _form = new FormPanel();
 	var _api = new NetworkAPI();
 	var _networks = {};
 	var _currentNetwork;					// the ssid of the network the box is on
@@ -56,8 +54,8 @@ function NetworkPanel() {
 	
 	this.init = function(wifiboxURL,wifiboxCGIBinURL,panelElement) {
 		//console.log("NetworkPanel:init");
-		// super call:
-		_self.constructor.prototype.init.call(_self,wifiboxURL,wifiboxCGIBinURL,panelElement);
+		
+		_form.init(wifiboxURL,wifiboxCGIBinURL,panelElement)
 		
 		_api.init(wifiboxURL,wifiboxCGIBinURL);
 		
@@ -302,7 +300,7 @@ function NetworkPanel() {
 		//console.log("NetworkPanel:connectToNetwork");
 		if(_selectedNetwork == undefined) return;
 		// save network related settings and on complete, connect to network
-		_self.saveSettings(_self.readForm(),function(validated) {
+		_form.saveSettings(_form.readForm(),function(validated) {
 			if(!validated) return;
 			updateClientModeUI(NetworkAPI.STATUS.CONNECTING,"");
 			_api.associate(_selectedNetwork,_passwordField.val(),true);
@@ -317,7 +315,7 @@ function NetworkPanel() {
 	this.createAP = function() {
 		//console.log("createAP");
 		// save network related settings and on complete, create access point
-		_self.saveSettings(_self.readForm(),function(success) {
+		_form.saveSettings(_form.readForm(),function(success) {
 			if(!success) return;
 			updateAPModeUI(NetworkAPI.STATUS.CREATING,""); 
 			_api.openAP();
