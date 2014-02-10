@@ -108,8 +108,10 @@ function SettingsWindow() {
 		_btnOK.attr("disabled",true);
 		e.preventDefault();
 		e.stopPropagation();
-		_form.saveSettings(_form.readForm(),function(success){
-			if(success) {
+		var newSettings = _form.readForm();
+		_form.saveSettings(newSettings,function(validated, data){
+			if(validated) {
+				settings = newSettings; // store new settings in global settings
 				settingsPopup.close();
 				self.signin();
 			}
@@ -126,14 +128,6 @@ function SettingsWindow() {
 			if(complete) complete();
 		});
 		_networkPanel.update();
-	};
-	
-	this.saveSettings = function(newSettings,complete) {
-		settings = newSettings; // store new settings in global settings
-		_form.saveSettings(newSettings,function(validated) {
-			//TODO: settings.substituted_ssid = data.substituted_ssid;
-			if(complete) complete(validated);
-		});
 	};
 	
 	this.resetSettings = function() {

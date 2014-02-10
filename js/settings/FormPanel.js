@@ -120,8 +120,7 @@ function FormPanel() {
 					validated = false;
 				}
 			});
-			settings.substituted_ssid = data.substituted_ssid;
-			if(complete) complete(validated);
+			if(complete) complete(validated, data);
 		}, function() {
 			console.log("Settings:saveSettings: failed");
 			clearTimeout(_retrySaveSettingsDelay);

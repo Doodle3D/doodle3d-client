@@ -24,6 +24,7 @@ function NetworkPanel() {
 	var _networks = {};
 	var _currentNetwork;					// the ssid of the network the box is on
 	var _selectedNetwork;         // the ssid of the selected network in the client mode settings
+	var _substituted_ssid;				// the substituted ssid (displayed during creation)
 	var _currentLocalIP = "";
 	var _currentAP;
 	var _currentNetworkStatus;
@@ -295,7 +296,7 @@ function NetworkPanel() {
 				break;
 			case NetworkAPI.STATUS.CREATING:
 				_btnCreate.attr("disabled", true);
-				msg = "Creating access point... Reconnect by connecting your device to <b>"+settings.substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>";
+				msg = "Creating access point... Reconnect by connecting your device to <b>"+_substituted_ssid+"</b> and going to <a href='http://draw.doodle3d.com'>draw.doodle3d.com</a>";
 				break;
 		}
 		//console.log("  ap display msg: ",msg);
@@ -306,7 +307,7 @@ function NetworkPanel() {
 		//console.log("NetworkPanel:connectToNetwork");
 		if(_selectedNetwork == undefined) return;
 		// save network related settings and on complete, connect to network
-		_form.saveSettings(_form.readForm(),function(validated) {
+		_form.saveSettings(_form.readForm(),function(validated, data) {
 			if(!validated) return;
 			updateClientModeUI(NetworkAPI.STATUS.CONNECTING,"");
 			_api.associate(_selectedNetwork,_passwordField.val(),true);
@@ -321,8 +322,9 @@ function NetworkPanel() {
 	this.createAP = function() {
 		//console.log("createAP");
 		// save network related settings and on complete, create access point
-		_form.saveSettings(_form.readForm(),function(success) {
-			if(!success) return;
+		_form.saveSettings(_form.readForm(),function(validated, data) {
+			if(!validated) return;
+			_substituted_ssid = data.substituted_ssid;
 			updateAPModeUI(NetworkAPI.STATUS.CREATING,""); 
 			_api.openAP();
 
