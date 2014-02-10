@@ -23,9 +23,9 @@ function NetworkAPI() {
 	var _self = this;
 
 	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
-		console.log("NetworkAPI:init");
-		console.log("  wifiboxURL: ",wifiboxURL);
-		console.log("  wifiboxCGIBinURL: ",wifiboxCGIBinURL);
+		//console.log("NetworkAPI:init");
+		//console.log("  wifiboxURL: ",wifiboxURL);
+		//console.log("  wifiboxCGIBinURL: ",wifiboxCGIBinURL);
 		_wifiboxURL = wifiboxURL;
 		_wifiboxCGIBinURL = wifiboxCGIBinURL;
 	}
@@ -73,7 +73,7 @@ function NetworkAPI() {
 	};
 	
 	this.associate = function(ssid,phrase,recreate) {
-		console.log("NetworkAPI:associate");
+		//console.log("NetworkAPI:associate");
 		var postData = {
 				ssid:ssid,
 				phrase:phrase,
@@ -94,7 +94,7 @@ function NetworkAPI() {
 	};
 	
 	this.openAP = function() {
-		console.log("NetworkAPI:openAP");
+		//console.log("NetworkAPI:openAP");
 		$.ajax({
 			url: _wifiboxCGIBinURL + "/network/openap",
 			type: "POST",
@@ -115,10 +115,10 @@ function NetworkAPI() {
 			dataType: 'json',
 			timeout: _timeoutTime,
 			success: function(response){
-				console.log("NetworkAPI:signin response: ",response);
+				//console.log("NetworkAPI:signin response: ",response);
 			}
 		}).fail(function() {
-			console.log("NetworkAPI:signin: failed");
+			//console.log("NetworkAPI:signin: failed");
 		});
 	};
 }

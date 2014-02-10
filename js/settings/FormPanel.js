@@ -70,7 +70,9 @@ function FormPanel() {
 	};
 	
 	FormPanel.prototype.fill = function(settings,form) { 
+		//console.log("FormPanel:fillForm");
 		if(!form) form = _element; // if no form specified, fill whole panel form
+		//console.log("  form: ",form);
 		
 		//fill form with loaded settings
 		var selects = form.find("select");

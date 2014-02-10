@@ -105,7 +105,7 @@ function NetworkPanel() {
 	};
 
 	this.update = function() {
-		console.log("NetworkPanel:update");
+		//console.log("NetworkPanel:update");
 		_self.refreshNetworks();
 		_self.retrieveNetworkStatus(false);
 	}
@@ -143,7 +143,7 @@ function NetworkPanel() {
 			if(typeof data.status === 'string') {
 				data.status = parseInt(data.status);
 			}
-			console.log("NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
+			//console.log("NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
 			
 			// if status changed
 			if(data.status != _currentNetworkStatus) {
@@ -199,7 +199,7 @@ function NetworkPanel() {
 			}
 			_currentNetworkStatus = data.status;
 		}, function() {
-			console.log("NetworkPanel:retrieveStatus failed");
+			//console.log("NetworkPanel:retrieveStatus failed");
 			clearTimeout(_retryRetrieveStatusDelay);
 			_retryRetrieveStatusDelay = setTimeout(function() { _self.retrieveNetworkStatus(connecting); }, _retryRetrieveStatusDelayTime); // retry after delay
 		});
