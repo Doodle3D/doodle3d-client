@@ -29,10 +29,8 @@ function NetworkAPI() {
 		_wifiboxURL = wifiboxURL;
 		_wifiboxCGIBinURL = wifiboxCGIBinURL;
 	}
-	this.scan = function(completeHandler) {
 	this.scan = function(completeHandler,failedHandler) {
 		//console.log("NetworkAPI:scan");
-		//console.log("  _wifiboxURL: ",_wifiboxURL);
 		$.ajax({
 			url: _wifiboxURL + "/network/scan",
 			type: "GET",

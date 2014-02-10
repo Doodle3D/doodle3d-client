@@ -28,6 +28,8 @@ function NetworkPanel() {
 	var _currentAP;
 	var _currentNetworkStatus;
 	
+	var _retryDelay = 2000;
+	//var _retryRefreshNetworksDelay;
 	var _retryRetrieveStatusDelayTime = 1000;
 	var _retryRetrieveStatusDelay;
 	// after switching wifi network or creating a access point we delay the status retrieval
@@ -109,7 +111,7 @@ function NetworkPanel() {
 	}
 	this.refreshNetworks = function(completeHandler) {
 		//console.log("NetworkPanel:refreshNetworks");
-		_api.scan(function(data) {
+		_api.scan(function(data) { // completed
 			//console.log("NetworkPanel:scanned");
 			_networks = {};
 			var foundCurrentNetwork = false;
@@ -132,7 +134,11 @@ function NetworkPanel() {
 				_self.selectNetwork(_currentNetwork);
 			}
 			if(completeHandler) completeHandler();
-		});
+		}/*,
+		function() { // failed
+			clearTimeout(_retryRefreshNetworksDelay);
+			_retryRetrieveStatusDelay = setTimeout(function() { _self.refreshNetworks(completeHandler); },_retryDelay); // retry after delay
+		}*/);
 	};
 	
 	this.retrieveNetworkStatus = function(connecting) {
