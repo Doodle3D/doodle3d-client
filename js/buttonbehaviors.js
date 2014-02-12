@@ -21,6 +21,10 @@ var hasControl;
 var gcodeGenerateDelayer;
 var gcodeGenerateDelay = 50;
 
+
+var preheatDelay;
+var preheatDelayTime = 15*1000;
+
 function initButtonBehavior() {
   console.log("f:initButtonBehavior");
 
@@ -428,7 +432,9 @@ function setState(newState,newHasControl) {
 		message.set("Printer connected",Message.INFO,true);
 		console.log("  preheat: ",settings["printer.heatup.enabled"]);
 		if(settings["printer.heatup.enabled"]) {
-			printer.preheat();
+			// HACK: we delay the preheat because the driver needs time to connect
+			clearTimeout(preheatDelay);
+			preheatDelay = setTimeout(printer.preheat,preheatDelayTime); // retry after delay
 		}
 	}	else if(prevState == Printer.PRINTING_STATE && newState == Printer.STOPPING_STATE) {
 		console.log("stopmsg show");
