@@ -15,6 +15,15 @@
   @import "mobile.less";
 }
 
+// TABLET
+@media	only screen and (max-height: 300px),
+				only screen and (max-width: 450px) and (min-device-pixel-ratio : 1.5),
+				only screen and (max-width: 450px) and (-webkit-min-device-pixel-ratio : 1.5) {
+  #popupSettings {
+ 	  margin: 2% 2%;
+	}
+}
+
 // PORTRAIT
 @media  only screen and (orientation:portrait) {
   @import "portrait.less";

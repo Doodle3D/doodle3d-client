@@ -23,6 +23,7 @@ function UpdatePanel() {
 	this.newestVersion;	
 	this.progress;
 	this.imageSize;
+	var _inAccessPointMode;
 	
 	// states from api, see Doodle3D firmware src/script/d3d-updater.lua
 	UpdatePanel.NONE 								= 1; // default state 
@@ -35,8 +36,6 @@ function UpdatePanel() {
   
   this.state; // update state from api
   this.stateText = ""; // update state text from api
-  
-  this.networkMode; // network modes from SettingsWindow
   
 	var self = this;
 
@@ -56,8 +55,7 @@ function UpdatePanel() {
 		this.checkStatus(false);
 	}
 	this.retainChanged = function(e) {
-		console.log("UpdatePanel:retainChanged");
-		
+		//console.log("UpdatePanel:retainChanged");
 		self.setState(self.state,true);
 	}
 	this.update = function() {
@@ -97,7 +95,7 @@ function UpdatePanel() {
 				console.log("UpdatePanel:installUpdate response: ",response);
 			}
 		}).fail(function() {
-			console.log("UpdatePanel:installUpdate: no respons (there shouldn't be)");
+			//console.log("UpdatePanel:installUpdate: no respons (there shouldn't be)");
 		});
 		self.setState(UpdatePanel.INSTALLING);
 		
@@ -172,26 +170,26 @@ function UpdatePanel() {
 		}
 	}
 	this.setState = function(newState,refresh) {
-		console.log("UpdatePanel:setState");
+		//console.log("UpdatePanel:setState");
 		if(!refresh && this.state == newState) return;
-		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (networkMode: ",self.networkMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
+		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (in Access Point Mode: ",_inAccessPointMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
 		this.state = newState;
 		
 		// should personal sketches and settings be retained over update?
 		var retain = self.retainCheckbox.prop('checked');
-		console.log("  retain", retain);
+		//console.log("  retain", retain);
 		
 		// download button
 		// if there isn't newestVersion data something went wrong, 
 		//   probably accessing the internet
-		console.log("  self.newestVersion: ",self.newestVersion);
+		//console.log("  self.newestVersion: ",self.newestVersion);
 		if(self.newestVersion != undefined) {
-			console.log("  this.state: ",this.state);
+			//console.log("  this.state: ",this.state);
 			switch(this.state){
 				case UpdatePanel.NONE: 
 				case UpdatePanel.DOWNLOAD_FAILED:
 				case UpdatePanel.INSTALL_FAILED:
-					console.log("  self.canUpdate: ",self.canUpdate);
+					//console.log("  self.canUpdate: ",self.canUpdate);
 					if(self.canUpdate || !retain) {
 						self.btnUpdate.removeAttr("disabled");
 					} else {
@@ -239,7 +237,7 @@ function UpdatePanel() {
 					break;
 			}
 		} else {
-			if(self.networkMode == SettingsWindow.NETWORK_MODE_ACCESS_POINT) {
+			if(_inAccessPointMode) {
 				text = "Can't access internet in access point mode.";
 			} else {
 				text = "Can't access internet.";
@@ -256,7 +254,9 @@ function UpdatePanel() {
 		}
 		self.infoDisplay.html(html);
 	}
-	this.setNetworkMode = function(networkMode) {
-		self.networkMode = networkMode;
+
+	this.setInAccessPointMode = function(inAccessPointMode) {
+		_inAccessPointMode = inAccessPointMode;
+		self.updateStatusDisplay();
 	}
 }

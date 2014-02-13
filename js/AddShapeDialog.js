@@ -50,7 +50,7 @@ function updateShapePreview() {
   var c = canvas.getContext('2d');
   var w = canvas.width;
   var h = canvas.height;
-  console.log(w,h);
+  //console.log(w,h);
   var r = w/2 - 20;
   var x0 = w/2;
   var y0 = h/2;

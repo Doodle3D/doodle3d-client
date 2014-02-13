@@ -35,8 +35,8 @@ function setSketchModified(_isModified, doNotClearCurrent) {
 	// alert("isModified: " + isModified);
 	//console.log("setModified: " + isModified + (typeof(doNotClearCurrent) !== 'undefined' ? " (doNotClearCurrent: "+doNotClearCurrent+")" : "")); //TEMP
 
-	if (isModified) enableButton(btnSave, saveSketch);
-	else disableButton(btnSave);
+	if (isModified) btnSave.enable();
+	else btnSave.disable();
 
 	//if (typeof(doNotClearCurrent) !== 'undefined' && !doNotClearCurrent) setCurrentSketchId(-1);
 
@@ -62,26 +62,26 @@ function setCurrentSketchId(sId) {
 }
 
 function updatePrevNextButtonStateOnClear() {
-	if (numSavedSketches > 0) enableButton(btnPrevious, prevDoodle);
-	disableButton(btnNext);
+	if (numSavedSketches > 0) btnPrevious.enable();
+	btnNext.disable();
 	currentSketchId = numSavedSketches+1; //after the end of the list
-	disableButton(btnSave);
+	btnSave.disable();
 }
 
 function updatePrevNextButtonState() {
 
 	//btnPrevious state
 	if (numSavedSketches==0 || currentSketchId < 2) {
-		disableButton(btnPrevious);
+		btnPrevious.disable();
 	} else {
-		enableButton(btnPrevious, prevDoodle);
+		btnPrevious.enable();
 	}
 
 	//btnNext state
 	if (numSavedSketches==0 || currentSketchId >= numSavedSketches) {
-		disableButton(btnNext);
+		btnNext.disable();
 	} else {
-		enableButton(btnNext, nextDoodle);
+		btnNext.enable();
 	}
 }
 
@@ -109,7 +109,6 @@ function loadSketch(sketchId) {
 	});
 }
 
-//btnSave.mouseup(saveSketch);
 function saveSketch() {
 	svg = saveToSvg();
 	console.log("generated SVG [" + _points.length + " points, " + svg.length + " bytes]:\n" + svg);

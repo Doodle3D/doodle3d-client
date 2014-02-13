@@ -8,14 +8,14 @@
 
 var grandTour;
 function GrandTour(_name) {
-  console.log("GrandTour");
+  //console.log("GrandTour");
   this.tour = "";
   this.name = _name;
   this.active = false;
   var self = this;
 
   this.init = function() {
-    console.log("GrandTour >> f:init()");
+    //console.log("GrandTour >> f:init()");
 
     this.tour = function() {
       $('#help_d3dIntro').joyride({
@@ -48,9 +48,9 @@ function GrandTour(_name) {
   };
 
   this.preRideCallback = function(index, tip) {
-    console.log("GrandTour >> f:preRideCallback() >> index: " + index);
+    //console.log("GrandTour >> f:preRideCallback() >> index: " + index);
     if (index == 0 && $.cookie("Doodle3DFirstTime") == "ridden") {
-      console.log("GrandTour >> f:preRideCallback() >> we've been here before...");
+      //console.log("GrandTour >> f:preRideCallback() >> we've been here before...");
 
       if ($.cookie("grandTourFinished")) {
         // grand tour was previously finished (eh.. is that useful?)
@@ -82,7 +82,7 @@ function GrandTour(_name) {
     if (dataset.action != undefined) {
       switch (dataset.action) {
         case "showMessage":
-          console.log("    action: showMessage");
+          //console.log("    action: showMessage");
           message.set("This is a status message...", Message.NOTICE);
           break;
       }
@@ -111,7 +111,7 @@ function GrandTour(_name) {
     }
 
     if (index < $(this)[0].$tip_content.length - 1) {
-      console.log("GrandTour >> f:postRideCallback() >> tour terminated before its true end");
+      //console.log("GrandTour >> f:postRideCallback() >> tour terminated before its true end");
       // tour wasn't finished
 
       // tour was ended prematurely. For only the first few visits, nag the user about being able to revisit the tour..
@@ -121,7 +121,7 @@ function GrandTour(_name) {
 //      infoReminderTour.start();
     } else {
       // tour was finished
-      console.log("GrandTour >> f:postRideCallback() >> tour ended at its true end");
+      //console.log("GrandTour >> f:postRideCallback() >> tour ended at its true end");
       // we should be at the end...
       if (!$.cookie("grandTourFinished") && parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
         helpTours.startTour(helpTours.INFOREMINDER, helpTours);
@@ -132,7 +132,7 @@ function GrandTour(_name) {
   };
 
   this.start = function() {
-    console.log("GrandTour >> f:start() >> this: " , this);
+    //console.log("GrandTour >> f:start() >> this: " , this);
     this.active = true;
     $(window).joyride('restart');
 //    self.tour();
@@ -141,14 +141,14 @@ function GrandTour(_name) {
 
 var infoReminderTour;
 function InfoReminderTour(_name) {
-  console.log("InfoReminderTour");
+  //console.log("InfoReminderTour");
   this.tour = "";
   this.name = _name;
   this.active = false;
   var self = this;
 
   this.init = function(callback) {
-    console.log("InfoReminderTour >> f:init()");
+    //console.log("InfoReminderTour >> f:init()");
 
     this.tour = function() {
       $('#help_InfoReminder').joyride({
@@ -173,19 +173,19 @@ function InfoReminderTour(_name) {
   };
 
   this.preRideCallback = function(index, tip) {
-    console.log("InfoReminderTour >> f:preRideCallback() >> index: " + index + ", tip: " , tip);
+    //console.log("InfoReminderTour >> f:preRideCallback() >> index: " + index + ", tip: " , tip);
   };
   this.postStepCallback = function(index, tip) {
-    console.log("InfoReminderTour >> f:postStepCallback() >> index: " + index + ", tip: " , tip);
+    //console.log("InfoReminderTour >> f:postStepCallback() >> index: " + index + ", tip: " , tip);
   };
   this.postRideCallback = function(index, tip) {
-    console.log("InfoReminderTour >> f:postRideCallback() >> index: " + index + ", tip: " , tip);
+    //console.log("InfoReminderTour >> f:postRideCallback() >> index: " + index + ", tip: " , tip);
     this.active = false;
     $(document).trigger(helpTours.TOURFINISHED, self.name);
   };
 
   this.start = function() {
-    console.log("InfoReminderTour >> f:start()");
+    //console.log("InfoReminderTour >> f:start()");
     this.active = true;
     $(window).joyride('restart');
 //    self.tour();
@@ -193,7 +193,7 @@ function InfoReminderTour(_name) {
 }
 
 function initHelp() {
-  console.log("f:initHelp()");
+  //console.log("f:initHelp()");
 
   // track number of visits of this user
   if ($.cookie("Doodle3DVisitCounter") == null) {
@@ -204,7 +204,7 @@ function initHelp() {
 
   // load the html file which describes the tour contents
   $("#helpContainer").load("helpcontent.html", function() {
-    console.log("helpContent loaded");
+    //console.log("helpContent loaded");
 
     helpTours = new HelpTours();
 
@@ -212,7 +212,7 @@ function initHelp() {
 
 
       if (parseInt($.cookie("Doodle3DVisitCounter")) < helpTours.numTimesToShowNagPopup) {
-        console.log("initHelp >> Doodle3DFirstTime cookie is set, Doodle3DVisitCounter is < 4");
+        //console.log("initHelp >> Doodle3DFirstTime cookie is set, Doodle3DVisitCounter is < 4");
         if ($.cookie("Doodle3DFirstTime") != "ridden") {
           setTimeout(helpTours.startTour, 750, helpTours.tours.grandTour, helpTours);
         } else {
@@ -239,7 +239,7 @@ function initHelp() {
 
 var helpTours;
 function HelpTours() {
-  console.log("HelpTours");
+  //console.log("HelpTours");
 
   this.numTimesToShowNagPopup = 2;
 
@@ -257,7 +257,7 @@ function HelpTours() {
   var self = this;
 
   this.init = function(callback) {
-    console.log("HelpTours >> f:init >> self: " + self);
+    //console.log("HelpTours >> f:init >> self: " + self);
     $(document).on(this.TOURFINISHED, this.tourEnded);
 
     grandTour = new GrandTour(this.WELCOMETOUR);
@@ -265,7 +265,7 @@ function HelpTours() {
 
 //    this.tours["grandTour"] = self.WELCOMETOUR;
 //    this.tours["infoReminderTour "]= self.INFOREMINDER;
-    console.log("HelpTours >> f:init >> this.tours: " , this.tours);
+    //console.log("HelpTours >> f:init >> this.tours: " , this.tours);
 
     if (callback != undefined) callback();
   };
@@ -282,8 +282,8 @@ function HelpTours() {
     switch (which) {
       case scope.WELCOMETOUR:
         // do welcometour
-//        console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR >> scope.tourActive = " + scope.tourActive);
-        console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR");
+        //console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR >> scope.tourActive = " + scope.tourActive);
+        //console.log("HelpTours >> f:startTour >> case this.WELCOMETOUR");
         if (scope.tourActive) {
           if (scope.currActiveTour.active == true) {
             $(window).joyride('end');
@@ -304,8 +304,8 @@ function HelpTours() {
         break;
       case self.INFOREMINDER:
         // do info reminder
-//        console.log("HelpTours >> f:startTour >> case self.INFOREMINDER >> scope.tourActive = " + scope.tourActive);
-        console.log("HelpTours >> f:startTour >> case self.INFOREMINDER");
+//      console.log("HelpTours >> f:startTour >> case self.INFOREMINDER >> scope.tourActive = " + scope.tourActive);
+        //console.log("HelpTours >> f:startTour >> case self.INFOREMINDER");
         if (scope.tourActive) {
 //          console.log("    killing previous joyride... ");
           if (scope.currActiveTour.active == true) {
@@ -330,7 +330,7 @@ function HelpTours() {
   }
 
   this.tourEnded = function(e, n) {
-    console.log("HelpTours >> f:tourEnded >> self.tourActive: " + self.tourActive + ", name: " + n);
+    //console.log("HelpTours >> f:tourEnded >> self.tourActive: " + self.tourActive + ", name: " + n);
 
     $(window).joyride('destroy');
     self.currActiveTour = undefined;

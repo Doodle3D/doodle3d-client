@@ -21,41 +21,45 @@ var hasControl;
 var gcodeGenerateDelayer;
 var gcodeGenerateDelay = 50;
 
+
+var preheatDelay;
+var preheatDelayTime = 15*1000;
+
 function initButtonBehavior() {
   console.log("f:initButtonBehavior");
 
-  $(".btn").Button(); //initalizes all buttons
-
-  btnOops = $("#btnOops");
-  btnInfo = $("#btnInfo");
-  btnSettings = $("#btnSettings");
-  btnNew = $("#btnNew");
-  btnPrint= $("#btnPrint");
-  btnStop = $("#btnStop");
-  btnPrevious = $("#btnPrevious");
-  btnNext = $("#btnNext");
-  btnSave = $("#btnSave");
+  btnOops = new Button("#btnOops");
+  btnInfo = new Button("#btnInfo");
+  btnSettings = new Button("#btnSettings");
+  btnNew = new Button("#btnNew");
+  btnPrint= new Button("#btnPrint");
+  btnStop = new Button("#btnStop");
+  btnPrevious = new Button("#btnPrevious");
+  btnNext = new Button("#btnNext");
+  btnSave = new Button("#btnSave");
   buttonGroupAdd = $("#buttonGroupAdd");
-	btnShape = $("#btnShape");
-	btnWordArt = $("#btnWordArt");
+	btnShape = new Button("#btnShape");
+	btnWordArt = new Button("#btnWordArt");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
 	popupMask = $("#popupMask");
 	logoPanel = $("#logopanel");
-  btnToggleEdit = $("#btnToggleEdit");
+  btnToggleEdit = new Button("#btnToggleEdit");
   buttonGroupEdit = $("#buttonGroupEdit");
-  btnZoom = $("#btnZoom");
-  btnMove = $("#btnMove");
-  btnRotate = $("#btnRotate");
-  btnToggleVerticalShapes = $("#btnToggleVerticalShapes");
+  btnZoom = new Button("#btnZoom");
+  btnMove = new Button("#btnMove");
+  btnRotate = new Button("#btnRotate");
+  btnToggleVerticalShapes = new Button("#btnToggleVerticalShapes");
   buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
-  btnHeight = $("#btnHeight");
-  btnTwist = $("#btnTwist");
-  btnStraight = $("#btnStraight");
-  btnDiv = $("#btnDiv");
-  btnConv = $("#btnConv");
-  btnSine = $("#btnSine");
-  btnAdd = $("#btnAdd");
+  btnHeight = new Button("#btnHeight");
+  btnTwist = new Button("#btnTwist");
+  btnStraight = new Button("#btnStraight");
+  btnDiv = new Button("#btnDiv");
+  btnConv = new Button("#btnConv");
+  btnSine = new Button("#btnSine");
+  btnAdd = new Button("#btnAdd");
+  
+  $(".btn").Button(); //initalize other buttons
   
   logoPanel.on("onButtonClick", onLogo);
   btnNew.on("onButtonClick", onBtnNew);
@@ -63,6 +67,10 @@ function initButtonBehavior() {
   btnWordArt.on("onButtonClick", onBtnWordArt);
   btnShape.on("onButtonClick", onBtnShape);
   btnPrint.on("onButtonClick", print);
+  btnStop.on("onButtonClick", stopPrint);
+  btnSave.on("onButtonClick", saveSketch);
+  btnPrevious.on("onButtonClick", prevDoodle);
+  btnNext.on("onButtonClick", nextDoodle);
   btnOops.on("onButtonHold", onBtnOops);
   // vertical shape buttons
   btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
@@ -179,17 +187,15 @@ function initButtonBehavior() {
     buttonGroupAdd.fadeOut();
   }
 
-  enableButton(btnSettings, openSettingsWindow);
-
+  btnSettings.on("onButtonClick", openSettingsWindow);
   
   // 29-okt-2013 - we're not doing help for smartphones at the moment
   if (clientInfo.isSmartphone) {
-    btnInfo.addClass("disabled");
+    btnInfo.disable();
   } else {
-  	function onBtnInfo(e) {
+    btnInfo.on("onButtonClick", function(e) {
   		helpTours.startTour(helpTours.WELCOMETOUR);
-    }
-    enableButton(btnInfo, onBtnInfo);
+    });
   }
 }
 
@@ -331,6 +337,8 @@ function resetTwist() {
 }
 
 function update() {
+	
+	
 	setState(printer.state,printer.hasControl);
 
 	thermometer.update(printer.temperature, printer.targetTemperature);
@@ -348,17 +356,17 @@ function setState(newState,newHasControl) {
 	// print button
 	var printEnabled = (newState == Printer.IDLE_STATE && newHasControl);
 	if(printEnabled) {
-		enableButton(btnPrint,print);
+		btnPrint.enable();
 	} else {
-		disableButton(btnPrint);
+		btnPrint.disable();
 	}
 
 	// stop button
 	var stopEnabled = ((newState == Printer.PRINTING_STATE || newState == Printer.BUFFERING_STATE) && newHasControl);
 	if(stopEnabled) {
-		enableButton(btnStop,stopPrint);
+		btnStop.enable();
 	} else {
-		disableButton(btnStop);
+		btnStop.disable();
 	}
 
 	// thermometer
@@ -387,29 +395,29 @@ function setState(newState,newHasControl) {
 	/* settings button */
 	switch(newState) {
     case Printer.IDLE_STATE:
-      enableButton(btnSettings, openSettingsWindow);
+    	btnSettings.enable();
       break;
     case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
     case Printer.BUFFERING_STATE: /* fall-through */
     case Printer.PRINTING_STATE: /* fall-through */
     case Printer.STOPPING_STATE:
-      disableButton(btnSettings);
+    	btnSettings.disable();
       break;
     default:
-      enableButton(btnSettings, openSettingsWindow);
+    	btnSettings.enable();
       break;
   }
 	
 	/* save, next and prev buttons */
 	switch(newState) {
 		case Printer.WIFIBOX_DISCONNECTED_STATE:
-			disableButton(btnPrevious);
-			disableButton(btnNext);
-			disableButton(btnSave);
+			btnPrevious.disable();
+			btnNext.disable()
+			btnSave.disable();
 			break;
 		default:
 			updatePrevNextButtonState();
-			if (isModified) enableButton(btnSave, saveSketch);
+			if (isModified) btnSave.enable();
 			break;
 	}
 
@@ -422,6 +430,12 @@ function setState(newState,newHasControl) {
 	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
 						prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE) {
 		message.set("Printer connected",Message.INFO,true);
+		console.log("  preheat: ",settings["printer.heatup.enabled"]);
+		if(settings["printer.heatup.enabled"]) {
+			// HACK: we delay the preheat because the driver needs time to connect
+			clearTimeout(preheatDelay);
+			preheatDelay = setTimeout(printer.preheat,preheatDelayTime); // retry after delay
+		}
 	}	else if(prevState == Printer.PRINTING_STATE && newState == Printer.STOPPING_STATE) {
 		console.log("stopmsg show");
 		message.set("Printer stopping",Message.INFO,false);

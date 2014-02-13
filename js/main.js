@@ -35,7 +35,7 @@ var BUTTON_GROUP_SHOW_DURATION = 80;
 
 $(function() {
   console.log("ready");
-
+  
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
@@ -136,19 +136,6 @@ function disableDragging() {
   });
 }
 
-function enableButton(elem, handler) {
-	//var elem = $('#'+domId);
-	elem.removeClass("disabled");
- 	elem.unbind('onButtonClick');
- 	elem.bind('onButtonClick', handler);
-}
-
-function disableButton(elem) {
-	//var elem = $('#'+domId);
-	elem.addClass("disabled");
- 	elem.unbind('onButtonClick');
-}
-
 function showOrHideThermo() {
   console.log("f:showOrHideThermo()");
   if (showOrHide) {
@@ -164,9 +151,11 @@ function showOrHideThermo() {
 
 function settingsLoaded() {
 	console.log("settingsLoaded");
-	console.log("autoHeatup: ",settings["printer.heatup.enabled"]);
+	
 	if(firstTimeSettingsLoaded) {
-		if(settings["printer.heatup.enabled"]) {
+		console.log("  preheat: ",settings["printer.heatup.enabled"]);
+		console.log("  state: ",state);
+		if(state == Printer.IDLE_STATE && settings["printer.heatup.enabled"]) {
 			printer.preheat();
 		}
 		console.log("doodle3d.tour.enabled: ",settings["doodle3d.tour.enabled"]);
