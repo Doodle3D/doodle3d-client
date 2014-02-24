@@ -52,7 +52,7 @@
         <option value="marlin_generic">Generic Marlin Printer</option>
         <option value="makerbot_generic">Generic Makerbot Printer</option>
       </select> --><br/>
-      
+
       <label for="printerDimensionsX">Dimensions:</label>
       x:<input id="printerDimensionsX" type="number" class="small" name="printer.dimensions.x" placeholder="x">mm<br>
       <label for="printerDimensionsY"></label>
@@ -80,7 +80,7 @@
       				<dt>{preheatBedTemp}</dt><dd>Preheat bed temperature</dd>
       				<dt>{printerType}</dt><dd>Printer type</dd>
       				<dt>{if heatedBed}</dt><dd>Enable line if printer has heated bed</dd>
-      				
+
       			</dl>
       		</small>
       	</div>
@@ -165,8 +165,9 @@
 
 	<fieldset id="updatePanel">
  		<legend>Update</legend>
- 		<input id="retainConfiguration" type="checkbox" name="" value="retainConfiguration" checked="true"> <label for="retainConfiguration" id="retainConfigurationLabel">Preserve personal sketches and settings</label>
- 		<br/><br/>
+ 		<input id="retainConfiguration" type="checkbox" name="" value="retainConfiguration" checked="true"> <label for="retainConfiguration" id="retainConfigurationLabel">Preserve personal sketches and settings</label><br/>
+ 		<input id="includeBetas" type="checkbox" name="doodle3d.includeBetas" value="includeBetas"> <label for="includeBetas" id="includeBetasLabel">Include beta releases (<a target="beta-info" href="http://doodle3d.com/help/beta">read more</a>)</label><br/>
+ 		<br/>
  		<input type="button" name="update" value="Update" class="button" id="update"/>
         <span id="updateState"></span><br/>
         <small id="updateInfo"></small>
@@ -178,7 +179,7 @@
     <input type="button" onclick="settingsWindow.downloadGcode()" name="downloadGcode" value="Download GCODE" class="button" id="downloadGcode"/>
     <input type="button" onclick="settingsWindow.downloadSvg()" name="downloadSvg" value="Download SVG" class="button" id="downloadSvg"/>
     </fieldset>
-    
+
     <fieldset id="restorePanel">
  		<legend>Restore</legend>
  		<input type="button" name="restoresettings" value="Restore settings to defaults" class="button" id="restoreSettings"/>

@@ -7,6 +7,8 @@
  */
 
 function UpdatePanel() {
+	var _form = new FormPanel();
+
 	this.wifiboxURL;
 	this.element;
 	
@@ -40,23 +42,33 @@ function UpdatePanel() {
 	var self = this;
 
 	this.init = function(wifiboxURL,updatePanelElement) {
+		_form.init(wifiboxURL,wifiboxURL,updatePanelElement);
 		
 		this.wifiboxURL = wifiboxURL;
 		
 		this.element = updatePanelElement;
 		this.retainCheckbox = this.element.find("#retainConfiguration");
+		this.includeBetasCheckbox = this.element.find("#includeBetas");
 		this.btnUpdate = this.element.find("#update");
 		this.statusDisplay = this.element.find("#updateState");
 		this.infoDisplay = this.element.find("#updateInfo");
 		
 		this.retainCheckbox.change(this.retainChanged);
+		this.includeBetasCheckbox.change(this.includeBetasChanged);
 		this.btnUpdate.click(this.update);
 		
 		this.checkStatus(false);
 	}
 	this.retainChanged = function(e) {
 		//console.log("UpdatePanel:retainChanged");
+		//this call ensures that the update button gets enabled if (!retainChanged && !canUpdate)
 		self.setState(self.state,true);
+	}
+	this.includeBetasChanged = function() {
+		//console.log("UpdatePanel:includeBetasChanged");
+		_form.saveSettings(_form.readForm(),function(validated, data) {
+			if(validated) self.checkStatus(false);
+		});
 	}
 	this.update = function() {
 		console.log("UpdatePanel:update");
@@ -149,6 +161,8 @@ function UpdatePanel() {
 	
 	this.handleStatusData = function(data) {
 		//console.log("UpdatePanel:handleStatusData");
+		var refreshUI = (self.canUpdate != data.can_update);
+
 		self.canUpdate 				= data.can_update;
 		
 		if(self.currentVersion != data.current_version || self.newestVersion != data.newest_version) {
@@ -161,7 +175,7 @@ function UpdatePanel() {
 		self.progress 				= data.progress; // not always available
 		self.imageSize 				= data.image_size; // not always available
 		
-		self.setState(data.state_code);
+		self.setState(data.state_code, refreshUI);
 		
 		switch(this.state){
 			case UpdatePanel.IMAGE_READY:
