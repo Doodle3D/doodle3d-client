@@ -31,7 +31,7 @@ function UpdatePanel() {
 	UpdatePanel.NONE 			= 1; // default state
 	UpdatePanel.DOWNLOADING  	= 2;
 	UpdatePanel.DOWNLOAD_FAILED	= 3;
-	UpdatePanel.IMAGE_READY 	= 4; // download successfull and checked
+	UpdatePanel.IMAGE_READY 	= 4; // download successful and checked
 	UpdatePanel.INSTALLING 		= 5;
 	UpdatePanel.INSTALLED 		= 6;
 	UpdatePanel.INSTALL_FAILED 	= 7;
@@ -148,6 +148,8 @@ function UpdatePanel() {
 				if(response.status != "error") {
 					var data = response.data;
 					self.handleStatusData(data);
+				} else {
+					console.log("API update/status call returned an error: '" + response.msg + "'");
 				}
 			}
 		}).fail(function() {
@@ -225,7 +227,9 @@ function UpdatePanel() {
 			switch(this.state){
 				case UpdatePanel.NONE:
 					if(self.canUpdate) {
-						text = "Update(s) available.";
+						var settings = _form.readForm();
+						if (self.versionIsBeta(self.currentVersion) && !settings.includeBetas) text = "You can switch back to the latest stable release.";
+						else text = "Update(s) available.";
 					} else {
 						text = "You're up to date.";
 					}
@@ -272,5 +276,9 @@ function UpdatePanel() {
 	this.setInAccessPointMode = function(inAccessPointMode) {
 		_inAccessPointMode = inAccessPointMode;
 		self.updateStatusDisplay();
+	}
+
+	this.versionIsBeta = function(version) {
+		return version.match(/.*-.*/g) != null;
 	}
 }
