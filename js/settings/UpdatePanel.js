@@ -23,6 +23,8 @@ function UpdatePanel() {
 	this.canUpdate = false;
 	this.currentVersion = "";
 	this.newestVersion;
+	this.currentReleaseDate;
+	this.newestReleaseDate;
 	this.progress;
 	this.imageSize;
 	var _inAccessPointMode;
@@ -59,21 +61,26 @@ function UpdatePanel() {
 
 		this.checkStatus(false);
 	}
+
 	this.retainChanged = function(e) {
 		//console.log("UpdatePanel:retainChanged");
 		//this call ensures that the update button gets enabled if (!retainChanged && !canUpdate)
 		self.setState(self.state,true);
 	}
+
 	this.includeBetasChanged = function() {
 		//console.log("UpdatePanel:includeBetasChanged");
 		_form.saveSettings(_form.readForm(),function(validated, data) {
 			if(validated) self.checkStatus(false);
 		});
 	}
+
+
 	this.update = function() {
 		console.log("UpdatePanel:update");
 		self.downloadUpdate();
 	}
+
 	this.downloadUpdate = function() {
 		console.log("UpdatePanel:downloadUpdate");
 		$.ajax({
@@ -89,6 +96,7 @@ function UpdatePanel() {
 		self.setState(UpdatePanel.DOWNLOADING);
 		self.startCheckingStatus();
 	}
+
 	this.installUpdate = function() {
 		console.log("UpdatePanel:installUpdate");
 
@@ -115,15 +123,18 @@ function UpdatePanel() {
 		self.installedDelayer = setTimeout(function() { self.setState(UpdatePanel.INSTALLED) },self.installedDelay);
 	}
 
+
 	this.startCheckingStatus = function() {
 		clearTimeout(self.statusCheckDelayer);
 		clearTimeout(self.retryDelayer);
 		self.statusCheckDelayer = setTimeout(function() { self.checkStatus(true) },self.statusCheckInterval);
 	}
+
 	this.stopCheckingStatus = function() {
 		clearTimeout(self.statusCheckDelayer);
 		clearTimeout(self.retryDelayer);
 	}
+
 	this.checkStatus = function(keepChecking) {
 		if (!communicateWithWifibox) return;
 		$.ajax({
@@ -161,15 +172,19 @@ function UpdatePanel() {
 		});
 	}
 
+
 	this.handleStatusData = function(data) {
 		//console.log("UpdatePanel:handleStatusData");
-		var refreshUI = (self.canUpdate != data.can_update);
+		//status texts and button state might have to be updated if the newest version changes (e.g., after (un)ticking include betas checkbox)
+		var refreshUI = (self.newestVersion != data.newest_version);
 
 		self.canUpdate 				= data.can_update;
 
 		if(self.currentVersion != data.current_version || self.newestVersion != data.newest_version) {
 			self.currentVersion 	= data.current_version;
 			self.newestVersion 		= data.newest_version;
+			self.currentReleaseDate	= data.current_release_date; // not always available (for older versions)
+			self.newestReleaseDate	= data.newest_release_date; // not always available (for older versions)
 			self.updateInfoDisplay();
 		}
 
@@ -185,6 +200,7 @@ function UpdatePanel() {
 				break;
 		}
 	}
+
 	this.setState = function(newState,refresh) {
 		//console.log("UpdatePanel:setState");
 		if(!refresh && this.state == newState) return;
@@ -221,15 +237,25 @@ function UpdatePanel() {
 		}
 		this.updateStatusDisplay();
 	}
+
 	this.updateStatusDisplay = function() {
 		var text = "";
 		if(self.newestVersion != undefined) {
 			switch(this.state){
 				case UpdatePanel.NONE:
 					if(self.canUpdate) {
-						var settings = _form.readForm();
-						if (self.versionIsBeta(self.currentVersion) && !settings.includeBetas) text = "You can switch back to the latest stable release.";
-						else text = "Update(s) available.";
+						var currIsBeta = self.versionIsBeta(self.currentVersion);
+						var newIsBeta = self.versionIsBeta(self.newestVersion);
+						var relIsNewer = (self.newestReleaseDate && self.currentReleaseDate) ? (self.newestReleaseDate - self.currentReleaseDate > 0) : true;
+
+						if (!newIsBeta) {
+							if (relIsNewer) text = "Update available.";
+							else text = "You can switch back to the latest stable release."; //this case is always a beta->stable 'downgrade'
+						} else {
+							//NOTE: actually, an older beta will never be presented as update by the API
+							var prefixText = currIsBeta ? "A" : (relIsNewer ? "A newer" : "An older");
+							text = prefixText + " beta release is available.";
+						}
 					} else {
 						text = "You're up to date.";
 					}
@@ -263,22 +289,36 @@ function UpdatePanel() {
 		}
 		this.statusDisplay.html(text);
 	}
+
 	this.updateInfoDisplay = function() {
-		var html = 'Current version: ' + self.currentVersion +
-				' (<a target="d3d-curr-relnotes" href="ReleaseNotes.html">release notes</a>). ';
+		var html = 'Current version: ' + self.currentVersion;
+		if (self.currentReleaseDate) html += '; released: ' + self.formatDate(self.currentReleaseDate);
+		html += ' (<a target="d3d-curr-relnotes" href="ReleaseNotes.html">release notes</a>).';
+
 		if(self.canUpdate) {
-			html += 'Latest version: ' + self.newestVersion +
-					' (<a target="d3d-new-relnotes" href="http://doodle3d.com/updates/images/ReleaseNotes.md">release notes</a>).';
+			html += '<br/>Latest version: ' + self.newestVersion;
+			if (self.newestReleaseDate) html += '; released: ' + self.formatDate(self.newestReleaseDate);
+			html += ' (<a target="d3d-new-relnotes" href="http://doodle3d.com/updates/images/ReleaseNotes.md">release notes</a>).';
 		}
 		self.infoDisplay.html(html);
 	}
+
 
 	this.setInAccessPointMode = function(inAccessPointMode) {
 		_inAccessPointMode = inAccessPointMode;
 		self.updateStatusDisplay();
 	}
 
+	this.formatDate = function(ts) {
+		if (!ts || ts.length != 8 || !/^[0-9]+$/.test(ts)) return null;
+		var fields = [ ts.substr(0, 4), ts.substr(4, 2), ts.substr(6, 2) ];
+		if (!fields || fields.length != 3 || fields[1] > 12) return null;
+
+		var abbrMonths = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Sep', 'Aug', 'Oct', 'Nov', 'Dec' ];
+		return abbrMonths[fields[1] - 1] + " " + fields[2] + ", " + fields[0];
+	}
+
 	this.versionIsBeta = function(version) {
-		return version.match(/.*-.*/g) != null;
+		return version ? /.*-.*/g.test(version) : null;
 	}
 }
