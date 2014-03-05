@@ -202,7 +202,6 @@ function initButtonBehavior() {
 
 function stopPrint() {
 	console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
-	//if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
 	if (sendPrintCommands) printer.stop();
 	//setState(Printer.STOPPING_STATE,printer.hasControl);
 	printer.overruleState(Printer.STOPPING_STATE);
@@ -247,10 +246,6 @@ function print(e) {
 	} else {
 		console.log("f:print >> not enough points!");
 	}
-
-	//alert("Je tekening zal nu geprint worden");
-	//$(".btnPrint").css("display","block");
-
 
 	//	$.post("/doodle3d.of", { data:output }, function(data) {
 	//	btnPrint.disabled = false;
@@ -393,6 +388,7 @@ function setState(newState,newHasControl) {
 
 	/* settings button */
 	switch(newState) {
+	case Printer.CONNECTING_STATE: /* fall-through */
 	case Printer.IDLE_STATE:
 		btnSettings.enable();
 		break;
@@ -426,12 +422,15 @@ function setState(newState,newHasControl) {
 		message.set("Connected to WiFi box",Message.INFO,true);
 	} else if(newState == Printer.DISCONNECTED_STATE) {
 		message.set("Printer disconnected",Message.WARNING,true);
+	} else if(newState == Printer.CONNECTING_STATE) {
+		message.set("Printer connecting",Message.INFO,false);
 	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
-			prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE) {
+			prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE ||
+			prevState == Printer.CONNECTING_STATE && newState == Printer.IDLE_STATE) {
 		message.set("Printer connected",Message.INFO,true);
 		console.log("  preheat: ",settings["printer.heatup.enabled"]);
 		if(settings["printer.heatup.enabled"]) {
-			// HACK: we delay the preheat because the driver needs time to connect
+			// HACK: we delay the preheat because the makerbot driver needs time to connect
 			clearTimeout(preheatDelay);
 			preheatDelay = setTimeout(printer.preheat,preheatDelayTime); // retry after delay
 		}

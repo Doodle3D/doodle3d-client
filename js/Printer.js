@@ -23,13 +23,14 @@ function Printer() {
 	Printer.WIFIBOX_DISCONNECTED_STATE	= "wifibox disconnected";
 	Printer.UNKNOWN_STATE				= "unknown";				// happens when a printer is connection but there isn't communication yet
 	Printer.DISCONNECTED_STATE			= "disconnected";			// printer disconnected
-	Printer.IDLE_STATE					= "idle"; 					// printer found, but idle
+	Printer.CONNECTING_STATE 			= "connecting";				// printer connecting (printer found, but driver has not yet finished setting up the connection)
+	Printer.IDLE_STATE 					= "idle"; 					// printer found and ready to use, but idle
 	Printer.BUFFERING_STATE				= "buffering";				// printer is buffering (recieving) data, but not yet printing
 	Printer.PRINTING_STATE				= "printing";
 	Printer.STOPPING_STATE				= "stopping";				// when you stop (abort) a print it prints the endcode
 	Printer.TOUR_STATE					= "tour";					// when in joyride mode
 
-	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being send to the printer, leaving will result in a incomplete 3D print";
+	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being sent to the printer, leaving will result in a incomplete 3D print";
 
 	this.temperature 		= 0;
 	this.targetTemperature 	= 0;
@@ -47,7 +48,7 @@ function Printer() {
 	this.sendPrintPartTimeoutTime = 5000;
 
 	this.gcode; 							// gcode to be printed
-	this.sendLength = 500; 					// max amount of gcode lines per post (limited because WiFi box can't handle to much)
+	this.sendLength = 500; 					// max amount of gcode lines per post (limited because WiFi box can't handle too much)
 
 	this.retryDelay = 2000; 				// retry setTimout delay
 	this.retrySendPrintPartDelay; 			// retry setTimout instance
@@ -80,11 +81,7 @@ function Printer() {
 	this.preheat = function() {
 		console.log("Printer:preheat");
 
-		if(	this.state == Printer.BUFFERING_STATE ||
-				this.state == Printer.PRINTING_STATE ||
-				this.state == Printer.STOPPING_STATE) {
-			return;
-		}
+		if (this.state != Printer.IDLE_STATE) return;
 
 		var self = this;
 		if (communicateWithWifibox) {
@@ -131,8 +128,9 @@ function Printer() {
 		console.log("  gcodeSize: ",gcodeSize);
 
 		if(gcodeSize > Printer.MAX_GCODE_SIZE) {
-			alert("Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
-			console.log("Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)");
+			var msg = "Error: Printer:print: gcode file is probably too big ("+gcodeSize+"MB) (max: "+Printer.MAX_GCODE_SIZE+"MB)";
+			alert(msg);
+			console.log(msg);
 
 			this.overruleState(Printer.IDLE_STATE);
 			this.startStatusCheckInterval();
@@ -191,7 +189,7 @@ function Printer() {
 							message.set("Doodle has been sent to printer...",Message.INFO,true);
 							//self.targetTemperature = settings["printer.temperature"]; // slight hack
 						} else {
-							// only if the state hasn't bin changed (by for example pressing stop) we send more gcode
+							// only if the state hasn't been changed (by for example pressing stop) we send more gcode
 
 							//console.log("Printer:sendPrintPart:gcode part received (state: ",self.state,")");
 							if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
@@ -257,7 +255,7 @@ function Printer() {
 				self.startStatusCheckInterval();
 			});
 		} else {
-			console.log ("Printer >> f:communicateWithWifibox() >> communicateWithWifibox is false, so not executing this function");
+			console.log ("Printer >> f:stop() >> communicateWithWifibox is false, so not executing this function");
 		}
 	}
 
@@ -316,21 +314,21 @@ function Printer() {
 			// state
 			//console.log("  stateOverruled: ",this.stateOverruled);
 			if(!this.stateOverruled) {
-				self.state 								= data.state;
+				self.state = data.state;
 				//console.log("  state > ",self.state);
 			}
 
 			// temperature
-			self.temperature 					= data.hotend;
-			self.targetTemperature 		= data.hotend_target;
+			self.temperature = data.hotend;
+			self.targetTemperature = data.hotend_target;
 
 			// progress
-			self.currentLine 					= data.current_line;
-			self.totalLines 					= data.total_lines;
-			self.bufferedLines				= data.buffered_lines
+			self.currentLine = data.current_line;
+			self.totalLines = data.total_lines;
+			self.bufferedLines = data.buffered_lines
 
 			// access
-			self.hasControl						= data.has_control;
+			self.hasControl = data.has_control;
 
 			if(self.state == Printer.PRINTING_STATE || self.state == Printer.STOPPING_STATE) {
 				console.log("progress: ",self.currentLine+"/"+self.totalLines+" ("+self.bufferedLines+") ("+self.state+")");
