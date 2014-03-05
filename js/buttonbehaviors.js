@@ -21,9 +21,12 @@ var hasControl;
 var gcodeGenerateDelayer;
 var gcodeGenerateDelay = 50;
 
-
 var preheatDelay;
 var preheatDelayTime = 15*1000;
+
+var connectingHintDelay = null;
+var connectingHintDelayTime = 15 * 1000;
+
 
 function initButtonBehavior() {
 	console.log("f:initButtonBehavior");
@@ -416,6 +419,11 @@ function setState(newState,newHasControl) {
 	break;
 	}
 
+	if(connectingHintDelay && newState != Printer.CONNECTING_STATE) {
+		clearTimeout(connectingHintDelay);
+		connectingHintDelay = null;
+	}
+
 	if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
 		message.set("Lost connection to WiFi box",Message.ERROR);
 	}	else if(prevState == Printer.WIFIBOX_DISCONNECTED_STATE) {
@@ -424,6 +432,13 @@ function setState(newState,newHasControl) {
 		message.set("Printer disconnected",Message.WARNING,true);
 	} else if(newState == Printer.CONNECTING_STATE) {
 		message.set("Printer connecting",Message.INFO,false);
+		if (prevState != Printer.CONNECTING_STATE) { //enable 'watchdog' if we entered from a different state
+			clearTimeout(connectingHintDelay);
+			connectingHintDelay = setTimeout(function() {
+				message.set("Printer still not connected, did you select the correct type?", Message.WARNING, false);
+				connectingHintDelay = null;
+			}, connectingHintDelayTime);
+		}
 	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
 			prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE ||
 			prevState == Printer.CONNECTING_STATE && newState == Printer.IDLE_STATE) {
