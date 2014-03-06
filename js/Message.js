@@ -7,38 +7,38 @@
  */
 
 function Message() {
-	
+
 	Message.ERROR 			= "error";
 	Message.WARNING 		= "warning";
 	Message.NOTICE 			= "notice";
 	Message.INFO 				= "info";
-	
+
 	this.mode						= "";
-	
+
 	this.$element;
-	
+
 	var self = this;
 	var autoHideDelay = 5000;
 	var autohideTimeout;
-	
+
 	this.init = function($element) {
     this.$element = $element;
  	}
-	this.set = function(text,mode,autoHide,disableEffect) {
-		console.log("Message:set: ",text,mode,autoHide,disableEffect);
+	this.set = function(contents,mode,autoHide,disableEffect) {
+		console.log("Message:set: ",contents,mode,autoHide,disableEffect);
 		if(disableEffect) {
-			self.fill(text,mode,autoHide)
+			self.fill(contents,mode,autoHide)
 		} else{
 			self.hide(function() {
 				self.show();
-				self.fill(text,mode,autoHide)
+				self.fill(contents,mode,autoHide)
 			});
 		}
 	}
-	this.fill = function(text,mode,autoHide) {
+	this.fill = function(contents,mode,autoHide) {
 		//console.log("Message:fill: ",text,mode,autoHide);
 		self.clear();
-		self.$element.text(text);
+		self.$element.html(contents);
 		self.$element.addClass(mode);
 		self.mode = mode;
 		clearTimeout(autohideTimeout);
@@ -47,10 +47,10 @@ function Message() {
 		}
 	}
 	this.clear = function($element) {
-		this.$element.text("");
+		this.$element.html("");
 		this.$element.removeClass(this.mode);
 	}
-	
+
 	this.show = function() {
 		this.$element.fadeIn(200);
 	}

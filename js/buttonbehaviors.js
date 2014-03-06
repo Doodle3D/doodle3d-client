@@ -431,11 +431,11 @@ function setState(newState,newHasControl) {
 	} else if(newState == Printer.DISCONNECTED_STATE) {
 		message.set("Printer disconnected",Message.WARNING,true);
 	} else if(newState == Printer.CONNECTING_STATE) {
-		message.set("Printer connecting",Message.INFO,false);
+		message.set("Printer connecting...",Message.INFO,false);
 		if (prevState != Printer.CONNECTING_STATE) { //enable 'watchdog' if we entered from a different state
 			clearTimeout(connectingHintDelay);
 			connectingHintDelay = setTimeout(function() {
-				message.set("Printer still not connected, did you select the correct type?", Message.WARNING, false);
+				message.set("Printer still not connected, did you<br/>select the correct printer type?", Message.WARNING, false);
 				connectingHintDelay = null;
 			}, connectingHintDelayTime);
 		}
