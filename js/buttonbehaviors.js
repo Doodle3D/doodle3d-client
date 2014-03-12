@@ -25,7 +25,7 @@ var preheatDelay;
 var preheatDelayTime = 15*1000;
 
 var connectingHintDelay = null;
-var connectingHintDelayTime = 15 * 1000;
+var connectingHintDelayTime = 20 * 1000;
 
 
 function initButtonBehavior() {
