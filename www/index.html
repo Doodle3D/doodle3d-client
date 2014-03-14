@@ -5,10 +5,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+
   <link rel="icon" type="image/ico" href="./favicon_alt.ico"/>
   <link rel="apple-touch-icon-precomposed" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png"/>
   <link rel="apple-touch-icon-precomposed" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png" sizes="144x144" />
-  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
   <link href="css/styles.min.css" rel="stylesheet" media="screen">
   <link href="css/debug.min.css" rel="stylesheet" media="screen">
 
@@ -36,7 +39,7 @@
 
     <div id="buttonGroupAdd" class="buttonGroup">
       <img id="btnWordArt" class="btn" src="img/buttons/btnWordArt.png" />
-      <img id="btnShape" class="btn" src="img/buttons/btnShape.png" />    
+      <img id="btnShape" class="btn" src="img/buttons/btnShape.png" />
     </div>
 
   </div>
@@ -63,18 +66,16 @@
 
   </div>
 
-  <div id="message"></div>
-
   <!-- center panel -->
   <div id="centerpanel">
-    
+
     <div id="logopanel" class="btn">
       <img id="pencil" src="img/logo/pencil.png"/>
       <img id="logo" src="img/logo/doodle3d.png"/>
     </div>
 
     <div id="drawareacontainer">
-      
+
       <div id="canvasContainers">
         <div id="mycanvasContainer">
           <canvas id="mycanvas"></canvas>
@@ -92,20 +93,20 @@
               <img id="btnStraight" class="btn" src="img/buttons/btnStraight.png" />
             </div>
           </div>
-          <img id="btnToggleVerticalShapes" class="btn" src="img/buttons/btnArrowClose.png" />      
+          <img id="btnToggleVerticalShapes" class="btn" src="img/buttons/btnArrowClose.png" />
         </div>
-      
+
       </div>
       <canvas id="preview_tmp"></canvas>
-      
+
       <div id="buttonGroupEdit" class="buttonGroup">
         <img id="btnMove" class="btn" src="img/buttons/btnMove.png" />
         <img id="btnZoom" class="btn" src="img/buttons/btnZoom.png" />
         <img id="btnRotate" class="btn" src="img/buttons/btnRotate.png" />
       </div>
       <img id="btnToggleEdit" class="btn" src="img/buttons/btnArrowOpen.png" />
-	  
-    </div>  
+
+    </div>
   </div>
 
   <div id="debug_textArea">
@@ -153,6 +154,8 @@
       </div>
     </div>
   </div>
+
+  <div id="message"></div>
 </div>
 
 <div id="portrait">

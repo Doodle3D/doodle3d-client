@@ -21,122 +21,126 @@ var hasControl;
 var gcodeGenerateDelayer;
 var gcodeGenerateDelay = 50;
 
-
 var preheatDelay;
 var preheatDelayTime = 15*1000;
 
-function initButtonBehavior() {
-  console.log("f:initButtonBehavior");
+var connectingHintDelay = null;
+var connectingHintDelayTime = 20 * 1000;
 
-  btnOops = new Button("#btnOops");
-  btnInfo = new Button("#btnInfo");
-  btnSettings = new Button("#btnSettings");
-  btnNew = new Button("#btnNew");
-  btnPrint= new Button("#btnPrint");
-  btnStop = new Button("#btnStop");
-  btnPrevious = new Button("#btnPrevious");
-  btnNext = new Button("#btnNext");
-  btnSave = new Button("#btnSave");
-  buttonGroupAdd = $("#buttonGroupAdd");
+
+function initButtonBehavior() {
+	console.log("f:initButtonBehavior");
+
+	btnOops = new Button("#btnOops");
+	btnInfo = new Button("#btnInfo");
+	btnSettings = new Button("#btnSettings");
+	btnNew = new Button("#btnNew");
+	btnPrint= new Button("#btnPrint");
+	btnStop = new Button("#btnStop");
+	btnPrevious = new Button("#btnPrevious");
+	btnNext = new Button("#btnNext");
+	btnSave = new Button("#btnSave");
+	buttonGroupAdd = $("#buttonGroupAdd");
 	btnShape = new Button("#btnShape");
 	btnWordArt = new Button("#btnWordArt");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
 	popupMask = $("#popupMask");
 	logoPanel = $("#logopanel");
-  btnToggleEdit = new Button("#btnToggleEdit");
-  buttonGroupEdit = $("#buttonGroupEdit");
-  btnZoom = new Button("#btnZoom");
-  btnMove = new Button("#btnMove");
-  btnRotate = new Button("#btnRotate");
-  btnToggleVerticalShapes = new Button("#btnToggleVerticalShapes");
-  buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
-  btnHeight = new Button("#btnHeight");
-  btnTwist = new Button("#btnTwist");
-  btnStraight = new Button("#btnStraight");
-  btnDiv = new Button("#btnDiv");
-  btnConv = new Button("#btnConv");
-  btnSine = new Button("#btnSine");
-  btnAdd = new Button("#btnAdd");
-  
-  $(".btn").Button(); //initalize other buttons
-  
-  logoPanel.on("onButtonClick", onLogo);
-  btnNew.on("onButtonClick", onBtnNew);
-  btnAdd.on("onButtonClick", onBtnAdd);
-  btnWordArt.on("onButtonClick", onBtnWordArt);
-  btnShape.on("onButtonClick", onBtnShape);
-  btnPrint.on("onButtonClick", print);
-  btnStop.on("onButtonClick", stopPrint);
-  btnSave.on("onButtonClick", saveSketch);
-  btnPrevious.on("onButtonClick", prevDoodle);
-  btnNext.on("onButtonClick", nextDoodle);
-  btnOops.on("onButtonHold", onBtnOops);
-  // vertical shape buttons
-  btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
-  btnHeight.on("onButtonHold", onBtnHeight);
-  btnTwist.on("onButtonHold", onBtnTwist);
-  btnStraight.on("onButtonClick", onBtnStraight);
+	btnToggleEdit = new Button("#btnToggleEdit");
+	buttonGroupEdit = $("#buttonGroupEdit");
+	btnZoom = new Button("#btnZoom");
+	btnMove = new Button("#btnMove");
+	btnRotate = new Button("#btnRotate");
+	btnToggleVerticalShapes = new Button("#btnToggleVerticalShapes");
+	buttonGroupVerticalShapes = $("#buttonGroupVerticalShapes");
+	btnHeight = new Button("#btnHeight");
+	btnTwist = new Button("#btnTwist");
+	btnStraight = new Button("#btnStraight");
+	btnDiv = new Button("#btnDiv");
+	btnConv = new Button("#btnConv");
+	btnSine = new Button("#btnSine");
+	btnAdd = new Button("#btnAdd");
+
+	$(".btn").Button(); //initalize other buttons
+
+	logoPanel.on("onButtonClick", onLogo);
+	btnNew.on("onButtonClick", onBtnNew);
+	btnAdd.on("onButtonClick", onBtnAdd);
+	btnWordArt.on("onButtonClick", onBtnWordArt);
+	btnShape.on("onButtonClick", onBtnShape);
+	btnPrint.on("onButtonClick", print);
+	btnStop.on("onButtonClick", stopPrint);
+	btnSave.on("onButtonClick", saveSketch);
+	btnPrevious.on("onButtonClick", prevDoodle);
+	btnNext.on("onButtonClick", nextDoodle);
+	btnOops.on("onButtonHold", onBtnOops);
+	// vertical shape buttons
+	btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
+	btnHeight.on("onButtonHold", onBtnHeight);
+	btnTwist.on("onButtonHold", onBtnTwist);
+	btnStraight.on("onButtonClick", onBtnStraight);
 	btnDiv.on("onButtonClick", onBtnDiv);
 	btnConv.on("onButtonClick", onBtnConv);
 	btnSine.on("onButtonClick", onBtnSine);
-  
-  btnToggleEdit.on("onButtonClick", onBtnToggleEdit);
-  btnMove.on("onButtonHold", onBtnMove);
-  btnZoom.on("onButtonHold", onBtnZoom);
-  btnRotate.on("onButtonHold", onBtnRotate);
-  
-  getSavedSketchStatus();
-  setSketchModified(false);
 
-  function onBtnToggleVerticalShapes() {
-  	var btnImg;
-  	if(buttonGroupVerticalShapes.is(":hidden")) {
-  		btnImg = "img/buttons/btnArrowClose.png";
-  	} else {
-  		btnImg = "img/buttons/btnArrowOpen.png";
-  	}
-  	btnToggleVerticalShapes.attr("src",btnImg);
-  	
-  	buttonGroupVerticalShapes.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
-  }
+	btnToggleEdit.on("onButtonClick", onBtnToggleEdit);
+	btnMove.on("onButtonHold", onBtnMove);
+	btnZoom.on("onButtonHold", onBtnZoom);
+	btnRotate.on("onButtonHold", onBtnRotate);
 
-  function onLogo() {
-  	location.reload();
+	getSavedSketchStatus();
+	setSketchModified(false);
+
+	function onBtnToggleVerticalShapes() {
+		var btnImg;
+		if (buttonGroupVerticalShapes.is(":hidden")) {
+			btnImg = "img/buttons/btnArrowClose.png";
+		} else {
+			btnImg = "img/buttons/btnArrowOpen.png";
+		}
+		btnToggleVerticalShapes.attr("src",btnImg);
+
+		buttonGroupVerticalShapes.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
 	}
-  function onBtnAdd() {
-    buttonGroupAdd.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
-  }
 
-  function onBtnStraight() {
-    setVerticalShape(verticalShapes.NONE);
-  }
-  function onBtnDiv() {
-    setVerticalShape(verticalShapes.DIVERGING);
-  }
-  function onBtnConv() {
-    setVerticalShape(verticalShapes.CONVERGING);
-  }
-  function onBtnSine() {
-    setVerticalShape(verticalShapes.SINUS);
-  }
+	function onLogo() {
+		location.reload();
+	}
 
-  function hitTest(cursor,button,radius) {
-    return distance(cursor.x,cursor.y,button.x,button.y)<radius;
-  }
-  
-  
-  function onBtnToggleEdit() {
-  	var btnImg;
+	function onBtnAdd() {
+		buttonGroupAdd.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
+	}
+
+	function onBtnStraight() {
+		setVerticalShape(verticalShapes.NONE);
+	}
+	function onBtnDiv() {
+		setVerticalShape(verticalShapes.DIVERGING);
+	}
+	function onBtnConv() {
+		setVerticalShape(verticalShapes.CONVERGING);
+	}
+	function onBtnSine() {
+		setVerticalShape(verticalShapes.SINUS);
+	}
+
+	function hitTest(cursor,button,radius) {
+		return distance(cursor.x,cursor.y,button.x,button.y)<radius;
+	}
+
+
+	function onBtnToggleEdit() {
+		var btnImg;
 		if(buttonGroupEdit.is(":hidden")) {
 			btnImg = "img/buttons/btnArrowClose.png";
 		} else {
 			btnImg = "img/buttons/btnArrowOpen.png";
 		}
 		btnToggleEdit.attr("src",btnImg);
-		
+
 		buttonGroupEdit.fadeToggle(BUTTON_GROUP_SHOW_DURATION);
-  }
+	}
 	function onBtnMove(e,cursor) {
 		var w = btnMove.width();
 		var h = btnMove.height();
@@ -153,86 +157,85 @@ function initButtonBehavior() {
 	function onBtnRotate(e,cursor) {
 		var h = btnZoom.height();
 		var multiplier = (h/2-cursor.y)*0.003;
-		rotateShape(-multiplier); 
+		rotateShape(-multiplier);
 	}
-	
-  function onBtnHeight(e,cursor) {
-  	var h = btnHeight.height();
-  	if(cursor.y < h/2) {
-  		previewUp(true);
-  	} else {
-  		previewDown(true);
-  	}
-  }
-  function onBtnTwist(e,cursor) {
-  	var h = btnTwist.height();
+
+	function onBtnHeight(e,cursor) {
+		var h = btnHeight.height();
+		if(cursor.y < h/2) {
+			previewUp(true);
+		} else {
+			previewDown(true);
+		}
+	}
+	function onBtnTwist(e,cursor) {
+		var h = btnTwist.height();
 		var multiplier = (cursor.y-h/2)*0.0005;
 		previewTwist(multiplier,true);
-  }
+	}
 
-  function onBtnOops(e) {
-    oopsUndo();
-  }
+	function onBtnOops(e) {
+		oopsUndo();
+	}
 
-  function onBtnNew(e) {
-    clearDoodle();
-  }
-  
-  function onBtnWordArt(e) {
-    showWordArtDialog();
-  }
+	function onBtnNew(e) {
+		clearDoodle();
+	}
 
-  function onBtnShape(e) {
-    showShapeDialog();
-    buttonGroupAdd.fadeOut();
-  }
+	function onBtnWordArt(e) {
+		showWordArtDialog();
+	}
 
-  btnSettings.on("onButtonClick", openSettingsWindow);
-  
-  // 29-okt-2013 - we're not doing help for smartphones at the moment
-  if (clientInfo.isSmartphone) {
-    btnInfo.disable();
-  } else {
-    btnInfo.on("onButtonClick", function(e) {
-  		helpTours.startTour(helpTours.WELCOMETOUR);
-    });
-  }
+	function onBtnShape(e) {
+		showShapeDialog();
+		buttonGroupAdd.fadeOut();
+	}
+
+	btnSettings.on("onButtonClick", openSettingsWindow);
+
+	// 29-okt-2013 - we're not doing help for smartphones at the moment
+	if (clientInfo.isSmartphone) {
+		btnInfo.disable();
+	} else {
+		btnInfo.on("onButtonClick", function(e) {
+			helpTours.startTour(helpTours.WELCOMETOUR);
+		});
+	}
 }
 
 function stopPrint() {
-  console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
-  //if (!confirm("Weet je zeker dat je huidige print wilt stoppen?")) return;
-  if (sendPrintCommands) printer.stop();
-  //setState(Printer.STOPPING_STATE,printer.hasControl);
-  printer.overruleState(Printer.STOPPING_STATE);
+	console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
+	if (sendPrintCommands) printer.stop();
+	//setState(Printer.STOPPING_STATE,printer.hasControl);
+	printer.overruleState(Printer.STOPPING_STATE);
 }
 
 
 function print(e) {
 	console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
 
-  //$(".btnPrint").css("display","none");
+	//$(".btnPrint").css("display","none");
 
-  if (_points.length > 2) {
+	if (_points.length > 2) {
 
-  	//setState(Printer.BUFFERING_STATE,printer.hasControl);
-    printer.overruleState(Printer.BUFFERING_STATE);
+		//setState(Printer.BUFFERING_STATE,printer.hasControl);
+		printer.overruleState(Printer.BUFFERING_STATE);
 
-    btnStop.css("display","none"); // hack
+		btnStop.css("display","none"); // hack
 
-    // we put the gcode generation in a little delay
-    // so that for example the print button is disabled right away
-    clearTimeout(gcodeGenerateDelayer);
-    gcodeGenerateDelayer = setTimeout(function() {
+		// we put the gcode generation in a little delay
+		// so that for example the print button is disabled right away
+		clearTimeout(gcodeGenerateDelayer);
+		gcodeGenerateDelayer = setTimeout(function() {
 
-    	var gcode = generate_gcode();
-    	if (sendPrintCommands) {
-    		if(gcode.length > 0) {
-    			printer.print(gcode);
-    		} else {
-    			printer.overruleState(Printer.IDLE_STATE);
-    			printer.startStatusCheckInterval();
-    		}
+			var gcode = generate_gcode();
+			if (sendPrintCommands) {
+				if(gcode.length > 0) {
+					printer.print(gcode);
+				} else {
+					printer.overruleState(Printer.IDLE_STATE);
+					printer.startStatusCheckInterval();
+				}
 			} else {
 				console.log("sendPrintCommands is false: not sending print command to 3dprinter");
 			}
@@ -242,75 +245,71 @@ function print(e) {
 			// 	$("#textdump").text(gcode.join("\n"));
 			// }
 
-    }, gcodeGenerateDelay);
-  } else {
-    console.log("f:print >> not enough points!");
-  }
+		}, gcodeGenerateDelay);
+	} else {
+		console.log("f:print >> not enough points!");
+	}
 
-  //alert("Je tekening zal nu geprint worden");
-  //$(".btnPrint").css("display","block");
-
-
-  //	$.post("/doodle3d.of", { data:output }, function(data) {
-  //	btnPrint.disabled = false;
-  //	});
+	//	$.post("/doodle3d.of", { data:output }, function(data) {
+	//	btnPrint.disabled = false;
+	//	});
 }
 
 
 function clearMainView() {
-  //    console.log("f:clearMainView()");
-  ctx.save();
-  ctx.clearRect(0,0,canvas.width, canvas.height);
-  ctx.restore();
+	//    console.log("f:clearMainView()");
+	ctx.save();
+	ctx.clearRect(0,0,canvas.width, canvas.height);
+	ctx.restore();
 }
 function resetPreview() {
-  //    console.log("f:resetPreview()");
+	//    console.log("f:resetPreview()");
 
-  // clear preview canvas
-  previewCtx.save();
-  previewCtx.clearRect(0,0,canvas.width, canvas.height);
-  previewCtx.restore();
+	// clear preview canvas
+	previewCtx.save();
+	previewCtx.clearRect(0,0,canvas.width, canvas.height);
+	previewCtx.restore();
 
-  // also make new Image, otherwise the previously cached preview can be redrawn with move up/down or twist left/right
-  doodleImageCapture = new Image();
+	// also make new Image, otherwise the previously cached preview can be redrawn with move up/down or twist left/right
+	doodleImageCapture = new Image();
 
-  // reset height and rotation to default values
-  numLayers 	= previewDefaults.numLayers;     // current number of preview layers
-  rStep 			= previewDefaults.rotation; // Math.PI/180; //Math.PI/40; //
+	// reset height and rotation to default values
+	numLayers 	= previewDefaults.numLayers;     // current number of preview layers
+	rStep 			= previewDefaults.rotation; // Math.PI/180; //Math.PI/40; //
 }
 
 function oopsUndo() {
-  //    console.log("f:oopsUndo()");
-  _points.pop();
+	//    console.log("f:oopsUndo()");
+	_points.pop();
 
-  if (clientInfo.isSmartphone) {
-    // do not recalc the whole preview's bounds during undo if client device is a smartphone
-    redrawDoodle(false);
-  } else {
-    // recalc the whole preview's bounds during if client device is not a smartphone
-    redrawDoodle(true);
-  }
-  redrawPreview();
+	if (clientInfo.isSmartphone) {
+		// do not recalc the whole preview's bounds during undo if client device is a smartphone
+		redrawDoodle(false);
+	} else {
+		// recalc the whole preview's bounds during if client device is not a smartphone
+		redrawDoodle(true);
+	}
+	redrawPreview();
 }
 
 function previewUp(redrawLess) {
-  //    console.log("f:previewUp()");
-  if (numLayers < maxNumLayers) {
-    numLayers++;
-  }
-  setSketchModified(true);
+	//    console.log("f:previewUp()");
+	if (numLayers < maxNumLayers) {
+		numLayers++;
+	}
+	setSketchModified(true);
 
-//  redrawPreview(redrawLess);
-  redrawRenderedPreview(redrawLess);
+//	redrawPreview(redrawLess);
+	redrawRenderedPreview(redrawLess);
 }
 function previewDown(redrawLess) {
-  //    console.log("f:previewDown()");
-  if (numLayers > minNumLayers) {
-    numLayers--;
-  }
-  setSketchModified(true);
-//  redrawPreview(redrawLess);
-  redrawRenderedPreview(redrawLess);
+	//    console.log("f:previewDown()");
+	if (numLayers > minNumLayers) {
+		numLayers--;
+	}
+	setSketchModified(true);
+//	redrawPreview(redrawLess);
+	redrawRenderedPreview(redrawLess);
 }
 function previewTwistLeft(redrawLess) {
 	previewTwist(-twistIncrement,true)
@@ -320,25 +319,23 @@ function previewTwistRight(redrawLess) {
 }
 function previewTwist(increment,redrawLess) {
 	console.log("previewTwist: ",increment);
-  if (redrawLess == undefined) redrawLess = false;
-  
-  rStep += increment;
-  if(rStep < -previewRotationLimit) rStep = -previewRotationLimit;
-  else if(rStep > previewRotationLimit) rStep = previewRotationLimit;
-  
-  redrawRenderedPreview(redrawLess);
-  setSketchModified(true);
+	if (redrawLess == undefined) redrawLess = false;
+
+	rStep += increment;
+	if(rStep < -previewRotationLimit) rStep = -previewRotationLimit;
+	else if(rStep > previewRotationLimit) rStep = previewRotationLimit;
+
+	redrawRenderedPreview(redrawLess);
+	setSketchModified(true);
 }
 
 function resetTwist() {
-  rStep = 0;
-  redrawRenderedPreview();
-  setSketchModified(true);
+	rStep = 0;
+	redrawRenderedPreview();
+	setSketchModified(true);
 }
 
 function update() {
-	
-	
 	setState(printer.state,printer.hasControl);
 
 	thermometer.update(printer.temperature, printer.targetTemperature);
@@ -371,54 +368,60 @@ function setState(newState,newHasControl) {
 
 	// thermometer
 	switch(newState) {
-		case Printer.IDLE_STATE: /* fall-through */
-		case Printer.BUFFERING_STATE: /* fall-through */
-		case Printer.PRINTING_STATE: /* fall-through */
-		case Printer.STOPPING_STATE:
-			thermometer.show();
-			break;
-		default:
-			thermometer.hide();
-			break;
+	case Printer.IDLE_STATE: /* fall-through */
+	case Printer.BUFFERING_STATE: /* fall-through */
+	case Printer.PRINTING_STATE: /* fall-through */
+	case Printer.STOPPING_STATE:
+		thermometer.show();
+		break;
+	default:
+		thermometer.hide();
+	break;
 	}
 
 	// progress indicator
 	switch(newState) {
-		case Printer.PRINTING_STATE:
-			progressbar.show();
-			break;
-		default:
-			progressbar.hide();
-			break;
+	case Printer.PRINTING_STATE:
+		progressbar.show();
+		break;
+	default:
+		progressbar.hide();
+	break;
 	}
 
 	/* settings button */
 	switch(newState) {
-    case Printer.IDLE_STATE:
-    	btnSettings.enable();
-      break;
-    case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
-    case Printer.BUFFERING_STATE: /* fall-through */
-    case Printer.PRINTING_STATE: /* fall-through */
-    case Printer.STOPPING_STATE:
-    	btnSettings.disable();
-      break;
-    default:
-    	btnSettings.enable();
-      break;
-  }
-	
+	case Printer.CONNECTING_STATE: /* fall-through */
+	case Printer.IDLE_STATE:
+		btnSettings.enable();
+		break;
+	case Printer.WIFIBOX_DISCONNECTED_STATE: /* fall-through */
+	case Printer.BUFFERING_STATE: /* fall-through */
+	case Printer.PRINTING_STATE: /* fall-through */
+	case Printer.STOPPING_STATE:
+		btnSettings.disable();
+		break;
+	default:
+		btnSettings.enable();
+	break;
+	}
+
 	/* save, next and prev buttons */
 	switch(newState) {
-		case Printer.WIFIBOX_DISCONNECTED_STATE:
-			btnPrevious.disable();
-			btnNext.disable()
-			btnSave.disable();
-			break;
-		default:
-			updatePrevNextButtonState();
-			if (isModified) btnSave.enable();
-			break;
+	case Printer.WIFIBOX_DISCONNECTED_STATE:
+		btnPrevious.disable();
+		btnNext.disable()
+		btnSave.disable();
+		break;
+	default:
+		updatePrevNextButtonState();
+	if (isModified) btnSave.enable();
+	break;
+	}
+
+	if(connectingHintDelay && newState != Printer.CONNECTING_STATE) {
+		clearTimeout(connectingHintDelay);
+		connectingHintDelay = null;
 	}
 
 	if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
@@ -427,12 +430,22 @@ function setState(newState,newHasControl) {
 		message.set("Connected to WiFi box",Message.INFO,true);
 	} else if(newState == Printer.DISCONNECTED_STATE) {
 		message.set("Printer disconnected",Message.WARNING,true);
+	} else if(newState == Printer.CONNECTING_STATE) {
+		message.set("Printer connecting...",Message.INFO,false);
+		if (prevState != Printer.CONNECTING_STATE) { //enable 'watchdog' if we entered from a different state
+			clearTimeout(connectingHintDelay);
+			connectingHintDelay = setTimeout(function() {
+				message.set("Printer still not connected, did you<br/>select the correct printer type?", Message.WARNING, false);
+				connectingHintDelay = null;
+			}, connectingHintDelayTime);
+		}
 	} else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
-						prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE) {
+			prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE ||
+			prevState == Printer.CONNECTING_STATE && newState == Printer.IDLE_STATE) {
 		message.set("Printer connected",Message.INFO,true);
 		console.log("  preheat: ",settings["printer.heatup.enabled"]);
 		if(settings["printer.heatup.enabled"]) {
-			// HACK: we delay the preheat because the driver needs time to connect
+			// HACK: we delay the preheat because the makerbot driver needs time to connect
 			clearTimeout(preheatDelay);
 			preheatDelay = setTimeout(printer.preheat,preheatDelayTime); // retry after delay
 		}
