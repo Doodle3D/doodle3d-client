@@ -38,6 +38,8 @@ function generate_gcode() {
   var printerDimensionsX   		= settings["printer.dimensions.x"];
   var printerDimensionsY      = settings["printer.dimensions.y"];
   var printerDimensionsZ      = settings["printer.dimensions.z"];
+  var rasterSize			= settings["doodle3d.raster.size"];
+  var rasterDiagonals		= settings["doodle3d.raster.diagonals"];
 
   var gCodeOffsetX = printerDimensionsX/2;
   var gCodeOffsetY = printerDimensionsY/2;
@@ -140,6 +142,8 @@ function generate_gcode() {
       }
     }
 
+    var prevPoint = null;
+
     // loop over the subpaths (the separately drawn lines)
     for (var j = 0; j < paths.length; j++) { // TODO paths > subpaths
       var commands = paths[j];
@@ -158,6 +162,22 @@ function generate_gcode() {
 
         var isTraveling = !isLoop && i==0;
         var doRetract = retractionEnabled && prev.distance(to) > retractionminDistance;
+
+        if (rasterSize > 0) {
+        	to.x = (to.x / rasterSize).toFixed(0) * rasterSize;
+			to.y = (to.y / rasterSize).toFixed(0) * rasterSize;
+        }
+
+        if (prevPoint == null) prevPoint = to;
+
+        if (!rasterDiagonals) {
+	        if (prevPoint.x != to.x && prevPoint.y != to.y) {
+	        	to.x = prevPoint.x;
+	        	i--;
+	        }
+        }
+
+        prevPoint = to;
 
         var firstPointEver = (layer == 0 && i == 0 && j == 0);
         if (firstPointEver || layer > 2 && enableTraveling && isTraveling) { //always travel to first point, then disable traveling for first two layers and use settings for remainder of print
