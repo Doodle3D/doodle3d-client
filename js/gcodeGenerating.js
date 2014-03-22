@@ -55,7 +55,7 @@ function generate_gcode() {
 
   // translate preview rotation (per layer) to real world rotation
   var rStepGCode = rStep * maxNumLayers/layers; ///maxNumLayers*maxObjectHeight;
-  
+
   // correct direction
   rStepGCode = -rStepGCode;
 
@@ -89,11 +89,47 @@ function generate_gcode() {
   	return [];
   }
 
+
+
+
+
+//NOTE: not functional because points are not centered around (0,0)
+  var pmodded = JSON.parse(JSON.stringify(points));
+  var rsMmScaled = rasterSize / screenToMillimeterScale;
+  var pp = null;
+  if (rasterSize > 0) {
+	  for (var i = 0; i < pmodded.length; i++) {
+		  if (pp == null) pp = pmodded[i];
+
+		  pmodded[i][0] = (pmodded[i][0] / rsMmScaled).toFixed(0) * rsMmScaled;
+		  pmodded[i][1] = (pmodded[i][1] / rsMmScaled).toFixed(0) * rsMmScaled;
+
+		  if (!rasterDiagonals) {
+			  if (pp[0] != pmodded[i][0] && pp[1] != pmodded[i][1]) {
+				  pp[0] = pmodded[i][0];
+				  i--;
+			  }
+		  }
+
+		  pp = pmodded[i];
+	  }
+  }
+
+
+
+
+
   for (var layer = 0; layer < layers; layer++) {
 
     //gcode.push(";LAYER:"+layer); //this will be added in a next release to support GCODE previewing in CURA
 
-    var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
+//    var p = JSON.parse(JSON.stringify(points)); // [].concat(points);
+	  //clone pmodded into p
+	  var p = [];
+	  for (var i = 0; i < pmodded.length; i++) {
+		  var pt = pmodded[i].slice(0);
+		  p.push(pt);
+	  }
 
     if (p.length < 2) return;
     var even = (layer % 2 == 0);
@@ -163,21 +199,21 @@ function generate_gcode() {
         var isTraveling = !isLoop && i==0;
         var doRetract = retractionEnabled && prev.distance(to) > retractionminDistance;
 
-        if (rasterSize > 0) {
-        	to.x = (to.x / rasterSize).toFixed(0) * rasterSize;
-			to.y = (to.y / rasterSize).toFixed(0) * rasterSize;
-        }
-
-        if (prevPoint == null) prevPoint = to;
-
-        if (!rasterDiagonals) {
-	        if (prevPoint.x != to.x && prevPoint.y != to.y) {
-	        	to.x = prevPoint.x;
-	        	i--;
-	        }
-        }
-
-        prevPoint = to;
+//        if (rasterSize > 0) {
+//        	to.x = (to.x / rasterSize).toFixed(0) * rasterSize;
+//			to.y = (to.y / rasterSize).toFixed(0) * rasterSize;
+//        }
+//
+//        if (prevPoint == null) prevPoint = to;
+//
+//        if (!rasterDiagonals) {
+//	        if (prevPoint.x != to.x && prevPoint.y != to.y) {
+//	        	to.x = prevPoint.x;
+//	        	i--;
+//	        }
+//        }
+//
+//        prevPoint = to;
 
         var firstPointEver = (layer == 0 && i == 0 && j == 0);
         if (firstPointEver || layer > 2 && enableTraveling && isTraveling) { //always travel to first point, then disable traveling for first two layers and use settings for remainder of print
@@ -234,7 +270,7 @@ function subsituteVariables(gcode) {
   var heatedbed             	= settings["printer.heatedbed"];
 
   switch (printerType) {
-    case "makerbot_replicator2": printerType = "r2"; break; 
+    case "makerbot_replicator2": printerType = "r2"; break;
     case "makerbot_replicator2x": printerType = "r2x"; break;
     case "makerbot_thingomatic": printerType = "t6"; break;
     case "makerbot_generic": printerType = "r2"; break;
@@ -247,7 +283,7 @@ function subsituteVariables(gcode) {
 	gcode = gcode.replace(/{preheatBedTemp}/gi 	,preheatBedTemperature);
   gcode = gcode.replace(/{printerType}/gi     ,printerType);
   gcode = gcode.replace(/{if heatedBed}/gi    ,heatedBedReplacement);
-    
+
 	return gcode;
 }
 
