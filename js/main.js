@@ -73,6 +73,7 @@ $(function() {
   initKeyboard();
   // initVerticalShapes();
   initWordArt();
+  initScan();
   initShapeDialog();
 
   disableDragging();
@@ -84,8 +85,9 @@ $(function() {
 
   message.init($("#message"));
 
-  printer.init();
-	$(document).on(Printer.UPDATE,update);
+//Rick: tijdelijk uit om console schoon te houden
+  //printer.init();
+	//$(document).on(Printer.UPDATE,update);
 
 	settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
 	$(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);

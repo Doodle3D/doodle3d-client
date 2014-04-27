@@ -12,7 +12,7 @@ var btnNew, btnPrevious, btnNext, btnOops, btnStop, btnInfo;
 var btnSettings, btnWordArt;
 var btnToggleEdit, buttonGroupEdit, btnZoom, btnMove, btnRotate;
 var btnToggleVerticalShapes, btnHeight, btnTwist, btnShape, btnConv, btnStraight, btnSine, btnDiv;
-var buttonGroupAdd, popupWordArt;
+var buttonGroupAdd, popupWordArt, btnScan;
 
 var state;
 var prevState;
@@ -43,6 +43,7 @@ function initButtonBehavior() {
 	buttonGroupAdd = $("#buttonGroupAdd");
 	btnShape = new Button("#btnShape");
 	btnWordArt = new Button("#btnWordArt");
+	btnScan = new Button("#btnScan");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
 	popupMask = $("#popupMask");
@@ -68,6 +69,7 @@ function initButtonBehavior() {
 	btnNew.on("onButtonClick", onBtnNew);
 	btnAdd.on("onButtonClick", onBtnAdd);
 	btnWordArt.on("onButtonClick", onBtnWordArt);
+	btnScan.on("onButtonClick", onBtnScan);
 	btnShape.on("onButtonClick", onBtnShape);
 	btnPrint.on("onButtonClick", print);
 	btnStop.on("onButtonClick", stopPrint);
@@ -184,6 +186,11 @@ function initButtonBehavior() {
 
 	function onBtnWordArt(e) {
 		showWordArtDialog();
+	}
+
+	function onBtnScan(e) {
+		// alert("onBtnScan");
+		showScanDialog();
 	}
 
 	function onBtnShape(e) {
