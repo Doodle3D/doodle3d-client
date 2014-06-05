@@ -47,17 +47,19 @@ body {
   left: 0px;
   //z-index: -5;
 }
-
 #bgTop {
   top: 0px;
 }
-
 #bgMiddle {
   top: 30%;
 }
-
 #bgBottom {
   bottom: 0px;
+}
+@media  only screen and (max-height: 700px) {
+  #bgMiddle {
+  	display: none;
+  }
 }
 
 @import "base_centerpanel.less";

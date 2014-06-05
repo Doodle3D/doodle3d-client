@@ -145,6 +145,9 @@ function NetworkPanel() {
 	this.retrieveNetworkStatus = function(connecting) {
 		//console.log("NetworkPanel:retrieveNetworkStatus");
 		_api.status(function(data) {
+			if(data.status === "") {
+				data.status = NetworkAPI.STATUS.CREATED.toString();
+			}
 			if(typeof data.status === 'string') {
 				data.status = parseInt(data.status);
 			}
