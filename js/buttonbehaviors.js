@@ -13,6 +13,7 @@ var btnSettings, btnWordArt;
 var btnToggleEdit, buttonGroupEdit, btnZoom, btnMove, btnRotate;
 var btnToggleVerticalShapes, btnHeight, btnTwist, btnShape, btnConv, btnStraight, btnSine, btnDiv;
 var buttonGroupAdd, popupWordArt;
+var btnScan, popupScan;
 
 var state;
 var prevState;
@@ -43,8 +44,10 @@ function initButtonBehavior() {
 	buttonGroupAdd = $("#buttonGroupAdd");
 	btnShape = new Button("#btnShape");
 	btnWordArt = new Button("#btnWordArt");
+    btnScan = new Button("#btnScan");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
+    popupScan = $("#popupScan");
 	popupMask = $("#popupMask");
 	logoPanel = $("#logopanel");
 	btnToggleEdit = new Button("#btnToggleEdit");
@@ -69,6 +72,7 @@ function initButtonBehavior() {
 	btnAdd.on("onButtonClick", onBtnAdd);
 	btnWordArt.on("onButtonClick", onBtnWordArt);
 	btnShape.on("onButtonClick", onBtnShape);
+    btnScan.on("onButtonClick", onBtnScan);
 	btnPrint.on("onButtonClick", print);
 	btnStop.on("onButtonClick", stopPrint);
 	btnSave.on("onButtonClick", saveSketch);
@@ -191,6 +195,11 @@ function initButtonBehavior() {
 		buttonGroupAdd.fadeOut();
 	}
 
+    function onBtnScan(e) {
+        showScanDialog();
+		buttonGroupAdd.fadeOut();
+    }
+    
 	btnSettings.on("onButtonClick", openSettingsWindow);
 
 	// 29-okt-2013 - we're not doing help for smartphones at the moment

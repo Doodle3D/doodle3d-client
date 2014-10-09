@@ -66,6 +66,7 @@ function initKeyboard() {
 			case '|': resetTwist(); break;
 			case 't': showWordArtDialog(); break;
 			case 'i': showShapeDialog(); break;
+			case 'T': showScanDialog(); break;
 			
 			case ';': moveShape(-5,0); break;
 			case '\'': moveShape(5,0); break;

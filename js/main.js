@@ -74,6 +74,7 @@ $(function() {
   // initVerticalShapes();
   initWordArt();
   initShapeDialog();
+  initScanDialog();
 
   disableDragging();
   
