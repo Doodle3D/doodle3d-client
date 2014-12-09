@@ -1,0 +1,26 @@
+body {
+  font-family: Abel, Arial;
+
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+
+div.item {
+  width:300px;
+  height:260px;
+  border:1px solid black;
+  display: inline-block;
+  overflow: hidden;
+  background-color: white;
+  margin-right: 5px;
+}
+
+div.item.selected {
+  background-color: #7cf;
+}
+
+div.item input[type='checkbox'] {
+  position: absolute;
+}
