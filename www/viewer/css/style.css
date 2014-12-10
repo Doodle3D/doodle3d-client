@@ -1,5 +1,6 @@
 body {
-  font-family: Abel, Arial;
+  font-family: Helvetica, Abel, Arial;
+  font-size: 1em;
 
   -webkit-user-select: none; /* webkit (safari, chrome) browsers */
   -moz-user-select: none; /* mozilla browsers */
@@ -7,9 +8,13 @@ body {
   -ms-user-select: none; /* IE10+ */
 }
 
+button {
+  font-size: 1em;
+}
+
 div.item {
-  width:300px;
-  height:260px;
+  width:150px;
+  height:130px;
   border:1px solid black;
   display: inline-block;
   overflow: hidden;
@@ -23,4 +28,18 @@ div.item.selected {
 
 div.item input[type='checkbox'] {
   position: absolute;
+}
+
+#frmUpload {
+  display: inline;
+}
+
+input[type='file'] {
+  width: 1px;
+  opacity:0    
+}
+
+#txtInfo {
+  float: right;
+  /*display: inline-block;*/
 }

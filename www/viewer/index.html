@@ -6,10 +6,17 @@
 </head>
 <body>
 
-Actions:
-<button onclick="selectAll()">Select all</button>
-<button onclick="deselectAll()">Deselect all</button>
-<button onclick="deleteSelectedSketches()">Delete</button>
+<a href="?"><img src="../img/logo/doodle3d.png" height="25"></a><br>
+<hr>
+<button id="btnSelectAll">Select all</button>
+<button id="btnDeselectAll">Deselect all</button>
+<button id="btnDelete">Delete</button>
+<button id="btnDownload">Download</button> <!-- <a id="link" href="#">Download</a> -->
+
+<form id="frmUpload" action="#"><button id="btnUpload">Upload</button><input id="uploads" type="file" accept="image/svg+xml" multiple/></form>
+
+<span id="txtInfo"></span>
+
 <hr>
 <form>
 <div id="svgContainer"></div>
@@ -17,6 +24,7 @@ Actions:
 
 <script src="../js/libs/jquery-1-9-1.min.js"></script>
 <script src="js/main.js"></script>
+
 
 </body>
 </html>
