@@ -6,158 +6,95 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
-var currentSketchId = 0;
-var numSavedSketches = 0;
+var curSketch = 0;
+var sketches = []; //contains fileIDs
 
-function getSavedSketchStatus() {
-	$.ajax({
-		url: wifiboxURL + "/sketch/status",
-		dataType: 'json',
-		type: 'GET',
-		//timeout: this.timeoutTime,
-		success: function(response) {
-			if (response.status == 'error' || response.status == 'fail') {
-				console.log("getSavedSketchStatus fail/error: " + response.msg + " -- ", response);
-			} else {
-				console.log("getSavedSketchStatus success: num. saved: " + response.data.number_of_sketches + ", space available: " + response.data.available);
-				numSavedSketches = response.data.number_of_sketches;
-				updatePrevNextButtonStateOnClear();
-			}
-		}
-	}).fail(function() {
-		console.log("getSavedSketchStatus failed");
-	});
+function previousSketch(e) {
+	loadSketch(curSketch-1);
 }
 
-function setSketchModified(_isModified, doNotClearCurrent) {
+function nextSketch(e) {
+	loadSketch(curSketch+1);
+}
+
+function newSketch(e) {
+	clearDoodle();
+	curSketch = sketches.length; //index of the last item + 1
+	updateSketchButtonStates();
+}
+
+function listSketches() {
+	console.log('listSketches')
+	$.get(wifiboxURL + "/sketch/list", function(data) {
+		if (data.status=='success') {
+			sketches = data.data.list;
+			curSketch = sketches.length-1;
+			setSketchModified(false);
+			updateSketchButtonStates();
+		}
+	})
+}
+
+function setSketchModified(_isModified) {
 	isModified = _isModified;
-
-	// alert("isModified: " + isModified);
-	//console.log("setModified: " + isModified + (typeof(doNotClearCurrent) !== 'undefined' ? " (doNotClearCurrent: "+doNotClearCurrent+")" : "")); //TEMP
-
-	if (isModified) btnSave.enable();
-	else btnSave.disable();
-
-	//if (typeof(doNotClearCurrent) !== 'undefined' && !doNotClearCurrent) setCurrentSketchId(-1);
-
-	
-	//sketchModified  = isModified; /// ERROR?
+	updateSketchButtonStates();
 }
 
-function setCurrentSketchId(sId) {
-	console.log("setCurrentSketchId: " + sId + " / " + numSavedSketches);
-	// var enablePrev = false;
-	// var enableNext = false;
+function updateSketchButtonStates() {
+	console.log('sketch: isModified',isModified,'curSketch',curSketch,'sketches.length',sketches.length);
 
-	currentSketchId = sId;
-
-	//clamp
-	if (currentSketchId > numSavedSketches) currentSketchId = numSavedSketches;
-	if (currentSketchId < 1) currentSketchId = 1;
-
-	//update textbox
-	//$("#txtSketch").val(currentSketchId);
-	
-	updatePrevNextButtonState();
-}
-
-function updatePrevNextButtonStateOnClear() {
-	if (numSavedSketches > 0) btnPrevious.enable();
-	btnNext.disable();
-	currentSketchId = numSavedSketches+1; //after the end of the list
-	btnSave.disable();
-}
-
-function updatePrevNextButtonState() {
-
-	//btnPrevious state
-	if (numSavedSketches==0 || currentSketchId < 2) {
-		btnPrevious.disable();
-	} else {
-		btnPrevious.enable();
+	if (isModified) {
+		btnSave.enable();
+	}
+	else {
+		btnSave.disable();
 	}
 
-	//btnNext state
-	if (numSavedSketches==0 || currentSketchId >= numSavedSketches) {
-		btnNext.disable();
-	} else {
+	if (curSketch<sketches.length-1) {
 		btnNext.enable();
+	} else {
+		btnNext.disable();
 	}
+
+	if (curSketch>0) {
+		btnPrevious.enable();
+	} else {
+		btnPrevious.disable();
+	}
+
 }
 
-function loadSketch(sketchId) {
+function loadSketch(_curSketch) {
+	curSketch = _curSketch;
 
-	$.ajax({
-		url: wifiboxURL + "/sketch/" + sketchId,
-		dataType: 'json',
-		type: 'GET',
-//			timeout: this.timeoutTime,
-		success: function(response) {
-			if (response.status == 'error' || response.status == 'fail') {
-				console.log("loadSketch fail/error: " + response.msg + " -- ", response);
-			} else {
-				console.log("loadSketch success: loaded id #" + response.data.id, response);
-				//console.log("sketch content:\n" + response.data.data);
-				if (loadFromSvg(response.data.data)) {
-					setSketchModified(false, true);
-					setCurrentSketchId(response.data.id);
-				}
-			}
+	if (curSketch<0) curSketch=0;
+	if (curSketch>sketches.length-1) curSketch=sketches.length-1;
+
+	var id = sketches[curSketch];
+
+	console.log('sketch: loadSketch curSketch',curSketch,'id',id);
+
+	$.get(wifiboxURL + "/sketch", {id:id}, function(response) {
+		if (response.status=='success') {
+			console.log('sketch: loaded',response);
+			var svgData = response.data.data;
+			loadFromSvg(svgData);
+			setSketchModified(false);
+		} else {
+			console.log('error loading sketch: ',response);
+			listSketches();
 		}
-	}).fail(function() {
-		console.log("loadSketch failed: ", response);
-	});
+		
+	})
 }
 
 function saveSketch() {
-	svg = saveToSvg();
-	console.log("generated SVG [" + _points.length + " points, " + svg.length + " bytes]:\n" + svg);
+	console.log("sketch: saveSketch");
+	var svgData = saveToSvg();
 
-	$.ajax({
-		url: wifiboxURL + "/sketch",
-		dataType: 'json',
-		type: 'POST',
-		data: { data: svg },
-		//timeout: this.timeoutTime,
-		success: function(response) {
-			if (response.status == 'error' || response.status == 'fail') {
-				console.log("saveSketch fail/error: " + response.msg + " -- ", response);
-			} else {
-				console.log("saveSketch success: saved with id #" + response.data.id, response);
-				setSketchModified(false, true);
-				numSavedSketches = response.data.id;
-				setCurrentSketchId(response.data.id);
-			}
-		}
-	}).fail(function() {
-		console.log("saveSketch failed: ", response);
-	});
-}
+	$.post(wifiboxURL + "/sketch", {data: svgData}, function(response) {
+		console.log("sketch: saveSketch: response",response);
+		listSketches();
+	})
 
-function prevDoodle(e) {
-  console.log("f:prevDoodle(): " + currentSketchId + " / " + numSavedSketches);
-  //alert('prev ' + numSavedSketches);
-  //return;
-
-  //TODO: if (enabled) {
-	  var sketchId = (currentSketchId > 0) ? currentSketchId : numSavedSketches;
-	  if (sketchId > 1) sketchId--;
-
-
-	  //alert(sketchId);
-
-	  loadSketch(sketchId);
-  //}
-}
-
-function nextDoodle(e) {
-  console.log("f:nextDoodle()");
-  //alert('next ' + numSavedSketches);
-  //return;
-
-  //TODO: if (enabled) {
-	  var sketchId = (currentSketchId > 0) ? currentSketchId : numSavedSketches;
-	  if (sketchId < numSavedSketches) sketchId++;
-	  loadSketch(sketchId);
-  //}
 }

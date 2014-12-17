@@ -42,15 +42,26 @@ $(function() {
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
 
-	if (wifiboxIsRemote) {
-    // var hostname = "http://10.0.0.45";
-    var hostname = "http://192.168.5.1";
-		wifiboxURL = hostname+"/d3dapi";
-		wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
-	} else {
-		wifiboxURL = "http://" + window.location.host + "/d3dapi";
-		wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
-	}
+  var hostname;
+  if (wifiboxIsRemote) hostname = 'http://192.168.5.1';
+  if (getURLParameter("wifiboxURL") != "null") hostname = getURLParameter("wifiboxURL");
+  if (!hostname) hostname = "http://" + window.location.host;
+
+  wifiboxURL = hostname+"/d3dapi";
+  wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
+
+  
+  //var api = wifiboxURL+'/d3dapi/sketch/';
+
+	// if (wifiboxIsRemote) {
+ //    // var hostname = "http://10.0.0.45";
+ //    var hostname = "http://192.168.5.1";
+	// 	wifiboxURL = hostname+"/d3dapi";
+	// 	wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
+	// } else {
+	// 	wifiboxURL = "http://" + window.location.host + "/d3dapi";
+	// 	wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
+	// }
 
   if (!communicateWithWifibox) {
     sendPrintCommands = false; // 'communicateWithWifibox = false' implies this

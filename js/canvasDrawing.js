@@ -157,7 +157,7 @@ function draw(_x, _y, _width) {
 function clearDoodle() {
   //console.log("f:clearDoodle");
 
-  updatePrevNextButtonStateOnClear();
+  //updatePrevNextButtonStateOnClear();
 
   _points = [];
 
@@ -177,6 +177,7 @@ function clearDoodle() {
   resetVerticalShapes();
 
   setSketchModified(false);
+  // updateSketchButtonStates();
 }
 
 function redrawDoodle(recalcBoundsAndTransforms) {

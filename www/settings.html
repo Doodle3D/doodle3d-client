@@ -173,14 +173,20 @@
         <small id="updateInfo"></small>
  	</fieldset>
 
-    <fieldset id="debugPanel">
- 		<legend>Debug</legend>
- 		<input type="button" onclick="settingsWindow.downloadlogs()" name="downloadlogs" value="Download logs" class="button" id="downloadlogs"/>
+  <fieldset id="extraPanel">
+    <legend>Sketches</legend>
+    <input type="button" onclick="settingsWindow.openFileManager()" name="btnFileMgr" value="Open FileManager" class="button" id="btnFileMgr"/>
     <input type="button" onclick="settingsWindow.downloadGcode()" name="downloadGcode" value="Download GCODE" class="button" id="downloadGcode"/>
     <input type="button" onclick="settingsWindow.downloadSvg()" name="downloadSvg" value="Download SVG" class="button" id="downloadSvg"/>
-    </fieldset>
-
-    <fieldset id="restorePanel">
+  </fieldset>
+    
+  <fieldset id="debugPanel">
+ 		<legend>Debug</legend>
+ 		<input type="button" onclick="settingsWindow.downloadlogs()" name="downloadlogs" value="Download logs" class="button" id="downloadlogs"
+     />
+  </fieldset>
+  
+  <fieldset id="restorePanel">
  		<legend>Restore</legend>
  		<input type="button" name="restoresettings" value="Restore settings to defaults" class="button" id="restoreSettings"/>
  		<span id="restoreState"></span>

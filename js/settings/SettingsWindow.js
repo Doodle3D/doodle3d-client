@@ -176,6 +176,10 @@ function SettingsWindow() {
 			saveAs(blob, "doodle3d.svg");
 		}
 	};
+
+	this.openFileManager = function() {
+		location.href = "filemanager/"+location.search;
+	}
 }
 
 /*************************

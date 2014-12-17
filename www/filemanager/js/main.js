@@ -1,31 +1,40 @@
-var api = 'http://10.0.0.40/d3dapi/sketch/';
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2014, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
+
+// http://stackoverflow.com/questions/1403888/get-url-parameter-with-jquery
+function getURLParameter(name) {
+  return decodeURI((new RegExp('[&?]'+name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]);
+}
+
+var wifiboxURL = "";
+
+if (getURLParameter("r") != "null") wifiboxURL = 'http://192.168.5.1';
+if (getURLParameter("wifiboxURL") != "null") wifiboxURL = getURLParameter("wifiboxURL");
+
+var api = wifiboxURL+'/d3dapi/sketch/';
 
 $("#btnDelete").click(deleteSelectedSketches);
 $("#btnSelectAll").click(selectAll);
 $("#btnDeselectAll").click(deselectAll);
-// $("#btnUpload").click(upload);
 $("#uploads").change(upload);
 $("#btnDownload").click(download);
 
-$("#btnUpload").click(function() {
-  console.log('trigger')
+$("#btnUpload").click(function(e) {
+  e.preventDefault();
   $("#uploads").trigger('click');
 });
 
-// $("a").on("click", function () {
-//     var d = new Date().toISOString().slice(0, 19).replace(/-/g, "");
-//     $(this).attr("href", "data:application/octet-stream;"+encodeURIComponent("test")).attr("download", "file-" + d + ".svg");
-// });
-
-
 var isBusy = true;
-// var statusMessage = "";
 
-// updateFreeSpace();
 updateButtonStates();
 
 $.get(api+'list', function(data) { //?id=00003
-  
+
   if (data.status=='success') {
     var list = data.data.list;
     // list.reverse();
@@ -38,7 +47,6 @@ $.get(api+'list', function(data) { //?id=00003
       console.log('done');
       isBusy = false;
       updateFreeSpace();
-      //updateStatusMessage('loading '+list.length+' sketches...');
       updateButtonStates();
     });
 
@@ -46,6 +54,9 @@ $.get(api+'list', function(data) { //?id=00003
     console.log('failure',data)
   }
 
+}).fail(function(status) {
+  alert("Error ("+status.status+") connecting to "+api+'list');
+  console.log(status);
 });
 
 function loadSketch(list,cb) {
@@ -77,7 +88,7 @@ function addItem(id,svgData,doPrepend) {
   else if (svgData.indexOf("CDATA")==-1) path = "";
   else path = svgData.split('d="')[1].split('"')[0]; 
 
-  var item = $('<div class="item" data="'+id+'">');
+  var item = $('<div class="item" data="'+id+'" title="'+id+'">');
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 640 540"><path fill="none" stroke="black" stroke-width="2" d="'+path+'"></path></svg>';
   
   item.click(function() {
@@ -170,7 +181,6 @@ function uploadFile(files, index, next) {
     //process file
     var svg = convertSvg(evt.target.result);
 
-    // setTimeout(function() {
     $.post(api, {data:svg}, function(data) {
       if (data.status=='success') {
         var id = data.data.id;
@@ -183,11 +193,8 @@ function uploadFile(files, index, next) {
         } else {
           next(); //no more files, call back
         }
-
       }
     });
-    // },500);
-
 
   }
 
@@ -237,7 +244,11 @@ function convertSvg(svg) {
   var re = /([a-zA-Z])\s?([0-9]{1,}) ([0-9]{1,})/g;
   svg = svg.replace(re,"$1$2,$3");
   re = /<\/svg>/g;
-  return svg.replace(re,"<!--<![CDATA[d3d-keys {\"height\":5,\"outlineShape\":\"none\",\"twist\":0}]]>-->\n</svg>");
+  svg = svg.replace(re,"<!--<![CDATA[d3d-keys {\"height\":5,\"outlineShape\":\"none\",\"twist\":0}]]>-->\n</svg>");
+
+  svg = svg.replace("M0,0 ",""); //RC: hack
+
+  return svg;
 }
 
 function download() {

@@ -76,8 +76,8 @@ function initButtonBehavior() {
 	btnPrint.on("onButtonClick", print);
 	btnStop.on("onButtonClick", stopPrint);
 	btnSave.on("onButtonClick", saveSketch);
-	btnPrevious.on("onButtonClick", prevDoodle);
-	btnNext.on("onButtonClick", nextDoodle);
+	btnPrevious.on("onButtonClick", previousSketch);
+	btnNext.on("onButtonClick", nextSketch);
 	btnOops.on("onButtonHold", onBtnOops);
 	// vertical shape buttons
 	btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
@@ -93,8 +93,10 @@ function initButtonBehavior() {
 	btnZoom.on("onButtonHold", onBtnZoom);
 	btnRotate.on("onButtonHold", onBtnRotate);
 
-	getSavedSketchStatus();
-	setSketchModified(false);
+	//getSavedSketchStatus();
+	listSketches();
+	// setSketchModified(false);
+	// updateSketchButtonStates();
 
 	function onBtnToggleVerticalShapes() {
 		var btnImg;
@@ -183,7 +185,7 @@ function initButtonBehavior() {
 	}
 
 	function onBtnNew(e) {
-		clearDoodle();
+		newSketch();
 	}
 
 	function onBtnWordArt(e) {
@@ -423,8 +425,9 @@ function setState(newState,newHasControl) {
 		btnSave.disable();
 		break;
 	default:
-		updatePrevNextButtonState();
-	if (isModified) btnSave.enable();
+		// updatePrevNextButtonState();
+		updateSketchButtonStates();
+		if (isModified) btnSave.enable();
 	break;
 	}
 
