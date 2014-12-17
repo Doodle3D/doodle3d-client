@@ -43,3 +43,7 @@ input[type='file'] {
   float: right;
   /*display: inline-block;*/
 }
+
+img#logo {
+  cursor: pointer;
+}

@@ -18,6 +18,7 @@ if (getURLParameter("wifiboxURL") != "null") wifiboxURL = getURLParameter("wifib
 
 var api = wifiboxURL+'/d3dapi/sketch/';
 
+$("#logo").click(onLogoClick)
 $("#btnDelete").click(deleteSelectedSketches);
 $("#btnSelectAll").click(selectAll);
 $("#btnDeselectAll").click(deselectAll);
@@ -58,6 +59,10 @@ $.get(api+'list', function(data) { //?id=00003
   alert("Error ("+status.status+") connecting to "+api+'list');
   console.log(status);
 });
+
+function onLogoClick() {
+  location.href=location.search;
+}
 
 function loadSketch(list,cb) {
   var id = list.pop();
