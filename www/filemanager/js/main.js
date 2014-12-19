@@ -61,7 +61,7 @@ $.get(api+'list', function(data) { //?id=00003
 });
 
 function onLogoClick() {
-  location.href=location.search;
+  location.href='/'+location.search;
 }
 
 function loadSketch(list,cb) {
