@@ -94,15 +94,39 @@ function getPointsFromPath(path) {
   var cursor = { x:0.0, y:0.0 };
   var move = false;
   var prevCmd = "";
+  var lastCmd = "";
+
+  console.log(path);
+
   for (var i=0; i<cmds.length; i++) {
     var cmd = cmds[i];   
-    var xy = cmd.split(",");
-		if (cmd=='m') move = true;
-		if (xy.length==2) { // if there are two parts (a comma) we asume it's a l command. (So L is not supported)
-			cursor.x += parseFloat(xy[0]);
-			cursor.y += parseFloat(xy[1]);
-			points.push([cursor.x,cursor.y,move]);
-			move = false;
+    var xy = cmd.split(",");  
+
+    if (cmd.length==1) { //we suppose this is a alpha numeric character and threat it as a command
+      lastCmd = cmd;
+    }
+
+		move = (lastCmd=='m' || lastCmd=='M');
+
+		if (xy.length==2) {
+  		
+      var x = parseFloat(xy[0]);
+      var y = parseFloat(xy[1]);
+
+      if (lastCmd=='m' || lastCmd=='l') { //relative movement
+        cursor.x += x;
+        cursor.y += y;
+      } 
+      else if (lastCmd=='M' || lastCmd=='L') { //absolute movement
+        cursor.x = x;
+        cursor.y = y;
+      }
+
+      if (lastCmd=='m') lastCmd='l'; //the next command after a relative move is relative line if not overruled
+      if (lastCmd=='M') lastCmd='L'; //same for absolute moves
+
+      points.push([cursor.x,cursor.y,move]);
+    
 		} else if (prevCmd == "h"){
 			cursor.x += parseFloat(cmd);
 			points.push([cursor.x,cursor.y,move]);
