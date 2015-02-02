@@ -39,6 +39,8 @@ var lineweight = 2;
 
 var isModified = false;
 
+var showTravelLines = false;
+
 /* * * * * * * * * *
  *
  *  INIT
@@ -98,8 +100,6 @@ function initDoodleDrawing() {
  *
  * * * * * * * * * */
 function draw(_x, _y, _width) {
-	//console.log("canvasDrawing:draw");
-  //    console.log("f:draw() >> _width: " + _width);
 
   if (prevX == 0 && prevY ==0) {
     prevX = _x;
@@ -108,7 +108,12 @@ function draw(_x, _y, _width) {
 
   ctx.beginPath();
   ctx.moveTo(prevX, prevY);
-  ctx.lineTo(_x, _y);
+
+  if (showTravelLines || _width==undefined) {  //when _width=0.5 it's a travel line, when it's not supplied it's a real line.
+    ctx.lineTo(_x, _y);
+  } else {
+    ctx.moveTo(_x, _y);
+  }
 
   if (_width != undefined) {
     ctx.lineWidth = _width;
@@ -202,7 +207,7 @@ function redrawDoodle(recalcBoundsAndTransforms) {
   for (var i = 0; i < _points.length; i++) {
     //      console.log("     drawing points " + _points[i]);
     if (_points[i][2] == true) {
-      draw(_points[i][0], _points[i][1], 0.5);
+      draw(_points[i][0], _points[i][1], 0.5);    //draw moves as thin lines
     } else {
       draw(_points[i][0], _points[i][1]);
     }

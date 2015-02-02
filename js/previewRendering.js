@@ -16,7 +16,8 @@ var previewCtx_tmp;
 
 var previewDefaults = {
   rotation: 0, //Math.PI/90,
-  numLayers: 10
+  numLayers: 5, //was 10
+  showTravelLines: false
 }
 
 var svgPathRegExp = /[LM]\d* \d*/ig;
@@ -189,7 +190,12 @@ function renderToImageDataPreview() {
   previewCtx_tmp.moveTo(adjustedDoodlePt.x, adjustedDoodlePt.y);
   for(var j = 1; j < _points.length; j++) {
     adjustedDoodlePt = centeredAndScaledDoodlePoint(_points[j])
-    previewCtx_tmp.lineTo(adjustedDoodlePt.x, adjustedDoodlePt.y);
+    
+    if (!previewDefaults.showTravelLines && _points[j][2]==true) {
+      previewCtx_tmp.moveTo(adjustedDoodlePt.x, adjustedDoodlePt.y);
+    } else {
+      previewCtx_tmp.lineTo(adjustedDoodlePt.x, adjustedDoodlePt.y);
+    }
   }
   previewCtx_tmp.stroke();
   previewCtx_tmp.closePath();
@@ -303,6 +309,7 @@ function centeredAndScaledDoodlePoint(p) {
 var updatePrevX = -1;
 var updatePrevY = -1;
 function updatePreview(_x, _y, redrawLess) {
+  
 	//console.log("PreviewRendering:updatePreview");
   if (redrawLess == undefined) redrawLess = false;
   redrawLess = false;
