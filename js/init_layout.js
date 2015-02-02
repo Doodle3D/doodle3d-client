@@ -67,3 +67,4 @@ function _startOrientationAndChangeEventListening() {
   // is it necessary to call these? Aren't they called by the above eventhandlers?
   doOnResize();
 }
+

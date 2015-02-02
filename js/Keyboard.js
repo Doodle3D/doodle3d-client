@@ -49,31 +49,31 @@ function initKeyboard() {
 		var ch = String.fromCharCode(event.which);
 
 		switch (ch) {
-			case 'c': newSketch(); break;
-			case 'n': newSketch(); break;
-			case 'p': print(); break;
-			case 'u': oopsUndo(); break;
-			case 'g': settingsWindow.downloadGcode(); break;
-			case 'q': stopPrint(); break;
+			case '+': case '=': zoomShape(1.05); break;
 			case ',': openSettingsWindow(); break;
-			case 'h': previewUp(true); break;
+			case '-': zoomShape(.95); break;
+			case ';': moveShape(-5,0); break;
+			case '[': previewTwistLeft(); break;
+			case '\'': moveShape(5,0); break;
+			case ']': previewTwistRight(); break;
+			case 'c': newSketch(); break;
+			case 'f': showTravelLines=!showTravelLines; redrawDoodle(); break;
+			case 'g': settingsWindow.downloadGcode(); break;
 			case 'H': previewDown(true); break;
-			case 's': saveSketch(); break;
+			case 'h': previewUp(true); break;
+			case 'i': showShapeDialog(); break;
 			case 'L': nextSketch(); break;
 			case 'l': prevSketch(); break;
-			case '[': previewTwistLeft(); break;
-			case ']': previewTwistRight(); break;
-			case '|': resetTwist(); break;
-			case 't': showWordArtDialog(); break;
-			case 'i': showShapeDialog(); break;
-			case 'T': showScanDialog(); break;
-			
-			case ';': moveShape(-5,0); break;
-			case '\'': moveShape(5,0); break;
-			case '-': zoomShape(.95); break;
-			case '+': zoomShape(1.05); break;
-			case 'r': rotateShape(.1); break;
+			case 'n': newSketch(); break;
+			case 'p': print(); break;
+			case 'q': stopPrint(); break;
 			case 'R': rotateShape(-.1); break;
+			case 'r': rotateShape(.1); break;
+			case 's': saveSketch(); break;
+			case 'T': showScanDialog(); break;
+			case 't': showWordArtDialog(); break;
+			case 'u': oopsUndo(); break;
+			case '|': resetTwist(); break;
 			
 			//default: console.log("Key: '" + ch + "' (" + event.which + ")");
 		}

@@ -27,6 +27,7 @@ var $drawAreaContainer, $doodleCanvas, doodleCanvas, doodleCanvasContext, $previ
 
 var showhideInterval;
 var showOrHide = false;
+var limitedFeatures = false;
 
 var clientInfo = {};
 
@@ -41,6 +42,7 @@ $(function() {
   if (getURLParameter("c") != "null") communicateWithWifibox = (getURLParameter("c") == "1");
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
+  if (getURLParameter("l") != "null") limitedFeatures = (getURLParameter("l") == "1");
 
   var hostname;
   if (wifiboxIsRemote) hostname = 'http://192.168.5.1';
@@ -107,37 +109,11 @@ $(function() {
     $("body").css("overflow", "auto");
     $("#debug_textArea").css("display", "block");
     //$("#preview_tmp").css("display", "block");
-
     $("#debug_display").css("display", "block");
+  }
 
-    // show and hide the progressguage and thermometer
-    //showhideInterval = setInterval(showOrHideThermo, 2500);
-
-//    $("#debugContainer").css("display", "block");
-
-    /* TEMP CODE!! -> artificially populates the startgcode and endgcode textareas in the settings window */
-    // todo remove this temporary code...
-    /*
-    setTimeout(function() {
-      $("#startgcode").text("");
-      $("#startgcode").append("G21 (mm) \n");
-      $("#startgcode").append("G91 (relative) \n");
-      $("#startgcode").append("G28 X0 Y0 Z0 (physical home) \n");
-      $("#startgcode").append("M104 S230 (temperature) \n");
-      $("#startgcode").append("G1 E10 F250 (flow) \n");
-      $("#startgcode").append("G92 X-100 Y-100 Z0 E10 \n");
-      $("#startgcode").append("G1 Z3 F5000 (prevent diagonal line) \n");
-      $("#startgcode").append("G90 (absolute) \n");
-      $("#startgcode").append("M106 (fan on)");
-      console.log("$('#startgcode'): " + $("#startgcode").val());
-
-      $("#endgcode").text("");
-      $("#endgcode").append("G1 X-100 Y-100 F15000 (fast homing) \n");
-      $("#endgcode").append("M107 \n");
-      $("#endgcode").append("M84 (disable axes) \n");
-      console.log("$('#endgcode'): " + $("#endgcode").val());
-    }, 1000);
-    //*/
+  if (limitedFeatures) {
+    initLimitedInterface();
   }
 });
 
@@ -182,4 +158,5 @@ function settingsLoaded() {
 
 function setDebugText(text) {
 	$("#debug_display").text(text);
+  
 }

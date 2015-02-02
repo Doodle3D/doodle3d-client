@@ -8,9 +8,10 @@
 
 var curSketch = 0;
 var sketches = []; //contains fileIDs
+var sketchLoaded = false;
 
 function previousSketch(e) {
-	loadSketch(curSketch-1);
+	loadSketch(curSketch-1);	
 }
 
 function nextSketch(e) {
@@ -80,6 +81,7 @@ function loadSketch(_curSketch) {
 			var svgData = response.data.data;
 			loadFromSvg(svgData);
 			setSketchModified(false);
+			sketchLoaded = true;
 		} else {
 			console.log('error loading sketch: ',response);
 			listSketches();

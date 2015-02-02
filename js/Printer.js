@@ -184,7 +184,8 @@ function Printer() {
 						if (completed) {
 							console.log("Printer:sendPrintPart:gcode sending completed");
 							this.gcode = [];
-							btnStop.css("display","block"); // hack
+							//btnStop.css("display","block"); // hack
+							btnStop.enable(); //check me
 							self.removeLeaveWarning();
 							message.set("Doodle has been sent to printer...",Message.INFO,true);
 							//self.targetTemperature = settings["printer.temperature"]; // slight hack

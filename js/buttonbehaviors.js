@@ -44,10 +44,10 @@ function initButtonBehavior() {
 	buttonGroupAdd = $("#buttonGroupAdd");
 	btnShape = new Button("#btnShape");
 	btnWordArt = new Button("#btnWordArt");
-    btnScan = new Button("#btnScan");
+	btnScan = new Button("#btnScan");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
-    popupScan = $("#popupScan");
+	popupScan = $("#popupScan");
 	popupMask = $("#popupMask");
 	logoPanel = $("#logopanel");
 	btnToggleEdit = new Button("#btnToggleEdit");
@@ -76,7 +76,7 @@ function initButtonBehavior() {
 	btnPrint.on("onButtonClick", print);
 	btnStop.on("onButtonClick", stopPrint);
 	btnSave.on("onButtonClick", saveSketch);
-	btnPrevious.on("onButtonClick", previousSketch);
+	btnPrevious.on("onButtonClick", onPreviousButtonClick);
 	btnNext.on("onButtonClick", nextSketch);
 	btnOops.on("onButtonHold", onBtnOops);
 	// vertical shape buttons
@@ -97,6 +97,11 @@ function initButtonBehavior() {
 	listSketches();
 	// setSketchModified(false);
 	// updateSketchButtonStates();
+
+	function onPreviousButtonClick() {
+		if (!sketchLoaded) loadSketch(curSketch);
+		else previousSketch();
+	}
 
 	function onBtnToggleVerticalShapes() {
 		var btnImg;
@@ -232,7 +237,8 @@ function print(e) {
 		//setState(Printer.BUFFERING_STATE,printer.hasControl);
 		printer.overruleState(Printer.BUFFERING_STATE);
 
-		btnStop.css("display","none"); // hack
+		// btnStop.css("display","none"); // hack
+		btnStop.disable(); //check me
 
 		// we put the gcode generation in a little delay
 		// so that for example the print button is disabled right away
@@ -471,4 +477,23 @@ function setState(newState,newHasControl) {
 
 	state = newState;
 	hasControl = newHasControl;
+}
+
+function initLimitedInterface() {
+	btnSettings.hide();
+	btnPrint.hide();
+	btnStop.hide();
+	btnInfo.hide();
+	btnPrevious.hide();
+	btnNext.hide();
+	$("#thermometerContainer").hide();
+	$("#progressbarCanvasContainerParent").hide();
+	$("#btnSave").addClass("fake-print-button");
+	$("#btnSave").attr("src","img/buttons/btnPrint.png");
+	$("#btnSave").on("onButtonClick",function() {
+		setTimeout(function() {
+			alert('\nThank you!\n\nYour sketch has been saved on the Doodle3D WiFi-Box and is now ready for 3D-printing.\n\n');
+		},1000);
+		
+	})
 }
