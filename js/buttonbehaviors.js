@@ -484,8 +484,7 @@ function initLimitedInterface() {
 	btnPrint.hide();
 	btnStop.hide();
 	btnInfo.hide();
-	btnPrevious.hide();
-	btnNext.hide();
+	$("#btnsPrevNext").hide();
 	$("#thermometerContainer").hide();
 	$("#progressbarCanvasContainerParent").hide();
 	$("#btnSave").addClass("fake-print-button");
