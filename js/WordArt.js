@@ -85,7 +85,7 @@ function getPathFromChar(ch) {
   var index = ch.charCodeAt(0)-33;
   var element = $("#svgfont path")[index];
   if (element==undefined) return "";
-  return $("#svgfont path")[index].attributes["d"].nodeValue;
+  return $("#svgfont path")[index].attributes["d"].value; //was nodeValue but that's depricated
 }
 
 function getPointsFromPath(path) {
@@ -96,7 +96,7 @@ function getPointsFromPath(path) {
   var prevCmd = "";
   var lastCmd = "";
 
-  console.log(path);
+  //console.log(path);
 
   for (var i=0; i<cmds.length; i++) {
     var cmd = cmds[i];   
