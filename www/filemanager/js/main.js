@@ -24,6 +24,8 @@ $("#btnSelectAll").click(selectAll);
 $("#btnDeselectAll").click(deselectAll);
 $("#uploads").change(upload);
 $("#btnDownload").click(download);
+$("#btnRefresh").click(refresh);
+$("#btnPrint").click(print);
 
 $("#btnUpload").click(function(e) {
   e.preventDefault();
@@ -60,6 +62,7 @@ $.get(api+'list', function(data) { //?id=00003
   console.log(status);
 });
 
+
 function onLogoClick() {
   location.href='/'+location.search;
 }
@@ -93,15 +96,14 @@ function addItem(id,svgData,doPrepend) {
   else if (svgData.indexOf("CDATA")==-1) path = "";
   else path = svgData.split('d="')[1].split('"')[0]; 
 
-  var item = $('<div class="item" data="'+id+'" title="'+id+'">');
+  var item = $('<li class="item ui-widget-content" data="'+id+'" title="'+id+'"></li>');
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 640 540"><path fill="none" stroke="black" stroke-width="2" d="'+path+'"></path></svg>';
-  
+
+  item.append(svg);
   item.click(function() {
     $(this).toggleClass('selected');
-    console.log($(this).attr("data"));
     updateButtonStates();
   })
-  item.append(svg);
 
   if (doPrepend) $('#svgContainer').prepend(item);
   else $('#svgContainer').append(item);
@@ -173,8 +175,10 @@ function updateButtonStates() {
   $("#btnDeselectAll").attr("disabled",isBusy || noSelection);
   $("#btnSelectAll").attr("disabled",isBusy || numItems==0);
   $("#btnUpload").attr("disabled",isBusy || !noSelection);
-  $("#btnDelete").text("Delete" + (noSelection ? "" :  " ("+numSelected+")"));
-  $("#btnDownload").text("Download" + (noSelection ? "" :  " ("+numSelected+")"));
+  $("#btnPrint").attr("disabled",isBusy || noSelection);
+  // $("#btnDelete").text("Delete" + (noSelection ? "" :  " ("+numSelected+")"));
+  // $("#btnDownload").text("Download" + (noSelection ? "" :  " ("+numSelected+")"));
+  // $("#btnPrint").text("Print" + (noSelection ? "..." :  " ("+numSelected+")..."));
 }
 
 function uploadFile(files, index, next) {
@@ -263,5 +267,17 @@ function download() {
     console.log('downloading',id);
     $('<a target="_blank" href="data:image/svg+xml,'+encodeURIComponent(svgData)+'" download="'+id+'.svg">')[0].click();
   });
+}
+
+function refresh() {
+  location.reload();
+}
+
+function print() {
+  var ids = [];
+  $('.item.selected').each(function() {
+    ids.push($(this).attr('data'));
+  });
+  location.href = '/printmanager/' + location.search + "&ids=" + ids.join();
 }
 

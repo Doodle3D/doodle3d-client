@@ -8,92 +8,77 @@
 
 function ConfigAPI() {
 	
-	var _wifiboxURL;
-	var _wifiboxCGIBinURL;
-	var _timeoutTime 							= 3000;
-	var _saveSettingsTimeoutTime 	= 8000;
-	
-	var _self = this;
+	function loadAll(success,fail) {
+		API.get('config/all',success,fail);
+	};
 
-	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
-		//console.log("ConfigAPI:init");
-		
-		_wifiboxURL = wifiboxURL;
-		_wifiboxCGIBinURL = wifiboxCGIBinURL;
+	function load(key,success,fail) {
+		API.get('config/?'+key+'=',success,fail)
+	};
+
+	function save(newSettings,success,fail) {
+		API.post('config',{data:newSettings},success,fail);
+	};
+	
+	function resetAll(success,fail) {
+		API.post('config/resetall',{},success,fail)
+	};
+
+	function getSetting(key,success,fail) {
+		API.get('config/?'+key+'=',function(response) {
+			if (success) success(response[key]);
+		},fail);
 	}
-	this.loadAll = function(completeHandler,failedHandler) {
-		//console.log("ConfigAPI:loadAll");
-		$.ajax({
-			url: _wifiboxURL + "/config/all",
-			type: "GET",
-			dataType: 'json',
-			timeout: _timeoutTime,
-			success: function(response){
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
-	};
-	this.load = function(targetSettings,completeHandler,failedHandler) {
-		//console.log("ConfigAPI:load");
-		$.ajax({
-			url: _wifiboxURL + "/config/",
-			type: "GET",
-			dataType: 'json',
-			data: targetSettings,
-			timeout: _timeoutTime,
-			success: function(response){
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
-	};
-	this.save = function(newSettings,completeHandler,failedHandler) {
-		//console.log("ConfigAPI:save");
-		$.ajax({
-			url: _wifiboxCGIBinURL + "/config",
-			type: "POST",
-			data: newSettings,
-			dataType: 'json',
-			timeout: _saveSettingsTimeoutTime,
-			success: function(response){
-				//console.log("ConfigAPI:save response: ",response);
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
-	};
-	this.resetAll = function(completeHandler,failedHandler) {
-		//console.log("ConfigAPI:resetAll");
-		$.ajax({
-			url: _wifiboxCGIBinURL + "/config/resetall",
-			type: "POST",
-			dataType: 'json',
-			timeout: _timeoutTime,
-			success: function(response){
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
-	};
+
+	function getStartCode(success,fail) {
+		loadAll(function(data) {
+			var startcode = subsituteVariables(data['printer.startcode'],data);
+			if (success) success(startcode);
+		},fail);
+	}
+
+	function getEndCode(success,fail) {
+		loadAll(function(data) {
+			var endcode = subsituteVariables(data['printer.endcode'],data);
+			if (success) success(endcode);
+		},fail);
+	}
+
+	function subsituteVariables(gcode,settings) {
+		//,temperature,bedTemperature,preheatTemperature,preheatBedTemperature
+		var temperature 			      = settings["printer.temperature"];
+		var bedTemperature 			    = settings["printer.bed.temperature"];
+		var preheatTemperature      = settings["printer.heatup.temperature"];
+		var preheatBedTemperature   = settings["printer.heatup.bed.temperature"];
+	  var printerType             = settings["printer.type"];
+	  var heatedbed             	= settings["printer.heatedbed"];
+
+	  switch (printerType) {
+	    case "makerbot_replicator2": printerType = "r2"; break; 
+	    case "makerbot_replicator2x": printerType = "r2x"; break;
+	    case "makerbot_thingomatic": printerType = "t6"; break;
+	    case "makerbot_generic": printerType = "r2"; break;
+	    case "_3Dison_plus": printerType = "r2"; break;
+	  }
+	  var heatedBedReplacement = (heatedbed)? "" : ";";
+
+		gcode = gcode.replace(/{printingTemp}/gi  	,temperature);
+		gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);
+		gcode = gcode.replace(/{preheatTemp}/gi			,preheatTemperature);
+		gcode = gcode.replace(/{preheatBedTemp}/gi 	,preheatBedTemperature);
+	  gcode = gcode.replace(/{printerType}/gi     ,printerType);
+	  gcode = gcode.replace(/{if heatedBed}/gi    ,heatedBedReplacement);
+	    
+		return gcode;
+	}
+
+	return {
+		loadAll: loadAll,
+		load: load,
+		save: save,
+		resetAll: resetAll,
+		getSetting: getSetting,
+		getStartCode: getStartCode,
+		getEndCode: getEndCode,
+	}
 }

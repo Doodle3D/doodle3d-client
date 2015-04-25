@@ -16,7 +16,7 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
-          'js/api/*.js',
+          //'js/api/*.js',
           'js/settings/FormPanel.js',
           'js/settings/*.js',
           'js/*.js',
@@ -24,6 +24,10 @@ module.exports = function(grunt) {
           '!js/main.js',
           'js/main.js',         ],
         dest: 'www/js/<%= pkg.name %>.js'
+      },
+      api: {
+        src: [ 'js/api/*.js'],
+        dest: 'www/js/doodle3d-api.js'
       }
     },
     uglify: {
@@ -37,7 +41,8 @@ module.exports = function(grunt) {
       },
       js: {
         files: {
-          'www/js/<%= pkg.name %>.min.js' : ['www/js/<%= pkg.name %>.js']
+          'www/js/<%= pkg.name %>.min.js' : ['www/js/<%= pkg.name %>.js'],
+          'www/js/doodle3d-api.min.js' : ['www/js/doodle3d-api.js']
         }
       },
       jslibs: {
@@ -91,7 +96,7 @@ module.exports = function(grunt) {
     watch: {
       javascript: {
         files: ["js/**", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
-        tasks: ["concat:js", "uglify:js"]
+        tasks: ["concat:api", "concat:js", "uglify:js"],
 //        tasks: ["jshint", "concat", "uglify"]
       },
       javascriptLibs: {

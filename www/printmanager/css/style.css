@@ -1,0 +1,90 @@
+body {
+  font-family: Helvetica, Abel, Arial;
+  font-size: 1em;
+
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+
+button {
+  font-size: 1em;
+}
+
+#svgContainer {
+  width: 540px;
+  height: 540px;
+  border: 1px solid black;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+#svgContainer svg {
+  border: 1px solid lightgrey;
+  position: absolute;
+}
+
+#printPreview {
+  width: 540px;
+  height: 540px;
+  border: 1px solid black;
+  margin: 0 auto;
+  position: relative;
+  display: inline-block;
+}
+
+/*#svgContainer {
+  width: 640px;
+  height: 640px;
+  border: 1px solid black;
+  display: inline-block;
+}*/
+
+/*.item {
+  padding: 0.5em;
+  display: inline-block;
+  position: absolute;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.item.selected {
+  background-color: rgba(102, 206, 255, 0.4);
+}
+
+.item.crosshair {
+  cursor: crosshair;
+}*/
+
+#frmUpload {
+  display: inline;
+}
+
+#txtInfo {
+  float: right;
+}
+
+img#logo {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+#buttonsPanel {
+  float: right;
+}
+
+span.statusvar {
+  background-color: #7cf;
+  margin: 2px 2px 2px 2px;
+  padding: 5px 5px 2px 5px;
+}
+
+#preview {
+  display: inline-block;
+  border: 1px solid black;
+  width: 640px;
+  height: 540px;
+}

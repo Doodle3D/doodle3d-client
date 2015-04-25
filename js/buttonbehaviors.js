@@ -310,7 +310,6 @@ function oopsUndo() {
 }
 
 function previewUp(redrawLess) {
-	//    console.log("f:previewUp()");
 	if (numLayers < maxNumLayers) {
 		numLayers++;
 	}
