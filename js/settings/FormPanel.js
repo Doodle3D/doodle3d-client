@@ -107,7 +107,7 @@ function FormPanel() {
 	};
 	
 	this.saveSettings = function(newSettings,complete) {
-		//console.log("  newSettings: ",newSettings);
+		console.log("  newSettings: ",newSettings);
 		_configAPI.save(newSettings,function(data) {
 			var validation = data.validation;
 			//console.log("  validation: ",validation);

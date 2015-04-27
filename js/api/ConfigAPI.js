@@ -22,7 +22,8 @@ function ConfigAPI() {
 	};
 
 	function save(newSettings,success,fail) {
-		API.post('config',{data:newSettings},success,fail);
+		console.log(className,'save',newSettings);
+		API.post('config',newSettings,success,fail);
 	};
 	
 	function resetAll(success,fail) {
