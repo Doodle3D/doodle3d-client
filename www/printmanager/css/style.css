@@ -1,6 +1,7 @@
 body {
-  font-family: Helvetica, Abel, Arial;
+  font-family: Abel, 'sans-serif-thin', Sans-serif, Helvetica, Arial;
   font-size: 1em;
+  margin: 0 0 0 0;
 
   -webkit-user-select: none; /* webkit (safari, chrome) browsers */
   -moz-user-select: none; /* mozilla browsers */
@@ -12,13 +13,47 @@ button {
   font-size: 1em;
 }
 
+#toolbar {
+  padding-top: 10px;
+  padding-left: 10px;
+  float: left;
+  width: 300px;
+  height: 100%;
+}
+
+#btnPrint {
+  font-size: 30px;
+  /*width: 100px;*/
+  /*height: 100px;*/
+}
+
+#toolbar h1 {
+  margin-top: 5px;
+  font-size: 1.5em;
+}
+
+#rightToolbar {
+  margin-top: 5px;
+  margin-right: 5px;
+  float: right;
+}
+
+#toolbar button {
+  display: block;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
 #svgContainer {
-  width: 540px;
-  height: 540px;
+  /*margin-top: 10px;*/
+  background-color: #fff;
+  width: 640px;
+  height: 640px;
   border: 1px solid black;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
+  top: 10px;
   display: inline-block;
 }
 #svgContainer svg {
@@ -27,8 +62,8 @@ button {
 }
 
 #printPreview {
-  width: 540px;
-  height: 540px;
+  width: 640px;
+  height: 640px;
   border: 1px solid black;
   margin: 0 auto;
   position: relative;
@@ -70,6 +105,7 @@ button {
 img#logo {
   cursor: pointer;
   margin-right: 10px;
+  width: 200px;
 }
 
 #buttonsPanel {
@@ -79,7 +115,8 @@ img#logo {
 span.statusvar {
   background-color: #7cf;
   margin: 2px 2px 2px 2px;
-  padding: 5px 5px 2px 5px;
+  /*padding: 5px 5px 2px 5px;*/
+  display: block;
 }
 
 #preview {

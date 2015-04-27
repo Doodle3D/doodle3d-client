@@ -7,9 +7,14 @@
  */
 
 function PrinterAPI() {
+	var className = 'PrinterAPI';
 
 	this.remainingLines = [];
 	this.totalLinesAtStart = 0;
+
+	this.init = function() {
+		console.log(className,'init is deprecated');
+	}
 
 	this.state = function(success,fail) {
 		API.get('printer/state',success,fail);
@@ -57,8 +62,8 @@ function PrinterAPI() {
 			var data = {gcode: chunk.join("\n"), first: first, start: start};
 			
 			_printPartPost(lines,data,function() {
-				console.log('_printPartPost cb');
-				cb(); //??? needed
+				// console.log('_printPartPost cb');
+				// cb(); //??? needed
 			});
 
 		} else {

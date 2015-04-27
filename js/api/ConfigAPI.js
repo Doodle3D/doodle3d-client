@@ -7,7 +7,12 @@
  */
 
 function ConfigAPI() {
-	
+	var className = 'ConfigAPI';
+
+	function init() {
+		console.log(className,'init is deprecated');
+	}
+
 	function loadAll(success,fail) {
 		API.get('config/all',success,fail);
 	};
@@ -73,6 +78,7 @@ function ConfigAPI() {
 	}
 
 	return {
+		init: init,
 		loadAll: loadAll,
 		load: load,
 		save: save,

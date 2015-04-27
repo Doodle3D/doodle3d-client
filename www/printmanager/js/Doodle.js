@@ -1,32 +1,40 @@
 var Doodle = function(svgData,settings) {
 
   var path = new Path();
-  var height = 50; //in mm
+  var height = 10; //in mm
   var offset = new Point(0,0);
   var scale = 1;
   var rotation = 0;
-  var twist = 0;
+  var twist = .1;
 
-  if (svgData!==undefined) {
+  if (settings!=undefined) {
+    if (settings.height!=undefined) height = settings.height;
+    if (settings.twist!=undefined) twist = settings.twist;
+    if (settings.scale!=undefined) scale = settings.scale;
+    if (settings.offset!=undefined) offset = settings.offset;
+  }
+
+  if (svgData!=undefined) {
     setFromSvgPathDescription(svgData);
     removeShortPaths(); //move this to main.js?
 
-    //TODO: determine current offset from boundingbox and store in 'offset' variable
+    // offset.x += path.getBoundingBox().getX();
+    // offset.y += path.getBoundingBox().getY();
+
     path.alignCorner(); //set left-top corner of path boundingbox to 0,0
+
+    // scale = 1;
+
+    // console.log(path.getBoundingBox().getX(),offset);
   }
 
-  if (settings!==undefined) {
-    if (settings.height!==undefined) height = settings.height;
-    if (settings.twist!==undefined) twist = settings.twist;
-  }
 
   function setFromSvgPathDescription(svgData) {
     // if (!svgData) svgData = "";
     // else if (typeof(svgData)!='string') svgData = "";
     // // else if (svgData.indexOf("CDATA")==-1) svgData = "";
     // else svgData = svgData.split('d="')[1].split('"')[0]; 
-
-    console.log('svgData',svgData);
+    // console.log('svgData',svgData);
 
     svgData+=' '; //add a trailing space
 
