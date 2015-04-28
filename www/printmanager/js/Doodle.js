@@ -6,6 +6,7 @@ var Doodle = function(svgData,settings) {
   var scale = 1;
   var rotation = 0;
   var twist = .1;
+  var id;
 
   if (settings!=undefined) {
     if (settings.height!=undefined) height = settings.height;
@@ -15,27 +16,30 @@ var Doodle = function(svgData,settings) {
   }
 
   if (svgData!=undefined) {
-    setFromSvgPathDescription(svgData);
-    removeShortPaths(); //move this to main.js?
-
-    // offset.x += path.getBoundingBox().getX();
-    // offset.y += path.getBoundingBox().getY();
-
-    path.alignCorner(); //set left-top corner of path boundingbox to 0,0
-
-    // scale = 1;
-
-    // console.log(path.getBoundingBox().getX(),offset);
+    if (svgData.charAt(0)=='<') {
+      setFromSvgFileData(svgData);
+    } else {
+      setFromSvgPathDescription(svgData);
+    }
+    removeShortPaths();
+    path.alignCorner();
   }
 
+  function setFromSvgFileData(svgData) {
+    if (!svgData) svgData = "";
+    else if (typeof(svgData)!='string') svgData = "";
+    // else if (svgData.indexOf("CDATA")==-1) svgData = ""; //only accept doodles with CDATA inside containing transforms
+    else svgData = svgData.split('d="')[1].split('"')[0]; 
+    setFromSvgPathDescription(svgData);
+  }
+
+  function getSvgFileData() {
+     return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 640 540">' +
+            '<path fill="none" stroke="black" stroke-width="2" d="' + getSvgPathDescription() + 
+            '"></path><!--<![CD'+'ATA[d3d-keys {"height":5,"outlineShape":"none","twist":0}]]>--></svg>';
+  }
 
   function setFromSvgPathDescription(svgData) {
-    // if (!svgData) svgData = "";
-    // else if (typeof(svgData)!='string') svgData = "";
-    // // else if (svgData.indexOf("CDATA")==-1) svgData = "";
-    // else svgData = svgData.split('d="')[1].split('"')[0]; 
-    // console.log('svgData',svgData);
-
     svgData+=' '; //add a trailing space
 
     //Parse Path Description
@@ -98,9 +102,10 @@ var Doodle = function(svgData,settings) {
     setPath(path);
   }
 
-  function getSvgPathDescription() {
+  function getSvgPathDescription(p) {
+    if (!p) p = path;
     var d = "";
-    var polylines = path.getPolylines();
+    var polylines = p.getPolylines();
     for (var i=0; i<polylines.length; i++) {
       var points = polylines[i].getPoints();
       for (var j=0; j<points.length; j++) {
@@ -109,7 +114,15 @@ var Doodle = function(svgData,settings) {
       }
     }
     return d;
-    // return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="640" height="540"><path xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-width="2" d="'+d+'"></path></svg>';
+  }
+
+  function getTransformedPath() {
+    var p = path.clone();
+    //var box = p.getBoundingBox();
+    p.scale(scale);
+    p.alignCorner();
+    p.translate(offset.x,offset.y);
+    return p;
   }
 
   function removeShortPaths(minLength,minPoints) {
@@ -164,13 +177,23 @@ var Doodle = function(svgData,settings) {
   function getScaleFunction(f) {
     return 1; //Math.sin(f*2*Math.PI)/4+1;
   }
+
+  function setId(_id) {
+    id = _id;
+  }
+
+  function getId() {
+    return id;
+  }
   
   return {
     getPath: getPath,
     setPath: setPath,
+    getTransformedPath: getTransformedPath,
     getSettings: getSettings,
     setFromSvgPathDescription: setFromSvgPathDescription,
     getSvgPathDescription: getSvgPathDescription,
+    getSvgFileData: getSvgFileData,
     getHeight: getHeight,
     getRotation: getRotation,
     getTwist: getTwist,
@@ -179,6 +202,8 @@ var Doodle = function(svgData,settings) {
     setScale: setScale,
     getOffset: getOffset,
     setOffset: setOffset,
+    setId: setId,
+    getId: getId,
   }
 
 }

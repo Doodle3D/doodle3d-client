@@ -25,7 +25,7 @@ $("#btnDeselectAll").click(deselectAll);
 $("#uploads").change(upload);
 $("#btnDownload").click(download);
 $("#btnRefresh").click(refresh);
-$("#btnPrint").click(print);
+$("#btnCombine").click(combine);
 
 $("#btnUpload").click(function(e) {
   e.preventDefault();
@@ -175,7 +175,7 @@ function updateButtonStates() {
   $("#btnDeselectAll").attr("disabled",isBusy || noSelection);
   $("#btnSelectAll").attr("disabled",isBusy || numItems==0);
   $("#btnUpload").attr("disabled",isBusy || !noSelection);
-  $("#btnPrint").attr("disabled",isBusy || noSelection);
+  $("#btnCombine").attr("disabled",isBusy || noSelection);
   // $("#btnDelete").text("Delete" + (noSelection ? "" :  " ("+numSelected+")"));
   // $("#btnDownload").text("Download" + (noSelection ? "" :  " ("+numSelected+")"));
   // $("#btnPrint").text("Print" + (noSelection ? "..." :  " ("+numSelected+")..."));
@@ -273,11 +273,11 @@ function refresh() {
   location.reload();
 }
 
-function print() {
+function combine() {
   var ids = [];
   $('.item.selected').each(function() {
     ids.push($(this).attr('data'));
   });
-  location.href = '/printmanager/' + location.search + "&ids=" + ids.join();
+  location.href = '/printmanager/?ids=' + ids.join(); //+ location.search + 
 }
 

@@ -52,8 +52,6 @@ var Doodle2gcode = function() {
     // var org = path.getOffset();
     var box = path.getBoundingBox();
 
-
-
     //center object on origin to apply transformations
     path.translate(-box.getX(),-box.getY());
     path.translate(-box.getWidth()/2,-box.getHeight()/2);
@@ -81,15 +79,6 @@ var Doodle2gcode = function() {
 
     path.scale(px2mm);
     path.translate(0,-dimensions.y);
-
-// G1 X95.054 Y95.154 E4.83242
-// G1 F2400 E0.33242   ;retract voor travel
-// G0 F9000 X98.641 Y93.617
-// ;TYPE:WALL-INNER
-// G1 F2400 E4.83242   ;unretract na een travel en voor 
-// G1 F1200 X98.621 Y93.596 E4.83297
-
-
 
     for (var i=0; i<polylines.length; i++) {
       var points = polylines[i].getPoints();

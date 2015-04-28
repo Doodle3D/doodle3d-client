@@ -3,7 +3,7 @@ var ViewerItem = function(doodle) {
   var path = doodle.getPath();
   var svgData = doodle.getSvgPathDescription();
   var box = path.getBoundingBox();
-  var svg = $('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="640" height="540"><path xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" d="'+svgData+'"></path></svg>');
+  var svg = $('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="640" height="540"><path xmlns="http://www.w3.org/2000/svg" fill="none" d="'+svgData+'"></path></svg>');
   var viewbox = box.getX() + " " + box.getY() + " " + box.getWidth() + " " + box.getHeight();
   var xDown = 0, yDown = 0;
   var xCur = 0, yCur = 0;
@@ -20,12 +20,17 @@ var ViewerItem = function(doodle) {
     var box = path.getBoundingBox();
     var scaledCenterX = box.getCenter().x * (1-doodle.getScale());
     var scaledCenterY = box.getCenter().y * (1-doodle.getScale());
-    svg[0].setAttribute("stroke-width", 1/doodle.getScale());
+    svg[0].setAttribute("stroke-width", 2/doodle.getScale());
     svg.css({
       transform: "scale(" + doodle.getScale() + ")",
       left: doodle.getOffset().x - scaledCenterX + xCur - xDown,
       top: doodle.getOffset().y - scaledCenterY + yCur - yDown
     });
+  }
+
+  function setColor(c) {
+    console.log('setColor',c);
+    svg[0].setAttribute("stroke", c);
   }
 
   function getDoodle() {
@@ -88,13 +93,20 @@ var ViewerItem = function(doodle) {
       updateDrag(e.originalEvent.pageX,e.originalEvent.pageY);
     }
   });
-
+  
   svg.on("mouseup", function (e) {
     stopDrag();
   });
 
   $(document).on("mouseup", function (e) {
     stopDrag();
+  });
+
+  $(document).on("keydown", function (e) {
+    if (dragging) {
+      if (e.keyCode==189) zoomBy(-.01);
+      if (e.keyCode==187) zoomBy(+.01);
+    }
   });
   
   svg.on("touchstart", function (e) {
@@ -132,5 +144,6 @@ var ViewerItem = function(doodle) {
   return {
     getDoodle: getDoodle,
     getSvg: getSvg,
+    setColor: setColor,
   }
 }

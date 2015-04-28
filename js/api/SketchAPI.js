@@ -12,4 +12,8 @@ function SketchAPI() {
 		API.get('sketch/?id='+id,success,fail);
 	}
 
+  this.save = function(data,success,fail) {
+    API.post('sketch',{data:data},success,fail);
+  }
+
 }
