@@ -136,6 +136,10 @@ function UpdatePanel() {
 	}
 
 	this.checkStatus = function(keepChecking) {
+		if (limitedFeatures) {
+			return; //don't check printer status when in limitedFeatures mode
+		}
+		
 		if (!communicateWithWifibox) return;
 		$.ajax({
 			url: self.wifiboxURL + "/update/status",

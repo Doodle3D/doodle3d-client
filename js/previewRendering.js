@@ -16,7 +16,7 @@ var previewCtx_tmp;
 
 var previewDefaults = {
   rotation: 0, //Math.PI/90,
-  numLayers: 5, //was 10
+  numLayers: 1, //was 10
   showTravelLines: false
 }
 

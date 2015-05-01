@@ -33,3 +33,7 @@ less/verticalshapes_backup.css
 __settings.html
 css/_settings.css
 node_modules/*
+
+*.tgz
+
+*.tgz

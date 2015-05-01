@@ -36,7 +36,7 @@ var Doodle = function(svgData,settings) {
   function getSvgFileData() {
      return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 640 540">' +
             '<path fill="none" stroke="black" stroke-width="2" d="' + getSvgPathDescription() + 
-            '"></path><!--<![CD'+'ATA[d3d-keys {"height":5,"outlineShape":"none","twist":0}]]>--></svg>';
+            '"></path><!--<![CD'+'ATA[d3d-keys {"height":2,"outlineShape":"none","twist":0}]]>--></svg>';
   }
 
   function setFromSvgPathDescription(svgData) {

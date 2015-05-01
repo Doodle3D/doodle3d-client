@@ -19,6 +19,7 @@ function setPrintprogress(val) {
 //*/
 
 function Printer() {
+	var className = 'Printer';
 
 	Printer.WIFIBOX_DISCONNECTED_STATE	= "wifibox disconnected";
 	Printer.UNKNOWN_STATE				= "unknown";				// happens when a printer is connection but there isn't communication yet
@@ -275,6 +276,11 @@ function Printer() {
 	}
 
 	this.checkStatus = function() {
+
+		if (limitedFeatures) {
+			return; //don't check printer status when in limitedFeatures mode
+		}
+
 		//console.log("Printer:checkStatus");
 		this.stateOverruled = false;
 		//console.log("  stateOverruled: ",this.stateOverruled);

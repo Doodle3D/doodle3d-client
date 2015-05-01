@@ -111,6 +111,10 @@ function NetworkPanel() {
 		_self.retrieveNetworkStatus(false);
 	}
 	this.refreshNetworks = function(completeHandler) {
+		if (limitedFeatures) {
+			return; //don't check printer status when in limitedFeatures mode
+		}
+		
 		//console.log("NetworkPanel:refreshNetworks");
 		_api.scan(function(data) { // completed
 			//console.log("NetworkPanel:scanned");
@@ -143,7 +147,13 @@ function NetworkPanel() {
 	};
 	
 	this.retrieveNetworkStatus = function(connecting) {
+
+		if (limitedFeatures) {
+			return; //don't check network status when in limitedFeatures mode
+		}
+
 		//console.log("NetworkPanel:retrieveNetworkStatus");
+
 		_api.status(function(data) {
 			if(data.status === "") {
 				data.status = NetworkAPI.STATUS.CREATED.toString();

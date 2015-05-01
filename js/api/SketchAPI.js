@@ -7,12 +7,14 @@
  */
  
 function SketchAPI() {
+  var className = 'SketchAPI';
 
 	this.load = function(id,success,fail) {
 		API.get('sketch/?id='+id,success,fail);
 	}
 
   this.save = function(data,success,fail) {
+    console.log(className,'saving sketch',data);
     API.post('sketch',{data:data},success,fail);
   }
 

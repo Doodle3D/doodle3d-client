@@ -55,6 +55,7 @@ define Package/doodle3d-client/install
 
 	$(INSTALL_DIR) $(1)/www
 	$(INSTALL_DIR) $(1)/www/filemanager
+	$(INSTALL_DIR) $(1)/www/printmanager
 	$(INSTALL_DIR) $(1)/www/css
 	$(INSTALL_DIR) $(1)/www/img
 	#$(INSTALL_DIR) $(1)/www/js
@@ -72,14 +73,17 @@ define Package/doodle3d-client/install
 	
 	$(CP) $(PKG_BUILD_DIR)/www/img/* $(1)/www/img/
 	$(CP) $(PKG_BUILD_DIR)/www/filemanager/* $(1)/www/filemanager/
+	$(CP) $(PKG_BUILD_DIR)/www/printmanager/* $(1)/www/printmanager/
 	
 ifeq ($(CONFIG_DOODLE3D_CLIENT_MINIFY_JS),y)
 		$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-client.min.js $(1)/www/js/
+		$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-api.min.js $(1)/www/js/
 else
 		#NOTE: if using a symlink here installation with openwrt make fails
 		#  when trying to build with minification after package has been built
 		#  without minification (dangling symlink breaks openwrt's final copy command)
 		$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-client.js $(1)/www/js/doodle3d-client.min.js
+		$(CP) $(PKG_BUILD_DIR)/www/js/doodle3d-api.js $(1)/www/js/doodle3d-api.min.js
 		#$(LN) -s /www/js/doodle3d-client.js $(1)/www/js/doodle3d-client.min.js
 endif
 
