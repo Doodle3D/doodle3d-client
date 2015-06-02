@@ -278,6 +278,7 @@ function Printer() {
 	this.checkStatus = function() {
 
 		if (limitedFeatures) {
+			console.log(className,'ignoring checkStatus due to limitedFeatures mode');
 			return; //don't check printer status when in limitedFeatures mode
 		}
 
