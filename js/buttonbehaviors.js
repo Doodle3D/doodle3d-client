@@ -72,7 +72,7 @@ function initButtonBehavior() {
 	btnAdd.on("onButtonClick", onBtnAdd);
 	btnWordArt.on("onButtonClick", onBtnWordArt);
 	btnShape.on("onButtonClick", onBtnShape);
-    btnScan.on("onButtonClick", onBtnScan);
+	btnScan.on("onButtonClick", onBtnScan);
 	btnPrint.on("onButtonClick", print);
 	btnStop.on("onButtonClick", stopPrint);
 	btnSave.on("onButtonClick", saveSketch);
