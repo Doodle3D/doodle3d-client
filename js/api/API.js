@@ -7,7 +7,7 @@
  */
 
 var API = function() {
-	
+	var className = 'API';
 	var _wifiboxURL = 'http://192.168.5.1/d3dapi/';
 	var _wifiboxCGIBinURL = 'http://192.168.5.1/cgi-bin/d3dapi/';
 	var _timeoutTime = 10000;
@@ -29,40 +29,41 @@ var API = function() {
 			success: function(response){
 				_isBusy = false;
 				if(response.status == "error" || response.status == "fail") {
-					console.log('API.post fail',cmd)
+					console.log(className,'post fail',cmd)
 					if (fail) fail(response);
 				} else {
 					if (success) success(response.data);
-					else console.log('API.post:',cmd,'success cb undefined')
+					else console.log(className,'post:',cmd,'success cb undefined')
 				}
 			}
 		}).fail(function(jqXHR, textStatus) {
 			_isBusy = false;
-			console.log('API.post fail',cmd,jqXHR,textStatus);
+			console.log(className,'post fail',cmd,jqXHR,textStatus);
 			if (fail) fail(jqXHR,textStatus);
 		});
 	}
 
-	function get(cmd,success,fail) {
+	function get(cmd,data,success,fail) {
 		_isBusy = true;
 		$.ajax({
 			url: _wifiboxURL + cmd,
 			type: "GET",
+			data: data,
 			dataType: 'json',
 			timeout: _timeoutTime,
 			success: function(response) {
 				_isBusy = false;
 				if (response.status == "error" || response.status == "fail") {
-					console.log('API.get fail',cmd,response);
+					console.log(className,'get fail',cmd,response);
 					if (fail) fail(response);
 				} else {
 					if (success) success(response.data);
-					else console.log('API.get:',cmd,'success cb undefined')
+					else console.log(className,'get:',cmd,'success cb undefined')
 				}
 			}
 		}).fail(function() {
 			_isBusy = false;
-			console.log('API.get fail',cmd);
+			console.log(className,'get fail',cmd);
 			if (fail) fail();
 		});
 	}

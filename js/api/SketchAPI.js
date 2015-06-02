@@ -9,13 +9,34 @@
 function SketchAPI() {
   var className = 'SketchAPI';
 
-	this.load = function(id,success,fail) {
-		API.get('sketch/?id='+id,success,fail);
+  function load(id,success,fail) {
+		API.get('sketch/?id='+id,{},success,fail);
 	}
 
-  this.save = function(data,success,fail) {
+  function list(success,fail) {
+    API.get('sketch/list',{},success,fail); 
+  }
+
+  function save(data,success,fail) {
     console.log(className,'saving sketch',data);
     API.post('sketch',{data:data},success,fail);
+  }
+
+  function del(id,success,fail) {
+    console.log(className,'deleting sketch',id);
+    API.post('sketch/delete',{id:id},success,fail);
+  }
+
+  function status(success,fail) {
+     API.get('sketch/status',{},success,fail);  
+  }
+
+  return {
+    load: load,
+    list: list,
+    save: save,
+    status: status,
+    del: del,
   }
 
 }

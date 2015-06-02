@@ -17,19 +17,19 @@ function PrinterAPI() {
 	}
 
 	this.state = function(success,fail) {
-		API.get('printer/state',success,fail);
+		API.get('printer/state',{},success,fail);
 	};
 	
 	this.listAll = function(success,fail) {
-		API.get('printer/listall',success,fail);
+		API.get('printer/listall',{},success,fail);
 	};
 
 	this.temperature = function(success,fail) {
-		API.get('printer/temperature',success,fail);
+		API.get('printer/temperature',{},success,fail);
 	};
 
 	this.progress = function(success,fail) {
-		API.get('printer/progress',success,fail);
+		API.get('printer/progress',{},success,fail);
 	}
 
 	function _printPartPost(lines,data,cb) {

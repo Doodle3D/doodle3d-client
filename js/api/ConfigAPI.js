@@ -14,11 +14,15 @@ function ConfigAPI() {
 	}
 
 	function loadAll(success,fail) {
-		API.get('config/all',success,fail);
+		API.get('config/all',{},success,fail);
 	};
 
-	function load(key,success,fail) {
-		API.get('config/?'+key+'=',success,fail)
+	function load(dataObject,success,fail) {
+		// console.log(className,'load',dataObject);
+		API.get('config', dataObject, function(res) {
+			console.log(className,'load get config cb',dataObject,res);
+			if (success) success(res);
+		},fail);
 	};
 
 	function save(newSettings,success,fail) {
@@ -31,7 +35,8 @@ function ConfigAPI() {
 	};
 
 	function getSetting(key,success,fail) {
-		API.get('config/?'+key+'=',function(response) {
+		console.log(className,'getSetting',key);
+		API.get('config/?'+key+'=',{},function(response) {
 			if (success) success(response[key]);
 		},fail);
 	}
