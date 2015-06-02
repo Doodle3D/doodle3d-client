@@ -11,6 +11,7 @@ var sendPrintCommands = true;       // if Doodle3d should send print commands to
 var communicateWithWifibox = true;  // if Doodle3d should try interfacing with the wifibox (in case one is not connected)
 var wifiboxIsRemote = false;        // when you want to run the client on a computer and have it remotely connect to the wifibox
 var autoUpdate = true; 							// auto retrieve updates about temperature and progress from printer
+var autoLoadSketchId;
 
 var printer =  new Printer();
 var progressbar = new Progressbar();
@@ -43,27 +44,18 @@ $(function() {
   if (getURLParameter("r") != "null") wifiboxIsRemote = (getURLParameter("r") == "1");
   if (getURLParameter("u") != "null") autoUpdate = (getURLParameter("u") == "1");
   if (getURLParameter("l") != "null") limitedFeatures = (getURLParameter("l") == "1");
+  if (getURLParameter("load") != "null") autoLoadSketchId = parseInt(getURLParameter("load"));
 
   var hostname;
   if (wifiboxIsRemote) hostname = 'http://192.168.5.1';
   if (getURLParameter("wifiboxURL") != "null") hostname = getURLParameter("wifiboxURL");
+  
+  if (location.host=='doodle3d') hostname = 'http://wifibox';
   if (!hostname) hostname = "http://" + window.location.host;
 
   wifiboxURL = hostname+"/d3dapi";
   wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
 
-  
-  //var api = wifiboxURL+'/d3dapi/sketch/';
-
-	// if (wifiboxIsRemote) {
- //    // var hostname = "http://10.0.0.45";
- //    var hostname = "http://192.168.5.1";
-	// 	wifiboxURL = hostname+"/d3dapi";
-	// 	wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
-	// } else {
-	// 	wifiboxURL = "http://" + window.location.host + "/d3dapi";
-	// 	wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
-	// }
 
   if (!communicateWithWifibox) {
     sendPrintCommands = false; // 'communicateWithWifibox = false' implies this
