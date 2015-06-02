@@ -7,6 +7,7 @@
  */
 
 function FormPanel() {
+	var className = 'FormPanel';
 	
 	var _configAPI = new ConfigAPI();
 	var _retryDelay = 2000;
@@ -102,6 +103,7 @@ function FormPanel() {
 		textareas.each( function(index,element) {
 			var elem = $(element);
 			var value = settings[elem.attr('name')];
+			// console.log(className,'fillForm textarea set value',value);
 			elem.val(value);
 		});
 	};
@@ -145,6 +147,7 @@ function FormPanel() {
 		});
 	};
 	this.loadSettings = function(targetSettings,complete) {
+		// console.log(className,'loadSettings',targetSettings);
 		_configAPI.load(targetSettings,complete,function() {
 			clearTimeout(_retryLoadSettingsDelay);
 			_retryLoadSettingsDelay = setTimeout(function() { _self.loadSettings(targetSettings,complete); },_retryDelay); // retry after delay
