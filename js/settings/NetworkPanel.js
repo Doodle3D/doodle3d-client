@@ -7,7 +7,7 @@
  */
 
 function NetworkPanel() {
-	
+	var className = 'NetworkPanel';
 	var NOT_CONNECTED = "not connected"; // used as first item in networks list
 	
 	// network mode
@@ -112,6 +112,7 @@ function NetworkPanel() {
 	}
 	this.refreshNetworks = function(completeHandler) {
 		if (limitedFeatures) {
+			console.log(className,'ignoring refreshNetworks due to limitedFeatures mode');
 			return; //don't check printer status when in limitedFeatures mode
 		}
 		
@@ -149,6 +150,7 @@ function NetworkPanel() {
 	this.retrieveNetworkStatus = function(connecting) {
 
 		if (limitedFeatures) {
+			console.log(className,'ignoring retrieveNetworkStatus due to limitedFeatures mode');
 			return; //don't check network status when in limitedFeatures mode
 		}
 
