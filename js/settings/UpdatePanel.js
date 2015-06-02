@@ -7,6 +7,7 @@
  */
 
 function UpdatePanel() {
+	var className = 'UpdatePanel';
 	var _form = new FormPanel();
 
 	this.wifiboxURL;
@@ -137,9 +138,10 @@ function UpdatePanel() {
 
 	this.checkStatus = function(keepChecking) {
 		if (limitedFeatures) {
+			console.log(className,'ignoring checkStatus due to limitedFeatures mode');
 			return; //don't check printer status when in limitedFeatures mode
 		}
-		
+
 		if (!communicateWithWifibox) return;
 		$.ajax({
 			url: self.wifiboxURL + "/update/status",
