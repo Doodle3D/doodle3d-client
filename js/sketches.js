@@ -32,6 +32,8 @@ function listSketches() {
 			curSketch = sketches.length-1;
 			setSketchModified(false);
 			updateSketchButtonStates();
+
+			if (autoLoadSketchId) loadSketch(autoLoadSketchId);
 		}
 	})
 }

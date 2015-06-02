@@ -22,7 +22,8 @@ var app = function() {
   var doodles = [];
   var appURL = '/';
 
-  API.setURL('/d3dapi/'); //10.0.0.212
+  if (location.host=='doodle3d') API.setURL('http://wifibox/d3dapi/'); //local
+  else API.setURL('/d3dapi/');
 
   init();
 
@@ -90,7 +91,7 @@ var app = function() {
 
     sketchAPI.save(doodle.getSvgFileData(),function(response) {
       console.log('saved!',response);
-      location.href = appURL; // + "&load=" + response.id;
+      location.href = appURL + "?load=" + response.id;
     });
 
   }
