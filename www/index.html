@@ -40,6 +40,7 @@
     <div id="buttonGroupAdd" class="buttonGroup">
       <img id="btnWordArt" class="btn" src="img/buttons/btnWordArt.png" />
       <img id="btnShape" class="btn" src="img/buttons/btnShape.png" />
+      <img id="btnScan" class="btn" src="img/buttons/btnGuide.png" />
     </div>
 
   </div>
@@ -75,10 +76,12 @@
     </div>
 
     <div id="drawareacontainer">
-
       <div id="canvasContainers">
+
         <div id="mycanvasContainer">
+          <img id="imgGuide">
           <canvas id="mycanvas"></canvas>
+          <img id="btnCloseScan" class="btn" src="img/buttons/btnClose.png" />
         </div>
 
         <div id="previewContainer">
@@ -123,6 +126,15 @@
       Please enter your text:<br>
       <input id="txtWordArt" type="text"/>
       <img id="btnWordArtOk" class="btn" src="img/buttons/btnOk.png">
+    </div>
+  </div>
+    
+  <div class="popup" id="popupScan">
+    <div class="content">
+      <h1>Use photo as a guide</h1>
+      <input id="fileScan" type="file"/>
+      <!-- <input id="txtDummy" type="text"/> -->
+      <img id="btnScanOk" class="btn" src="img/buttons/btnOk.png">
     </div>
   </div>
 

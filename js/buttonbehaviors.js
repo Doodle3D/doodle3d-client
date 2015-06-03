@@ -13,6 +13,7 @@ var btnSettings, btnWordArt;
 var btnToggleEdit, buttonGroupEdit, btnZoom, btnMove, btnRotate;
 var btnToggleVerticalShapes, btnHeight, btnTwist, btnShape, btnConv, btnStraight, btnSine, btnDiv;
 var buttonGroupAdd, popupWordArt;
+var btnScan, popupScan;
 
 var state;
 var prevState;
@@ -43,8 +44,10 @@ function initButtonBehavior() {
 	buttonGroupAdd = $("#buttonGroupAdd");
 	btnShape = new Button("#btnShape");
 	btnWordArt = new Button("#btnWordArt");
+    btnScan = new Button("#btnScan");
 	popupWordArt = $("#popupWordArt");
 	popupShape = $("#popupShape");
+    popupScan = $("#popupScan");
 	popupMask = $("#popupMask");
 	logoPanel = $("#logopanel");
 	btnToggleEdit = new Button("#btnToggleEdit");
@@ -69,11 +72,12 @@ function initButtonBehavior() {
 	btnAdd.on("onButtonClick", onBtnAdd);
 	btnWordArt.on("onButtonClick", onBtnWordArt);
 	btnShape.on("onButtonClick", onBtnShape);
+    btnScan.on("onButtonClick", onBtnScan);
 	btnPrint.on("onButtonClick", print);
 	btnStop.on("onButtonClick", stopPrint);
 	btnSave.on("onButtonClick", saveSketch);
-	btnPrevious.on("onButtonClick", prevDoodle);
-	btnNext.on("onButtonClick", nextDoodle);
+	btnPrevious.on("onButtonClick", previousSketch);
+	btnNext.on("onButtonClick", nextSketch);
 	btnOops.on("onButtonHold", onBtnOops);
 	// vertical shape buttons
 	btnToggleVerticalShapes.on("onButtonClick", onBtnToggleVerticalShapes);
@@ -89,8 +93,10 @@ function initButtonBehavior() {
 	btnZoom.on("onButtonHold", onBtnZoom);
 	btnRotate.on("onButtonHold", onBtnRotate);
 
-	getSavedSketchStatus();
-	setSketchModified(false);
+	//getSavedSketchStatus();
+	listSketches();
+	// setSketchModified(false);
+	// updateSketchButtonStates();
 
 	function onBtnToggleVerticalShapes() {
 		var btnImg;
@@ -179,7 +185,7 @@ function initButtonBehavior() {
 	}
 
 	function onBtnNew(e) {
-		clearDoodle();
+		newSketch();
 	}
 
 	function onBtnWordArt(e) {
@@ -191,6 +197,11 @@ function initButtonBehavior() {
 		buttonGroupAdd.fadeOut();
 	}
 
+    function onBtnScan(e) {
+        showScanDialog();
+		buttonGroupAdd.fadeOut();
+    }
+    
 	btnSettings.on("onButtonClick", openSettingsWindow);
 
 	// 29-okt-2013 - we're not doing help for smartphones at the moment
@@ -414,8 +425,9 @@ function setState(newState,newHasControl) {
 		btnSave.disable();
 		break;
 	default:
-		updatePrevNextButtonState();
-	if (isModified) btnSave.enable();
+		// updatePrevNextButtonState();
+		updateSketchButtonStates();
+		if (isModified) btnSave.enable();
 	break;
 	}
 

@@ -56,6 +56,8 @@ function loadFromSvg(svgData) {
 
 	clearDoodle();
 
+	svgData = svgData.replace("M0,0 ",""); //RC: hack
+
 	var p = svgData.indexOf("<path");
 	if (p == -1) { console.log("loadFromSvg: could not find parsing start point"); return false; }
 	p = svgData.indexOf('d="', p);
@@ -73,7 +75,17 @@ function loadFromSvg(svgData) {
 				return true;
 			} else { //something else, must be a pair of coordinates...
 				var tx = 0, ty = 0, numberEnd = 0, len = 0;
+				// var firstComma = svgData.indexOf(',', p);
+				// var firstSpace = svgData.indexOf(' ', p);
+
 				numberEnd = svgData.indexOf(',', p);
+
+				////// RC: if instead of a comma a space is used between a pair use that as a separator
+				var firstSpace = svgData.indexOf(' ', p);
+				if (firstSpace<numberEnd) numberEnd=firstSpace;   
+				//console.log('numberEnd',numberEnd,firstSpace);
+				////////////////
+
 				if (numberEnd == -1) { console.log("could not find comma in coordinate pair"); return false; }
 				len = numberEnd - p;
 				tx = parseFloat(svgData.substr(p, len));

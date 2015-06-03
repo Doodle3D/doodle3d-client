@@ -49,8 +49,8 @@ function initKeyboard() {
 		var ch = String.fromCharCode(event.which);
 
 		switch (ch) {
-			case 'c': clearDoodle(); break;
-			case 'n': clearDoodle(); break;
+			case 'c': newSketch(); break;
+			case 'n': newSketch(); break;
 			case 'p': print(); break;
 			case 'u': oopsUndo(); break;
 			case 'g': settingsWindow.downloadGcode(); break;
@@ -59,13 +59,14 @@ function initKeyboard() {
 			case 'h': previewUp(true); break;
 			case 'H': previewDown(true); break;
 			case 's': saveSketch(); break;
-			case 'L': nextDoodle(); break;
-			case 'l': prevDoodle(); break;
+			case 'L': nextSketch(); break;
+			case 'l': prevSketch(); break;
 			case '[': previewTwistLeft(); break;
 			case ']': previewTwistRight(); break;
 			case '|': resetTwist(); break;
 			case 't': showWordArtDialog(); break;
 			case 'i': showShapeDialog(); break;
+			case 'T': showScanDialog(); break;
 			
 			case ';': moveShape(-5,0); break;
 			case '\'': moveShape(5,0); break;
