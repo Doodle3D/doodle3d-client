@@ -218,6 +218,7 @@ function subsituteVariables(gcode) {
     case "makerbot_replicator2x": printerType = "r2x"; break;
     case "makerbot_thingomatic": printerType = "t6"; break;
     case "makerbot_generic": printerType = "r2"; break;
+    case "wanhao_duplicator4": printerType = "r2x"; break;
     case "_3Dison_plus": printerType = "r2"; break;
   }
   var heatedBedReplacement = (heatedbed)? "" : ";";
