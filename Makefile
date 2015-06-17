@@ -65,7 +65,8 @@ define Package/doodle3d-client/install
 	$(CP) $(PKG_BUILD_DIR)/www/settings.html $(1)/www/
 	$(CP) $(PKG_BUILD_DIR)/www/helpcontent.html $(1)/www/
 	$(CP) $(PKG_BUILD_DIR)/www/redirect.html $(1)/www/
-	
+	$(CP) $(PKG_BUILD_DIR)/www/404.html $(1)/www/
+
 	$(CP) $(PKG_BUILD_DIR)/www/css/debug.min.css $(1)/www/css/
 	$(CP) $(PKG_BUILD_DIR)/www/css/settings.min.css $(1)/www/css/
 	$(CP) $(PKG_BUILD_DIR)/www/css/styles.min.css $(1)/www/css/
