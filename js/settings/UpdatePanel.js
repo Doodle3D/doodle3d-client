@@ -314,7 +314,7 @@ function UpdatePanel() {
 		var fields = [ ts.substr(0, 4), ts.substr(4, 2), ts.substr(6, 2) ];
 		if (!fields || fields.length != 3 || fields[1] > 12) return null;
 
-		var abbrMonths = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Sep', 'Aug', 'Oct', 'Nov', 'Dec' ];
+		var abbrMonths = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 		return abbrMonths[fields[1] - 1] + " " + fields[2] + ", " + fields[0];
 	}
 
