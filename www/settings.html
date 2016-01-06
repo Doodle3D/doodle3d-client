@@ -179,11 +179,27 @@
     <input type="button" onclick="settingsWindow.downloadGcode()" name="downloadGcode" value="Download GCODE" class="button" id="downloadGcode"/>
     <input type="button" onclick="settingsWindow.downloadSvg()" name="downloadSvg" value="Download SVG" class="button" id="downloadSvg"/>
   </fieldset>
-    
+
   <fieldset id="debugPanel">
  		<legend>Debug</legend>
- 		<input type="button" onclick="settingsWindow.downloadlogs()" name="downloadlogs" value="Download logs" class="button" id="downloadlogs"
-     />
+ 		<label for="logLevel">Log level:</label>
+		<select id="logLevel" name="system.log.level" onchange="settingsWindow.logLevelChanged(this)">
+			<option value="" disabled="disabled" selected="selected">Please choose a log level</option>
+			<option value="quiet">Quiet</option>
+			<option value="error">Error</option>
+			<option value="warning">Warning</option>
+			<option value="info">Info</option>
+			<option value="verbose">Verbose</option>
+			<option value="bulk">Bulk</option>
+ 		</select><br/>
+ 		<div id="logging-restart-warning" class="warn-box">
+  			Restart the wifibox for a new log level to take effect.
+  		</div>
+  		<div id="logging-verbose-warning" class="warn-box">
+  			<em>Be careful</em>: when setting a log level higher than info, the Wifibox may quickly run out of memory, causing crashes and other unwanted behaviour.
+  		</div>
+ 		<br/>
+ 		<input type="button" onclick="settingsWindow.downloadlogs()" name="downloadlogs" value="Download logs" class="button" id="downloadlogs"/>
   </fieldset>
   
   <fieldset id="restorePanel">

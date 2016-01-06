@@ -34,7 +34,8 @@ function SettingsWindow() {
 	var _networkPanel = new NetworkPanel();
 	var _networkAPI = new NetworkAPI();
 	
-	var _restoreStateField
+	var _restoreStateField;
+	var _initialLogLevel;
 	
 	var self = this;
 
@@ -123,6 +124,7 @@ function SettingsWindow() {
 		_form.loadAllSettings(function(loadedSettings){
 			console.log("Settings:loaded settings: ",loadedSettings);
 			settings = loadedSettings;
+			_initialLogLevel = loadedSettings['system.log.level'];
 			_form.fillForm(settings);
 			$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 			if(complete) complete();
@@ -179,6 +181,23 @@ function SettingsWindow() {
 
 	this.openFileManager = function() {
 		location.href = "filemanager/"+location.search;
+	}
+
+	this.logLevelChanged = function(elem) {
+		var showHideAnimDuration = 100;
+		if (_initialLogLevel != elem.value) {
+			$('#logging-restart-warning').show(showHideAnimDuration);
+		} else {
+			$('#logging-restart-warning').hide(showHideAnimDuration);
+		}
+
+		switch (elem.value) {
+		case "info": case "verbose": case "bulk":
+			$('#logging-verbose-warning').show(showHideAnimDuration);
+			break;
+		default:
+			$('#logging-verbose-warning').hide(showHideAnimDuration);
+		}
 	}
 }
 
