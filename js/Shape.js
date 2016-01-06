@@ -25,7 +25,7 @@ function shapeMoveTo(x,y) {
   _points.push([x, y, true]);
   adjustBounds(x, y);
   adjustPreviewTransformation();
-  draw(x, y, .5);
+  draw(x, y, -1);
 }
 
 function shapeLineTo(x,y) {

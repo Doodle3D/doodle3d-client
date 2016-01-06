@@ -97,52 +97,67 @@ function initDoodleDrawing() {
  *  CANVAS DRAWING FUNCTION
  *
  * * * * * * * * * */
-function draw(_x, _y, _width) {
-	//console.log("canvasDrawing:draw");
-  //    console.log("f:draw() >> _width: " + _width);
 
-  if (prevX == 0 && prevY ==0) {
+//If _width is not specified, it is calculated from the distance between this and the previous point.
+//If _width is negative, the path is 'floating', and only drawn if the setting printer.bottomEnableTraveling is true.
+function draw(_x, _y, _width) {
+  //console.log("canvasDrawing:draw");
+  //console.log("f:draw() >> _width: " + _width);
+
+  if (prevX == 0 && prevY == 0) {
     prevX = _x;
     prevY = _y;
   }
 
   ctx.beginPath();
   ctx.moveTo(prevX, prevY);
-  ctx.lineTo(_x, _y);
-
-  if (_width != undefined) {
-    ctx.lineWidth = _width;
-  } else {
-    if (drawVariableLineWeight) {
-      var dist = Math.sqrt(Math.pow((prevX - _x), 2) + Math.pow((prevY - _y), 2));
-      if (dist < 10) {
-        lineweight += .25;
-      } else if (dist < 20) {
-        lineweight += .5;
-      } else if (dist < 30) {
-        lineweight += .75;
-      } else if (dist < 50) {
-        lineweight += 1;
-      } else if (dist < 80) {
-        lineweight += 1.5;
-      } else if (dist < 120) {
-        lineweight += 2.25;
-      } else if (dist < 170) {
-        lineweight += 3.5;
-      } else {
-        lineweight += 2;
-      }
-      lineweight = Math.min(lineweight, 30);
-      lineweight *= 0.90;
-      lineweight = Math.max(lineweight, 1.0);
+  
+  if (_width != undefined && _width < 0) {
+    if (settings['printer.bottomEnableTraveling']) {
+      ctx.moveTo(_x, _y);
     } else {
-      lineweight = 2;
+      ctx.lineTo(_x, _y);
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
     }
+  } else {
+    ctx.lineTo(_x, _y);
 
-    ctx.lineWidth = lineweight;
+    if (_width != undefined) {
+      ctx.lineWidth = _width;
+    } else {
+      if (drawVariableLineWeight) {
+        var dist = Math.sqrt(Math.pow((prevX - _x), 2) + Math.pow((prevY - _y), 2));
+        if (dist < 10) {
+          lineweight += .25;
+        } else if (dist < 20) {
+          lineweight += .5;
+        } else if (dist < 30) {
+          lineweight += .75;
+        } else if (dist < 50) {
+          lineweight += 1;
+        } else if (dist < 80) {
+          lineweight += 1.5;
+        } else if (dist < 120) {
+          lineweight += 2.25;
+        } else if (dist < 170) {
+          lineweight += 3.5;
+        } else {
+          lineweight += 2;
+        }
+        lineweight = Math.min(lineweight, 30);
+        lineweight *= 0.90;
+        lineweight = Math.max(lineweight, 1.0);
+      } else {
+        lineweight = 2;
+      }
+
+      ctx.lineWidth = lineweight;
+    }
+    ctx.lineCap = 'round';
+
+    ctx.stroke();
   }
-  ctx.lineCap = 'round';
-  ctx.stroke();
 
   prevX = _x;
   prevY = _y;
@@ -202,7 +217,7 @@ function redrawDoodle(recalcBoundsAndTransforms) {
   for (var i = 0; i < _points.length; i++) {
     //      console.log("     drawing points " + _points[i]);
     if (_points[i][2] == true) {
-      draw(_points[i][0], _points[i][1], 0.5);
+      draw(_points[i][0], _points[i][1], -1);
     } else {
       draw(_points[i][0], _points[i][1]);
     }
@@ -301,7 +316,7 @@ function onCanvasMouseDown(e) {
   _points.push([x, y, true]);
   adjustBounds(x, y);
   adjustPreviewTransformation();
-  draw(x, y, 0.5);
+  draw(x, y, -1);
 }
 
 var prevPoint = {x:-1, y:-1};
@@ -401,7 +416,7 @@ function onCanvasTouchDown(e) {
   _points.push([x, y, true]);
   adjustBounds(x, y);
   adjustPreviewTransformation();
-  draw(x, y, .5);
+  draw(x, y, -1);
 
   movementCounter = 0;
 
@@ -489,8 +504,3 @@ function onCanvasTouchEnd(e) {
 function prevent(e) {
   e.preventDefault();
 }
-
-
-
-
-

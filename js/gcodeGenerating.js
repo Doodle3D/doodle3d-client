@@ -20,6 +20,7 @@ function generate_gcode() {
   var bottomSpeed 			      = settings["printer.bottomLayerSpeed"];
   var firstLayerSlow			  = settings["printer.firstLayerSlow"];
   var bottomFlowRate			  = settings["printer.bottomFlowRate"];
+  var bottomEnableTraveling		  = settings["printer.bottomEnableTraveling"];
   var travelSpeed 			      = settings["printer.travelSpeed"]
   var filamentThickness       = settings["printer.filamentThickness"];
   var wallThickness 		      = settings["printer.wallThickness"];
@@ -159,8 +160,10 @@ function generate_gcode() {
         var isTraveling = !isLoop && i==0;
         var doRetract = retractionEnabled && prev.distance(to) > retractionminDistance;
 
+        //Always travel to first point, then optionally disable traveling for first two layers and use settings for remainder of print.
         var firstPointEver = (layer == 0 && i == 0 && j == 0);
-        if (firstPointEver || layer > 2 && enableTraveling && isTraveling) { //always travel to first point, then disable traveling for first two layers and use settings for remainder of print
+        var travelingAllowed = firstPointEver || bottomEnableTraveling || layer > 2;
+        if (travelingAllowed && enableTraveling && isTraveling) {
           if (!firstPointEver && doRetract) gcode.push("G0 E" + (extruder - retractionamount).toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); //retract
           gcode.push("G0 X" + to.x.toFixed(3) + " Y" + to.y.toFixed(3) + " Z" + z.toFixed(3) + " F" + (travelSpeed * 60).toFixed(3));
           if (!firstPointEver && doRetract) gcode.push("G0 E" + extruder.toFixed(3) + " F" + (retractionspeed * 60).toFixed(3)); // return to normal

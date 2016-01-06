@@ -116,6 +116,10 @@ function SettingsWindow() {
 				settingsPopup.close();
 				self.signin();
 			}
+			
+			//FIXME: instead of this rather ugly call, implement events for changes to settings so we can keep code decoupled
+			redrawDoodle(false);
+      
 			_btnOK.removeAttr("disabled");
 		});
 	};

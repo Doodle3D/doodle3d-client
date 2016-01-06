@@ -116,7 +116,7 @@ function loadFromSvg(svgData) {
 				adjustBounds(x, y);
 				adjustPreviewTransformation();
 
-				if (isMove) draw(x, y, .5);
+				if (isMove) draw(x, y, -1);
 				else draw(x, y);
 			}
 			p++;
