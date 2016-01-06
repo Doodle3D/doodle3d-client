@@ -35,7 +35,7 @@ function SettingsWindow() {
 	var _networkAPI = new NetworkAPI();
 	
 	var _restoreStateField;
-	var _initialLogLevel;
+	var _initialLogLevel = undefined;
 	
 	var self = this;
 
@@ -124,7 +124,12 @@ function SettingsWindow() {
 		_form.loadAllSettings(function(loadedSettings){
 			console.log("Settings:loaded settings: ",loadedSettings);
 			settings = loadedSettings;
-			_initialLogLevel = loadedSettings['system.log.level'];
+			
+			//only set the initial level once, to make behaviour of restart warning as correctly as possible
+			if (_initialLogLevel == undefined)
+				_initialLogLevel = loadedSettings['system.log.level'];
+			updateLogLevelWarningsVisibility();
+			
 			_form.fillForm(settings);
 			$(document).trigger(SettingsWindow.SETTINGS_LOADED);
 			if(complete) complete();
@@ -183,16 +188,24 @@ function SettingsWindow() {
 		location.href = "filemanager/"+location.search;
 	}
 
-	this.logLevelChanged = function(elem) {
+	this.logLevelChanged = function() {
+		updateLogLevelWarningsVisibility();
+	}
+
+
+	/***** LOCAL FUNCTIONS *****/
+
+	function updateLogLevelWarningsVisibility() {
 		var showHideAnimDuration = 100;
-		if (_initialLogLevel != elem.value) {
+		newLevel = $('#logLevel').val();
+		if (_initialLogLevel != newLevel) {
 			$('#logging-restart-warning').show(showHideAnimDuration);
 		} else {
 			$('#logging-restart-warning').hide(showHideAnimDuration);
 		}
 
-		switch (elem.value) {
-		case "info": case "verbose": case "bulk":
+		switch (newLevel) {
+		case "verbose": case "bulk":
 			$('#logging-verbose-warning').show(showHideAnimDuration);
 			break;
 		default:

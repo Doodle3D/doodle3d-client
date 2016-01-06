@@ -183,7 +183,7 @@
   <fieldset id="debugPanel">
  		<legend>Debug</legend>
  		<label for="logLevel">Log level:</label>
-		<select id="logLevel" name="system.log.level" onchange="settingsWindow.logLevelChanged(this)">
+		<select id="logLevel" name="system.log.level" onchange="settingsWindow.logLevelChanged()">
 			<option value="" disabled="disabled" selected="selected">Please choose a log level</option>
 			<option value="quiet">Quiet</option>
 			<option value="error">Error</option>
@@ -193,7 +193,7 @@
 			<option value="bulk">Bulk</option>
  		</select><br/>
  		<div id="logging-restart-warning" class="warn-box">
-  			Restart the wifibox for a new log level to take effect.
+  			Restart the wifibox for the new log level to take effect.
   		</div>
   		<div id="logging-verbose-warning" class="warn-box">
   			<em>Be careful</em>: when setting a log level higher than info, the Wifibox may quickly run out of memory, causing crashes and other unwanted behaviour.
