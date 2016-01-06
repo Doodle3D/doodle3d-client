@@ -76,6 +76,10 @@ form fieldset.collapsed legend {
 		center left;
 }
 
+#debugPanel label {
+	min-width: 59px;
+}
+
 form label {
 	min-width: 150px;
 	display: block;
