@@ -111,51 +111,50 @@ function draw(_x, _y, _width) {
 
   ctx.beginPath();
   ctx.moveTo(prevX, prevY);
-  
+
+  var lineWeight = null;
   if (_width != undefined && _width < 0) {
     if (settings['printer.bottomEnableTraveling']) {
       ctx.moveTo(_x, _y);
     } else {
-      ctx.lineTo(_x, _y);
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
+      lineWeight = 0.5;
     }
   } else {
-    ctx.lineTo(_x, _y);
-
     if (_width != undefined) {
-      ctx.lineWidth = _width;
+      lineWeight = _width;
     } else {
       if (drawVariableLineWeight) {
         var dist = Math.sqrt(Math.pow((prevX - _x), 2) + Math.pow((prevY - _y), 2));
         if (dist < 10) {
-          lineweight += .25;
+          lineWeight += .25;
         } else if (dist < 20) {
-          lineweight += .5;
+          lineWeight += .5;
         } else if (dist < 30) {
-          lineweight += .75;
+          lineWeight += .75;
         } else if (dist < 50) {
-          lineweight += 1;
+          lineWeight += 1;
         } else if (dist < 80) {
-          lineweight += 1.5;
+          lineWeight += 1.5;
         } else if (dist < 120) {
-          lineweight += 2.25;
+          lineWeight += 2.25;
         } else if (dist < 170) {
-          lineweight += 3.5;
+          lineWeight += 3.5;
         } else {
-          lineweight += 2;
+          lineWeight += 2;
         }
-        lineweight = Math.min(lineweight, 30);
-        lineweight *= 0.90;
-        lineweight = Math.max(lineweight, 1.0);
+        lineWeight = Math.min(lineWeight, 30);
+        lineWeight *= 0.90;
+        lineWeight = Math.max(lineWeight, 1.0);
       } else {
-        lineweight = 2;
+        lineWeight = 2;
       }
-
-      ctx.lineWidth = lineweight;
     }
-    ctx.lineCap = 'round';
+  }
 
+  if (lineWeight != null) {
+    ctx.lineCap = 'round';
+    ctx.lineWidth = lineWeight;
+    ctx.lineTo(_x, _y);
     ctx.stroke();
   }
 
@@ -338,18 +337,9 @@ function onCanvasMouseMove(e) {
     y = e.layerY;
   }
 
-  if (prevPoint.x != -1 || prevPoint.y != -1) {
-    var dist = Math.sqrt(((prevPoint.x - x) * (prevPoint.x - x)) + ((prevPoint.y - y) * (prevPoint.y - y)));
-    if (dist > 5) { // replace by setting: doodle3d.simplify.minDistance
-      _points.push([x, y, false]);
-      adjustBounds(x, y);
-      adjustPreviewTransformation();
-      draw(x, y);
-      prevPoint.x = x;
-      prevPoint.y = y;
-    }
-  } else {
-    // this is called once, every time you start to draw a line
+  var prevPresent = prevPoint.x != -1 || prevPoint.y != -1;
+  var dist = prevPresent ? Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2)) : undefined;
+  if (!prevPresent || dist > 5) { // replace dist check by setting: doodle3d.simplify.minDistance
     _points.push([x, y, false]);
     adjustBounds(x, y);
     adjustPreviewTransformation();
@@ -357,7 +347,7 @@ function onCanvasMouseMove(e) {
     prevPoint.x = x;
     prevPoint.y = y;
   }
-
+  
   // DEBUG
 //  $("#textdump").text("");
 //  $("#textdump").append("doodlebounds:" + doodleBounds + "\n");
@@ -439,19 +429,11 @@ function onCanvasTouchMove(e) {
 
   //console.log("f:onCanvasTouchMove >> x,y = "+x+","+y+" , e: " , e);
 
-  if (prevPoint.x != -1 || prevPoint.y != -1) {
-    var dist = Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2));
-    if (dist > 5) {
-      _points.push([x, y, false]);
-      adjustBounds(x, y)
-      adjustPreviewTransformation();
-      draw(x, y);
-      prevPoint.x = x;
-      prevPoint.y = y;
-    }
-  } else {
+  var prevPresent = prevPoint.x != -1 || prevPoint.y != -1;
+  var dist = prevPresent ? Math.sqrt(Math.pow((prevPoint.x - x), 2) + Math.pow((prevPoint.y - y), 2)) : undefined;
+  if (!prevPresent || dist > 5) { // replace dist check by setting: doodle3d.simplify.minDistance
     _points.push([x, y, false]);
-    adjustBounds(x, y)
+    adjustBounds(x, y);
     adjustPreviewTransformation();
     draw(x, y);
     prevPoint.x = x;
