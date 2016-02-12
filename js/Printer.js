@@ -37,6 +37,8 @@ function Printer() {
 	this.currentLine 		= 0;
 	this.totalLines			= 0;
 	this.bufferedLines		= 0;
+	this.bufferSize = 0;
+	this.maxBufferSize = 0;
 	this.state				= Printer.UNKNOWN_STATE;
 	this.hasControl			= true;	// whether this client has control access
 
@@ -56,6 +58,10 @@ function Printer() {
 	this.retryStopDelay;					// retry setTimout instance
 	this.retryPreheatDelay;					// retry setTimout instance
 
+	//after buffer full message has been received, wait until the buffer load is below this ratio before sending new data
+	Printer.GCODE_BUFFER_WAIT_LOAD_RATIO = 0.75;
+	Printer.BUFFER_SPACE_WAIT_TIMEOUT = 30000;
+	
 	Printer.MAX_GCODE_SIZE = 10;			// max size of gcode in MB's (estimation)
 
 	this.stateOverruled = false;
@@ -149,6 +155,9 @@ function Printer() {
 		return~-encodeURI(s).split(/%..|./).length;
 	}
 
+	 /* Note: the API supports numbered chunks as a way to ensure they are received in the correct order.
+   * Since no problems regarding that seem to exist anymore, this code has not been adapted to use this facility.
+   */
 	this.sendPrintPart = function(sendIndex,sendLength) {
 		console.log("Printer:sendPrintPart sendIndex: " + sendIndex + "/" + this.gcode.length + ", sendLength: " + sendLength);
 
@@ -156,7 +165,7 @@ function Printer() {
 		var sendPercentage = Math.round(sendIndex/this.gcode.length*100);
 		message.set("Sending doodle to printer: "+sendPercentage+"%",Message.NOTICE,false,true);
 
-		var firstOne = (sendIndex == 0)? true : false;
+		var firstOne = (sendIndex == 0) ? true : false;
 		var start = firstOne; // start printing right away
 
 		var completed = false;
@@ -178,7 +187,7 @@ function Printer() {
 				dataType: 'json',
 				timeout: this.sendPrintPartTimeoutTime,
 				success: function(data){
-					console.log("Printer:sendPrintPart response: ",data);
+					//console.log("Printer:sendPrintPart response: ",data);
 
 					if(data.status == "success") {
 						if (completed) {
@@ -197,8 +206,18 @@ function Printer() {
 								self.sendPrintPart(sendIndex + sendLength, sendLength);
 							}
 						}
+					} else if (data.status == "fail") {
+					  if (data.data.status == "buffer_full") {
+					    //this will wait in a setTimeout loop until enough room is available and then call sendPrintPart again.
+					    self.waitForBufferSpace(sendIndex, sendLength);
+					  } else {
+					    //Note: apart from logging an error here, we ignore these errors as they all have to do
+					    //with chunk sequencing, which we do not use, except for the source parameter which is set internally.
+					    console.error("Printer:sendPrintPart: unexpected failure response for API endpoint printer/print (" + data.data.status + ")");
+					  }
 					}
-					// after we know the first gcode packed has bin received or failed
+
+					// after we know the first gcode part has been received or failed
 					// (and the driver had time to update the printer.state)
 					// we start checking the status again
 					if(sendIndex == 0) {
@@ -221,6 +240,33 @@ function Printer() {
 		} else {
 			console.log ("Printer >> f:sendPrintPart() >> communicateWithWifibox is false, so not executing this function");
 		}
+	}
+	
+	/*
+	 * Called by sendPrintPart when a buffer_full fail response is received.
+	 * This function keeps calling itself until the GCodeBuffer's load ratio
+	 * drops below a predefined value and then calls sendPrintPart again.
+	 */
+	this.waitForBufferSpace = function(sendIndex,sendLength) {
+    var fillRatio = this.bufferSize / this.maxBufferSize;
+    var self = this;
+
+    //console.log("buffer fill state: " + self.bufferSize + "/" + self.maxBufferSize + " (" + fillPercent + "%)");
+
+    if (fillRatio >= Printer.GCODE_BUFFER_WAIT_LOAD_RATIO) {
+      var fillPercent = (fillRatio * 100).toFixed(2);
+      console.log("Printer:waitForBufferSpace: waiting until gcode buffer load ratio is below " +
+          (Printer.GCODE_BUFFER_WAIT_LOAD_RATIO * 100) + "% (current: " + fillPercent + "% of " +
+          (self.maxBufferSize / 1024) + "KiB)");
+      setTimeout(function() { self.waitForBufferSpace(sendIndex, sendLength); }, Printer.BUFFER_SPACE_WAIT_TIMEOUT);
+    } else {
+      if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
+        console.log("Printer:waitForBufferSpace: load ratio dropped below " + (Printer.GCODE_BUFFER_WAIT_LOAD_RATIO * 100) + "%, calling sendPrintPart...");
+        self.sendPrintPart(sendIndex, sendLength);
+      } else {
+        console.log("Printer:waitForBufferSpace: load ratio dropped far enough but printer state is not printing or buffering anymore, not resuming.");
+      }
+    }
 	}
 
 	this.stop = function() {
@@ -325,7 +371,9 @@ function Printer() {
 			// progress
 			self.currentLine = data.current_line;
 			self.totalLines = data.total_lines;
-			self.bufferedLines = data.buffered_lines
+			self.bufferedLines = data.buffered_lines;
+			self.bufferSize = data.buffer_size;
+			self.maxBufferSize = data.max_buffer_size;
 
 			// access
 			self.hasControl = data.has_control;

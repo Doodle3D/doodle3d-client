@@ -25,7 +25,7 @@ function Message() {
     this.$element = $element;
  	}
 	this.set = function(contents,mode,autoHide,disableEffect) {
-		console.log("Message:set: ",contents,mode,autoHide,disableEffect);
+		//console.log("Message:set: ",contents,mode,autoHide,disableEffect);
 		if(disableEffect) {
 			self.fill(contents,mode,autoHide)
 		} else{
