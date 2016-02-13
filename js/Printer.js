@@ -177,7 +177,7 @@ function Printer() {
 		}
 		var gcodePart = this.gcode.slice(sendIndex, sendIndex+sendLength);
 
-		var postData = { gcode: gcodePart.join("\n"), first: firstOne, start: start};
+		var postData = { gcode: gcodePart.join("\n"), total_lines: this.gcode.length, first: firstOne, start: start};
 		var self = this;
 		if (communicateWithWifibox) {
 			$.ajax({
