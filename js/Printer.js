@@ -174,16 +174,6 @@ function Printer() {
 			completed = true;
 		}
 
-		
-		/* inform user what's going on */
-
-		var lessThanMaxText = sendLength < Printer.MAX_LINES_PER_POST ? " (less than max of " + Printer.MAX_LINES_PER_POST + ")" : "";
-		console.log("Printer:sendPrintPart: sendIndex=" + sendIndex + "/" + this.gcode.length +
-				", sendLength=" + sendLength + lessThanMaxText);
-
-		var sendPercentage = Math.round(sendIndex / this.gcode.length * 100);
-		message.set("Sending doodle to printer: " + sendPercentage + "%", Message.NOTICE, false, true);
-
 
 		/* prepare post data */
 
@@ -196,6 +186,17 @@ function Printer() {
 				clear: firstOne, start: start,
 				seq_number: seqNum, seq_total: this.gcodeNumChunks
 		};
+
+		
+		/* inform user what's going on */
+
+		var lessThanMaxText = completed ? " (last one, max=" + Printer.MAX_LINES_PER_POST + ")" : "";
+		console.log("Printer:sendPrintPart: sendIndex=" + sendIndex + "/" + this.gcode.length +
+				", sendLength=" + sendLength + lessThanMaxText +
+				", sequence numbers: " + seqNum + "/" + this.gcodeNumChunks);
+
+		var sendPercentage = Math.round(sendIndex / this.gcode.length * 100);
+		message.set("Sending doodle to printer: " + sendPercentage + "%", Message.NOTICE, false, true);
 
 		
 		/* send data */
