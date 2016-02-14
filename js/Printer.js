@@ -166,25 +166,33 @@ function Printer() {
    * Since no problems regarding that seem to exist anymore, this code has not been adapted to use this facility.
    */
 	this.sendPrintPart = function(sendIndex,sendLength) {
-		console.log("Printer:sendPrintPart sendIndex: " + sendIndex + "/" + this.gcode.length + ", sendLength: " + sendLength);
-
-
-		var sendPercentage = Math.round(sendIndex/this.gcode.length*100);
-		message.set("Sending doodle to printer: "+sendPercentage+"%",Message.NOTICE,false,true);
-
-		var firstOne = (sendIndex == 0) ? true : false;
-		var start = firstOne; // start printing right away
-
 		var completed = false;
 		if (this.gcode.length < (sendIndex + sendLength)) {
-			console.log("  sending less than max sendLength (and last)");
 			sendLength = this.gcode.length - sendIndex;
-			//lastOne = true;
 			completed = true;
 		}
-		var gcodePart = this.gcode.slice(sendIndex, sendIndex+sendLength);
 
+		
+		/* inform user what's going on */
+
+		var lessThanMaxText = sendLength < Printer.MAX_LINES_PER_POST ? " (less than max of " + Printer.MAX_LINES_PER_POST + ")" : "";
+		console.log("Printer:sendPrintPart: sendIndex=" + sendIndex + "/" + this.gcode.length +
+				", sendLength=" + sendLength + lessThanMaxText);
+
+		var sendPercentage = Math.round(sendIndex / this.gcode.length * 100);
+		message.set("Sending doodle to printer: " + sendPercentage + "%", Message.NOTICE, false, true);
+
+
+		/* prepare post data */
+
+		var gcodePart = this.gcode.slice(sendIndex, sendIndex + sendLength);
+		var firstOne = (sendIndex == 0) ? true : false;
+		var start = firstOne; // start printing right away
 		var postData = { gcode: gcodePart.join("\n"), total_lines: this.gcode.length, clear: firstOne, start: start};
+
+		
+		/* send data */
+		
 		var self = this;
 		if (communicateWithWifibox) {
 			$.ajax({
