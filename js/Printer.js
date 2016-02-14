@@ -63,7 +63,8 @@ function Printer() {
 	this.timeoutTime = 3000;
 	this.sendPrintPartTimeoutTime = 5000;
 
-	this.gcode; 							// gcode to be printed
+	this.gcode = []; // gcode to be printed
+	this.gcodeNumChunks = 0; //number of chunks to be sent (used for sequence numbering)
 
 	this.retryDelay = 2000; 				// retry setTimout delay
 	this.retrySendPrintPartDelay; 			// retry setTimout instance
@@ -133,6 +134,7 @@ function Printer() {
 
 		this.sendIndex = 0;
 		this.gcode = gcode;
+		this.gcodeNumChunks = Math.ceil(this.gcode.length / Printer.MAX_LINES_PER_POST);
 
 		//console.log("  gcode[20]: ",gcode[20]);
 		var gcodeLineSize = this.byteSize(gcode[20]);
@@ -188,7 +190,12 @@ function Printer() {
 		var gcodePart = this.gcode.slice(sendIndex, sendIndex + sendLength);
 		var firstOne = (sendIndex == 0) ? true : false;
 		var start = firstOne; // start printing right away
-		var postData = { gcode: gcodePart.join("\n"), total_lines: this.gcode.length, clear: firstOne, start: start};
+		var seqNum = Math.floor(sendIndex / Printer.MAX_LINES_PER_POST);
+		var postData = {
+				gcode: gcodePart.join("\n"), total_lines: this.gcode.length,
+				clear: firstOne, start: start,
+				seq_number: seqNum, seq_total: this.gcodeNumChunks
+		};
 
 		
 		/* send data */
@@ -206,9 +213,9 @@ function Printer() {
 
 					if(data.status == "success") {
 						if (completed) {
-							console.log("Printer:sendPrintPart:gcode sending completed");
+							console.log("Printer:sendPrintPart: gcode sending completed");
 							this.gcode = [];
-							btnStop.css("display","block"); // hack
+							this.gcodeNumChunks = 0;
 							self.removeLeaveWarning();
 							message.set("Doodle has been sent to printer...",Message.INFO,true);
 							//self.targetTemperature = settings["printer.temperature"]; // slight hack
@@ -229,6 +236,10 @@ function Printer() {
 					    //Note: apart from logging an error here, we ignore these errors as they all have to do
 					    //with chunk sequencing, which we do not use, except for the source parameter which is set internally.
 					    console.error("Printer:sendPrintPart: unexpected failure response for API endpoint printer/print (" + data.data.status + ")");
+					    //sequence errors should not occur, except perhaps when 'stop' was clicked while still sending (https://github.com/Doodle3D/doodle3d-client/issues/226).
+					    if (self.state != Printer.STOPPING_STATE) {
+					    	message.set("Unexpected error sending doodle to printer (" + data.data.status + "), please retry", Message.ERROR, false, true);
+					    }
 					  }
 					}
 
