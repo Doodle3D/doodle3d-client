@@ -19,6 +19,7 @@ function setPrintprogress(val) {
 //*/
 
 function Printer() {
+  /* CONSTANTS */
 
 	Printer.WIFIBOX_DISCONNECTED_STATE	= "wifibox disconnected";
 	Printer.UNKNOWN_STATE				= "unknown";				// happens when a printer is connection but there isn't communication yet
@@ -31,6 +32,19 @@ function Printer() {
 	Printer.TOUR_STATE					= "tour";					// when in joyride mode
 
 	Printer.ON_BEFORE_UNLOAD_MESSAGE = "You're doodle is still being sent to the printer, leaving will result in a incomplete 3D print";
+
+  //after buffer full message has been received, wait until the buffer load is below this ratio before sending new data
+  Printer.GCODE_BUFFER_WAIT_LOAD_RATIO = 0.75;
+  Printer.BUFFER_SPACE_WAIT_TIMEOUT = 30000; // how often to recheck buffer load
+  
+  Printer.MAX_LINES_PER_POST = 500; // max amount of gcode lines per post (limited because WiFi box can't handle too much)
+  Printer.MAX_GCODE_SIZE = 10; // max size of gcode in MB's (estimation)
+
+  // Events
+  Printer.UPDATE = "update";
+
+  
+  /* MEMBER VARIABLES */
 
 	this.temperature 		= 0;
 	this.targetTemperature 	= 0;
@@ -50,7 +64,6 @@ function Printer() {
 	this.sendPrintPartTimeoutTime = 5000;
 
 	this.gcode; 							// gcode to be printed
-	this.sendLength = 500; 					// max amount of gcode lines per post (limited because WiFi box can't handle too much)
 
 	this.retryDelay = 2000; 				// retry setTimout delay
 	this.retrySendPrintPartDelay; 			// retry setTimout instance
@@ -58,16 +71,10 @@ function Printer() {
 	this.retryStopDelay;					// retry setTimout instance
 	this.retryPreheatDelay;					// retry setTimout instance
 
-	//after buffer full message has been received, wait until the buffer load is below this ratio before sending new data
-	Printer.GCODE_BUFFER_WAIT_LOAD_RATIO = 0.75;
-	Printer.BUFFER_SPACE_WAIT_TIMEOUT = 30000;
-	
-	Printer.MAX_GCODE_SIZE = 10;			// max size of gcode in MB's (estimation)
-
 	this.stateOverruled = false;
 
-	// Events
-	Printer.UPDATE = "update";
+	
+	/* FUNCTIONS */
 
 	var self = this;
 
@@ -148,7 +155,7 @@ function Printer() {
 
 		//this.targetTemperature = settings["printer.temperature"]; // slight hack
 
-		this.sendPrintPart(this.sendIndex, this.sendLength);
+		this.sendPrintPart(this.sendIndex, Printer.MAX_LINES_PER_POST);
 	}
 
 	this.byteSize = function(s){
