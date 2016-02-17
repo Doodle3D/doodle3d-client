@@ -164,9 +164,6 @@ function Printer() {
 		return~-encodeURI(s).split(/%..|./).length;
 	}
 
-	 /* Note: the API supports numbered chunks as a way to ensure they are received in the correct order.
-   * Since no problems regarding that seem to exist anymore, this code has not been adapted to use this facility.
-   */
 	this.sendPrintPart = function(sendIndex,sendLength) {
 		var completed = false;
 		if (this.gcode.length < (sendIndex + sendLength)) {
