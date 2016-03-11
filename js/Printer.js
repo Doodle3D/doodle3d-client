@@ -228,6 +228,7 @@ function Printer() {
 						}
 					} else if (data.status == "fail") {
 					  if (data.data.status == "buffer_full") {
+					  	console.log("Printer:sendPrintPart: print server reported buffer full, pausing data transmission");
 					    //this will wait in a setTimeout loop until enough room is available and then call sendPrintPart again.
 					    self.waitForBufferSpace(sendIndex, sendLength);
 					  } else {
@@ -248,8 +249,8 @@ function Printer() {
 						self.startStatusCheckInterval();
 					}
 				}
-			}).fail(function() {
-				console.log("Printer:sendPrintPart: failed");
+			}).fail(function(jqXHr, textStatus, errorThrown) {
+				console.log("Printer:sendPrintPart: failed (AJAX status: '" + textStatus + "') AJAX exception (if any):", errorThrown);
 				clearTimeout(self.retrySendPrintPartDelay);
 				self.retrySendPrintPartDelay = setTimeout(function() {
 					console.log("request printer:sendPrintPart failed retry");
