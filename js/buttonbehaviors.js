@@ -356,7 +356,7 @@ function setState(newState,newHasControl) {
 
 	prevState = state;
 
-	console.log("setState: ",prevState," > ",newState," ( ",newHasControl,")");
+	console.log("setState: " + prevState + " > " + newState + " ( " + newHasControl + ")");
 	setDebugText("State: "+newState);
 
 	// print button

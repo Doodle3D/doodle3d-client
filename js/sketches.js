@@ -41,7 +41,7 @@ function setSketchModified(_isModified) {
 }
 
 function updateSketchButtonStates() {
-	console.log('sketch: isModified',isModified,'curSketch',curSketch,'sketches.length',sketches.length);
+	console.log('sketch: isModified' + isModified + 'curSketch' + curSketch + 'sketches.length' + sketches.length);
 
 	if (isModified) {
 		btnSave.enable();

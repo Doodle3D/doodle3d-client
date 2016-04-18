@@ -204,7 +204,7 @@ function UpdatePanel() {
 	this.setState = function(newState,refresh) {
 		//console.log("UpdatePanel:setState");
 		if(!refresh && this.state == newState) return;
-		console.log("UpdatePanel:setState: ",this.state," > ",newState,"(",this.stateText,") (in Access Point Mode: ",_inAccessPointMode,") (newestVersion: ",self.newestVersion,") (refresh: ",refresh,")");
+		console.log("UpdatePanel:setState: " + this.state + " > " + newState + "(" + this.stateText + ") (in Access Point Mode: " + _inAccessPointMode + ") (newestVersion: " + self.newestVersion + ") (refresh: " + refresh + ")");
 		this.state = newState;
 
 		// should personal sketches and settings be retained over update?
