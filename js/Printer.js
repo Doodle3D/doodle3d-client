@@ -37,6 +37,9 @@ function Printer() {
   Printer.GCODE_BUFFER_WAIT_LOAD_RATIO = 0.75;
   Printer.BUFFER_SPACE_WAIT_TIMEOUT = 30000; // how often to recheck buffer load
   
+  //time to wait when wifibox connection is lost while printing
+  Printer.DISCONNECTED_RETRY_DELAY = 5000;
+  
   Printer.MAX_LINES_PER_POST = 500; // max amount of gcode lines per post (limited because WiFi box can't handle too much)
   Printer.MAX_GCODE_SIZE = 10; // max size of gcode in MB's (estimation)
 
@@ -207,7 +210,7 @@ function Printer() {
 				dataType: 'json',
 				timeout: this.sendPrintPartTimeoutTime,
 				success: function(data){
-					//console.log("Printer:sendPrintPart response: ",data);
+					//console.log("Printer:sendPrintPart success response: ", data);
 
 					if(data.status == "success") {
 						if (completed) {
@@ -224,6 +227,13 @@ function Printer() {
 							if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
 								//console.log("Printer:sendPrintPart:sending next part");
 								self.sendPrintPart(sendIndex + sendLength, sendLength);
+							} else if (Printer.WIFIBOX_DISCONNECTED_STATE) {
+								console.warn("Printer:sendPrintPart: wifibox connection lost while printing, retrying in " + (Printer.DISCONNECTED_RETRY_DELAY / 1000) + " seconds");
+								clearTimeout(self.retrySendPrintPartDelay);
+								self.retrySendPrintPartDelay = setTimeout(function() {
+									console.log("Printer:sendPrintPart: retrying after wifibox disconnect was detected");
+									self.sendPrintPart(sendIndex, sendLength);
+								}, Printer.DISCONNECTED_RETRY_DELAY);
 							}
 						}
 					} else if (data.status == "fail") {
@@ -231,10 +241,12 @@ function Printer() {
 					  	console.log("Printer:sendPrintPart: print server reported buffer full, pausing data transmission");
 					    //this will wait in a setTimeout loop until enough room is available and then call sendPrintPart again.
 					    self.waitForBufferSpace(sendIndex, sendLength);
+					  } else if (data.data.status == "seq_num_mismatch" && data.data.seq_number == seqNum) {
+				  		console.warn("Printer:sendPrintPart: received sequence error, server is one chunk ahead. Proceeding with next chunk...");
+				  		self.sendPrintPart(sendIndex + sendLength, sendLength);
 					  } else {
-					    //Note: apart from logging an error here, we ignore these errors as they all have to do
-					    //with chunk sequencing, which we do not use, except for the source parameter which is set internally.
-					    console.error("Printer:sendPrintPart: unexpected failure response for API endpoint printer/print (" + data.data.status + ")");
+					    console.error("Printer:sendPrintPart: unexpected failure response for API endpoint printer/print (" +
+					    		data.data.status + ", current server seq. info: " + data.data.seq_number + "/" + data.data.seq_total + ")");
 					    //sequence errors should not occur, except perhaps when 'stop' was clicked while still sending (https://github.com/Doodle3D/doodle3d-client/issues/226).
 					    if (self.state != Printer.STOPPING_STATE) {
 					    	message.set("Unexpected error sending doodle to printer (" + data.data.status + "), please retry", Message.ERROR, false, true);
@@ -250,12 +262,13 @@ function Printer() {
 					}
 				}
 			}).fail(function(jqXHr, textStatus, errorThrown) {
-				console.log("Printer:sendPrintPart: failed (AJAX status: '" + textStatus + "') AJAX exception (if any):", errorThrown);
+				console.error("Printer:sendPrintPart: failed (AJAX status: '" + textStatus + "') AJAX exception (if any):", errorThrown);
+				console.warn("Printer:sendPrintPart: retrying in " + (Printer.DISCONNECTED_RETRY_DELAY / 1000) + " seconds");
 				clearTimeout(self.retrySendPrintPartDelay);
 				self.retrySendPrintPartDelay = setTimeout(function() {
-					console.log("request printer:sendPrintPart failed retry");
+					console.log("Printer:sendPrintPart: retrying after AJAX failure");
 					self.sendPrintPart(sendIndex, sendLength)
-				},self.retryDelay); // retry after delay
+				}, Printer.DISCONNECTED_RETRY_DELAY);
 
 				// after we know the gcode packed has bin received or failed
 				// (and the driver had time to update the printer.state)
