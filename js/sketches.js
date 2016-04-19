@@ -41,7 +41,7 @@ function setSketchModified(_isModified) {
 }
 
 function updateSketchButtonStates() {
-	console.log('sketch: isModified' + isModified + 'curSketch' + curSketch + 'sketches.length' + sketches.length);
+	console.log('sketch: isModified: ' + isModified + ', curSketch: ' + curSketch + ', sketches.length: ' + sketches.length);
 
 	if (isModified) {
 		btnSave.enable();
@@ -72,7 +72,7 @@ function loadSketch(_curSketch) {
 
 	var id = sketches[curSketch];
 
-	console.log('sketch: loadSketch curSketch',curSketch,'id',id);
+	console.log('sketch: loadSketch curSketch:' + curSketch + ', id: ' + id);
 
 	$.get(wifiboxURL + "/sketch", {id:id}, function(response) {
 		if (response.status=='success') {
