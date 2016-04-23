@@ -34,7 +34,8 @@ var POPUP_SHOW_DURATION = 175;
 var BUTTON_GROUP_SHOW_DURATION = 80;
 
 $(function() {
-  console.log("ready");
+  console.log("Doodle3D client ready");
+  console.log("Build information - <%= build_info %>)");
   
   if (getURLParameter("d") != "null") debugMode = (getURLParameter("d") == "1");
   if (getURLParameter("p") != "null") sendPrintCommands = (getURLParameter("p") == "1");

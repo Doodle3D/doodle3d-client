@@ -9,7 +9,7 @@
   "author": "Peter Uithoven, Adriaan Wormgoor, Rick Companje, Wouter Reckman",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.5",
     "grunt-cli": "~0.1.9",
     "grunt-contrib-less": "~0.7.0",
     "grunt-contrib-watch": "~0.5.3",
@@ -17,6 +17,8 @@
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-autoprefixer": "~0.4.0",
     "grunt-contrib-cssmin": "~0.6.2",
-    "grunt-contrib-concat": "~0.3.0"
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-gitinfo": "~0.1.7",
+    "grunt-template": "~0.2.3"
   }
 }

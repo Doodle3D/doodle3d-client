@@ -10,6 +10,31 @@ module.exports = function(grunt) {
       '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+    gitinfo: {
+    	options: {},
+      commands: { 'tag': ['tag', '--points-at', 'HEAD'] }
+    },
+    template: {
+    	'add_build_info': {
+    		options: {
+    			data: function() {
+    				grunt.task.requires('gitinfo');
+    				var gi = grunt.config('gitinfo');
+    				var lbc = gi.local.branch.current;
+
+    				var tag = (gi.tag == '') ? 'no_tag' : gi.tag;
+    				var commitMsg = lbc.lastCommitMessage.slice(1, -1).split('\n')[0].replace(/"/g, '\\\"');
+
+    				var buildInfo = lbc.shortSHA + "/" + lbc.name + "/" + tag +
+    						" (" + lbc.lastCommitTime.slice(1, -1) + "; \'" + commitMsg + "'";
+    				return { 'build_info': buildInfo };
+    			}
+    		},
+    		files: {
+    			'js/main.js.out': ['js/main.js']
+    		}
+    	}
+    },
     concat: {
       options: {
 //         separator: ';'
@@ -22,7 +47,8 @@ module.exports = function(grunt) {
           'js/*.js',
           // make sure we put main.js last
           '!js/main.js',
-          'js/main.js',         ],
+          'js/main.js.out'
+        ],
         dest: 'www/js/<%= pkg.name %>.js'
       }
     },
@@ -129,6 +155,8 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-gitinfo');
+  grunt.loadNpmTasks('grunt-template');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -139,6 +167,8 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', [
+    'gitinfo',
+    'template',
     'less',
     'autoprefixer',
     'cssmin',
