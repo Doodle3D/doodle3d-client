@@ -43,11 +43,14 @@ define Build/Prepare
 endef
 
 define Build/Compile
-	npm install
+	# We're cd'in into the build dir manually so it
+	# runs these in the build dir, instead of the
+	# shared customfeeds folder
+	cd $(PKG_BUILD_DIR) && npm install
 ifeq ($(CONFIG_DOODLE3D_CLIENT_MINIFY_JS),y)
-		grunt less autoprefixer cssmin concat uglify
+	cd $(PKG_BUILD_DIR) && grunt less autoprefixer cssmin concat uglify
 else
-		grunt less autoprefixer cssmin concat
+	cd $(PKG_BUILD_DIR) && grunt less autoprefixer cssmin concat
 endif
 endef
 
