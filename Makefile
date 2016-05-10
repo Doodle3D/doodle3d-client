@@ -34,6 +34,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
+	$(CP) js $(PKG_BUILD_DIR)/
 	$(CP) less $(PKG_BUILD_DIR)/
 	$(CP) www $(PKG_BUILD_DIR)/
 	$(CP) Gruntfile.js $(PKG_BUILD_DIR)/
