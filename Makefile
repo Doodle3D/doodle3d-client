@@ -44,15 +44,16 @@ define Build/Prepare
 endef
 
 define Build/Compile
-	# We're cd'in into the build dir manually so it
-	# runs these in the build dir, instead of the
-	# shared customfeeds folder
-	cd $(PKG_BUILD_DIR) && npm install
+	# We're running grunt in the shared folder, so
+	# grunt can access git info
+	npm install
 ifeq ($(CONFIG_DOODLE3D_CLIENT_MINIFY_JS),y)
-	cd $(PKG_BUILD_DIR) && grunt less autoprefixer cssmin concat uglify
+	grunt less autoprefixer cssmin concat uglify
 else
-	cd $(PKG_BUILD_DIR) && grunt less autoprefixer cssmin concat
+	grunt less autoprefixer cssmin concat
 endif
+	# Copy compiled files to build dir
+	$(CP) www $(PKG_BUILD_DIR)/
 endef
 
 define Package/doodle3d-client/install
