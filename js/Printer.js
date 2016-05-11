@@ -168,6 +168,11 @@ function Printer() {
 	}
 
 	this.sendPrintPart = function(sendIndex,sendLength) {
+		var self = this;
+		// Abort if stopping
+		// sendPrintPart can be called by delayed retry after request timeout for example
+		if (self.state === Printer.STOPPING_STATE) return;
+
 		var completed = false;
 		if (this.gcode.length < (sendIndex + sendLength)) {
 			sendLength = this.gcode.length - sendIndex;
@@ -200,8 +205,6 @@ function Printer() {
 
 		
 		/* send data */
-		
-		var self = this;
 		if (communicateWithWifibox) {
 			$.ajax({
 				url: this.wifiboxURL + "/printer/print",
@@ -296,7 +299,7 @@ function Printer() {
       console.log("Printer:waitForBufferSpace: waiting until gcode buffer load ratio is below " +
           (Printer.GCODE_BUFFER_WAIT_LOAD_RATIO * 100) + "% (current: " + fillPercent + "% of " +
           (self.maxBufferSize / 1024) + "KiB)");
-      setTimeout(function() { self.waitForBufferSpace(sendIndex, sendLength); }, Printer.BUFFER_SPACE_WAIT_TIMEOUT);
+      self.waitForBufferSpaceDelay = setTimeout(function() { self.waitForBufferSpace(sendIndex, sendLength); }, Printer.BUFFER_SPACE_WAIT_TIMEOUT);
     } else {
       if(self.state == Printer.PRINTING_STATE || self.state == Printer.BUFFERING_STATE) {
         console.log("Printer:waitForBufferSpace: load ratio dropped below " + (Printer.GCODE_BUFFER_WAIT_LOAD_RATIO * 100) + "%, calling sendPrintPart...");
@@ -309,10 +312,17 @@ function Printer() {
 
 	this.stop = function() {
 		console.log("Printer:stop");
+		var self = this;
+		if (self.retrySendPrintPartDelay !== undefined) {
+			clearTimeout(self.retrySendPrintPartDelay);
+		}
+		if (self.waitForBufferSpaceDelay !== undefined) {
+			clearTimeout(self.waitForBufferSpaceDelay);
+		}
+
 		endCode = generateEndCode();
 		console.log("  endCode: ",endCode);
 		var postData = { gcode: endCode.join("\n")};
-		var self = this;
 		if (communicateWithWifibox) {
 			$.ajax({
 				url: this.wifiboxURL + "/printer/stop",
