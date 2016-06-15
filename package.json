@@ -20,5 +20,8 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-gitinfo": "~0.1.7",
     "grunt-template": "~0.2.3"
+  },
+  "scripts": {
+    "start": "grunt"
   }
 }
