@@ -22,10 +22,11 @@ module.exports = function(grunt) {
     				var gi = grunt.config('gitinfo');
     				var lbc = gi.local.branch.current;
 
-    				var tag = (gi.tag == '') ? 'no_tag' : gi.tag;
+    				var tags = (gi.tag == '') ? 'no_tag' : gi.tag;
+            tags = tags.split('\n').join(',');
     				var commitMsg = lbc.lastCommitMessage.slice(1, -1).split('\n')[0].replace(/"/g, '\\\"');
 
-    				var buildInfo = lbc.shortSHA + "/" + lbc.name + "/" + tag +
+    				var buildInfo = lbc.shortSHA + "/" + lbc.name + "/" + tags +
     						" (" + lbc.lastCommitTime.slice(1, -1) + "; \'" + commitMsg + "'";
     				return { 'build_info': buildInfo };
     			}
