@@ -24,6 +24,7 @@ $("#btnSelectAll").click(selectAll);
 $("#btnDeselectAll").click(deselectAll);
 $("#uploads").change(upload);
 $("#btnDownload").click(download);
+$("#btnPancake").click(pancake);
 
 $("#btnUpload").click(function(e) {
   e.preventDefault();
@@ -88,12 +89,18 @@ function loadSketch(list,cb) {
 function addItem(id,svgData,doPrepend) {
   var path;
 
+// console.log($getBoundingClientRect().width);
+
   if (!svgData) path = "";
   else if (typeof(svgData)!='string') path = "";
   else if (svgData.indexOf("CDATA")==-1) path = "";
   else path = svgData.split('d="')[1].split('"')[0]; 
 
+  svgWidth = svgData.split("width=\"")[1].split("\"")[0];
+
   var item = $('<div class="item" data="'+id+'" title="'+id+'">');
+  item.attr("data-width",svgWidth);
+
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 640 540"><path fill="none" stroke="black" stroke-width="2" d="'+path+'"></path></svg>';
   
   item.click(function() {
@@ -265,3 +272,199 @@ function download() {
   });
 }
 
+function pointsToGCode(points) {
+  var gcode = "";
+  var wasMove = false;
+  for (var i=0; i<points.length; i++) {
+    var x = points[i][0];
+    var y = points[i][1];
+    var isMove = points[i][2];
+    if (!wasMove && isMove) gcode += "M107       ; pump off\n";
+    if (wasMove && !isMove) gcode += "M106       ; pump on\nG4 P450\n";
+    gcode += "G0 X" + x + " Y" + y + "\n";
+    wasMove = isMove;
+  }
+  return gcode;
+}
+
+
+//TODO: use local variables instead of _points,numLayers,VERTICALSHAPE and rStep so we can leave a current doodle in tact if an error occurs while parsing
+function loadFromSvg(svgData) {
+  var _points = [];
+  var mode = '', x = 0, y = 0;
+
+  console.log("loading " + svgData.length + " bytes of data...");
+
+  // clearDoodle();
+
+  svgData = svgData.replace("M0,0 ",""); //RC: hack
+
+  var p = svgData.indexOf("<path");
+  if (p == -1) { console.log("loadFromSvg: could not find parsing start point"); return false; }
+  p = svgData.indexOf('d="', p);
+  if (p == -1) { console.log("loadFromSvg: could not find parsing start point"); return false; }
+  p += 3; //skip 'd="'
+
+  var skipSpace = function() { while (svgData.charAt(p) == ' ') p++; }
+  var parseCommand = function() {
+    while (true) {
+      skipSpace();
+      var c = svgData.charAt(p);
+      if (c == 'M' || c == 'm' || c == 'L' || c == 'l') { //new command letter
+        mode = c;
+      } else if (c == '"') { //end of command chain
+        return true;
+      } else { //something else, must be a pair of coordinates...
+        var tx = 0, ty = 0, numberEnd = 0, len = 0;
+        // var firstComma = svgData.indexOf(',', p);
+        // var firstSpace = svgData.indexOf(' ', p);
+
+        numberEnd = svgData.indexOf(',', p);
+
+        ////// RC: if instead of a comma a space is used between a pair use that as a separator
+        var firstSpace = svgData.indexOf(' ', p);
+        if (firstSpace<numberEnd) numberEnd=firstSpace;   
+        //console.log('numberEnd',numberEnd,firstSpace);
+        ////////////////
+
+        if (numberEnd == -1) { console.log("could not find comma in coordinate pair"); return false; }
+        len = numberEnd - p;
+        tx = parseFloat(svgData.substr(p, len));
+        p += len + 1;
+        skipSpace();
+        numberEnd = svgData.indexOf(' ', p);
+        if (numberEnd == -1) { console.log("could not find space after coordinate pair"); return false; }
+        len = numberEnd - p;
+        ty = parseFloat(svgData.substr(p, len));
+        p += len;
+
+        if (mode == 'M' || mode == 'L') {
+          x = tx; y = ty;
+        } else if (mode == 'm' || mode == 'l') {
+          x += tx; y += ty;
+        } else {
+          console.log("loadFromSvg: found coordinate pair but mode was never set");
+          return false;
+        }
+
+        var isMove = mode == 'm' || mode == 'M';
+
+        //TODO: create script-wide function for adding points?
+        //console.log("inserting "+x+","+y+" ",isMove);
+        updatePrevX = x;
+        updatePrevY = y;
+        _points.push([x, y, isMove]);
+        //adjustBounds(x, y);
+        //adjustPreviewTransformation();
+
+        // if (isMove) draw(x, y, -1);
+        // else draw(x, y);
+      }
+      p++;
+    }
+
+    return true;
+  };
+
+  parseCommand(); //depends on value of p, so don't move this without taking that into consideration
+
+  return _points;
+}
+
+getMinX = function(p) {
+  var minX=9999;
+  for (var i = 0; i < p.length; i++) {
+    minX = Math.min(minX,p[i][0]);
+  }
+  return minX;
+}
+
+getMaxX = function(p) {
+  var maxX=-9999;
+  for (var i = 0; i < p.length; i++) {
+    maxX = Math.max(maxX,p[i][0]);
+  }
+  return maxX;
+}
+
+getMinY = function(p) {
+  var minY=9999;
+  for (var i = 0; i < p.length; i++) {
+    minY = Math.min(minY,p[i][1]);
+  }
+  return minY;
+}
+
+getMaxY = function(p) {
+  var maxY=-9999;
+  for (var i = 0; i < p.length; i++) {
+    maxY = Math.max(maxY,p[i][1]);
+  }
+  return maxY;
+}
+
+alignLeft = function(p) {
+  var minX = getMinX(p);
+  //apply
+  for (var i = 0; i < p.length; i++) {
+    p[i][0] -= minX;
+  }
+
+}
+
+alignTop = function(p) {
+  var minY = getMinY(p);
+  //apply
+  for (var i = 0; i < p.length; i++) {
+    p[i][1] -= minY;
+  }
+}
+
+getWidth = function(p) {
+  return getMaxX(p) - getMinX(p);
+}
+
+pointsTranslate = function(p, x, y) {
+  for (var i = 0; i < p.length; i++) {
+    p[i][0] += x;
+    p[i][1] += y;
+  }
+}
+
+pointsScale = function(p, sx, sy) {
+  for (var i = 0; i < p.length; i++) {
+    p[i][0] *= sx;
+    p[i][1] *= sy;
+  }
+}
+
+function pancake() {
+  var startGcode = "W1 X42 Y210 L485 T0 ;Define Workspace of this file\nG21 ;Set units to MM\nG1 F5600 ;Set Speed\nM107 ;Pump off\nG4 P1000 ;Pause for 1000 milliseconds\nM84 ;Motors off\nG28 X0 Y0 ;Home All Axis\n";
+  var endGcode = "G4 P1000\nG28 X0 Y0\nM84";
+  var allGcode = startGcode;
+  var offsetX = 0;
+
+  $('.item.selected').each(function() {
+    var id = $(this).attr('data');
+    var svgData = $(this).html();
+
+    var points = loadFromSvg(svgData);
+
+    pointsScale(points,.2,-.2);
+    alignLeft(points);
+    alignTop(points);
+
+    pointsTranslate(points,offsetX,0);
+
+    offsetX += getWidth(points);
+
+    var gcode = pointsToGCode(points);
+
+    allGcode += gcode;
+
+  });
+
+  allGcode += endGcode;
+
+  $('<a target="_blank" href="data:application/x-gcode,'+encodeURIComponent(allGcode)+'" download="doodle.gcode">')[0].click();
+}
