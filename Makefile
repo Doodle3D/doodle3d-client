@@ -48,9 +48,9 @@ define Build/Compile
 	# grunt can access git info
 	npm install
 ifeq ($(CONFIG_DOODLE3D_CLIENT_MINIFY_JS),y)
-	grunt gitinfo less autoprefixer cssmin concat uglify
+	grunt gitinfo template less autoprefixer cssmin concat uglify
 else
-	grunt gitinfo less autoprefixer cssmin concat
+	grunt gitinfo template less autoprefixer cssmin concat
 endif
 	# Copy compiled files to build dir
 	$(CP) www $(PKG_BUILD_DIR)/
