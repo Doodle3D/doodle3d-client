@@ -89,27 +89,27 @@ $(function() {
   initScanDialog();
 
   disableDragging();
-  
-  if (!clientInfo.isSmartphone) initHelp();
+
+  // if (!clientInfo.isSmartphone) initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
   message.init($("#message"));
 
-  printer.init();
-	$(document).on(Printer.UPDATE,update);
+  // printer.init();
+	// $(document).on(Printer.UPDATE,update);
 
-	settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
-	$(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
+	// settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
+	// $(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
 	
-  if(debugMode) {
-    console.log("debug mode is true");
-    $("body").css("overflow", "auto");
-    $("#debug_textArea").css("display", "block");
-    //$("#preview_tmp").css("display", "block");
+  // if(debugMode) {
+  //   console.log("debug mode is true");
+  //   $("body").css("overflow", "auto");
+  //   $("#debug_textArea").css("display", "block");
+  //   //$("#preview_tmp").css("display", "block");
 
-    $("#debug_display").css("display", "block");
+  //   $("#debug_display").css("display", "block");
 
     // show and hide the progressguage and thermometer
     //showhideInterval = setInterval(showOrHideThermo, 2500);
@@ -138,8 +138,8 @@ $(function() {
       $("#endgcode").append("M84 (disable axes) \n");
       console.log("$('#endgcode'): " + $("#endgcode").val());
     }, 1000);
-    //*/
-  }
+//     //*/
+//   }
 });
 
 function disableDragging() {
@@ -162,24 +162,24 @@ function showOrHideThermo() {
   showOrHide = !showOrHide;
 }
 
-function settingsLoaded() {
-	console.log("settingsLoaded");
+// function settingsLoaded() {
+// 	console.log("settingsLoaded");
 	
-	if(firstTimeSettingsLoaded) {
-		console.log("  preheat: ",settings["printer.heatup.enabled"]);
-		console.log("  state: ",state);
-		if(state == Printer.IDLE_STATE && settings["printer.heatup.enabled"]) {
-			printer.preheat();
-		}
-		console.log("doodle3d.tour.enabled: ",settings["doodle3d.tour.enabled"]);
-		if(settings["doodle3d.tour.enabled"] && !clientInfo.isSmartphone) {
-			console.log("show tour");
-			initHelp();
-		}
-		firstTimeSettingsLoaded = false;
-	}
+// 	if(firstTimeSettingsLoaded) {
+// 		console.log("  preheat: ",settings["printer.heatup.enabled"]);
+// 		console.log("  state: ",state);
+// 		if(state == Printer.IDLE_STATE && settings["printer.heatup.enabled"]) {
+// 			printer.preheat();
+// 		}
+// 		console.log("doodle3d.tour.enabled: ",settings["doodle3d.tour.enabled"]);
+// 		if(settings["doodle3d.tour.enabled"] && !clientInfo.isSmartphone) {
+// 			console.log("show tour");
+// 			initHelp();
+// 		}
+// 		firstTimeSettingsLoaded = false;
+// 	}
 	
-}
+// }
 
 function setDebugText(text) {
 	$("#debug_display").text(text);

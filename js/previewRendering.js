@@ -41,7 +41,8 @@ function initPreviewRendering() {
 
   previewCtx_tmp = preview_tmp.getContext('2d');
 
-//  doodleImageCapture = new Image();
+  doodleImageCapture = new Image();
+
 
   calcPreviewCanvasProperties();
   redrawPreview();
@@ -252,8 +253,11 @@ function redrawRenderedPreview(redrawLess) {
   var y = 0;
   var r = 0;
   
+  // console.log("doodleImageCapture",doodleImageCapture);
+  // return;
+
   // check if there is preview image data that we can use for the layers
-  if(!doodleImageCapture.src || doodleImageCapture.src == "") return;
+  if(!doodleImageCapture || !doodleImageCapture.src || doodleImageCapture.src == "") return;
   
   for(var i = 0; i < numLayers; i++) {
 

@@ -41,60 +41,61 @@ function setSketchModified(_isModified) {
 }
 
 function updateSketchButtonStates() {
-	console.log('sketch: isModified: ' + isModified + ', curSketch: ' + curSketch + ', sketches.length: ' + sketches.length);
+	return;
+	// console.log('sketch: isModified: ' + isModified + ', curSketch: ' + curSketch + ', sketches.length: ' + sketches.length);
 
-	if (isModified) {
-		btnSave.enable();
-	}
-	else {
-		btnSave.disable();
-	}
+	// if (isModified) {
+	// 	btnSave.enable();
+	// }
+	// else {
+	// 	btnSave.disable();
+	// }
 
-	if (curSketch<sketches.length-1) {
-		btnNext.enable();
-	} else {
-		btnNext.disable();
-	}
+	// if (curSketch<sketches.length-1) {
+	// 	btnNext.enable();
+	// } else {
+	// 	btnNext.disable();
+	// }
 
-	if (curSketch>0) {
-		btnPrevious.enable();
-	} else {
-		btnPrevious.disable();
-	}
+	// if (curSketch>0) {
+	// 	btnPrevious.enable();
+	// } else {
+	// 	btnPrevious.disable();
+	// }
 
 }
 
 function loadSketch(_curSketch) {
-	curSketch = _curSketch;
+	// curSketch = _curSketch;
 
-	if (curSketch<0) curSketch=0;
-	if (curSketch>sketches.length-1) curSketch=sketches.length-1;
+	// if (curSketch<0) curSketch=0;
+	// if (curSketch>sketches.length-1) curSketch=sketches.length-1;
 
-	var id = sketches[curSketch];
+	// var id = sketches[curSketch];
 
-	console.log('sketch: loadSketch curSketch:' + curSketch + ', id: ' + id);
+	// console.log('sketch: loadSketch curSketch:' + curSketch + ', id: ' + id);
 
-	$.get(wifiboxURL + "/sketch", {id:id}, function(response) {
-		if (response.status=='success') {
-			console.log('sketch: loaded',response);
-			var svgData = response.data.data;
-			loadFromSvg(svgData);
-			setSketchModified(false);
-		} else {
-			console.log('error loading sketch: ',response);
-			listSketches();
-		}
+	// $.get(wifiboxURL + "/sketch", {id:id}, function(response) {
+	// 	if (response.status=='success') {
+	// 		console.log('sketch: loaded',response);
+	// 		var svgData = response.data.data;
+	// 		loadFromSvg(svgData);
+	// 		setSketchModified(false);
+	// 	} else {
+	// 		console.log('error loading sketch: ',response);
+	// 		listSketches();
+	// 	}
 		
-	})
+	// })
 }
 
 function saveSketch() {
-	console.log("sketch: saveSketch");
-	var svgData = saveToSvg();
+	// console.log("sketch: saveSketch");
+	// var svgData = saveToSvg();
 
-	$.post(wifiboxURL + "/sketch", {data: svgData}, function(response) {
-		console.log("sketch: saveSketch: response",response);
-		listSketches();
-	})
+	// $.post(wifiboxURL + "/sketch", {data: svgData}, function(response) {
+	// 	console.log("sketch: saveSketch: response",response);
+	// 	listSketches();
+	// })
 
 }
