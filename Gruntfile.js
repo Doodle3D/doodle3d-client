@@ -14,28 +14,28 @@ module.exports = function(grunt) {
     	options: {},
       commands: { 'tag': ['tag', '--points-at', 'HEAD'] }
     },
-    template: {
-    	'add_build_info': {
-    		options: {
-    			data: function() {
-    				grunt.task.requires('gitinfo');
-    				var gi = grunt.config('gitinfo');
-    				var lbc = gi.local.branch.current;
+    // template: {
+    // 	'add_build_info': {
+    // 		options: {
+    // 			data: function() {
+    // 				grunt.task.requires('gitinfo');
+    // 				var gi = grunt.config('gitinfo');
+    // 				var lbc = gi.local.branch.current;
 
-    				var tags = (gi.tag == '') ? 'no_tag' : gi.tag;
-            tags = tags.split('\n').join(',');
-    				var commitMsg = lbc.lastCommitMessage.slice(1, -1).split('\n')[0].replace(/"/g, '\\\"');
+    // 				var tags = (gi.tag == '') ? 'no_tag' : gi.tag;
+    //         tags = tags.split('\n').join(',');
+    // 				var commitMsg = lbc.lastCommitMessage.slice(1, -1).split('\n')[0].replace(/"/g, '\\\"');
 
-    				var buildInfo = lbc.shortSHA + "/" + lbc.name + "/" + tags +
-    						" (" + lbc.lastCommitTime.slice(1, -1) + "; \'" + commitMsg + "'";
-    				return { 'build_info': buildInfo };
-    			}
-    		},
-    		files: {
-    			'js/main.js.out': ['js/main.js']
-    		}
-    	}
-    },
+    // 				var buildInfo = lbc.shortSHA + "/" + lbc.name + "/" + tags +
+    // 						" (" + lbc.lastCommitTime.slice(1, -1) + "; \'" + commitMsg + "'";
+    // 				return { 'build_info': buildInfo };
+    // 			}
+    // 		},
+    // 		files: {
+    // 			'js/main.js.out': ['js/main.js']
+    // 		}
+    // 	}
+    // },
     concat: {
       options: {
 //         separator: ';'
@@ -47,8 +47,9 @@ module.exports = function(grunt) {
           'js/settings/*.js',
           'js/*.js',
           // make sure we put main.js last
-          '!js/main.js',
-          'js/main.js.out'
+          // '!js/main.js',
+          // 'js/main.js.out'
+          'js/main.js'
         ],
         dest: 'www/js/<%= pkg.name %>.js'
       }
@@ -169,7 +170,7 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', [
     'gitinfo',
-    'template',
+    // 'template',
     'less',
     'autoprefixer',
     'cssmin',
