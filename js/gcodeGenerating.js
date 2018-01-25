@@ -11,10 +11,8 @@ var gcode = [];
 
 function generate_gcode() {
   console.log("f:generategcode()");
-
   gcode = [];
 
-  console.log("settings: ",settings);
   var speed 						      = settings["printer.speed"];
   var normalSpeed 			      = speed;
   var bottomSpeed 			      = settings["printer.bottomLayerSpeed"];
@@ -60,6 +58,11 @@ function generate_gcode() {
 
   // copy array without reference -> http://stackoverflow.com/questions/9885821/copying-of-an-array-of-objects-to-another-array-without-object-reference-in-java
   var points = JSON.parse(JSON.stringify(_points));
+
+  if (!points || points.length==0) {
+    console.log("generate_gcode: no points");
+    return gcode;
+  }
 
   // add gcode begin commands
   gcode = gcode.concat(startCode);
@@ -109,19 +112,20 @@ function generate_gcode() {
     pointsScale(p, layerScale, layerScale);
     pointsRotate(p, rStepGCode * layer);
 
-    if (layer == 0) {
-      //gcode.push("M107"); //fan off
-      if (firstLayerSlow) {
-	      //gcode.push("M220 S20"); //slow speed
-	      speed = bottomSpeed;
-			  //console.log("> speed: ",speed);
-      }
-    } else if (layer == 2) { ////////LET OP, pas bij layer 2 weer op normale snelheid ipv layer 1
-      gcode.push("M106");      //fan on
-      //gcode.push("M220 S100"); //normal speed
-      speed = normalSpeed;
-  	  //console.log("> speed: ",speed);
-    }
+    speed = layer<3 ? bottomSpeed : normalSpeed;
+    // if (layer == 0) {
+    //   //gcode.push("M107"); //fan off
+    //   if (firstLayerSlow) {
+	   //    //gcode.push("M220 S20"); //slow speed
+	   //    speed = bottomSpeed;
+			 //  //console.log("> speed: ",speed);
+    //   }
+    // } else if (layer == 2) { ////////LET OP, pas bij layer 2 weer op normale snelheid ipv layer 1
+    //   gcode.push("M106");      //fan on
+    //   //gcode.push("M220 S100"); //normal speed
+    //   speed = normalSpeed;
+  	 //  //console.log("> speed: ",speed);
+    // }
 
     var curLayerCommand = 0;
     var totalLayerCommands = p.length;
@@ -250,7 +254,7 @@ function scaleFunction(percent) {
       r = 1.0 - (percent * .8);
       break;
     case verticalShapes.SINUS:
-      r = (Math.cos(percent * Math.PI * 4) * .25) + .75;
+      r = (Math.cos(percent * Math.PI * 12) * .25) + .75;
       break;
   }
 

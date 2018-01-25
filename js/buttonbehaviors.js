@@ -202,68 +202,51 @@ function initButtonBehavior() {
 		buttonGroupAdd.fadeOut();
     }
     
-	// btnSettings.on("onButtonClick", openSettingsWindow);
-
-	// 29-okt-2013 - we're not doing help for smartphones at the moment
-	// if (clientInfo.isSmartphone) {
-	// 	btnInfo.disable();
-	// } else {
-	// 	btnInfo.on("onButtonClick", function(e) {
-	// 		helpTours.startTour(helpTours.WELCOMETOUR);
-	// 	});
-	// }
 }
 
 function stopPrint() {
-	console.log("stop");
-	// console.log("f:stopPrint() >> sendPrintCommands = " + sendPrintCommands);
-	// if (sendPrintCommands) printer.stop();
-	// //setState(Printer.STOPPING_STATE,printer.hasControl);
-	// printer.overruleState(Printer.STOPPING_STATE);
+	// btnStop.disable();
+	// $.get("/set?code=M104 S200\nG21\nM107\nG28 X0 Y0 Z0\nM109 S200\nG28 Z0\nG1 Z15 F9000\nG92 E0\nG91\nG1 F200 E20\nG92 E0\nG92 E0\nG1 F9000\nG90\n", function() {
+		$.get("/set?cmd={P:X}");	
+	// });
 }
 
 
 function print(e) {
 	console.log("print");
-	// console.log("f:print() >> sendPrintCommands = " + sendPrintCommands);
 
-	// //$(".btnPrint").css("display","none");
+	var gcode = generate_gcode();
+	if (!gcode || gcode=="") {
+		console.log("no gcode to print");
+		return;
+	}
 
-	// if (_points.length > 2) {
+	var blob = new Blob([gcode.join('\n')],{type: "application/octet-stream"});
+    var fd = new FormData();
+	fd.append("blob", blob, "doodle3d.gcode");
 
-	// 	//setState(Printer.BUFFERING_STATE,printer.hasControl);
-	// 	printer.overruleState(Printer.BUFFERING_STATE);
+	// $.get("/set?code=M104 S200", function() { //heatup
+		// $.get("/set?code=G28 X0 Y0", function() { //show movement
+		// $.get("/set?code=M563 S5", function() { //speed up Upload via WiFi
+			$.ajax({ //start download
+		        type: 'POST',
+		        url: '/upload',
+		        cache: false,
+		        data: fd,
+		        processData: false,
+		        // contentDisposition: 'form-data; name="file"; filename="doodle.gcode',
+		        contentType: false
+		    }).done(function(data) {
+		        console.log(data);
 
-	// 	// we put the gcode generation in a little delay
-	// 	// so that for example the print button is disabled right away
-	// 	clearTimeout(gcodeGenerateDelayer);
-	// 	gcodeGenerateDelayer = setTimeout(function() {
-
-	// 		var gcode = generate_gcode();
-	// 		if (sendPrintCommands) {
-	// 			if(gcode.length > 0) {
-	// 				printer.print(gcode);
-	// 			} else {
-	// 				printer.overruleState(Printer.IDLE_STATE);
-	// 				printer.startStatusCheckInterval();
-	// 			}
-	// 		} else {
-	// 			console.log("sendPrintCommands is false: not sending print command to 3dprinter");
-	// 		}
-
-	// 		// if (debugMode) {
-	// 		// 	$("#textdump").text("");
-	// 		// 	$("#textdump").text(gcode.join("\n"));
-	// 		// }
-
-	// 	}, gcodeGenerateDelay);
-	// } else {
-	// 	console.log("f:print >> not enough points!");
-	// }
-
-	//	$.post("/doodle3d.of", { data:output }, function(data) {
-	//	btnPrint.disabled = false;
-	//	});
+				// setTimeout(function() {
+				// 	btnStop.enable();
+				// 	$.get("/set?code=M565"); //start printing cache.gc
+				// },3000)
+				
+		    });
+		// });
+    // });
 }
 
 
@@ -421,58 +404,6 @@ function setState(newState,newHasControl) {
 	btnNext.disable()
 	btnSave.disable();
 
-	
-	// /* save, next and prev buttons */
-	// switch(newState) {
-	// case Printer.WIFIBOX_DISCONNECTED_STATE:
-	// 	btnPrevious.disable();
-	// 	btnNext.disable()
-	// 	btnSave.disable();
-	// 	break;
-	// default:
-	// 	// updatePrevNextButtonState();
-	// 	updateSketchButtonStates();
-	// 	if (isModified) btnSave.enable();
-	// break;
-	// }
-
-	// if(connectingHintDelay && newState != Printer.CONNECTING_STATE) {
-	// 	clearTimeout(connectingHintDelay);
-	// 	connectingHintDelay = null;
-	// }
-
-	// if(newState == Printer.WIFIBOX_DISCONNECTED_STATE) {
-	// 	message.set("Lost connection to WiFi box",Message.ERROR);
-	// }	else if(prevState == Printer.WIFIBOX_DISCONNECTED_STATE) {
-	// 	message.set("Connected to WiFi box",Message.INFO,true);
-	// } else if(newState == Printer.DISCONNECTED_STATE) {
-	// 	message.set("Printer disconnected",Message.WARNING,true);
-	// } else if(newState == Printer.CONNECTING_STATE) {
-	// 	message.set("Printer connecting...",Message.INFO,false);
-	// 	if (prevState != Printer.CONNECTING_STATE) { //enable 'watchdog' if we entered from a different state
-	// 		clearTimeout(connectingHintDelay);
-	// 		connectingHintDelay = setTimeout(function() {
-	// 			message.set("Printer still not connected, did you<br/>select the correct printer type?", Message.WARNING, false);
-	// 			connectingHintDelay = null;
-	// 		}, connectingHintDelayTime);
-	// 	}
-	// } else if(prevState == Printer.DISCONNECTED_STATE && newState == Printer.IDLE_STATE ||
-	// 		prevState == Printer.UNKNOWN_STATE && newState == Printer.IDLE_STATE ||
-	// 		prevState == Printer.CONNECTING_STATE && newState == Printer.IDLE_STATE) {
-	// 	message.set("Printer connected",Message.INFO,true);
-	// 	console.log("  preheat: ",settings["printer.heatup.enabled"]);
-	// 	if(settings["printer.heatup.enabled"]) {
-	// 		// HACK: we delay the preheat because the makerbot driver needs time to connect
-	// 		clearTimeout(preheatDelay);
-	// 		preheatDelay = setTimeout(printer.preheat,preheatDelayTime); // retry after delay
-	// 	}
-	// }	else if(prevState == Printer.PRINTING_STATE && newState == Printer.STOPPING_STATE) {
-	// 	console.log("stopmsg show");
-	// 	message.set("Printer stopping",Message.INFO,false);
-	// }	else if(prevState == Printer.STOPPING_STATE && newState == Printer.IDLE_STATE) {
-	// 	console.log("stopmsg hide");
-	// 	message.hide();
-	// }
 
 	state = newState;
 	hasControl = newHasControl;

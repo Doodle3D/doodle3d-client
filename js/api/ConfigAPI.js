@@ -17,83 +17,73 @@ function ConfigAPI() {
 
 	this.init = function(wifiboxURL,wifiboxCGIBinURL) {
 		//console.log("ConfigAPI:init");
-		
 		_wifiboxURL = wifiboxURL;
 		_wifiboxCGIBinURL = wifiboxCGIBinURL;
 	}
 	this.loadAll = function(completeHandler,failedHandler) {
 		//console.log("ConfigAPI:loadAll");
-		$.ajax({
-			url: _wifiboxURL + "/config/all",
-			type: "GET",
-			dataType: 'json',
-			timeout: _timeoutTime,
-			success: function(response){
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
+		alert('ConfigAPI.loadAll() deprecated');
 	};
+
+
 	this.load = function(targetSettings,completeHandler,failedHandler) {
+		alert('ConfigAPI.load() deprecated');
 		//console.log("ConfigAPI:load");
-		$.ajax({
-			url: _wifiboxURL + "/config/",
-			type: "GET",
-			dataType: 'json',
-			data: targetSettings,
-			timeout: _timeoutTime,
-			success: function(response){
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
+		// $.ajax({
+		// 	url: _wifiboxURL + "/config/",
+		// 	type: "GET",
+		// 	dataType: 'json',
+		// 	data: targetSettings,
+		// 	timeout: _timeoutTime,
+		// 	success: function(response){
+		// 		if(response.status == "error" || response.status == "fail") {
+		// 			if(failedHandler) failedHandler(response);
+		// 		} else {
+		// 			completeHandler(response.data);
+		// 		}
+		// 	}
+		// }).fail(function() {
+		// 	if(failedHandler) failedHandler();
+		// });
 	};
 	this.save = function(newSettings,completeHandler,failedHandler) {
 		//console.log("ConfigAPI:save");
-		$.ajax({
-			url: _wifiboxCGIBinURL + "/config",
-			type: "POST",
-			data: newSettings,
-			dataType: 'json',
-			timeout: _saveSettingsTimeoutTime,
-			success: function(response){
-				//console.log("ConfigAPI:save response: ",response);
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
+		alert('ConfigAPI.save() deprecated');
+		// $.ajax({
+		// 	url: _wifiboxCGIBinURL + "/config",
+		// 	type: "POST",
+		// 	data: newSettings,
+		// 	dataType: 'json',
+		// 	timeout: _saveSettingsTimeoutTime,
+		// 	success: function(response){
+		// 		//console.log("ConfigAPI:save response: ",response);
+		// 		if(response.status == "error" || response.status == "fail") {
+		// 			if(failedHandler) failedHandler(response);
+		// 		} else {
+		// 			completeHandler(response.data);
+		// 		}
+		// 	}
+		// }).fail(function() {
+		// 	if(failedHandler) failedHandler();
+		// });
 	};
 	this.resetAll = function(completeHandler,failedHandler) {
+		alert('ConfigAPI.resetAll() deprecated');
 		//console.log("ConfigAPI:resetAll");
-		$.ajax({
-			url: _wifiboxCGIBinURL + "/config/resetall",
-			type: "POST",
-			dataType: 'json',
-			timeout: _timeoutTime,
-			success: function(response){
-				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
-				} else {
-					completeHandler(response.data);
-				}
-			}
-		}).fail(function() {
-			if(failedHandler) failedHandler();
-		});
+		// $.ajax({
+		// 	url: _wifiboxCGIBinURL + "/config/resetall",
+		// 	type: "POST",
+		// 	dataType: 'json',
+		// 	timeout: _timeoutTime,
+		// 	success: function(response){
+		// 		if(response.status == "error" || response.status == "fail") {
+		// 			if(failedHandler) failedHandler(response);
+		// 		} else {
+		// 			completeHandler(response.data);
+		// 		}
+		// 	}
+		// }).fail(function() {
+		// 	if(failedHandler) failedHandler();
+		// });
 	};
 }

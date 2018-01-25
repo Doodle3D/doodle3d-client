@@ -2,7 +2,7 @@ var wordArtPopup;
 
 function initWordArt() {
   $("body").append('<div id="svgfont" style="display:none"></div>');
-  $("#svgfont").load("img/font.svg?");
+  $("#svgfont").load("http://draw.doodle3d.com/img/font.svg?");
   
   wordArtPopup = new Popup($("#popupWordArt"),$("#popupMask"));
   $("#btnWordArtOk").on("onButtonClick",wordArtPopup.commit);

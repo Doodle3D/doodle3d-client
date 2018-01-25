@@ -193,7 +193,7 @@ function InfoReminderTour(_name) {
 }
 
 function initHelp() {
-  //console.log("f:initHelp()");
+  console.log("f:initHelp()");
 
   // track number of visits of this user
   if ($.cookie("Doodle3DVisitCounter") == null) {
@@ -203,7 +203,7 @@ function initHelp() {
   }
 
   // load the html file which describes the tour contents
-  $("#helpContainer").load("helpcontent.html", function() {
+  $("#helpContainer").load("http://draw.doodle3d.com/helpcontent.html", function() {
     //console.log("helpContent loaded");
 
     helpTours = new HelpTours();

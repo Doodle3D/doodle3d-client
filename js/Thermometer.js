@@ -16,7 +16,7 @@ function Thermometer() {
   this.targetTemperature = 0; // default val
 
   this.thermoOverlayImg = new Image();
-  this.thermoOverlayImgSrc = "img/thermometer_fg_overlay.png"; // ../img/thermometer_fg_overlay.png
+  this.thermoOverlayImgSrc = "http://draw.doodle3d.com/img/thermometer_fg_overlay.png"; // ../img/thermometer_fg_overlay.png
 
   this.thermoWidth= 40;
   this.thermoHeight = 100;

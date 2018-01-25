@@ -368,6 +368,9 @@ function Printer() {
 	}
 
 	this.checkStatus = function() {
+		//disble printer status check RC: 2-1-2018
+		return;
+
 		//console.log("Printer:checkStatus");
 		this.stateOverruled = false;
 		//console.log("  stateOverruled: ",this.stateOverruled);

@@ -10,9 +10,9 @@ function Progressbar() {
   this.currProgress = 0; // default val
 
   this.progressbarFGImg = new Image();
-  this.progressbarFGImgSrc = "img/progress_fg.png";
+  this.progressbarFGImgSrc = "http://draw.doodle3d.com/img/progress_fg.png";
   this.progressbarBGImg = new Image();
-  this.progressbarBGImgSrc = "img/progress_bg.png";
+  this.progressbarBGImgSrc = "http://draw.doodle3d.com/img/progress_bg.png";
 
   this.progressWidth= 93;
   this.progressHeight = 82;

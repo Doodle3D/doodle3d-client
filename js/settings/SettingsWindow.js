@@ -174,7 +174,11 @@ function SettingsWindow() {
 
 	this.downloadGcode = function() {
 		var gcode = generate_gcode();
-		if (gcode!=undefined) {
+
+		if (!gcode || gcode=="" || gcode.length==0) {
+			console.log("no gcode to download");
+			return;
+		} else {
 			var blob = new Blob([gcode.join("\n")], {type: "text/plain;charset=utf-8"});
 			saveAs(blob, "doodle3d.gcode");
 		}

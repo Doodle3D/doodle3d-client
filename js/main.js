@@ -33,6 +33,52 @@ var clientInfo = {};
 var POPUP_SHOW_DURATION = 175;
 var BUTTON_GROUP_SHOW_DURATION = 80;
 
+var settings = {
+  "doodle3d.simplify.minDistance": 3,
+  "doodle3d.tour.enabled": true,
+  "doodle3d.update.baseUrl": "http://doodle3d.com/updates",
+  "doodle3d.update.includeBetas": false,
+  "gcode.server": "http://gcodeserver.doodle3d.com",
+  "network.ap.address" : "192.168.10.1",
+  "network.ap.key" : "",
+  "network.ap.netmask" : "255.255.255.0", 
+  "network.ap.ssid" : "Doodle3D-%%MAC_ADDR_TAIL%%",
+  "network.cl.wifiboxid": "Doodle3D-%%MAC_ADDR_TAIL%%",
+  "printer.baudrate": "115200",
+  "printer.bed.temperature": 50,
+  "printer.bottomEnableTraveling": true,
+  "printer.bottomFlowRate": 2,
+  "printer.bottomLayerSpeed": 35,
+  "printer.dimensions.x" : 120,
+  "printer.dimensions.y": 120,
+  "printer.dimensions.z": 120,
+  "printer.enableTraveling": true,
+  "printer.startcode": "M104 S220\nG21\nM107\nG28 X0 Y0 Z0\nM109 S220\nG28 Z0\nG1 Z15 F9000\nG92 E0\nG91\nG1 F200 E20\nG92 E0\nG92 E0\nG1 F9000\nG90\n",
+  "printer.endcode": "M107\nG91\nG1 E-1 F300\nG1 Z+0.5 E-5 X-20 Y-20 F9000\nG28 X0 Y0",
+  "printer.filamentThickness": 1.75,
+  "printer.firstLayerSlow": true,
+  "printer.heatedbed": false,
+  "printer.heatup.bed.temperature": 0,
+  "printer.heatup.enabled": false,
+  "printer.heatup.temperature": 0,
+  "printer.layerHeight": 0.2,
+  "printer.retraction.amount": 3,
+  "printer.retraction.enabled": true,
+  "printer.retraction.minDistance": 5,
+  "printer.retraction.speed": 50,
+  "printer.screenToMillimeterScale": .3,
+  "printer.speed": 70,
+  "printer.temperature": 180,
+  "printer.travelSpeed": 200,
+  "printer.type:": "marlin_generic",
+  "printer.useSubLayers": true,
+  "printer.wallThickness": 0.5,
+  "system.log.level": "info"
+  // "M104 S{printingTemp}\n{if heatedBed}M190 S{printingBedTemp}\nG21\nM107\nG28 X0 Y0\nM109 S{printingTemp}\nG28 Z0\nG1 Z15 F9000\nG92 E0\nG91\nG1 F200 E10\nG92 E0\nG92 E0\nG1 F9000\nG90\n"
+  //
+};
+
+
 $(function() {
   console.log("Doodle3D client ready");
   console.log("Build information - <%= build_info %>)");
@@ -51,18 +97,15 @@ $(function() {
   wifiboxURL = hostname+"/d3dapi";
   wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
 
-  
-  //var api = wifiboxURL+'/d3dapi/sketch/';
 
-	// if (wifiboxIsRemote) {
- //    // var hostname = "http://10.0.0.45";
- //    var hostname = "http://192.168.5.1";
-	// 	wifiboxURL = hostname+"/d3dapi";
-	// 	wifiboxCGIBinURL = hostname+"/cgi-bin/d3dapi";
-	// } else {
-	// 	wifiboxURL = "http://" + window.location.host + "/d3dapi";
-	// 	wifiboxCGIBinURL = "http://" + window.location.host + "/cgi-bin/d3dapi";
-	// }
+
+  // setInterval(function() {
+  //   $.get("/inquiry",function(data) {
+  //     console.log(data);
+  //   })
+  // },2000);
+
+
 
   if (!communicateWithWifibox) {
     sendPrintCommands = false; // 'communicateWithWifibox = false' implies this
@@ -90,56 +133,13 @@ $(function() {
 
   disableDragging();
 
-  // if (!clientInfo.isSmartphone) initHelp();
+  if (!clientInfo.isSmartphone) initHelp();
 
 	thermometer.init($("#thermometerCanvas"), $("#thermometerContainer"));
   progressbar.init($("#progressbarCanvas"), $("#progressbarCanvasContainer"));
 
   message.init($("#message"));
 
-  // printer.init();
-	// $(document).on(Printer.UPDATE,update);
-
-	// settingsWindow.init(wifiboxURL,wifiboxCGIBinURL);
-	// $(document).on(SettingsWindow.SETTINGS_LOADED, settingsLoaded);
-	
-  // if(debugMode) {
-  //   console.log("debug mode is true");
-  //   $("body").css("overflow", "auto");
-  //   $("#debug_textArea").css("display", "block");
-  //   //$("#preview_tmp").css("display", "block");
-
-  //   $("#debug_display").css("display", "block");
-
-    // show and hide the progressguage and thermometer
-    //showhideInterval = setInterval(showOrHideThermo, 2500);
-
-//    $("#debugContainer").css("display", "block");
-
-    /* TEMP CODE!! -> artificially populates the startgcode and endgcode textareas in the settings window */
-    // todo remove this temporary code...
-    /*
-    setTimeout(function() {
-      $("#startgcode").text("");
-      $("#startgcode").append("G21 (mm) \n");
-      $("#startgcode").append("G91 (relative) \n");
-      $("#startgcode").append("G28 X0 Y0 Z0 (physical home) \n");
-      $("#startgcode").append("M104 S230 (temperature) \n");
-      $("#startgcode").append("G1 E10 F250 (flow) \n");
-      $("#startgcode").append("G92 X-100 Y-100 Z0 E10 \n");
-      $("#startgcode").append("G1 Z3 F5000 (prevent diagonal line) \n");
-      $("#startgcode").append("G90 (absolute) \n");
-      $("#startgcode").append("M106 (fan on)");
-      console.log("$('#startgcode'): " + $("#startgcode").val());
-
-      $("#endgcode").text("");
-      $("#endgcode").append("G1 X-100 Y-100 F15000 (fast homing) \n");
-      $("#endgcode").append("M107 \n");
-      $("#endgcode").append("M84 (disable axes) \n");
-      console.log("$('#endgcode'): " + $("#endgcode").val());
-    }, 1000);
-//     //*/
-//   }
 });
 
 function disableDragging() {
